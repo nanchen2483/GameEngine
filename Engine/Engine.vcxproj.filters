@@ -7,6 +7,12 @@
     <Filter Include="Engine\Event">
       <UniqueIdentifier>{6C812495-58E4-B339-016A-ECEFEDAB7FBC}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{0b1e2e57-2eae-404e-94ca-3c374232da7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{19c0288a-837b-48e5-b37b-063bc8c832e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
@@ -35,6 +41,12 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\enginepch.h" />
+    <ClInclude Include="src\Engine\Window.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Application.cpp">
@@ -44,5 +56,8 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\enginepch.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
