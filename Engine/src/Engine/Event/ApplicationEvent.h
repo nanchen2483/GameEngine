@@ -26,6 +26,15 @@ namespace Engine
 		unsigned int m_width, m_height;
 	};
 
+	class ENGINE_API WindowCloseEvent : public Event
+	{
+	public:
+		WindowCloseEvent() {}
+
+		EVENT_CLASS_TYPE(WindowClose)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+	};
+
 	class ENGINE_API AppTickEvent : public Event
 	{
 	public:

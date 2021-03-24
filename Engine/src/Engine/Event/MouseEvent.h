@@ -36,7 +36,7 @@ namespace Engine
 		inline float GetXOffset() const { return m_xOffset; }
 		inline float GetYOffset() const { return m_yOffset; }
 
-		EVENT_CLASS_TYPE(MouceScrolled)
+		EVENT_CLASS_TYPE(MouseScrolled)
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
 		float m_xOffset, m_yOffset;
@@ -45,7 +45,7 @@ namespace Engine
 	class ENGINE_API MouseButtonEvent : public Event
 	{
 	public:
-		inline int GetMouseButton() const { return m_Button; }
+		inline int GetMouseButton() const { return m_button; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	protected:
