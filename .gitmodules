@@ -4,3 +4,6 @@
 [submodule "Engine/util/glfw"]
 	path = Engine/util/glfw
 	url = https://github.com/nanchen24/glfw.git
+[submodule "Engine/util/imgui"]
+	path = Engine/util/imgui
+	url = https://github.com/nanchen24/imgui.git
