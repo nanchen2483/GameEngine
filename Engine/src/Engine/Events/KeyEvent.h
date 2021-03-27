@@ -24,7 +24,7 @@ namespace Engine
 		KeyPressedEvent(int keyCode, int repeatCount)
 			: KeyEvent(keyCode), m_repeatCount(repeatCount) {}
 
-		inline int GetRepeatCount() const { return m_repeatCount; }
+		int GetRepeatCount() const { return m_repeatCount; }
 
 		std::string ToString() const override
 		{

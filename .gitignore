@@ -3,3 +3,5 @@ bin/
 imd/
 
 *.user
+*.vcxproj
+*.vcxproj.filters

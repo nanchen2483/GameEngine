@@ -1,5 +1,6 @@
 #include "enginepch.h"
 
+#include "Engine/Events/ApplicationEvent.h"
 #include "Application.h"
 
 #include <GLFW/glfw3.h>
@@ -18,12 +19,29 @@ namespace Engine
 	{
 	}
 
+	void Application::PushLayer(Layer* layer)
+	{
+		m_layerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer* overlay)
+	{
+		m_layerStack.PushOverlay(overlay);
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
-		ENGINE_CORE_TRACE("{0}", e);
+		for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
+		{
+			(*--it)->OnEvent(e);
+			if (e.handled)
+			{
+				break;
+			}
+		}
 	}
 
 	void Application::Run()
@@ -32,6 +50,12 @@ namespace Engine
 		{
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			for (Layer* layer : m_layerStack)
+			{
+				layer->OnUpdate();
+			}
+
 			m_window->OnUpdate();
 		}
 	}
