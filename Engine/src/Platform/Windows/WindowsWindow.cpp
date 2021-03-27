@@ -1,9 +1,13 @@
 #include "enginepch.h"
+
 #include "WindowsWindow.h"
 
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Events/KeyEvent.h"
 #include "Engine/Events/MouseEvent.h"
+
+#include "glad/glad.h"
+#include <GLFW/glfw3.h>
 
 namespace Engine
 {
@@ -48,6 +52,8 @@ namespace Engine
 
 		m_window = glfwCreateWindow((int)props.width, (int)props.height, m_data.title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_window);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		ENGINE_CORE_ASSERT(status, "Failed to initialize GLAD");
 		glfwSetWindowUserPointer(m_window, &m_data);
 		SetVSync(true);
 
