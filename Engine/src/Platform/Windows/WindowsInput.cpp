@@ -31,13 +31,13 @@ namespace Engine
 		return { (float)xpos, (float)ypos };
 	}
 
-	int WindowsInput::GetMouseXImpl()
+	float WindowsInput::GetMouseXImpl()
 	{
 		auto [x, y] = GetMousePositionImpl();
 		return x;
 	}
 
-	int WindowsInput::GetMouseYImpl()
+	float WindowsInput::GetMouseYImpl()
 	{
 		auto [x, y] = GetMousePositionImpl();
 		return y;

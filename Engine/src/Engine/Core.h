@@ -2,11 +2,15 @@
 
 
 #ifdef ENGINE_PLATFORM_WINDOWS
-	#ifdef ENGINE_BUILD_DLL	
-		#define ENGINE_API __declspec(dllexport)
+	#if ENGINE_DYNAMIC_LINK
+		#ifdef ENGINE_BUILD_DLL	
+			#define ENGINE_API __declspec(dllexport)
+		#else
+			#define ENGINE_API __declspec(dllimport)
+		#endif // ENGINE_BUILD_DLL
 	#else
-		#define ENGINE_API __declspec(dllimport)
-	#endif // ENGINE_BUILD_DLL
+		#define ENGINE_API
+	#endif // ENGINE_DYNAMIC_LINK
 #else
 	#error Engine only support windows
 #endif // ENGINE_PLATFORM_WINDOWS

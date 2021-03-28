@@ -11,15 +11,15 @@ namespace Engine
 		inline static bool IsKeyPressed(int keycode) { return s_instance->IsKeyPressedImpl(keycode); }
 		inline static bool IsMouseButtonPressed(int button) { return s_instance->IsMouseButtonPressedImpl(button); }
 		inline static std::pair<float, float> GetMousePosition() { return s_instance->GetMousePositionImpl(); }
-		inline static int IsMouseX() { return s_instance->GetMouseXImpl(); }
-		inline static int IsMouseY() { return s_instance->GetMouseYImpl(); }
+		inline static float IsMouseX() { return s_instance->GetMouseXImpl(); }
+		inline static float IsMouseY() { return s_instance->GetMouseYImpl(); }
 
 	protected:
 		virtual bool IsKeyPressedImpl(int keycode) = 0;
 		virtual bool IsMouseButtonPressedImpl(int button) = 0;
 		virtual std::pair<float, float> GetMousePositionImpl() = 0;
-		virtual int GetMouseXImpl() = 0;
-		virtual int GetMouseYImpl() = 0;
+		virtual float GetMouseXImpl() = 0;
+		virtual float GetMouseYImpl() = 0;
 
 	private:
 		static Input* s_instance;

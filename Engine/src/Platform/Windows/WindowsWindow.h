@@ -2,7 +2,7 @@
 
 #include "Engine/Window.h"
 
-class GLFWwindow;
+struct GLFWwindow;
 
 namespace Engine
 {
