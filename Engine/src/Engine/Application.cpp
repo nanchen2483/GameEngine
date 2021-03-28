@@ -3,6 +3,7 @@
 #include "Engine/Events/ApplicationEvent.h"
 #include <glad/glad.h>
 
+#include "Engine/Input.h"
 #include "Application.h"
 
 namespace Engine
@@ -62,6 +63,9 @@ namespace Engine
 			{
 				layer->OnUpdate();
 			}
+
+			auto [x, y] = Input::GetMousePosition();
+			ENGINE_CORE_TRACE("{0}, {1}", x, y);
 
 			m_window->OnUpdate();
 		}

@@ -21,6 +21,9 @@ namespace Engine
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
+
+		inline virtual void* GetNaviveWindow() const { return m_window;  }
+
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void ShutDown();
