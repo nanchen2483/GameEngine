@@ -5,10 +5,10 @@
 namespace Engine
 {
 
-	class ENGINE_API MouseMoveEvent : public Event
+	class ENGINE_API MouseMovedEvent : public Event
 	{
 	public:
-		MouseMoveEvent(float x, float y)
+		MouseMovedEvent(float x, float y)
 			: m_mouseX(x), m_mouseY(y) {}
 
 		float GetX() const { return m_mouseX; }

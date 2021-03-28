@@ -38,10 +38,10 @@ namespace Engine
 		int m_repeatCount;
 	};
 
-	class ENGINE_API KeyReleaseEvent : public KeyEvent
+	class ENGINE_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleaseEvent(int keyCode)
+		KeyReleasedEvent(int keyCode)
 			: KeyEvent(keyCode) {}
 
 		std::string ToString() const override
@@ -53,4 +53,20 @@ namespace Engine
 
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
+	class ENGINE_API KeyTypedEvent : public KeyEvent
+	{
+	public:
+		KeyTypedEvent(int keyCode)
+			: KeyEvent(keyCode) {}
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "KeyTypedEvent: " << m_keyCode;
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(KeyTyped)
+	};
+
 }

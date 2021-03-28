@@ -90,7 +90,7 @@ namespace Engine
 			}
 			case GLFW_RELEASE:
 			{
-				KeyReleaseEvent event(key);
+				KeyReleasedEvent event(key);
 				data.EventCallback(event);
 				break;
 			}
@@ -103,6 +103,14 @@ namespace Engine
 			default:
 				break;
 			}
+		});
+
+		glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int keycode)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			KeyTypedEvent event(keycode);
+			data.EventCallback(event);
 		});
 
 		glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
@@ -140,7 +148,7 @@ namespace Engine
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			
-			MouseMoveEvent event((float)xPos, (float)yPos);
+			MouseMovedEvent event((float)xPos, (float)yPos);
 			data.EventCallback(event);
 		});
 	}
