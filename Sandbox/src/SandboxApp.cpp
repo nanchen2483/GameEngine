@@ -15,6 +15,10 @@ public:
 		ENGINE_INFO("ExampleLayer::Update");
 	}
 
+	virtual void OnImGuiRender() override
+	{
+	}
+
 	void OnEvent(Engine::Event& event) override
 	{
 		ENGINE_TRACE("{0}", event);
@@ -28,7 +32,6 @@ public:
 	Sandbox()
 	{
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Engine::ImGuiLayer());
 	}
 
 	~Sandbox()

@@ -3,6 +3,7 @@
 #include "Core.h"
 
 #include "Window.h"
+#include "Engine/ImGui/ImGuiLayer.h"
 #include "Engine/LayerStack.h"
 
 class WindowCloseEvent;
@@ -28,6 +29,7 @@ namespace Engine
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_window;
+		ImGuiLayer* m_imGuiLayer;
 		bool m_running = true;
 		LayerStack m_layerStack;
 	private:

@@ -1,10 +1,11 @@
 #include "enginepch.h"
 
-#include "Engine/Events/ApplicationEvent.h"
-#include <glad/glad.h>
-
-#include "Engine/Input.h"
 #include "Application.h"
+
+#include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Input.h"
+
+#include <glad/glad.h>
 
 namespace Engine
 {
@@ -19,6 +20,9 @@ namespace Engine
 
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+
+		m_imGuiLayer = new ImGuiLayer();
+		PushOverlay(m_imGuiLayer);
 	}
 
 	Application::~Application()
@@ -64,8 +68,12 @@ namespace Engine
 				layer->OnUpdate();
 			}
 
-			auto [x, y] = Input::GetMousePosition();
-			ENGINE_CORE_TRACE("{0}, {1}", x, y);
+			m_imGuiLayer->Begin();
+			for (Layer* layer : m_layerStack)
+			{
+				layer->OnImGuiRender();
+			}
+			m_imGuiLayer->End();
 
 			m_window->OnUpdate();
 		}
