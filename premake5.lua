@@ -15,6 +15,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["glfw"] = "Engine/util/glfw/include"
 IncludeDir["glad"] = "Engine/util/glad/include"
+IncludeDir["glm"] = "Engine/util/glm"
 IncludeDir["imgui"] = "Engine/util/imgui"
 
 group "Dependencies"
@@ -47,7 +48,8 @@ project "Engine"
 		"%{prj.name}/util/spdlog/include",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glad}",
-		"%{IncludeDir.imgui}"
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -107,7 +109,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Engine/util/spdlog/include",
-		"Engine/src"
+		"Engine/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links

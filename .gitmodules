@@ -7,3 +7,6 @@
 [submodule "Engine/util/imgui"]
 	path = Engine/util/imgui
 	url = https://github.com/nanchen24/imgui.git
+[submodule "Engine/util/glm"]
+	path = Engine/util/glm
+	url = https://github.com/nanchen24/glm.git
