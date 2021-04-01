@@ -12,7 +12,6 @@ public:
 
 	void OnUpdate() override
 	{
-		ENGINE_INFO("ExampleLayer::Update");
 	}
 
 	virtual void OnImGuiRender() override
