@@ -13,6 +13,27 @@ namespace Engine
 
 	Application* Application::s_instance = nullptr;
 
+	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
+	{
+		switch (type)
+		{
+		case Engine::ShaderDataType::Float:		return GL_FLOAT;
+		case Engine::ShaderDataType::Float2:	return GL_FLOAT;
+		case Engine::ShaderDataType::Float3:	return GL_FLOAT;
+		case Engine::ShaderDataType::Float4:	return GL_FLOAT;
+		case Engine::ShaderDataType::Mat3:		return GL_FLOAT;
+		case Engine::ShaderDataType::Mat4:		return GL_FLOAT;
+		case Engine::ShaderDataType::Int:		return GL_INT;
+		case Engine::ShaderDataType::Int2:		return GL_INT;
+		case Engine::ShaderDataType::Int3:		return GL_INT;
+		case Engine::ShaderDataType::Int4:		return GL_INT;
+		case Engine::ShaderDataType::Bool:		return GL_BOOL;
+		}
+
+		ENGINE_CORE_ASSERT(false, "Unknow ShaderDataType!");
+		return 0;
+	}
+
 	Application::Application()
 	{
 		ENGINE_CORE_ASSERT(!s_instance, "Application already exists!");
@@ -27,34 +48,54 @@ namespace Engine
 		glGenVertexArrays(1, &m_vertexArray);
 		glBindVertexArray(m_vertexArray);
 
-
-		float vertices[3 * 3] = {
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f,
+		float vertices[3 * 7] = {
+			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
 		};
 
 		m_vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-		m_vertexBuffer->Bind();
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		{
+			BufferLayout layout = {
+				{ ShaderDataType::Float3, "aPosition" },
+				{ ShaderDataType::Float4, "aColor" }
+			};
+
+			m_vertexBuffer->SetLayout(layout);
+		}
+
+		uint32_t index = 0;
+		const auto& layout = m_vertexBuffer->GetLayout();
+		for (const auto& element : layout)
+		{
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(
+				index,
+				element.GetComponentCount(),
+				ShaderDataTypeToOpenGLBaseType(element.type),
+				element.normalized ? GL_TRUE : GL_FALSE,
+				layout.GetStride(),
+				(const void *)element.offset);
+			index++;
+		}
 
 		uint32_t indices[3] = { 0, 1, 2 };
 		m_indexBuffer.reset(IndexBuffer::Create(indices, 3));
-		m_indexBuffer->Bind();
-
 
 		std::string vertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 aPosition;
+			layout(location = 1) in vec4 aColor;
 			
 			out vec3 vPosition;
+			out vec4 vColor;
 			
 			void main()
 			{
 				vPosition = aPosition;
+				vColor = aColor;
 				gl_Position = vec4(aPosition, 1.0);
 			}
 		)";
@@ -65,10 +106,11 @@ namespace Engine
 			layout(location = 0) out vec4 color;
 			
 			in vec3 vPosition;
+			in vec4 vColor;
 			
 			void main()
 			{
-				color = vec4(vPosition, 1.0);
+				color = vColor;
 			}
 		)";
 
@@ -110,7 +152,7 @@ namespace Engine
 	{
 		while (m_running)
 		{
-			glClearColor(0.1, 0.1, 0.1, 1);
+			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_shader->Bind();
