@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "Engine/ImGui/ImGuiLayer.h"
 #include "Engine/LayerStack.h"
+#include <Engine/Renderer/Shader.h>
 
 class WindowCloseEvent;
 
@@ -34,6 +35,7 @@ namespace Engine
 		LayerStack m_layerStack;
 
 		unsigned int m_vertexArray, m_vertexBuffer, m_indexBuffer;
+		std::unique_ptr<Shader> m_shader;
 	private:
 		static Application* s_instance;
 	};
