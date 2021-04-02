@@ -7,6 +7,7 @@
 #include "Engine/LayerStack.h"
 #include "Engine/Renderer/Shader.h"
 #include "Engine/Renderer/VertexArray.h"
+#include "Engine/Renderer/OrthographicCamera.h"
 
 class WindowCloseEvent;
 
@@ -37,6 +38,8 @@ namespace Engine
 
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<VertexArray> m_vertexArray;
+
+		OrthographicCamera m_camera;
 	private:
 		static Application* s_instance;
 	};
