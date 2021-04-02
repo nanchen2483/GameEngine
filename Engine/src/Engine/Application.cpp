@@ -13,7 +13,6 @@ namespace Engine
 	Application* Application::s_instance = nullptr;
 
 	Application::Application()
-		: m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
 	{
 		ENGINE_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
@@ -23,63 +22,6 @@ namespace Engine
 
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
-
-		m_vertexArray.reset(VertexArray::Create());
-
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
-		};
-
-		std::shared_ptr<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-		vertexBuffer->SetLayout(
-		{
-			{ ShaderDataType::Float3, "aPosition" },
-			{ ShaderDataType::Float4, "aColor" }
-		});
-		m_vertexArray->AddVertexBuffer(vertexBuffer);
-
-		uint32_t indices[3] = { 0, 1, 2 };
-		std::shared_ptr<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
-		m_vertexArray->SetIndexBuffer(indexBuffer);
-
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 aPosition;
-			layout(location = 1) in vec4 aColor;
-			
-			uniform mat4 u_viewProjection;
-
-			out vec3 vPosition;
-			out vec4 vColor;
-			
-			void main()
-			{
-				vPosition = aPosition;
-				vColor = aColor;
-				gl_Position = u_viewProjection * vec4(aPosition, 1.0);
-			}
-		)";
-
-		std::string fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-			
-			in vec3 vPosition;
-			in vec4 vColor;
-			
-			void main()
-			{
-				color = vColor;
-			}
-		)";
-
-		m_shader.reset(new Shader(vertexSrc, fragmentSrc));
 	}
 
 	Application::~Application()
@@ -117,17 +59,6 @@ namespace Engine
 	{
 		while (m_running)
 		{
-			RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f});
-			RendererCommand::Clear();
-
-			m_camera.SetPosition({0.2f, 0.2f, 0.0f});
-			m_camera.SetRotation(45.0f);
-			Renderer::BeginScene(m_camera);
-			{
-				Renderer::Submit(m_shader, m_vertexArray);
-			}
-			Renderer::EndScene();
-
 			for (Layer* layer : m_layerStack)
 			{
 				layer->OnUpdate();
