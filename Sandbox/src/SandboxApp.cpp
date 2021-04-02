@@ -2,30 +2,32 @@
 
 #include <Engine.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_camera(-1.0f, 1.0f, -1.0f, 1.0f), m_cameraPosition(0.0f)
+		: Layer("Example"), m_camera(-1.0f, 1.0f, -1.0f, 1.0f), m_cameraPosition(0.0f), m_cameraRotation(0.0f)
 	{
 		m_vertexArray.reset(Engine::VertexArray::Create());
 
-		float vertices[3 * 7] = {
+		float vertices[4 * 7] = {
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
+			 0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f
 		};
 
 		std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Engine::VertexBuffer::Create(vertices, sizeof(vertices)));
-		vertexBuffer->SetLayout(
-			{
-				{ Engine::ShaderDataType::Float3, "aPosition" },
-				{ Engine::ShaderDataType::Float4, "aColor" }
-			});
+		vertexBuffer->SetLayout({
+			{ Engine::ShaderDataType::Float3, "aPosition" },
+			{ Engine::ShaderDataType::Float4, "aColor" }
+		});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 
-		uint32_t indices[3] = { 0, 1, 2 };
+		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0 };
 		std::shared_ptr<Engine::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Engine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_vertexArray->SetIndexBuffer(indexBuffer);
@@ -36,7 +38,8 @@ public:
 			layout(location = 0) in vec3 aPosition;
 			layout(location = 1) in vec4 aColor;
 			
-			uniform mat4 u_viewProjection;
+			uniform mat4 uViewProjection;
+			uniform mat4 uModel;
 
 			out vec3 vPosition;
 			out vec4 vColor;
@@ -45,7 +48,7 @@ public:
 			{
 				vPosition = aPosition;
 				vColor = aColor;
-				gl_Position = u_viewProjection * vec4(aPosition, 1.0);
+				gl_Position = uViewProjection * uModel * vec4(aPosition, 1.0);
 			}
 		)";
 
@@ -66,33 +69,33 @@ public:
 		m_shader.reset(new Engine::Shader(vertexSrc, fragmentSrc));
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Engine::TimeStep timeStep) override
 	{
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_LEFT))
-		{
-			m_cameraPosition.x -= m_cameraMoveSpeed;
-		} 
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_RIGHT))
-		{
-			m_cameraPosition.x += m_cameraMoveSpeed;
-		}
-
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_UP))
-		{
-			m_cameraPosition.y += m_cameraMoveSpeed;
-		}
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_DOWN))
-		{
-			m_cameraPosition.y -= m_cameraMoveSpeed;
-		}
-
 		if (Engine::Input::IsKeyPressed(ENGINE_KEY_A))
 		{
-			m_cameraRotation += m_cameraRotationSpeed;
-		}
+			m_cameraPosition.x -= m_cameraMoveSpeed * timeStep;
+		} 
 		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
 		{
-			m_cameraRotation -= m_cameraRotationSpeed;
+			m_cameraPosition.x += m_cameraMoveSpeed * timeStep;
+		}
+
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_W))
+		{
+			m_cameraPosition.y += m_cameraMoveSpeed * timeStep;
+		}
+		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_S))
+		{
+			m_cameraPosition.y -= m_cameraMoveSpeed * timeStep;
+		}
+
+		if (Engine::Input::IsKeyPressed(ENGINE_KEY_Q))
+		{
+			m_cameraRotation += m_cameraRotationSpeed * timeStep;
+		}
+		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_E))
+		{
+			m_cameraRotation -= m_cameraRotationSpeed * timeStep;
 		}
 
 		Engine::RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
@@ -101,9 +104,19 @@ public:
 		m_camera.SetPosition(m_cameraPosition);
 		m_camera.SetRotation(m_cameraRotation);
 		Engine::Renderer::BeginScene(m_camera);
+
+		static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		for (int y = 0; y < 20; y++)
 		{
-			Engine::Renderer::Submit(m_shader, m_vertexArray);
+			for (int x = 0; x < 20; x++)
+			{
+				glm::vec3 pos(x * 0.11, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				Engine::Renderer::Submit(m_shader, m_vertexArray, transform);
+			}
 		}
+
 		Engine::Renderer::EndScene();
 
 	}
@@ -122,9 +135,9 @@ private:
 
 	Engine::OrthographicCamera m_camera;
 	glm::vec3 m_cameraPosition;
-	float m_cameraRotation = 0.0f;
-	float m_cameraMoveSpeed = 0.01f;
-	float m_cameraRotationSpeed = 1.0f;
+	float m_cameraMoveSpeed = 1.0f;
+	float m_cameraRotation;
+	float m_cameraRotationSpeed = 180.0f;
 };
 
 

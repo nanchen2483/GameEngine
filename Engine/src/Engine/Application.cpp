@@ -5,6 +5,9 @@
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Input.h"
 #include "Engine/Renderer/Renderer.h"
+#include "Engine/Core/TimeStep.h"
+
+#include <GLFW/glfw3.h>
 
 namespace Engine
 {
@@ -59,9 +62,13 @@ namespace Engine
 	{
 		while (m_running)
 		{
+			float time = (float)glfwGetTime();
+			TimeStep timeStep = time - m_lastFrameTime;
+			m_lastFrameTime = time;
+
 			for (Layer* layer : m_layerStack)
 			{
-				layer->OnUpdate();
+				layer->OnUpdate(timeStep);
 			}
 
 			m_imGuiLayer->Begin();
