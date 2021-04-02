@@ -4,9 +4,7 @@
 
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Input.h"
-#include "Engine/Renderer/Buffer.h"
-
-#include <glad/glad.h>
+#include "Engine/Renderer/Renderer.h"
 
 namespace Engine
 {
@@ -116,12 +114,15 @@ namespace Engine
 	{
 		while (m_running)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f});
+			RendererCommand::Clear();
 
-			m_shader->Bind();
-			m_vertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::BeginScene();
+			{
+				m_shader->Bind();
+				Renderer::Submit(m_vertexArray);
+			}
+			Renderer::EndScene();
 
 			for (Layer* layer : m_layerStack)
 			{
