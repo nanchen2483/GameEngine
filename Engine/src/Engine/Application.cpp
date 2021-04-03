@@ -20,7 +20,7 @@ namespace Engine
 		ENGINE_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		m_window = std::unique_ptr<Window>(Window::Create());
+		m_window = Uniq<Window>(Window::Create());
 		m_window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		m_imGuiLayer = new ImGuiLayer();

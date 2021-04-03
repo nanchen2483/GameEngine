@@ -31,7 +31,7 @@ namespace Engine
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 	private:
-		std::unique_ptr<Window> m_window;
+		Uniq<Window> m_window;
 		ImGuiLayer* m_imGuiLayer;
 		bool m_running = true;
 		LayerStack m_layerStack;

@@ -24,7 +24,7 @@ public:
 			-0.5f,  0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f
 		};
 
-		std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
+		Engine::Ptr<Engine::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Engine::VertexBuffer::Create(vertices, sizeof(vertices)));
 		vertexBuffer->SetLayout({
 			{ Engine::ShaderDataType::Float3, "aPosition" },
@@ -33,7 +33,7 @@ public:
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Engine::IndexBuffer> indexBuffer;
+		Engine::Ptr<Engine::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Engine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_vertexArray->SetIndexBuffer(indexBuffer);
 
@@ -147,8 +147,8 @@ public:
 	}
 
 private:
-	std::shared_ptr<Engine::Shader> m_shader;
-	std::shared_ptr<Engine::VertexArray> m_vertexArray;
+	Engine::Ptr<Engine::Shader> m_shader;
+	Engine::Ptr<Engine::VertexArray> m_vertexArray;
 
 	Engine::OrthographicCamera m_camera;
 	glm::vec3 m_cameraPosition;
