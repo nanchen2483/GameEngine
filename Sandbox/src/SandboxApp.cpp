@@ -3,6 +3,7 @@
 #include <Engine.h>
 
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Platform/OpenGL/OpenGLTexture.h"
 
 #include <imgui.h>
 
@@ -17,18 +18,18 @@ public:
 	{
 		m_vertexArray.reset(Engine::VertexArray::Create());
 
-		float vertices[4 * 7] = {
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f
+		float vertices[4 * 9] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		Engine::Ptr<Engine::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Engine::VertexBuffer::Create(vertices, sizeof(vertices)));
 		vertexBuffer->SetLayout({
 			{ Engine::ShaderDataType::Float3, "aPosition" },
-			{ Engine::ShaderDataType::Float4, "aColor" }
+			{ Engine::ShaderDataType::Float2, "aTexCoord" },
 		});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 
@@ -41,18 +42,18 @@ public:
 			#version 330 core
 			
 			layout(location = 0) in vec3 aPosition;
-			layout(location = 1) in vec4 aColor;
+			layout(location = 1) in vec2 aTexCoord;
 			
 			uniform mat4 uViewProjection;
 			uniform mat4 uModel;
 
 			out vec3 vPosition;
-			out vec4 vColor;
+			out vec2 vTexCoord;
 			
 			void main()
 			{
 				vPosition = aPosition;
-				vColor = aColor;
+				vTexCoord = aTexCoord;
 				gl_Position = uViewProjection * uModel * vec4(aPosition, 1.0);
 			}
 		)";
@@ -62,17 +63,24 @@ public:
 			
 			layout(location = 0) out vec4 color;
 			
-			uniform vec3 uColor;
 			in vec3 vPosition;
-			in vec4 vColor;
+			in vec2 vTexCoord;
+			
+			uniform vec3 uColor;
+			uniform sampler2D uTexture;
 			
 			void main()
 			{
-				color = vec4(uColor, 1.0f);
+				color = texture(uTexture, vTexCoord);
 			}
 		)";
 
 		m_shader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
+
+		m_texture2D = Engine::Texture2D::Create("asserts/textures/blocks.png");
+
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->UploadUniformInt("uTexture", 0);
 	}
 
 	void OnUpdate(Engine::TimeStep timeStep) override
@@ -131,6 +139,9 @@ public:
 			}
 		}
 
+		m_texture2D->Bind();
+		Engine::Renderer::Submit(m_shader, m_vertexArray);
+
 		Engine::Renderer::EndScene();
 
 	}
@@ -149,12 +160,14 @@ public:
 private:
 	Engine::Ptr<Engine::Shader> m_shader;
 	Engine::Ptr<Engine::VertexArray> m_vertexArray;
+	Engine::Ptr<Engine::Texture2D> m_texture2D;
 
 	Engine::OrthographicCamera m_camera;
 	glm::vec3 m_cameraPosition;
 	float m_cameraMoveSpeed = 1.0f;
 	float m_cameraRotation;
 	float m_cameraRotationSpeed = 180.0f;
+
 	glm::vec3 m_color = glm::vec3(1.0f, 0.0f, 0.0f);
 };
 

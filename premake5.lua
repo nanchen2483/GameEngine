@@ -17,6 +17,7 @@ IncludeDir["glfw"] = "Engine/util/glfw/include"
 IncludeDir["glad"] = "Engine/util/glad/include"
 IncludeDir["glm"] = "Engine/util/glm"
 IncludeDir["imgui"] = "Engine/util/imgui"
+IncludeDir["stb_image"] = "Engine/util/stb_image"
 
 group "Dependencies"
 	include "Engine/util/glfw"
@@ -41,6 +42,7 @@ project "Engine"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/util/stb_image/**",
 	}
 
 	defines
@@ -55,7 +57,8 @@ project "Engine"
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links
