@@ -2,7 +2,12 @@
 
 #include <Engine.h>
 
+#include "Platform/OpenGL/OpenGLShader.h"
+
+#include <imgui.h>
+
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class ExampleLayer : public Engine::Layer
 {
@@ -57,16 +62,17 @@ public:
 			
 			layout(location = 0) out vec4 color;
 			
+			uniform vec3 uColor;
 			in vec3 vPosition;
 			in vec4 vColor;
 			
 			void main()
 			{
-				color = vColor;
+				color = vec4(uColor, 1.0f);
 			}
 		)";
 
-		m_shader.reset(new Engine::Shader(vertexSrc, fragmentSrc));
+		m_shader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
 	}
 
 	void OnUpdate(Engine::TimeStep timeStep) override
@@ -106,13 +112,21 @@ public:
 		Engine::Renderer::BeginScene(m_camera);
 
 		static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
-
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->Bind();
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
 			{
 				glm::vec3 pos(x * 0.11, y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				if ((x + y) % 2)
+				{
+					std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->UploadUniformFloat3("uColor", m_color);
+				}
+				else
+				{
+					std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->UploadUniformFloat3("uColor", glm::vec3(0.0f, 0.0f, 1.0f));
+				}
 				Engine::Renderer::Submit(m_shader, m_vertexArray, transform);
 			}
 		}
@@ -123,6 +137,9 @@ public:
 
 	virtual void OnImGuiRender() override
 	{
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_color));
+		ImGui::End();
 	}
 
 	void OnEvent(Engine::Event& event) override
@@ -138,6 +155,7 @@ private:
 	float m_cameraMoveSpeed = 1.0f;
 	float m_cameraRotation;
 	float m_cameraRotationSpeed = 180.0f;
+	glm::vec3 m_color = glm::vec3(1.0f, 0.0f, 0.0f);
 };
 
 

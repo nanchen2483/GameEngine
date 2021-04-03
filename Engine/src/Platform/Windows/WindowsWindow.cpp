@@ -58,8 +58,7 @@ namespace Engine
 		SetVSync(true);
 
 		// Set GLFW callbacks
-		glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
-		{
+		glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			data.width = width;
 			data.height = height;
@@ -68,16 +67,14 @@ namespace Engine
 			data.EventCallback(event);
 		});
 
-		glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
-		{
+		glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			WindowCloseEvent event;
 			data.EventCallback(event);
 		});
 
-		glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
-		{
+		glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action)
@@ -105,16 +102,14 @@ namespace Engine
 			}
 		});
 
-		glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int keycode)
-		{
+		glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int keycode) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			KeyTypedEvent event(keycode);
 			data.EventCallback(event);
 		});
 
-		glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
-		{
+		glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action)
@@ -136,16 +131,14 @@ namespace Engine
 			}
 		});
 
-		glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset)
-		{
+		glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			
 			MouseScrolledEvent event((float)xOffset, (float)yOffset);
 			data.EventCallback(event);
 		});
 
-		glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xPos, double yPos)
-		{
+		glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xPos, double yPos) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			
 			MouseMovedEvent event((float)xPos, (float)yPos);

@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "Renderer.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Engine
 {
@@ -17,8 +18,8 @@ namespace Engine
 	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
 		shader->Bind();
-		shader->UploadUniformMat4("uViewProjection", m_sceneData->viewProjectionMatrix);
-		shader->UploadUniformMat4("uModel", transform);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("uViewProjection", m_sceneData->viewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("uModel", transform);
 
 		vertexArray->Bind();
 		RendererCommand::DrawIndexed(vertexArray);

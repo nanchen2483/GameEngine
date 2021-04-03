@@ -110,6 +110,7 @@ project "Sandbox"
 	includedirs
 	{
 		"Engine/util/spdlog/include",
+		"Engine/util/imgui",
 		"Engine/src",
 		"%{IncludeDir.glm}"
 	}
