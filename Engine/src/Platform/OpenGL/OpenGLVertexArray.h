@@ -5,27 +5,6 @@
 
 namespace Engine
 {
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-		case Engine::ShaderDataType::Float:		return GL_FLOAT;
-		case Engine::ShaderDataType::Float2:	return GL_FLOAT;
-		case Engine::ShaderDataType::Float3:	return GL_FLOAT;
-		case Engine::ShaderDataType::Float4:	return GL_FLOAT;
-		case Engine::ShaderDataType::Mat3:		return GL_FLOAT;
-		case Engine::ShaderDataType::Mat4:		return GL_FLOAT;
-		case Engine::ShaderDataType::Int:		return GL_INT;
-		case Engine::ShaderDataType::Int2:		return GL_INT;
-		case Engine::ShaderDataType::Int3:		return GL_INT;
-		case Engine::ShaderDataType::Int4:		return GL_INT;
-		case Engine::ShaderDataType::Bool:		return GL_BOOL;
-		}
-
-		ENGINE_CORE_ASSERT(false, "Unknow ShaderDataType!");
-		return 0;
-	}
-
 	class OpenGLVertexArray : public VertexArray
 	{
 	public:

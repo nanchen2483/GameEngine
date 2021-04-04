@@ -22,14 +22,21 @@ namespace Engine
 		return 0;
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& path)
+	OpenGLShader::OpenGLShader(const std::string& filePath)
 	{
-		std::string source = ReadFile(path);
+		std::string source = ReadFile(filePath);
 		auto shaderSource = PreProcess(source);
 		Compile(shaderSource);
+
+		auto lastSlash = filePath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filePath.rfind('.');
+		auto nameSize = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
+		m_shaderName = filePath.substr(lastSlash, nameSize);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		: m_shaderName(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;

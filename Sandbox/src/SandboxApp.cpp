@@ -2,13 +2,11 @@
 
 #include <Engine.h>
 
-#include "Platform/OpenGL/OpenGLShader.h"
-#include "Platform/OpenGL/OpenGLTexture.h"
-
 #include <imgui.h>
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "Platform/OpenGL/OpenGLShader.h"
 
 class ExampleLayer : public Engine::Layer
 {
@@ -71,16 +69,18 @@ public:
 			
 			void main()
 			{
-				color = texture(uTexture, vTexCoord);
+				color = vec4(uColor, 1.0);
 			}
 		)";
 
-		m_shader = Engine::Shader::Create(vertexSrc, fragmentSrc);
+		auto reatangleshader = m_shaderLibrary.Load("Rectangle", vertexSrc, fragmentSrc);
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(reatangleshader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(reatangleshader)->UploadUniformInt("uTexture", 0);
 
+		auto textureShader = m_shaderLibrary.Load("asserts/shaders/Texture.glsl");
 		m_texture2D = Engine::Texture2D::Create("asserts/textures/blocks.png");
-
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->Bind();
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->UploadUniformInt("uTexture", 0);
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->UploadUniformInt("uTexture", 0);
 	}
 
 	void OnUpdate(Engine::TimeStep timeStep) override
@@ -117,10 +117,12 @@ public:
 
 		m_camera.SetPosition(m_cameraPosition);
 		m_camera.SetRotation(m_cameraRotation);
-		Engine::Renderer::BeginScene(m_camera);
 
+		Engine::Renderer::BeginScene(m_camera);
+		
+		auto reatangleShader = m_shaderLibrary.Get("Rectangle");
+		reatangleShader->Bind();
 		static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->Bind();
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
@@ -129,21 +131,22 @@ public:
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 				if ((x + y) % 2)
 				{
-					std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->UploadUniformFloat3("uColor", m_color);
+					std::dynamic_pointer_cast<Engine::OpenGLShader>(reatangleShader)->UploadUniformFloat3("uColor", m_color);
 				}
 				else
 				{
-					std::dynamic_pointer_cast<Engine::OpenGLShader>(m_shader)->UploadUniformFloat3("uColor", glm::vec3(0.0f, 0.0f, 1.0f));
+					std::dynamic_pointer_cast<Engine::OpenGLShader>(reatangleShader)->UploadUniformFloat3("uColor", glm::vec3(0.0f, 0.0f, 1.0f));
 				}
-				Engine::Renderer::Submit(m_shader, m_vertexArray, transform);
+				Engine::Renderer::Submit(reatangleShader, m_vertexArray, transform);
 			}
 		}
 
+		auto textureShader = m_shaderLibrary.Get("Texture");
+		textureShader->Bind();
 		m_texture2D->Bind();
-		Engine::Renderer::Submit(m_shader, m_vertexArray);
+		Engine::Renderer::Submit(textureShader, m_vertexArray);
 
 		Engine::Renderer::EndScene();
-
 	}
 
 	virtual void OnImGuiRender() override
@@ -158,7 +161,7 @@ public:
 	}
 
 private:
-	Engine::Ptr<Engine::Shader> m_shader;
+	Engine::ShaderLibrary m_shaderLibrary;
 	Engine::Ptr<Engine::VertexArray> m_vertexArray;
 	Engine::Ptr<Engine::Texture2D> m_texture2D;
 

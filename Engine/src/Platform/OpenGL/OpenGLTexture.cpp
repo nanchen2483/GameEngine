@@ -6,12 +6,12 @@
 
 namespace Engine
 {
-    OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
-        : m_path(path), m_width(0), m_height(0), m_rendererId(0)
+    OpenGLTexture2D::OpenGLTexture2D(const std::string& filePath)
+        : m_filePath(filePath), m_width(0), m_height(0), m_rendererId(0)
     {
         int width, height, channels;
         stbi_set_flip_vertically_on_load(true);
-        stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+        stbi_uc* data = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
         ENGINE_CORE_ASSERT(data, "Failed to load image!");
 
         m_width = width;
