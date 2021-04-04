@@ -19,5 +19,5 @@ private:
 	Engine::Ptr<Engine::VertexArray> m_vertexArray;
 	Engine::Ptr<Engine::Texture2D> m_texture2D;
 
-	glm::vec3 m_color;
+	glm::vec4 m_color;
 };
