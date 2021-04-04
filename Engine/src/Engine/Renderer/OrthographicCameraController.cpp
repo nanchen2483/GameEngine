@@ -1,8 +1,8 @@
 #include "enginepch.h"
 #include "OrthographicCameraController.h"
 
-#include "Engine/Input.h"
-#include "Engine/KeyCodes.h"
+#include "Engine/Core/Input.h"
+#include "Engine/Core/KeyCodes.h"
 
 namespace Engine
 {
@@ -70,7 +70,4 @@ namespace Engine
 		m_camera.SetProjectionMatrix(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
 		return false;
 	}
-
-
-
 }
