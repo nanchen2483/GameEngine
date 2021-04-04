@@ -12,7 +12,7 @@ class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_camera(-1.0f, 1.0f, -1.0f, 1.0f), m_cameraPosition(0.0f), m_cameraRotation(0.0f)
+		: Layer("Example"), m_cameraController(1280.0f / 720.0f, true)
 	{
 		m_vertexArray = Engine::VertexArray::Create();
 
@@ -85,40 +85,12 @@ public:
 
 	void OnUpdate(Engine::TimeStep timeStep) override
 	{
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_A))
-		{
-			m_cameraPosition.x -= m_cameraMoveSpeed * timeStep;
-		} 
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_D))
-		{
-			m_cameraPosition.x += m_cameraMoveSpeed * timeStep;
-		}
-
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_W))
-		{
-			m_cameraPosition.y += m_cameraMoveSpeed * timeStep;
-		}
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_S))
-		{
-			m_cameraPosition.y -= m_cameraMoveSpeed * timeStep;
-		}
-
-		if (Engine::Input::IsKeyPressed(ENGINE_KEY_Q))
-		{
-			m_cameraRotation += m_cameraRotationSpeed * timeStep;
-		}
-		else if (Engine::Input::IsKeyPressed(ENGINE_KEY_E))
-		{
-			m_cameraRotation -= m_cameraRotationSpeed * timeStep;
-		}
+		m_cameraController.OnUpdate(timeStep);
 
 		Engine::RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Engine::RendererCommand::Clear();
 
-		m_camera.SetPosition(m_cameraPosition);
-		m_camera.SetRotation(m_cameraRotation);
-
-		Engine::Renderer::BeginScene(m_camera);
+		Engine::Renderer::BeginScene(m_cameraController.GetCamera());
 		
 		auto reatangleShader = m_shaderLibrary.Get("Rectangle");
 		reatangleShader->Bind();
@@ -158,6 +130,7 @@ public:
 
 	void OnEvent(Engine::Event& event) override
 	{
+		m_cameraController.OnEvent(event);
 	}
 
 private:
@@ -165,12 +138,7 @@ private:
 	Engine::Ptr<Engine::VertexArray> m_vertexArray;
 	Engine::Ptr<Engine::Texture2D> m_texture2D;
 
-	Engine::OrthographicCamera m_camera;
-	glm::vec3 m_cameraPosition;
-	float m_cameraMoveSpeed = 1.0f;
-	float m_cameraRotation;
-	float m_cameraRotationSpeed = 180.0f;
-
+	Engine::OrthographicCameraController m_cameraController;
 	glm::vec3 m_color = glm::vec3(1.0f, 0.0f, 0.0f);
 };
 

@@ -8,6 +8,7 @@
 #include "Engine/Input.h"
 #include "Engine/KeyCodes.h"
 #include "Engine/MouseButtonCodes.h"
+#include "Engine/OrthographicCameraController.h"
 
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/RendererCommand.h"

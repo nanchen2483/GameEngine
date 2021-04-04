@@ -6,10 +6,14 @@
 namespace Engine
 {
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)
-		: m_projectionMatrix(glm::ortho(left, right, bottom, top, -0.1f, 0.1f)),
-			m_viewMatrix(1.0f),
-			m_position(glm::vec3())
+		: m_projectionMatrix(glm::ortho(left, right, bottom, top, -0.1f, 0.1f)), m_viewMatrix(1.0f), m_position(glm::vec3())
 	{
+		m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
+	}
+
+	void OrthographicCamera::SetProjectionMatrix(float left, float right, float bottom, float top)
+	{
+		m_projectionMatrix = glm::ortho(left, right, bottom, top, -0.1f, 0.1f);
 		m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
 	}
 	
