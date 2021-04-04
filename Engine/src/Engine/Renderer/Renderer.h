@@ -12,6 +12,7 @@ namespace Engine
 	{
 	public:
 		static void Init();
+		static void OnWindowResize(uint32_t width, uint32_t height);
 		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();
 		static void Submit(const Ptr<Shader>& shader, const Ptr<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
@@ -23,6 +24,6 @@ namespace Engine
 			glm::mat4 viewProjectionMatrix;
 		};
 
-		static SceneData* m_sceneData;
+		static Uniq<SceneData> m_sceneData;
 	};
 }

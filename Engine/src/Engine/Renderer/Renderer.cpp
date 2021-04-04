@@ -4,11 +4,16 @@
 
 namespace Engine
 {
-	Renderer::SceneData* Renderer::m_sceneData = new Renderer::SceneData;
+	Uniq<Renderer::SceneData> Renderer::m_sceneData = std::make_unique<Renderer::SceneData>();
 
 	void Renderer::Init()
 	{
 		RendererCommand::Init();
+	}
+
+	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	{
+		RendererCommand::SetViewport(0, 0, width, height);
 	}
 
 	void Renderer::BeginScene(OrthographicCamera& camera)
