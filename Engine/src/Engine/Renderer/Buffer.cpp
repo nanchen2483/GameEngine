@@ -6,24 +6,24 @@
 
 namespace Engine
 {
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
+	Ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return new OpenGLVertexBuffer(vertices, size);
+		case RendererAPI::API::OpenGL:		return Ptr<VertexBuffer>(new OpenGLVertexBuffer(vertices, size));
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
 		return nullptr;
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	Ptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return new OpenGLIndexBuffer(indices, count);
+		case RendererAPI::API::OpenGL:		return Ptr<IndexBuffer>(new OpenGLIndexBuffer(indices, count));
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");

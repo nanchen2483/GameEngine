@@ -19,6 +19,6 @@ namespace Engine
 		virtual const std::vector<Ptr<VertexBuffer>>& GetVertexBuffer() const = 0;
 		virtual const Ptr<IndexBuffer>& GetIndexBuffer() const = 0;
 
-		static VertexArray* Create();
+		static Ptr<VertexArray> Create();
 	};
 }

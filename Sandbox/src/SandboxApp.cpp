@@ -16,7 +16,7 @@ public:
 	ExampleLayer()
 		: Layer("Example"), m_camera(-1.0f, 1.0f, -1.0f, 1.0f), m_cameraPosition(0.0f), m_cameraRotation(0.0f)
 	{
-		m_vertexArray.reset(Engine::VertexArray::Create());
+		m_vertexArray = Engine::VertexArray::Create();
 
 		float vertices[4 * 9] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -26,7 +26,7 @@ public:
 		};
 
 		Engine::Ptr<Engine::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Engine::VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = Engine::VertexBuffer::Create(vertices, sizeof(vertices));
 		vertexBuffer->SetLayout({
 			{ Engine::ShaderDataType::Float3, "aPosition" },
 			{ Engine::ShaderDataType::Float2, "aTexCoord" },
@@ -35,7 +35,7 @@ public:
 
 		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0 };
 		Engine::Ptr<Engine::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Engine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = Engine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_vertexArray->SetIndexBuffer(indexBuffer);
 
 		std::string vertexSrc = R"(

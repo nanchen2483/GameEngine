@@ -100,7 +100,9 @@ namespace Engine
 		// Now time to link them together into a program.
 		// Get a program object.
 		GLuint program = glCreateProgram();
-		std::vector<GLuint> shaders(shaderSources.size());
+		ENGINE_CORE_ASSERT(shaderSources.size() <= 5, "Only supprt max 5 shaders!");
+		std::array<GLuint, 5> shaders;
+		int shaderIndex = 0;
 		for (auto& kv : shaderSources)
 		{
 			GLenum shaderType = kv.first;
@@ -141,7 +143,7 @@ namespace Engine
 			
 			// Attach our shaders to our program
 			glAttachShader(program, shader);
-			shaders.push_back(shader);
+			shaders[shaderIndex++] = shader;
 		}
 
 		// Link our program
