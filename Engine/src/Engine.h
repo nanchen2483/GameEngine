@@ -20,5 +20,3 @@
 #include "Engine/Renderer/Texture.h"
 
 #include "Engine/Renderer/OrthographicCamera.h"
-
-#include "Engine/Core/EntryPoint.h"
