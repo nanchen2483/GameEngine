@@ -11,6 +11,7 @@ namespace Engine
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		static Ptr<Shader> Create(const std::string& path);
 		static Ptr<Shader> Create(const std::string& vertexSrc, const std::string& fragmentSrc);
 	};
 }

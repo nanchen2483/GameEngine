@@ -75,7 +75,7 @@ public:
 			}
 		)";
 
-		m_shader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
+		m_shader = Engine::Shader::Create(vertexSrc, fragmentSrc);
 
 		m_texture2D = Engine::Texture2D::Create("asserts/textures/blocks.png");
 
