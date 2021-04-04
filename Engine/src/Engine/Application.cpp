@@ -23,6 +23,8 @@ namespace Engine
 		m_window = Uniq<Window>(Window::Create());
 		m_window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
+		Renderer::Init();
+
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
 	}
