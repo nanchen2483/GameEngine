@@ -12,5 +12,6 @@ namespace Engine
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void Clear() override;
 		virtual void DrawIndexed(const Ptr<VertexArray>& vertexArray) override;
+		virtual void DrawIndexed(uint32_t count) override;
 	};
 }

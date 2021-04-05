@@ -8,10 +8,20 @@ namespace Engine
 	/// <summary>
 	/// Vertex buffer
 	/// </summary>
-	/// <param name="vertices"></param>
 	/// <param name="size"></param>
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		glCreateBuffers(1, &m_rendererId);
+		glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
+	}
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glCreateBuffers(1, &m_rendererId);
 		glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
@@ -19,17 +29,29 @@ namespace Engine
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	{
+		ENGINE_PROFILE_FUNCTION();
+		
 		glDeleteBuffers(1, &m_rendererId);
 	}
 
 	void OpenGLVertexBuffer::Bind() const
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 	}
 
 	void OpenGLVertexBuffer::Unbind() const
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 
 	/// <summary>
@@ -40,6 +62,8 @@ namespace Engine
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
 		: m_count(count)
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glCreateBuffers(1, &m_rendererId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
@@ -47,16 +71,22 @@ namespace Engine
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glDeleteBuffers(1, &m_rendererId);
 	}
 
 	void OpenGLIndexBuffer::Bind() const
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererId);
 	}
 
 	void OpenGLIndexBuffer::Unbind() const
 	{
+		ENGINE_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }

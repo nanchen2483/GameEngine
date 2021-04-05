@@ -38,7 +38,8 @@ void Sandbox2D::OnUpdate(Engine::TimeStep timeStep)
 	{
 		ENGINE_PROFILE_SCOPE("Renderer Draw");
 		Engine::Renderer2D::BeginScene(m_cameraController.GetCamera());
-		Engine::Renderer2D::DrawQuad(glm::vec3(0.5f), glm::vec2(0.5f), m_color);
+		Engine::Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(0.5f), m_color);
+		Engine::Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(0.5f), m_color);
 		//Engine::Renderer2D::DrawQuad(glm::vec3(0.5f), glm::vec2(5.0f), m_texture2D);
 
 		Engine::Renderer2D::EndScene();
