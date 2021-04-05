@@ -20,6 +20,7 @@ void Sandbox2D::OnDetach()
 {
 
 }
+
 void Sandbox2D::OnUpdate(Engine::TimeStep timeStep)
 {
 	ENGINE_PROFILE_FUNCTION();
@@ -40,7 +41,7 @@ void Sandbox2D::OnUpdate(Engine::TimeStep timeStep)
 		Engine::Renderer2D::BeginScene(m_cameraController.GetCamera());
 		Engine::Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(0.5f), m_color);
 		Engine::Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(0.5f), m_color);
-		//Engine::Renderer2D::DrawQuad(glm::vec3(0.5f), glm::vec2(5.0f), m_texture2D);
+		Engine::Renderer2D::DrawQuad(glm::vec3(-0.5f), glm::vec2(5.0f), m_texture2D);
 
 		Engine::Renderer2D::EndScene();
 	}
@@ -48,6 +49,7 @@ void Sandbox2D::OnUpdate(Engine::TimeStep timeStep)
 
 void Sandbox2D::OnImGuiRender()
 {
+	ENGINE_PROFILE_FUNCTION();
 	ImGui::Begin("Settings");
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_color));
 	ImGui::End();

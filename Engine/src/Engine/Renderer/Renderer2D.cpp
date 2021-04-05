@@ -11,14 +11,16 @@ namespace Engine
 		glm::vec3 position;
 		glm::vec4 color;
 		glm::vec2 texCoord;
+		float textureIndex;
 	};
 
 	struct Renderer2DData
 	{
-		const uint32_t maxQuads = 10000;
-		const uint32_t maxVertices = maxQuads * 4;
-		const uint32_t maxIndices = maxQuads * 6;
-		
+		static const uint32_t maxQuads = 10000;
+		static const uint32_t maxVertices = maxQuads * 4;
+		static const uint32_t maxIndices = maxQuads * 6;
+		static const uint32_t maxTextureSlots = 32;
+
 		Ptr<VertexArray> vertexArray;
 		Ptr<VertexBuffer> vertexBuffer;
 		Ptr<Shader> shader;
@@ -27,6 +29,9 @@ namespace Engine
 		uint32_t indexCount = 0;
 		Vertex* vertexBufferBase = nullptr;
 		Vertex* vertexBufferPtr = nullptr;
+
+		std::array<Ptr<Texture2D>, maxTextureSlots> textureSlots;
+		uint32_t textureSlotIndex = 1;
 	};
 
 	static Renderer2DData s_data;
@@ -42,6 +47,7 @@ namespace Engine
 			{ ShaderDataType::Float3, "aPosition" },
 			{ ShaderDataType::Float4, "aColor" },
 			{ ShaderDataType::Float2, "aTexCoord" },
+			{ ShaderDataType::Float, "aTexIndex" },
 		});
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 
@@ -69,9 +75,16 @@ namespace Engine
 		uint32_t whiteTextureData = 0xffffffff;
 		s_data.whiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
 
+		int32_t samplers[s_data.maxTextureSlots];
+		for (uint32_t i = 0; i < s_data.maxTextureSlots; i++)
+		{
+			samplers[i] = i;
+		}
+
 		s_data.shader = Shader::Create("asserts/shaders/Color.glsl");
 		s_data.shader->Bind();
-		s_data.shader->SetInt("uTexture", 0);
+		s_data.shader->SetIntArray("uTextures", samplers, s_data.maxTextureSlots);
+		s_data.textureSlots[0] = s_data.whiteTexture;
 	}
 
 	void Renderer2D::Shutdown()
@@ -91,6 +104,7 @@ namespace Engine
 
 		s_data.indexCount = 0;
 		s_data.vertexBufferPtr = s_data.vertexBufferBase;
+		s_data.textureSlotIndex = 1;
 	}
 	
 	void Renderer2D::EndScene()
@@ -104,6 +118,11 @@ namespace Engine
 
 	void Renderer2D::Flush()
 	{
+		for (uint32_t i = 0; i < s_data.textureSlotIndex; i++)
+		{
+			s_data.textureSlots[i]->Bind(i);
+		}
+
 		RendererCommand::DrawIndexed(s_data.indexCount);
 	}
 
@@ -111,48 +130,82 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
+		float textureIndex = 0.0f;
 		auto pos = glm::vec3((position.x + size.x) /2.0f,(position.y + size.y) / 2.0f, 0.0f);
 		s_data.vertexBufferPtr->position = position - pos;
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 0.0f, 0.0f };
+		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
 		s_data.vertexBufferPtr->position = glm::vec3(position.x + size.x, position.y, 0.0f) - pos;
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 1.0f, 0.0f };
+		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
 		s_data.vertexBufferPtr->position = glm::vec3(position.x + size.x, position.y + size.y, 0.0f) - pos;
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 1.0f, 1.0f };
+		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
 		s_data.vertexBufferPtr->position = glm::vec3(position.x, position.y + size.y, 0.0f) - pos;
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 0.0f, 1.0f };
+		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
 		s_data.indexCount += 6;
-
-		/*s_data.shader->Bind();
-		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
-		s_data.shader->SetMat4("uModel", transform);
-		s_data.shader->SetFloat4("uColor", color);
-		s_data.vertexArray->Bind();
-		s_data.whiteTexture->Bind();
-		RendererCommand::DrawIndexed(s_data.vertexArray);*/
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture>& texture)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		s_data.shader->Bind();
-		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
-		s_data.shader->SetMat4("uModel", transform);
-		s_data.shader->SetFloat4("uColor", glm::vec4(1.0f));
-		s_data.vertexArray->Bind();
-		texture->Bind();
-		RendererCommand::DrawIndexed(s_data.vertexArray);
+		float textureIndex = 0.0f;
+		for (uint32_t i = 1; i < s_data.textureSlotIndex; i++)
+		{
+			if (*s_data.textureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			textureIndex = s_data.textureSlotIndex;
+			s_data.textureSlots[s_data.textureSlotIndex] = texture;
+			s_data.textureSlotIndex++;
+		}
+
+		constexpr glm::vec4 color = glm::uvec4(1.0f);
+		auto pos = glm::vec3((position.x + size.x) / 2.0f, (position.y + size.y) / 2.0f, 0.0f);
+		s_data.vertexBufferPtr->position = position - pos;
+		s_data.vertexBufferPtr->color = color;
+		s_data.vertexBufferPtr->texCoord = { 0.0f, 0.0f };
+		s_data.vertexBufferPtr->textureIndex = textureIndex;
+		s_data.vertexBufferPtr++;
+
+		s_data.vertexBufferPtr->position = glm::vec3(position.x + size.x, position.y, 0.0f) - pos;
+		s_data.vertexBufferPtr->color = color;
+		s_data.vertexBufferPtr->texCoord = { 1.0f, 0.0f };
+		s_data.vertexBufferPtr->textureIndex = textureIndex;
+		s_data.vertexBufferPtr++;
+
+		s_data.vertexBufferPtr->position = glm::vec3(position.x + size.x, position.y + size.y, 0.0f) - pos;
+		s_data.vertexBufferPtr->color = color;
+		s_data.vertexBufferPtr->texCoord = { 1.0f, 1.0f };
+		s_data.vertexBufferPtr->textureIndex = textureIndex;
+		s_data.vertexBufferPtr++;
+
+		s_data.vertexBufferPtr->position = glm::vec3(position.x, position.y + size.y, 0.0f) - pos;
+		s_data.vertexBufferPtr->color = color;
+		s_data.vertexBufferPtr->texCoord = { 0.0f, 1.0f };
+		s_data.vertexBufferPtr->textureIndex = textureIndex;
+		s_data.vertexBufferPtr++;
+
+		s_data.indexCount += 6;
 	}
 }

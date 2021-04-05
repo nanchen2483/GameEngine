@@ -20,7 +20,7 @@ namespace Engine
 		static void EndScene();
 		static void Flush();
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture>& texture);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); };
 	private:
