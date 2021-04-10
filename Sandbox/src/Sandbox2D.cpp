@@ -13,7 +13,14 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
+	ENGINE_PROFILE_FUNCTION();
+
 	m_texture2D = Engine::Texture2D::Create("asserts/textures/blocks.png");
+	
+	Engine::FramebufferSpecification fbSpec;
+	fbSpec.width = 1280;
+	fbSpec.height = 720;
+	m_framebuffer = Engine::Framebuffer::Create(fbSpec);
 }
 
 void Sandbox2D::OnDetach()
@@ -33,6 +40,7 @@ void Sandbox2D::OnUpdate(Engine::TimeStep timeStep)
 	Engine::Renderer2D::ResetStates();
 	{
 		ENGINE_PROFILE_SCOPE("Renderer Prep");
+		m_framebuffer->Bind();
 		Engine::RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		Engine::RendererCommand::Clear();
 	}
@@ -56,8 +64,8 @@ void Sandbox2D::OnUpdate(Engine::TimeStep timeStep)
 			}
 		}
 
-
 		Engine::Renderer2D::EndScene();
+		m_framebuffer->Unbind();
 	}
 }
 
@@ -65,7 +73,7 @@ void Sandbox2D::OnImGuiRender()
 {
 	ENGINE_PROFILE_FUNCTION();
 
-	static bool dockSpaceOpen = false;
+	static bool dockSpaceOpen = true;
 	if (dockSpaceOpen)
 	{
 		static bool opt_fullscreen = true;
@@ -130,6 +138,20 @@ void Sandbox2D::OnImGuiRender()
 
 			ImGui::EndMenuBar();
 		}
+
+		ImGui::Begin("Settings");
+
+		auto stats = Engine::Renderer2D::GetState();
+		ImGui::Text("Renderer stats");
+		ImGui::Text("Draw Calls: %d", stats.drawCalls);
+		ImGui::Text("Quads: %d", stats.quadCount);
+		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_color));
+		ImGui::Image((void*)m_framebuffer->GetColorAttachmentRendererId(), ImVec2(1280.0f, 720.0f));
+		
+		ImGui::End();
 
 		ImGui::End();
 	}
