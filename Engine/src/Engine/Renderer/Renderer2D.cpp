@@ -32,6 +32,8 @@ namespace Engine
 
 		std::array<Ptr<Texture2D>, maxTextureSlots> textureSlots;
 		uint32_t textureSlotIndex = 1;
+
+		glm::vec4 vertexPosition[4];
 	};
 
 	static Renderer2DData s_data;
@@ -85,6 +87,11 @@ namespace Engine
 		s_data.shader->Bind();
 		s_data.shader->SetIntArray("uTextures", samplers, s_data.maxTextureSlots);
 		s_data.textureSlots[0] = s_data.whiteTexture;
+
+		s_data.vertexPosition[0] = { -0.5, -0.5f, 0.0f, 1.0f };
+		s_data.vertexPosition[1] = {  0.5, -0.5f, 0.0f, 1.0f };
+		s_data.vertexPosition[2] = {  0.5,  0.5f, 0.0f, 1.0f };
+		s_data.vertexPosition[3] = { -0.5,  0.5f, 0.0f, 1.0f };
 	}
 
 	void Renderer2D::Shutdown()
@@ -131,26 +138,29 @@ namespace Engine
 		ENGINE_PROFILE_FUNCTION();
 
 		float textureIndex = 0.0f;
-		auto pos = glm::vec3((position.x + size.x) /2.0f,(position.y + size.y) / 2.0f, 0.0f);
-		s_data.vertexBufferPtr->position = position - pos;
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[0];
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 0.0f, 0.0f };
 		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
-		s_data.vertexBufferPtr->position = glm::vec3(position.x + size.x, position.y, 0.0f) - pos;
+		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[1];
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 1.0f, 0.0f };
 		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
-		s_data.vertexBufferPtr->position = glm::vec3(position.x + size.x, position.y + size.y, 0.0f) - pos;
+		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[2];
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 1.0f, 1.0f };
 		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
-		s_data.vertexBufferPtr->position = glm::vec3(position.x, position.y + size.y, 0.0f) - pos;
+		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[3];
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 0.0f, 1.0f };
 		s_data.vertexBufferPtr->textureIndex = textureIndex;
@@ -181,26 +191,29 @@ namespace Engine
 		}
 
 		constexpr glm::vec4 color = glm::uvec4(1.0f);
-		auto pos = glm::vec3((position.x + size.x) / 2.0f, (position.y + size.y) / 2.0f, 0.0f);
-		s_data.vertexBufferPtr->position = position - pos;
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[0];
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 0.0f, 0.0f };
 		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
-		s_data.vertexBufferPtr->position = glm::vec3(position.x + size.x, position.y, 0.0f) - pos;
+		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[1];
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 1.0f, 0.0f };
 		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
-		s_data.vertexBufferPtr->position = glm::vec3(position.x + size.x, position.y + size.y, 0.0f) - pos;
+		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[2];
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 1.0f, 1.0f };
 		s_data.vertexBufferPtr->textureIndex = textureIndex;
 		s_data.vertexBufferPtr++;
 
-		s_data.vertexBufferPtr->position = glm::vec3(position.x, position.y + size.y, 0.0f) - pos;
+		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[3];
 		s_data.vertexBufferPtr->color = color;
 		s_data.vertexBufferPtr->texCoord = { 0.0f, 1.0f };
 		s_data.vertexBufferPtr->textureIndex = textureIndex;
