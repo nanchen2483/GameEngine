@@ -16,7 +16,7 @@ namespace Engine
 
 	struct Renderer2DData
 	{
-		static const uint32_t maxQuads = 10000;
+		static const uint32_t maxQuads = 20000;
 		static const uint32_t maxVertices = maxQuads * 4;
 		static const uint32_t maxIndices = maxQuads * 6;
 		static const uint32_t maxTextureSlots = 32;
@@ -34,6 +34,8 @@ namespace Engine
 		uint32_t textureSlotIndex = 1;
 
 		glm::vec4 vertexPosition[4];
+
+		Renderer2D::Statistics states;
 	};
 
 	static Renderer2DData s_data;
@@ -131,15 +133,32 @@ namespace Engine
 		}
 
 		RendererCommand::DrawIndexed(s_data.indexCount);
+		
+		s_data.states.drawCalls++;
 	}
+
+	void Renderer2D::FlushAndReset()
+	{
+		EndScene();
+
+		s_data.indexCount = 0;
+		s_data.vertexBufferPtr = s_data.vertexBufferBase;
+		s_data.textureSlotIndex = 1;
+	}
+
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
+		if (s_data.indexCount >= s_data.maxIndices)
+		{
+			FlushAndReset();
+		}
+
 		float textureIndex = 0.0f;
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f))
 			* glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
 		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[0];
@@ -167,11 +186,18 @@ namespace Engine
 		s_data.vertexBufferPtr++;
 
 		s_data.indexCount += 6;
+
+		s_data.states.quadCount++;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture)
 	{
 		ENGINE_PROFILE_FUNCTION();
+
+		if (s_data.indexCount >= s_data.maxIndices)
+		{
+			FlushAndReset();
+		}
 
 		float textureIndex = 0.0f;
 		for (uint32_t i = 1; i < s_data.textureSlotIndex; i++)
@@ -220,5 +246,17 @@ namespace Engine
 		s_data.vertexBufferPtr++;
 
 		s_data.indexCount += 6;
+
+		s_data.states.quadCount++;
+	}
+
+	void Renderer2D::ResetStates()
+	{
+		memset(&s_data.states, 0, sizeof(Statistics));
+	}
+
+	Renderer2D::Statistics Renderer2D::GetState()
+	{
+		return s_data.states;
 	}
 }
