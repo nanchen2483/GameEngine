@@ -9,7 +9,7 @@
 namespace Engine
 {
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_cameraController(1280.0f / 720.0f), m_color(0.2, 0.2, 1.0f, 1.0f)
+		: Layer("EditorLayer"), m_cameraController(1280.0f / 720.0f), m_color(0.2, 0.2, 1.0f, 1.0f), m_viewportSize(1280.0f, 720.0f)
 	{
 	}
 
@@ -149,9 +149,19 @@ namespace Engine
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_color));
 		ImGui::End();
 
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		ImGui::Begin("Renderer");
-		ImGui::Image((void*)m_framebuffer->GetColorAttachmentRendererId(), ImVec2(1280.0f, 720.0f), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		if (m_viewportSize != *((glm::vec2*)&viewportSize))
+		{
+			m_framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+			m_viewportSize = glm::vec2(viewportSize.x, viewportSize.y);
+
+			m_cameraController.OnResize(viewportSize.x, viewportSize.y);
+		}
+		ImGui::Image((void*)m_framebuffer->GetColorAttachmentRendererId(), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 		ImGui::End();
+		ImGui::PopStyleVar();
 
 		ImGui::End();
 	}

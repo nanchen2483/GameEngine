@@ -18,6 +18,7 @@ namespace Engine
 
 		void OnUpdate(TimeStep timeStep);
 		void OnEvent(Event& e);
+		void OnResize(float width, float height);
 	private:
 		bool OmMouseScrolled(MouseScrolledEvent& e);
 		bool OmWindowResized(WindowResizeEvent& e);

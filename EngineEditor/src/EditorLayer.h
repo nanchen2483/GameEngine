@@ -19,5 +19,6 @@ namespace Engine
 		Ptr<Texture2D> m_texture2D;
 		Ptr<Framebuffer> m_framebuffer;
 		glm::vec4 m_color;
+		glm::vec2 m_viewportSize;
 	};
 }
