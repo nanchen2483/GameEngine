@@ -15,12 +15,12 @@ namespace Engine
 
 	Application* Application::s_instance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name)
 	{
 		ENGINE_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		m_window = Uniq<Window>(Window::Create());
+		m_window = Uniq<Window>(Window::Create(WindowProps(name)));
 		m_window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();

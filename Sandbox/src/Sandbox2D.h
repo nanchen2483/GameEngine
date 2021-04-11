@@ -15,6 +15,5 @@ public:
 private:
 	Engine::OrthographicCameraController m_cameraController;
 	Engine::Ptr<Engine::Texture2D> m_texture2D;
-	Engine::Ptr<Engine::Framebuffer> m_framebuffer;
 	glm::vec4 m_color;
 };

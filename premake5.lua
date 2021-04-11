@@ -1,6 +1,6 @@
 workspace "GameEngine"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "EngineEditor"
 
 	configurations
 	{
@@ -96,6 +96,58 @@ project "Engine"
 
 project "Sandbox"
 	location "Sandbox"
+	kind "ConsoleApp"
+	cppdialect "C++17"
+	language "C++"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("imd/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp",
+	}
+
+	includedirs
+	{
+		"Engine/util/spdlog/include",
+		"Engine/util/imgui",
+		"Engine/src",
+		"%{IncludeDir.glm}"
+	}
+
+	links
+	{
+		"Engine"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines
+		{
+			"ENGINE_PLATFORM_WINDOWS",
+		}
+
+	filter "configurations:Debug"
+		defines "ENGINE_DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "ENGINE_RELEASE"
+		runtime "Release"
+		symbols "on"
+
+	filter "configurations:Dist"
+		defines "ENGINE_DIST"
+		runtime "Release"
+		symbols "on"
+
+project "EngineEditor"
+	location "EngineEditor"
 	kind "ConsoleApp"
 	cppdialect "C++17"
 	language "C++"
