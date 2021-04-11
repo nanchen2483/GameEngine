@@ -35,8 +35,11 @@ namespace Engine
 		ENGINE_PROFILE_FUNCTION();
 
 		{
-			ENGINE_PROFILE_SCOPE("Camera OnUpdate");
-			m_cameraController.OnUpdate(timeStep);
+			if (m_viewportFocused)
+			{
+				ENGINE_PROFILE_SCOPE("Camera OnUpdate");
+				m_cameraController.OnUpdate(timeStep);
+			}
 		}
 
 		Renderer2D::ResetStates();
@@ -151,6 +154,9 @@ namespace Engine
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		ImGui::Begin("Renderer");
+		m_viewportFocused = ImGui::IsWindowFocused();
+		m_viewportHovered = ImGui::IsWindowHovered();
+		Application::Get().GetImGuiLayer()->DisableEvents(m_viewportFocused && m_viewportHovered);
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		if (m_viewportSize != *((glm::vec2*)&viewportSize))
 		{

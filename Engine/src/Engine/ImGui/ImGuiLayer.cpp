@@ -63,6 +63,16 @@ namespace Engine
 		ImGui::DestroyContext();
 	}
 
+	void ImGuiLayer::OnEvent(Event& e)
+	{
+		if (!m_disableEvents)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			e.handled |= e.IsIncategory(EventCategoryMouse) & io.WantCaptureMouse;
+			e.handled |= e.IsIncategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		}
+	}
+
 	void ImGuiLayer::OnImGuiRender()
 	{
 		static bool show = true;

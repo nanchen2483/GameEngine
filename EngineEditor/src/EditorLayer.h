@@ -20,5 +20,6 @@ namespace Engine
 		Ptr<Framebuffer> m_framebuffer;
 		glm::vec4 m_color;
 		glm::vec2 m_viewportSize;
+		bool m_viewportFocused = false, m_viewportHovered = false;
 	};
 }

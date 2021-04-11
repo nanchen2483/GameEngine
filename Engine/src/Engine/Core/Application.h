@@ -28,6 +28,7 @@ namespace Engine
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
 		inline Window& GetWindow() { return *m_window; }
+		inline ImGuiLayer* GetImGuiLayer() { return m_imGuiLayer; }
 		inline static Application& Get() { return *s_instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
