@@ -43,7 +43,6 @@ namespace Engine
 
 		if (!s_GLFWInitialized)
 		{
-			// TODO
 			int success = glfwInit();
 			ENGINE_CORE_ASSERT(success, "Could not initialize GLFW");
 			glfwSetErrorCallback(GLFWErrorCallback);
