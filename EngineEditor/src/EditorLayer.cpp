@@ -174,6 +174,15 @@ namespace Engine
 
 	void EditorLayer::OnEvent(Event& event)
 	{
+		if (event.GetEventType() == EventType::WindowResize)
+		{
+			auto e = (WindowResizeEvent*)&event;
+			if (e->GetWidth() == 0 || e->GetHeight() == 0)
+			{
+				m_viewportSize = glm::vec2(0.0f);
+			}
+		}
+
 		m_cameraController.OnEvent(event);
 	}
 }

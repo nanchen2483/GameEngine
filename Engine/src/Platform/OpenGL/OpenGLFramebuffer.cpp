@@ -5,6 +5,7 @@
 
 namespace Engine
 {
+	static const uint32_t MAX_FAMEBUFFER_SIZE = 8192;
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		: m_specification(spec)
 	{
@@ -61,6 +62,11 @@ namespace Engine
 
 	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
 	{
+		if (width == 0 || height == 0 || width > MAX_FAMEBUFFER_SIZE || height > MAX_FAMEBUFFER_SIZE)
+		{
+			ENGINE_CORE_WARN("Attemped to resize frambuffer to {0}x{1}", width, height);
+			return;
+		}
 		m_specification.width = width;
 		m_specification.height = height;
 
