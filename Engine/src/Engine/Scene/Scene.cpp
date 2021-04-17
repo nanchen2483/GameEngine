@@ -26,12 +26,37 @@ namespace Engine
 
 	void Scene::OnUpdate(TimeStep time)
 	{
-		auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
+		Camera* mainCamera = nullptr;
+		glm::mat4* mainTrnasform = nullptr;
 		{
-			auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			auto group = m_registry.view<TransformComponent, CameraComponent>();
+			for (auto entity : group)
+			{
+				auto& [transform, camera] = group.get<TransformComponent, CameraComponent>(entity);
 
-			Renderer2D::DrawQuad(transform, sprite.color);
+				if (camera.primary)
+				{
+					mainCamera = &camera.camera;
+					mainTrnasform = &transform.transform;
+					break;
+				}
+			}
 		}
+
+		if (mainCamera != nullptr)
+		{
+			Renderer2D::BeginScene(mainCamera->GetProjection(), *mainTrnasform);
+
+			auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
+			{
+				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+				Renderer2D::DrawQuad(transform, sprite.color);
+			}
+
+			Renderer2D::EndScene();
+		}
+
 	}
 }

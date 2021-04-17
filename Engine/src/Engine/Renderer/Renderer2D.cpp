@@ -103,6 +103,20 @@ namespace Engine
 	void Renderer2D::OnWindowResize(uint32_t width, uint32_t height)
 	{
 	}
+
+	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& transform)
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		auto& viewProjection = projection * glm::inverse(transform);
+
+		s_data.shader->Bind();
+		s_data.shader->SetMat4("uViewProjection", viewProjection);
+
+		s_data.indexCount = 0;
+		s_data.vertexBufferPtr = s_data.vertexBufferBase;
+		s_data.textureSlotIndex = 1;
+	}
 	
 	void Renderer2D::BeginScene(OrthographicCamera& camera)
 	{

@@ -27,9 +27,11 @@ namespace Engine
 
 		// Entity
 		m_activeScene = CreatePtr<Scene>();
-		Entity square = m_activeScene->CreateEntity("Lightblue square");
-		square.AddComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 1.0f, 1.0f));
-		m_entity = square;
+		m_squareEntity = m_activeScene->CreateEntity("Lightblue square");
+		m_squareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 1.0f, 1.0f));
+
+		m_cameraEntity = m_activeScene->CreateEntity("Camera entity");
+		m_cameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
 	}
 
 	void EditorLayer::OnDetach()
@@ -53,15 +55,15 @@ namespace Engine
 		RendererCommand::Clear();
 
 		{
-			ENGINE_PROFILE_SCOPE("Renderer Draw");
-			Renderer2D::BeginScene(m_cameraController.GetCamera());
-			{
-				m_activeScene->OnUpdate(timeStep);
-				//Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(1.0f), m_color);
-				//Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_color);
-				Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0, -0.1f), glm::vec2(10.0f), m_texture2D);
-			}
-			Renderer2D::EndScene();
+			//ENGINE_PROFILE_SCOPE("Renderer Draw");
+			//Renderer2D::BeginScene(m_cameraController.GetCamera());
+			//{
+			//	m_activeScene->OnUpdate(timeStep);
+			//	Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(1.0f), m_color);
+			//	Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_color);
+			//	Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0, -0.1f), glm::vec2(10.0f), m_texture2D);
+			//}
+			//Renderer2D::EndScene();
 
 			//Renderer2D::BeginScene(m_cameraController.GetCamera());
 			//for (float y = -4.5f; y < 5.0f; y += 0.5f)
@@ -74,6 +76,8 @@ namespace Engine
 			//}
 			//Renderer2D::EndScene();
 		}
+
+		m_activeScene->OnUpdate(timeStep);
 
 		m_framebuffer->Unbind();
 	}
@@ -153,12 +157,12 @@ namespace Engine
 		ImGui::Text("Quads: %d", stats.quadCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-		if (m_entity)
+		if (m_squareEntity)
 		{
 			ImGui::Separator();
-			auto& tag = m_entity.GetComponent<TagComponent>().tag;
+			auto& tag = m_squareEntity.GetComponent<TagComponent>().tag;
 			ImGui::Text("%s", tag.c_str());
-			auto& squareColor = m_entity.GetComponent<SpriteRendererComponent>().color;
+			auto& squareColor = m_squareEntity.GetComponent<SpriteRendererComponent>().color;
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 			ImGui::Separator();
 		}
