@@ -23,6 +23,13 @@ namespace Engine
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
 		m_framebuffer = Framebuffer::Create(fbSpec);
+
+
+		// Entity
+		m_activeScene = CreatePtr<Scene>();
+		Entity square = m_activeScene->CreateEntity("Lightblue square");
+		square.AddComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 1.0f, 1.0f));
+		m_entity = square;
 	}
 
 	void EditorLayer::OnDetach()
@@ -34,44 +41,41 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
+		if (m_viewportFocused)
 		{
-			if (m_viewportFocused)
-			{
-				ENGINE_PROFILE_SCOPE("Camera OnUpdate");
-				m_cameraController.OnUpdate(timeStep);
-			}
+			ENGINE_PROFILE_SCOPE("Camera OnUpdate");
+			m_cameraController.OnUpdate(timeStep);
 		}
 
 		Renderer2D::ResetStates();
-		{
-			ENGINE_PROFILE_SCOPE("Renderer Prep");
-			m_framebuffer->Bind();
-			RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
-			RendererCommand::Clear();
-		}
+		m_framebuffer->Bind();
+		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+		RendererCommand::Clear();
 
 		{
 			ENGINE_PROFILE_SCOPE("Renderer Draw");
 			Renderer2D::BeginScene(m_cameraController.GetCamera());
-			Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(1.0f), m_color);
-			Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_color);
-			Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0, -0.1f), glm::vec2(10.0f), m_texture2D);
-
-			Renderer2D::EndScene();
-
-			Renderer2D::BeginScene(m_cameraController.GetCamera());
-			for (float y = -4.5f; y < 5.0f; y += 0.5f)
 			{
-				for (float x = -4.5f; x < 5.0f; x += 0.5f)
-				{
-					glm::vec4 color = glm::vec4((x + 0.5f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f);
-					Renderer2D::DrawQuad(glm::vec3(x, y, 0.0f), glm::vec2(0.45f, 0.45f), color);
-				}
+				m_activeScene->OnUpdate(timeStep);
+				//Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(1.0f), m_color);
+				//Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_color);
+				Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0, -0.1f), glm::vec2(10.0f), m_texture2D);
 			}
-
 			Renderer2D::EndScene();
-			m_framebuffer->Unbind();
+
+			//Renderer2D::BeginScene(m_cameraController.GetCamera());
+			//for (float y = -4.5f; y < 5.0f; y += 0.5f)
+			//{
+			//	for (float x = -4.5f; x < 5.0f; x += 0.5f)
+			//	{
+			//		glm::vec4 color = glm::vec4((x + 0.5f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f);
+			//		Renderer2D::DrawQuad(glm::vec3(x, y, 0.0f), glm::vec2(0.45f, 0.45f), color);
+			//	}
+			//}
+			//Renderer2D::EndScene();
 		}
+
+		m_framebuffer->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -149,7 +153,15 @@ namespace Engine
 		ImGui::Text("Quads: %d", stats.quadCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_color));
+		if (m_entity)
+		{
+			ImGui::Separator();
+			auto& tag = m_entity.GetComponent<TagComponent>().tag;
+			ImGui::Text("%s", tag.c_str());
+			auto& squareColor = m_entity.GetComponent<SpriteRendererComponent>().color;
+			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+			ImGui::Separator();
+		}
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));

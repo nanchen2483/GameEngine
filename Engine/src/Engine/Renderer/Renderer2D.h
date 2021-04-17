@@ -24,6 +24,8 @@ namespace Engine
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture);
 
+		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
+
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); };
 		
 		struct Statistics

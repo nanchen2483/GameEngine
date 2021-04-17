@@ -149,45 +149,10 @@ namespace Engine
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		ENGINE_PROFILE_FUNCTION();
-
-		if (s_data.indexCount >= s_data.maxIndices)
-		{
-			FlushAndReset();
-		}
-
-		float textureIndex = 0.0f;
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f))
 			* glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
-
-		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[0];
-		s_data.vertexBufferPtr->color = color;
-		s_data.vertexBufferPtr->texCoord = { 0.0f, 0.0f };
-		s_data.vertexBufferPtr->textureIndex = textureIndex;
-		s_data.vertexBufferPtr++;
-
-		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[1];
-		s_data.vertexBufferPtr->color = color;
-		s_data.vertexBufferPtr->texCoord = { 1.0f, 0.0f };
-		s_data.vertexBufferPtr->textureIndex = textureIndex;
-		s_data.vertexBufferPtr++;
-
-		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[2];
-		s_data.vertexBufferPtr->color = color;
-		s_data.vertexBufferPtr->texCoord = { 1.0f, 1.0f };
-		s_data.vertexBufferPtr->textureIndex = textureIndex;
-		s_data.vertexBufferPtr++;
-
-		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[3];
-		s_data.vertexBufferPtr->color = color;
-		s_data.vertexBufferPtr->texCoord = { 0.0f, 1.0f };
-		s_data.vertexBufferPtr->textureIndex = textureIndex;
-		s_data.vertexBufferPtr++;
-
-		s_data.indexCount += 6;
-
-		s_data.states.quadCount++;
+		
+		DrawQuad(transform, color);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture)
@@ -216,34 +181,49 @@ namespace Engine
 			s_data.textureSlotIndex++;
 		}
 
+		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec4 color = glm::uvec4(1.0f);
+		constexpr glm::vec2 textureCoords[] = { glm::vec2(0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f), glm::vec2(0.0f, 1.0f) };
+
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f))
 			* glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
-		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[0];
-		s_data.vertexBufferPtr->color = color;
-		s_data.vertexBufferPtr->texCoord = { 0.0f, 0.0f };
-		s_data.vertexBufferPtr->textureIndex = textureIndex;
-		s_data.vertexBufferPtr++;
 
-		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[1];
-		s_data.vertexBufferPtr->color = color;
-		s_data.vertexBufferPtr->texCoord = { 1.0f, 0.0f };
-		s_data.vertexBufferPtr->textureIndex = textureIndex;
-		s_data.vertexBufferPtr++;
+		for (size_t i = 0; i < quadVertexCount; i++)
+		{
+			s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[i];
+			s_data.vertexBufferPtr->color = color;
+			s_data.vertexBufferPtr->texCoord = textureCoords[i];
+			s_data.vertexBufferPtr->textureIndex = textureIndex;
+			s_data.vertexBufferPtr++;
+		}
 
-		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[2];
-		s_data.vertexBufferPtr->color = color;
-		s_data.vertexBufferPtr->texCoord = { 1.0f, 1.0f };
-		s_data.vertexBufferPtr->textureIndex = textureIndex;
-		s_data.vertexBufferPtr++;
+		s_data.indexCount += 6;
 
-		s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[3];
-		s_data.vertexBufferPtr->color = color;
-		s_data.vertexBufferPtr->texCoord = { 0.0f, 1.0f };
-		s_data.vertexBufferPtr->textureIndex = textureIndex;
-		s_data.vertexBufferPtr++;
+		s_data.states.quadCount++;
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		if (s_data.indexCount >= s_data.maxIndices)
+		{
+			FlushAndReset();
+		}
+
+		constexpr size_t quadVertexCount = 4;
+		constexpr float textureIndex = 0.0f;
+		constexpr glm::vec2 textureCoords[] = { glm::vec2(0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f), glm::vec2(0.0f, 1.0f) };
+
+		for (size_t i = 0; i < quadVertexCount; i++)
+		{
+			s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[i];
+			s_data.vertexBufferPtr->color = color;
+			s_data.vertexBufferPtr->texCoord = textureCoords[i];
+			s_data.vertexBufferPtr->textureIndex = textureIndex;
+			s_data.vertexBufferPtr++;
+		}
 
 		s_data.indexCount += 6;
 

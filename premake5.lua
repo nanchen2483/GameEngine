@@ -18,6 +18,7 @@ IncludeDir["glad"] = "Engine/util/glad/include"
 IncludeDir["glm"] = "Engine/util/glm"
 IncludeDir["imgui"] = "Engine/util/imgui"
 IncludeDir["stb_image"] = "Engine/util/stb_image"
+IncludeDir["entt"] = "Engine/util/entt"
 
 group "Dependencies"
 	include "Engine/util/glfw"
@@ -58,7 +59,8 @@ project "Engine"
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
 
 	links
@@ -167,7 +169,8 @@ project "EngineEditor"
 		"Engine/util/spdlog/include",
 		"Engine/util/imgui",
 		"Engine/src",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links

@@ -23,3 +23,8 @@
 #include "Engine/Renderer/Texture.h"
 
 #include "Engine/Renderer/OrthographicCamera.h"
+
+// Entity
+#include "Engine/Scene/Scene.h";
+#include "Engine/Scene/Component.h";
+#include "Engine/Scene/Entity.h";

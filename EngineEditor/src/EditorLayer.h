@@ -21,5 +21,7 @@ namespace Engine
 		glm::vec4 m_color;
 		glm::vec2 m_viewportSize;
 		bool m_viewportFocused = false, m_viewportHovered = false;
+		Ptr<Scene> m_activeScene;
+		Entity m_entity;
 	};
 }
