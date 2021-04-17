@@ -16,8 +16,12 @@ namespace Engine
 		Entity CreateEntity(const std::string& name = "");
 
 		void OnUpdate(TimeStep time);
-	public:
+		void OnViewportResize(uint32_t width, uint32_t height);
+	private:
 		entt::registry m_registry;
+		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
+
+		friend class Entity;
 	};
 }
 

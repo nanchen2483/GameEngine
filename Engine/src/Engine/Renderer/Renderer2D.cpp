@@ -104,11 +104,11 @@ namespace Engine
 	{
 	}
 
-	void Renderer2D::BeginScene(const glm::mat4& projection, const glm::mat4& transform)
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		auto& viewProjection = projection * glm::inverse(transform);
+		auto& viewProjection = camera.GetProjection() * glm::inverse(transform);
 
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);

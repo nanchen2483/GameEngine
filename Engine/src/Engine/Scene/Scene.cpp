@@ -29,10 +29,10 @@ namespace Engine
 		Camera* mainCamera = nullptr;
 		glm::mat4* mainTrnasform = nullptr;
 		{
-			auto group = m_registry.view<TransformComponent, CameraComponent>();
-			for (auto entity : group)
+			auto view = m_registry.view<TransformComponent, CameraComponent>();
+			for (auto entity : view)
 			{
-				auto& [transform, camera] = group.get<TransformComponent, CameraComponent>(entity);
+				auto& [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 
 				if (camera.primary)
 				{
@@ -45,7 +45,7 @@ namespace Engine
 
 		if (mainCamera != nullptr)
 		{
-			Renderer2D::BeginScene(mainCamera->GetProjection(), *mainTrnasform);
+			Renderer2D::BeginScene(*mainCamera, *mainTrnasform);
 
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
@@ -58,5 +58,21 @@ namespace Engine
 			Renderer2D::EndScene();
 		}
 
+	}
+	
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	{
+		m_viewportWidth = width;
+		m_viewportHeight = height;
+
+		auto view = m_registry.view<CameraComponent>();
+		for (auto entity : view)
+		{
+			auto& cameraComponent = view.get<CameraComponent>(entity);
+			if (!cameraComponent.fixedAspectRatio)
+			{
+				cameraComponent.camera.SetViewportSize(width, height);
+			}
+		}
 	}
 }

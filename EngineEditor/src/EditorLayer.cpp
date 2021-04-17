@@ -9,7 +9,7 @@
 namespace Engine
 {
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_cameraController(1280.0f / 720.0f), m_color(0.2, 0.2, 1.0f, 1.0f), m_viewportSize(1280.0f, 720.0f)
+		: Layer("EditorLayer"), m_cameraController(1280.0f / 720.0f), m_color(0.2, 0.2, 1.0f, 1.0f)
 	{
 	}
 
@@ -31,7 +31,10 @@ namespace Engine
 		m_squareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 1.0f, 1.0f));
 
 		m_cameraEntity = m_activeScene->CreateEntity("Camera entity");
-		m_cameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+		m_cameraEntity.AddComponent<CameraComponent>();
+
+		m_secondCameraEntity = m_activeScene->CreateEntity("Second camera entity");
+		m_secondCameraEntity.AddComponent<CameraComponent>(false);
 	}
 
 	void EditorLayer::OnDetach()
@@ -42,6 +45,15 @@ namespace Engine
 	void EditorLayer::OnUpdate(TimeStep timeStep)
 	{
 		ENGINE_PROFILE_FUNCTION();
+
+		if (FramebufferSpecification spec = m_framebuffer->GetSpecification();
+			m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f && // zero sized framebuffer is invalid
+			(spec.width != m_viewportSize.x || spec.height != m_viewportSize.y))
+		{
+			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+			m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
+			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+		}
 
 		if (m_viewportFocused)
 		{
@@ -166,6 +178,23 @@ namespace Engine
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 			ImGui::Separator();
 		}
+
+		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().transform));
+		if (ImGui::Checkbox("Primary Camera", &m_isPrimaryCamera))
+		{
+			m_cameraEntity.GetComponent<CameraComponent>().primary = m_isPrimaryCamera;
+			m_secondCameraEntity.GetComponent<CameraComponent>().primary = !m_isPrimaryCamera;
+		}
+
+		{
+			auto& camera = m_secondCameraEntity.GetComponent<CameraComponent>().camera;
+			float orthoSize = camera.GetOrthographicSize();
+			if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+			{
+				camera.SetOrthographicSize(orthoSize);
+			}
+		}
+
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -174,13 +203,7 @@ namespace Engine
 		m_viewportHovered = ImGui::IsWindowHovered();
 		Application::Get().GetImGuiLayer()->DisableEvents(m_viewportFocused && m_viewportHovered);
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		if (m_viewportSize != *((glm::vec2*)&viewportSize))
-		{
-			m_framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
-			m_viewportSize = glm::vec2(viewportSize.x, viewportSize.y);
-
-			m_cameraController.OnResize(viewportSize.x, viewportSize.y);
-		}
+		m_viewportSize = glm::vec2(viewportSize.x, viewportSize.y);
 		ImGui::Image((void*)m_framebuffer->GetColorAttachmentRendererId(), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 		ImGui::End();
 		ImGui::PopStyleVar();

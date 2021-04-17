@@ -19,10 +19,12 @@ namespace Engine
 		Ptr<Texture2D> m_texture2D;
 		Ptr<Framebuffer> m_framebuffer;
 		glm::vec4 m_color;
-		glm::vec2 m_viewportSize;
+		glm::vec2 m_viewportSize = glm::vec2(0.0f);
 		bool m_viewportFocused = false, m_viewportHovered = false;
 		Ptr<Scene> m_activeScene;
 		Entity m_squareEntity;
 		Entity m_cameraEntity;
+		Entity m_secondCameraEntity;
+		bool m_isPrimaryCamera = true;
 	};
 }
