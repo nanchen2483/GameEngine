@@ -35,6 +35,44 @@ namespace Engine
 
 		m_secondCameraEntity = m_activeScene->CreateEntity("Second camera entity");
 		m_secondCameraEntity.AddComponent<CameraComponent>(false);
+
+		class CameraController : public ScriptableEntity
+		{
+		public:
+			virtual void OnCreate() override
+			{
+			}
+
+			virtual void OnDestroy() override
+			{
+
+			}
+
+			virtual void OnUpdate(TimeStep ts) override
+			{
+				auto& transform = GetComponent<TransformComponent>().transform;
+				float speed = 5.0f;
+
+				if (Input::IsKeyPressed(ENGINE_KEY_A))
+				{
+					transform[3][0] -= speed * ts;
+				}
+				if (Input::IsKeyPressed(ENGINE_KEY_D))
+				{
+					transform[3][0] += speed * ts;
+				}
+				if (Input::IsKeyPressed(ENGINE_KEY_W))
+				{
+					transform[3][1] -= speed * ts;
+				}
+				if (Input::IsKeyPressed(ENGINE_KEY_S))
+				{
+					transform[3][1] += speed * ts;
+				}
+			}
+		};
+
+		m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -179,7 +217,7 @@ namespace Engine
 			ImGui::Separator();
 		}
 
-		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().transform));
+		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().transform[3]));
 		if (ImGui::Checkbox("Primary Camera", &m_isPrimaryCamera))
 		{
 			m_cameraEntity.GetComponent<CameraComponent>().primary = m_isPrimaryCamera;

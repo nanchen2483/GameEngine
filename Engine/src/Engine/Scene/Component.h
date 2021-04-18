@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Scene/SceneCamera.h"
+#include "ScriptableEntity.h"
 
 #include <glm/glm.hpp>
 
@@ -49,5 +50,20 @@ namespace Engine
 		CameraComponent(bool isPrimary = true)
 			: primary(isPrimary) {}
 		CameraComponent(const CameraComponent& transform) = default;
+	};
+
+	struct NativeScriptComponent
+	{
+		ScriptableEntity* instance = nullptr;
+		
+		ScriptableEntity*(*InstantiateScript)();
+		void (*DestroyScript)(NativeScriptComponent* nsc);
+
+		template<typename T>
+		void Bind()
+		{
+			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->instance; nsc->instance = nullptr; };
+		}
 	};
 }
