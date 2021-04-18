@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Panel/SceneHierarchyPanel.h"
 
 namespace Engine
 {
@@ -26,5 +27,6 @@ namespace Engine
 		Entity m_cameraEntity;
 		Entity m_secondCameraEntity;
 		bool m_isPrimaryCamera = true;
+		SceneHierarchyPanel m_sceneHierachyPanel;
 	};
 }

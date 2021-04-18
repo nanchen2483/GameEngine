@@ -19,8 +19,8 @@ namespace Engine
 	{
 		Entity entity(m_registry.create(), this);
 		entity.AddComponent<TransformComponent>();
-		auto tag = entity.AddComponent<TagComponent>();
-		tag.tag = name.empty() ? "Entity" : name;
+		auto& tagComp = entity.AddComponent<TagComponent>();
+		tagComp.tag = name.empty() ? "Entity" : name;
 		return entity;
 	}
 

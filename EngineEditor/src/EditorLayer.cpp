@@ -73,6 +73,8 @@ namespace Engine
 		};
 
 		m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		m_sceneHierachyPanel.SetContext(m_activeScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -199,6 +201,8 @@ namespace Engine
 
 			ImGui::EndMenuBar();
 		}
+
+		m_sceneHierachyPanel.OmImGuiRender();
 
 		ImGui::Begin("Settings");
 		auto stats = Renderer2D::GetState();

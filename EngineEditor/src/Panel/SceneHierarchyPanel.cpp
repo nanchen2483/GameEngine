@@ -1,0 +1,85 @@
+#include "SceneHierarchyPanel.h"
+#include "imgui.h"
+
+#include <glm/gtc/type_ptr.hpp>
+
+namespace Engine
+{
+	SceneHierarchyPanel::SceneHierarchyPanel(const Ptr<Scene>& context)
+	{
+		SetContext(context);
+	}
+
+	void SceneHierarchyPanel::SetContext(const Ptr<Scene>& context)
+	{
+		m_context = context;
+	}
+
+	void SceneHierarchyPanel::OmImGuiRender()
+	{
+		ImGui::Begin("Scene Hierarchy");
+		m_context->m_registry.each([&](auto entityId) {
+			Entity entity = Entity{ entityId, m_context.get() };
+			DrawEntityNode(entity);
+		});
+
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+		{
+			m_selectionContext = {};
+		}
+
+		ImGui::End();
+
+		ImGui::Begin("Properties");
+		if (m_selectionContext)
+		{
+			DrawComponents(m_selectionContext);
+		}
+		ImGui::End();
+	}
+	
+	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
+	{
+		auto& tag = entity.GetComponent<TagComponent>().tag;
+		ImGuiTreeNodeFlags flags = ((m_selectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+		bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, tag.c_str());
+		if (ImGui::IsItemClicked())
+		{
+			m_selectionContext = entity;
+		}
+
+		if (opened)
+		{
+			ImGui::TreePop();
+		}
+	}
+
+	void SceneHierarchyPanel::DrawComponents(Entity entity)
+	{
+
+		if (entity.HasComponent<TagComponent>())
+		{
+			auto& tag = entity.GetComponent<TagComponent>().tag;
+
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			memcpy(buffer, tag.c_str(), sizeof(buffer));
+			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+			{
+				tag = std::string(buffer);
+			}
+		}
+
+		if (entity.HasComponent<TransformComponent>())
+		{
+			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			{
+				auto& transform = entity.GetComponent<TransformComponent>().transform;
+				ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.25f);
+
+				ImGui::TreePop();
+			}
+
+		}
+	}
+}
