@@ -24,7 +24,6 @@ namespace Engine
 		fbSpec.height = 720;
 		m_framebuffer = Framebuffer::Create(fbSpec);
 
-
 		// Entity
 		m_activeScene = CreatePtr<Scene>();
 		m_squareEntity = m_activeScene->CreateEntity("Lightblue square");
@@ -63,11 +62,11 @@ namespace Engine
 				}
 				if (Input::IsKeyPressed(ENGINE_KEY_W))
 				{
-					transform[3][1] -= speed * ts;
+					transform[3][1] += speed * ts;
 				}
 				if (Input::IsKeyPressed(ENGINE_KEY_S))
 				{
-					transform[3][1] += speed * ts;
+					transform[3][1] -= speed * ts;
 				}
 			}
 		};

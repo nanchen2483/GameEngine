@@ -2,7 +2,7 @@
 bin/
 imd/
 Sandbox/*.json
-EngineEditor/*json
+*Editor/*json
 
 *.user
 *.vcxproj

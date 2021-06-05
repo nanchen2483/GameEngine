@@ -37,6 +37,7 @@ namespace Engine
 		float orthoBottom = -m_orthographicSize * 0.5f;
 		float orthoTop = m_orthographicSize * 0.5f;
 
+		//m_projection = glm::perspective(glm::radians(45.0f), m_aspectRatio, m_orthgraphixNear, m_orthographicFar);
 		m_projection = glm::ortho(orthoLeft, orthoRight, orthoBottom, orthoTop, m_orthgraphixNear, m_orthographicFar);
 	}
 }

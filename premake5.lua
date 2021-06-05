@@ -1,6 +1,6 @@
 workspace "GameEngine"
 	architecture "x64"
-	startproject "EngineEditor"
+	startproject "xEditor"
 
 	configurations
 	{
@@ -149,8 +149,8 @@ project "Sandbox"
 		runtime "Release"
 		symbols "on"
 
-project "EngineEditor"
-	location "EngineEditor"
+project "xEditor"
+	location "xEditor"
 	kind "ConsoleApp"
 	cppdialect "C++17"
 	language "C++"
