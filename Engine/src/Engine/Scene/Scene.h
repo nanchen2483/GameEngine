@@ -18,6 +18,8 @@ namespace Engine
 
 		void OnUpdate(TimeStep time);
 		void OnViewportResize(uint32_t width, uint32_t height);
+		template<typename T>
+		void OnComponentAdded(Entity entity, T& component);
 	private:
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;

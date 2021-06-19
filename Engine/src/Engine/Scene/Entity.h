@@ -17,8 +17,9 @@ namespace Engine
 		T& AddComponent(Args&&... args)
 		{
 			ENGINE_CORE_ASSERT(!HasComponent<T>(), "Entity already has component!");
-
-			return m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
+			T& componet = m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
+			m_scene->OnComponentAdded<T>(*this, componet);
+			return componet;
 		}
 
 		template<typename T>
