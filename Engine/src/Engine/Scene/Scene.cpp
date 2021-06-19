@@ -41,7 +41,7 @@ namespace Engine
 		}
 
 		Camera* mainCamera = nullptr;
-		glm::mat4* mainTrnasform = nullptr;
+		glm::mat4 mainTrnasform;
 		{
 			auto view = m_registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view)
@@ -51,7 +51,7 @@ namespace Engine
 				if (camera.primary)
 				{
 					mainCamera = &camera.camera;
-					mainTrnasform = &transform.transform;
+					mainTrnasform = transform.GetTransform();
 					break;
 				}
 			}
@@ -59,14 +59,14 @@ namespace Engine
 
 		if (mainCamera != nullptr)
 		{
-			Renderer2D::BeginScene(*mainCamera, *mainTrnasform);
+			Renderer2D::BeginScene(*mainCamera, mainTrnasform);
 
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-				Renderer2D::DrawQuad(transform, sprite.color);
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
 			}
 
 			Renderer2D::EndScene();

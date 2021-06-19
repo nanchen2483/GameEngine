@@ -49,24 +49,24 @@ namespace Engine
 
 			virtual void OnUpdate(TimeStep ts) override
 			{
-				auto& transform = GetComponent<TransformComponent>().transform;
+				auto& translation = GetComponent<TransformComponent>().translation;
 				float speed = 5.0f;
 
 				if (Input::IsKeyPressed(ENGINE_KEY_A))
 				{
-					transform[3][0] -= speed * ts;
+					translation.x -= speed * ts;
 				}
 				if (Input::IsKeyPressed(ENGINE_KEY_D))
 				{
-					transform[3][0] += speed * ts;
+					translation.x += speed * ts;
 				}
 				if (Input::IsKeyPressed(ENGINE_KEY_W))
 				{
-					transform[3][1] += speed * ts;
+					translation.y += speed * ts;
 				}
 				if (Input::IsKeyPressed(ENGINE_KEY_S))
 				{
-					transform[3][1] -= speed * ts;
+					translation.y -= speed * ts;
 				}
 			}
 		};
@@ -220,7 +220,7 @@ namespace Engine
 			ImGui::Separator();
 		}
 
-		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().transform[3]));
+		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().translation));
 		if (ImGui::Checkbox("Primary Camera", &m_isPrimaryCamera))
 		{
 			m_cameraEntity.GetComponent<CameraComponent>().primary = m_isPrimaryCamera;
