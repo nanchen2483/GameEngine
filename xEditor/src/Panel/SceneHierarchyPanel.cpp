@@ -79,7 +79,6 @@ namespace Engine
 
 				ImGui::TreePop();
 			}
-
 		}
 
 		if (entity.HasComponent<CameraComponent>())
@@ -155,6 +154,17 @@ namespace Engine
 
 					ImGui::Checkbox("Fixed aspect ratio", &cameraComponent.fixedAspectRatio);
 				}
+
+				ImGui::TreePop();
+			}
+		}
+
+		if (entity.HasComponent<SpriteRendererComponent>())
+		{
+			if (ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
+			{
+				auto& comp= entity.GetComponent<SpriteRendererComponent>();
+				ImGui::ColorEdit4("Color", glm::value_ptr(comp.color));
 
 				ImGui::TreePop();
 			}
