@@ -14,6 +14,7 @@ namespace Engine
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = "");
+		void DestoryEntity(Entity entity);
 
 		void OnUpdate(TimeStep time);
 		void OnViewportResize(uint32_t width, uint32_t height);

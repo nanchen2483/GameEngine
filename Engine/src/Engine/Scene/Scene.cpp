@@ -24,6 +24,11 @@ namespace Engine
 		return entity;
 	}
 
+	void Scene::DestoryEntity(Entity entity)
+	{
+		m_registry.destroy(entity);
+	}
+
 	void Scene::OnUpdate(TimeStep time)
 	{
 		// Script

@@ -210,31 +210,31 @@ namespace Engine
 		ImGui::Text("Quads: %d", stats.quadCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-		if (m_squareEntity)
-		{
-			ImGui::Separator();
-			auto& tag = m_squareEntity.GetComponent<TagComponent>().tag;
-			ImGui::Text("%s", tag.c_str());
-			auto& squareColor = m_squareEntity.GetComponent<SpriteRendererComponent>().color;
-			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-			ImGui::Separator();
-		}
+		//if (m_squareEntity)
+		//{
+		//	ImGui::Separator();
+		//	auto& tag = m_squareEntity.GetComponent<TagComponent>().tag;
+		//	ImGui::Text("%s", tag.c_str());
+		//	auto& squareColor = m_squareEntity.GetComponent<SpriteRendererComponent>().color;
+		//	ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+		//	ImGui::Separator();
+		//}
 
-		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().translation));
-		if (ImGui::Checkbox("Primary Camera", &m_isPrimaryCamera))
-		{
-			m_cameraEntity.GetComponent<CameraComponent>().primary = m_isPrimaryCamera;
-			m_secondCameraEntity.GetComponent<CameraComponent>().primary = !m_isPrimaryCamera;
-		}
+		//ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().translation));
+		//if (ImGui::Checkbox("Primary Camera", &m_isPrimaryCamera))
+		//{
+		//	m_cameraEntity.GetComponent<CameraComponent>().primary = m_isPrimaryCamera;
+		//	m_secondCameraEntity.GetComponent<CameraComponent>().primary = !m_isPrimaryCamera;
+		//}
 
-		{
-			auto& camera = m_secondCameraEntity.GetComponent<CameraComponent>().camera;
-			float orthoSize = camera.GetOrthographicSize();
-			if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
-			{
-				camera.SetOrthographicSize(orthoSize);
-			}
-		}
+		//{
+		//	auto& camera = m_secondCameraEntity.GetComponent<CameraComponent>().camera;
+		//	float orthoSize = camera.GetOrthographicSize();
+		//	if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+		//	{
+		//		camera.SetOrthographicSize(orthoSize);
+		//	}
+		//}
 
 		ImGui::End();
 

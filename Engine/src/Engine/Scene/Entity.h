@@ -44,9 +44,18 @@ namespace Engine
 		}
 
 		operator bool() const { return m_entityHandle != entt::null; }
+		operator entt::entity() const { return m_entityHandle; }
 		operator uint32_t() const { return (uint32_t)m_entityHandle; }
-		bool operator==(const Entity& other) const { return m_entityHandle == other.m_entityHandle && m_scene == other.m_scene; }
-		bool operator!=(const Entity& other) const { return !(*this == other); }
+
+		bool operator==(const Entity& other) const
+		{
+			return m_entityHandle == other.m_entityHandle && m_scene == other.m_scene;
+		}
+
+		bool operator!=(const Entity& other) const
+		{
+			return !(*this == other);
+		}
 	private:
 		entt::entity m_entityHandle{ entt::null };
 		Scene* m_scene = nullptr;
