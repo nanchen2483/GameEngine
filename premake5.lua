@@ -19,11 +19,13 @@ IncludeDir["glm"] = "Engine/util/glm"
 IncludeDir["imgui"] = "Engine/util/imgui"
 IncludeDir["stb_image"] = "Engine/util/stb_image"
 IncludeDir["entt"] = "Engine/util/entt/include"
+IncludeDir["yaml_cpp"] = "Engine/util/yaml-cpp/include"
 
 group "Dependencies"
 	include "Engine/util/glfw"
 	include "Engine/util/glad"
 	include "Engine/util/imgui"
+	include "Engine/util/yaml-cpp"
 group ""
 
 project "Engine"
@@ -60,7 +62,8 @@ project "Engine"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links
@@ -68,7 +71,8 @@ project "Engine"
 		"GLFW",
 		"glad",
 		"imgui",
-		"opengl32.lib"
+		"opengl32.lib",
+		"yaml-cpp"
 	}
 
 	filter "system:windows"

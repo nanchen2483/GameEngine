@@ -26,6 +26,8 @@ namespace Engine
 
 		// Entity
 		m_activeScene = CreatePtr<Scene>();
+
+#if 0
 		m_squareEntity = m_activeScene->CreateEntity("Lightblue square");
 		m_squareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 1.0f, 1.0f));
 
@@ -72,6 +74,7 @@ namespace Engine
 		};
 
 		m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif // 0
 
 		m_sceneHierachyPanel.SetContext(m_activeScene);
 	}
@@ -105,28 +108,31 @@ namespace Engine
 		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RendererCommand::Clear();
 
+#if 0
 		{
-			//ENGINE_PROFILE_SCOPE("Renderer Draw");
-			//Renderer2D::BeginScene(m_cameraController.GetCamera());
-			//{
-			//	m_activeScene->OnUpdate(timeStep);
-			//	Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(1.0f), m_color);
-			//	Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_color);
-			//	Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0, -0.1f), glm::vec2(10.0f), m_texture2D);
-			//}
-			//Renderer2D::EndScene();
+			ENGINE_PROFILE_SCOPE("Renderer Draw");
+			Renderer2D::BeginScene(m_cameraController.GetCamera());
+			{
+				m_activeScene->OnUpdate(timeStep);
+				Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(1.0f), m_color);
+				Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_color);
+				Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0, -0.1f), glm::vec2(10.0f), m_texture2D);
+			}
+			Renderer2D::EndScene();
 
-			//Renderer2D::BeginScene(m_cameraController.GetCamera());
-			//for (float y = -4.5f; y < 5.0f; y += 0.5f)
-			//{
-			//	for (float x = -4.5f; x < 5.0f; x += 0.5f)
-			//	{
-			//		glm::vec4 color = glm::vec4((x + 0.5f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f);
-			//		Renderer2D::DrawQuad(glm::vec3(x, y, 0.0f), glm::vec2(0.45f, 0.45f), color);
-			//	}
-			//}
-			//Renderer2D::EndScene();
+			Renderer2D::BeginScene(m_cameraController.GetCamera());
+			for (float y = -4.5f; y < 5.0f; y += 0.5f)
+			{
+				for (float x = -4.5f; x < 5.0f; x += 0.5f)
+				{
+					glm::vec4 color = glm::vec4((x + 0.5f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f);
+					Renderer2D::DrawQuad(glm::vec3(x, y, 0.0f), glm::vec2(0.45f, 0.45f), color);
+				}
+			}
+			Renderer2D::EndScene();
 		}
+#endif // 0
+
 
 		m_activeScene->OnUpdate(timeStep);
 
@@ -192,9 +198,24 @@ namespace Engine
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("Exit")) { Application::Get().Close(); }
-				ImGui::Separator();
+				if (ImGui::MenuItem("Serialize"))
+				{
+					SceneSerializer serializer(m_activeScene);
+					serializer.Serialize("asserts/scene/example.yaml");
+				}
 
+				if (ImGui::MenuItem("Deserialize"))
+				{
+					SceneSerializer serializer(m_activeScene);
+					serializer.Deserialize("asserts/scene/example.yaml");
+				}
+
+				if (ImGui::MenuItem("Exit"))
+				{
+					Application::Get().Close();
+				}
+
+				ImGui::Separator();
 				ImGui::EndMenu();
 			}
 

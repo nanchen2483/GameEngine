@@ -28,4 +28,5 @@
 #include "Engine/Scene/Component.h";
 #include "Engine/Scene/Entity.h";
 #include "Engine/Scene/Scene.h";
+#include "Engine/Scene/SceneSerializer.h"
 #include "Engine/Scene/ScriptableEntity.h";

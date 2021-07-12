@@ -10,3 +10,6 @@
 [submodule "Engine/util/glm"]
 	path = Engine/util/glm
 	url = https://github.com/nanchen24/glm.git
+[submodule "Engine/util/yaml-cpp"]
+	path = Engine/util/yaml-cpp
+	url = https://github.com/nanchen24/yaml-cpp.git
