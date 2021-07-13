@@ -173,6 +173,7 @@ namespace Engine {
 
 		std::ofstream fout(filepath);
 		fout << out.c_str();
+		fout.close();
 	}
 
 	void SceneSerializer::SerializeRuntime(const std::string& filepath)

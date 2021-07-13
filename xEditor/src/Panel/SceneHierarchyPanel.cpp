@@ -14,6 +14,7 @@ namespace Engine
 	void SceneHierarchyPanel::SetContext(const Ptr<Scene>& context)
 	{
 		m_context = context;
+		m_selectionContext = {};
 	}
 
 	void SceneHierarchyPanel::OmImGuiRender()
@@ -157,7 +158,7 @@ namespace Engine
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
 		if (ImGui::Button("Z", buttonSize))
 		{
-			values.x = resetValue;
+			values.z = resetValue;
 		}
 		ImGui::PopStyleColor(3);
 

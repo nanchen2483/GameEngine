@@ -30,3 +30,6 @@
 #include "Engine/Scene/Scene.h";
 #include "Engine/Scene/SceneSerializer.h"
 #include "Engine/Scene/ScriptableEntity.h";
+
+// Utils
+#include "Engine/Utils/PlatformUtils.h"

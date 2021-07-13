@@ -198,16 +198,19 @@ namespace Engine
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("Serialize"))
+				if (ImGui::MenuItem("New", "Ctrl+N"))
 				{
-					SceneSerializer serializer(m_activeScene);
-					serializer.Serialize("asserts/scene/example.yaml");
+					NewScene();
 				}
 
-				if (ImGui::MenuItem("Deserialize"))
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
 				{
-					SceneSerializer serializer(m_activeScene);
-					serializer.Deserialize("asserts/scene/example.yaml");
+					OpenScene();
+				}
+
+				if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
+				{
+					SaveSceneAs();
 				}
 
 				if (ImGui::MenuItem("Exit"))
@@ -285,5 +288,72 @@ namespace Engine
 		}
 
 		m_cameraController.OnEvent(event);
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+	}
+
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& event)
+	{
+		bool control = Input::IsKeyPressed(ENGINE_KEY_LEFT_CONTROL) || Input::IsKeyPressed(ENGINE_KEY_RIGHT_CONTROL);
+		bool shift = Input::IsKeyPressed(ENGINE_KEY_LEFT_SHIFT) || Input::IsKeyPressed(ENGINE_KEY_RIGHT_SHIFT);
+
+		switch (event.GetKeyCode())
+		{
+		case ENGINE_KEY_N:
+			if (control)
+			{
+				NewScene();
+			}
+			break;
+		case ENGINE_KEY_O:
+			if (control)
+			{
+				OpenScene();
+			}
+			break;
+		case ENGINE_KEY_S:
+			if (control && shift)
+			{
+				SaveSceneAs();
+			}
+			break;
+		default:
+			break;
+		}
+
+		return false;
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_activeScene = CreatePtr<Scene>();
+		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+		m_sceneHierachyPanel.SetContext(m_activeScene);
+	}
+	
+	void EditorLayer::OpenScene()
+	{
+		std::string& filepath = FileDialogs::OpenFile("Game scene (*.xengine)\0*.xengine\0");
+
+		if (!filepath.empty())
+		{
+			m_activeScene = CreatePtr<Scene>();
+			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+			m_sceneHierachyPanel.SetContext(m_activeScene);
+
+			SceneSerializer serializer(m_activeScene);
+			serializer.Deserialize(filepath);
+		}
+	}
+	
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string& filepath = FileDialogs::SaveFile("Game scene (*.xengine)\0*.xengine\0");
+
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(m_activeScene);
+			serializer.Serialize(filepath);
+		}
 	}
 }

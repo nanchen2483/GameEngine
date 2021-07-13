@@ -2,9 +2,18 @@ Scene: Untitled
 Entities:
   - Entity: 123
     TagComponent:
+      Tag: Cube
+    TransformComponent:
+      Translation: [1.89999998, 2.4000001, -18]
+      Rotation: [0, 0.844739377, 0]
+      Scale: [2.20000005, 2.20000005, 2.20000005]
+    SpriteRendererComponent:
+      Color: [0.931372523, 0.228277594, 0.228277594, 1]
+  - Entity: 123
+    TagComponent:
       Tag: Lightblue square
     TransformComponent:
-      Translation: [0, 0, 0]
+      Translation: [0, 0, -15.6000004]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -18,7 +27,7 @@ Entities:
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
-        ProjectionType: 1
+        ProjectionType: 0
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
