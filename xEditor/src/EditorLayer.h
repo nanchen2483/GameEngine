@@ -29,10 +29,9 @@ namespace Engine
 		bool m_viewportFocused = false, m_viewportHovered = false;
 		Ptr<Scene> m_activeScene;
 		Entity m_squareEntity;
-		Entity m_cameraEntity;
-		Entity m_secondCameraEntity;
 		bool m_isPrimaryCamera = true;
-		int m_gizmoType = 0;
+		EditorCamera m_editorCamera;
+		int m_gizmoType = -1;
 		SceneHierarchyPanel m_sceneHierachyPanel;
 	};
 }

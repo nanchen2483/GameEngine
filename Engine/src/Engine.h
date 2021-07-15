@@ -10,6 +10,8 @@
 #include "Engine/Core/MouseButtonCodes.h"
 
 // Renderer
+#include "Engine/Renderer/EditorCamera.h"
+
 #include "Engine/Renderer/OrthographicCameraController.h"
 
 #include "Engine/Renderer/Renderer.h"

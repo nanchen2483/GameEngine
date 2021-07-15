@@ -7,7 +7,8 @@
 #include "OrthographicCamera.h"
 #include "Shader.h"
 #include "Texture.h"
-#include <Engine/Renderer/Camera.h>
+#include "Engine/Renderer/Camera.h"
+#include "Engine/Renderer/EditorCamera.h"
 
 namespace Engine
 {
@@ -18,6 +19,7 @@ namespace Engine
 		static void Shutdown();
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
+		static void BeginScene(const EditorCamera& camera);
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();
@@ -42,6 +44,7 @@ namespace Engine
 		static Statistics GetState();
 
 	private:
+		static void StartBatch();
 		static void FlushAndReset();
 	};
 }

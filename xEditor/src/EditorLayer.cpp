@@ -29,6 +29,8 @@ namespace Engine
 		// Entity
 		m_activeScene = CreatePtr<Scene>();
 
+		m_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+
 #if 0
 		m_squareEntity = m_activeScene->CreateEntity("Lightblue square");
 		m_squareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 1.0f, 1.0f));
@@ -96,6 +98,7 @@ namespace Engine
 		{
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 			m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
+			m_editorCamera.SetViewportSize(m_viewportSize.x, m_viewportSize.y);
 			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		}
 
@@ -104,6 +107,8 @@ namespace Engine
 			ENGINE_PROFILE_SCOPE("Camera OnUpdate");
 			m_cameraController.OnUpdate(timeStep);
 		}
+
+		m_editorCamera.OnUpdate(timeStep);
 
 		Renderer2D::ResetStates();
 		m_framebuffer->Bind();
@@ -136,7 +141,7 @@ namespace Engine
 #endif // 0
 
 
-		m_activeScene->OnUpdate(timeStep);
+		m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
 
 		m_framebuffer->Unbind();
 	}
@@ -284,10 +289,14 @@ namespace Engine
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 			
 			// Camera
-			auto cameraEntity = m_activeScene->GetPrimaryCameraEntity();
-			const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
-			const glm::mat4& cameraProjection = camera.GetProjection();
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			//auto cameraEntity = m_activeScene->GetPrimaryCameraEntity();
+			//const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
+			//const glm::mat4& cameraProjection = camera.GetProjection();
+			//glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			// Editor camera
+			const glm::mat4& cameraProjection = m_editorCamera.GetProjection();
+			glm::mat4 cameraView = m_editorCamera.GetViewMatrix();
 
 			// Entity transform
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
@@ -342,6 +351,7 @@ namespace Engine
 			}
 		}
 
+		m_editorCamera.OnEvent(event);
 		m_cameraController.OnEvent(event);
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));

@@ -104,6 +104,30 @@ namespace Engine
 	{
 	}
 
+	void Renderer2D::BeginScene(const EditorCamera& camera)
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		auto& viewProjection = camera.GetViewProjection();
+
+		s_data.shader->Bind();
+		s_data.shader->SetMat4("uViewProjection", viewProjection);
+
+		s_data.indexCount = 0;
+		s_data.vertexBufferPtr = s_data.vertexBufferBase;
+		s_data.textureSlotIndex = 1;
+	}
+
+	void Renderer2D::BeginScene(OrthographicCamera& camera)
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		s_data.shader->Bind();
+		s_data.shader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
+
+		StartBatch();
+	}
+
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
 		ENGINE_PROFILE_FUNCTION();
@@ -113,18 +137,11 @@ namespace Engine
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);
 
-		s_data.indexCount = 0;
-		s_data.vertexBufferPtr = s_data.vertexBufferBase;
-		s_data.textureSlotIndex = 1;
+		StartBatch();
 	}
-	
-	void Renderer2D::BeginScene(OrthographicCamera& camera)
+
+	void Renderer2D::StartBatch()
 	{
-		ENGINE_PROFILE_FUNCTION();
-
-		s_data.shader->Bind();
-		s_data.shader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
-
 		s_data.indexCount = 0;
 		s_data.vertexBufferPtr = s_data.vertexBufferBase;
 		s_data.textureSlotIndex = 1;
