@@ -13,3 +13,6 @@
 [submodule "Engine/util/yaml-cpp"]
 	path = Engine/util/yaml-cpp
 	url = https://github.com/nanchen24/yaml-cpp.git
+[submodule "Engine/util/ImGuizmo"]
+	path = Engine/util/ImGuizmo
+	url = https://github.com/nanchen24/ImGuizmo.git

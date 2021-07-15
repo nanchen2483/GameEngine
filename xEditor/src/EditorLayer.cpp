@@ -3,8 +3,10 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 
 #include <imgui.h>
+#include <ImGuizmo.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 namespace Engine
 {
@@ -225,7 +227,7 @@ namespace Engine
 			ImGui::EndMenuBar();
 		}
 
-		m_sceneHierachyPanel.OmImGuiRender();
+		m_sceneHierachyPanel.OnImGuiRender();
 
 		ImGui::Begin("Settings");
 		auto stats = Renderer2D::GetState();
@@ -266,10 +268,63 @@ namespace Engine
 		ImGui::Begin("Renderer");
 		m_viewportFocused = ImGui::IsWindowFocused();
 		m_viewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->DisableEvents(m_viewportFocused && m_viewportHovered);
+		Application::Get().GetImGuiLayer()->DisableEvents(m_viewportFocused || m_viewportHovered);
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		m_viewportSize = glm::vec2(viewportSize.x, viewportSize.y);
 		ImGui::Image((void*)m_framebuffer->GetColorAttachmentRendererId(), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+		
+		// ImGuizmo
+		Entity selectedEntity = m_sceneHierachyPanel.GetSelectedEntity();
+		if (selectedEntity && m_gizmoType != -1)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+			float windowWidth = (float)ImGui::GetWindowWidth();
+			float windowHeight = (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+			
+			// Camera
+			auto cameraEntity = m_activeScene->GetPrimaryCameraEntity();
+			const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
+			const glm::mat4& cameraProjection = camera.GetProjection();
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			// Entity transform
+			auto& tc = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = tc.GetTransform();
+
+			// Snapping
+			bool snap = Input::IsKeyPressed(ENGINE_KEY_LEFT_CONTROL);
+			float snapValue = 0.5f; // 0.5 meter for translation/scale
+			if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
+			{
+				snapValue = 45.0f; // 45.0 degrees for rotation
+			}
+
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(
+				glm::value_ptr(cameraView),
+				glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)m_gizmoType,
+				ImGuizmo::LOCAL,
+				glm::value_ptr(transform),
+				nullptr,
+				snap ? snapValues : nullptr
+			);
+
+			if (ImGuizmo::IsUsing())
+			{
+				glm::vec3 translation, rotation, scale;
+				Math::DecomposeTransform(transform, translation, rotation, scale);
+
+				glm::vec3 deltaRotation = rotation - tc.rotation;
+				tc.translation = translation;
+				tc.rotation += deltaRotation;
+				tc.scale = scale;
+			}
+		}
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -316,6 +371,18 @@ namespace Engine
 			{
 				SaveSceneAs();
 			}
+			break;
+		case ENGINE_KEY_Q:
+			m_gizmoType = -1;
+			break;
+		case ENGINE_KEY_W:
+			m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+			break;
+		case ENGINE_KEY_E:
+			m_gizmoType = ImGuizmo::OPERATION::SCALE;
+			break;
+		case ENGINE_KEY_R:
+			m_gizmoType = ImGuizmo::OPERATION::ROTATE;
 			break;
 		default:
 			break;

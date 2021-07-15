@@ -12,7 +12,9 @@ namespace Engine
 
 		void SetContext(const Ptr<Scene>& context);
 
-		void OmImGuiRender();
+		void OnImGuiRender();
+
+		Entity GetSelectedEntity() const { return m_selectionContext; };
 	private:
 		void DrawEntityNode(Entity entity);
 		void DrawComponents(Entity entity);

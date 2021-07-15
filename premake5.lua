@@ -20,6 +20,7 @@ IncludeDir["imgui"] = "Engine/util/imgui"
 IncludeDir["stb_image"] = "Engine/util/stb_image"
 IncludeDir["entt"] = "Engine/util/entt/include"
 IncludeDir["yaml_cpp"] = "Engine/util/yaml-cpp/include"
+IncludeDir["ImGuizmo"] = "Engine/util/ImGuizmo"
 
 group "Dependencies"
 	include "Engine/util/glfw"
@@ -46,6 +47,8 @@ project "Engine"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/util/stb_image/**",
+		"%{prj.name}/util/ImGuizmo/ImGuizmo.h",
+		"%{prj.name}/util/ImGuizmo/ImGuizmo.cpp",
 	}
 
 	defines
@@ -63,7 +66,8 @@ project "Engine"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.yaml_cpp}"
+		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links
@@ -74,6 +78,9 @@ project "Engine"
 		"opengl32.lib",
 		"yaml-cpp"
 	}
+
+	filter "files:Engine/util/ImGuizmo/**.cpp" 
+		flags { "NoPCH" }
 
 	filter "system:windows"
 		systemversion "latest"
@@ -122,7 +129,7 @@ project "Sandbox"
 		"Engine/util/imgui",
 		"Engine/src",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
 	}
 
 	links
@@ -175,7 +182,8 @@ project "xEditor"
 		"Engine/util/imgui",
 		"Engine/src",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links

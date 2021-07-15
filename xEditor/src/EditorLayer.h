@@ -32,6 +32,7 @@ namespace Engine
 		Entity m_cameraEntity;
 		Entity m_secondCameraEntity;
 		bool m_isPrimaryCamera = true;
+		int m_gizmoType = 0;
 		SceneHierarchyPanel m_sceneHierachyPanel;
 	};
 }
