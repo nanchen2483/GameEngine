@@ -78,6 +78,18 @@ namespace Engine
 
 			return false;
 		}
+
+		static GLenum GetGLTextureFormat(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case Engine::FramebufferTextureFormat::RGBA8: return GL_RGBA8;
+			case Engine::FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			case Engine::FramebufferTextureFormat::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
+			}
+			
+			ENGINE_CORE_ASSERT(false, "Invalid framebuffer texture format {0}", format);
+		}
 	}
 
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
@@ -200,6 +212,16 @@ namespace Engine
 	void OpenGLFramebuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	{
+		ENGINE_CORE_ASSERT(attachmentIndex < m_colorAttachments.size(), "");
+
+		auto& spec = m_colorAttachmentSpecifications[attachmentIndex];
+
+		glClearTexImage(m_colorAttachments[attachmentIndex], 0, Utils::GetGLTextureFormat(spec.textureFormat), GL_INT, &value);
+
 	}
 
 	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)

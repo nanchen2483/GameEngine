@@ -15,6 +15,7 @@ namespace Engine
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
+		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
 		virtual void Resize(uint32_t width, uint32_t height) override;
 		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) override;
 

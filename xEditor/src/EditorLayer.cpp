@@ -116,6 +116,9 @@ namespace Engine
 		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RendererCommand::Clear();
 
+		// Clear entity id buffer attachment to -1
+		m_framebuffer->ClearAttachment(1, -1);
+
 #if 0
 		{
 			ENGINE_PROFILE_SCOPE("Renderer Draw");
