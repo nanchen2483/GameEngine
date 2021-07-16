@@ -24,17 +24,17 @@ namespace Engine
 			glBindTexture(TextureTarget(multisampled), id);
 		}
 
-		static void AttachColorTexture(uint32_t id, int samples, GLenum format, uint32_t width, uint32_t height, int index)
+		static void AttachColorTexture(uint32_t id, int samples, GLenum internalFormat, GLenum format, uint32_t width, uint32_t height, int index)
 		{
 			bool multisampled = samples > 1;
 			GLenum textureTarget = TextureTarget(multisampled);
 			if (multisampled)
 			{
-				glTexImage2DMultisample(textureTarget, samples, format, width, height, GL_FALSE);
+				glTexImage2DMultisample(textureTarget, samples, internalFormat, width, height, GL_FALSE);
 			}
 			else
 			{
-				glTexImage2D(textureTarget, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+				glTexImage2D(textureTarget, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
 
 				glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -137,6 +137,17 @@ namespace Engine
 						m_colorAttachments[i],
 						m_specification.samples,
 						GL_RGBA8,
+						GL_RGBA,
+						m_specification.width,
+						m_specification.height,
+						i);
+					break;
+				case FramebufferTextureFormat::RED_INTEGER:
+					Utils::AttachColorTexture(
+						m_colorAttachments[i],
+						m_specification.samples,
+						GL_R32I,
+						GL_RGB_INTEGER,
 						m_specification.width,
 						m_specification.height,
 						i);
@@ -202,5 +213,15 @@ namespace Engine
 		m_specification.height = height;
 
 		Invalidate();
+	}
+
+	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
+	{
+		ENGINE_CORE_ASSERT(attachmentIndex < m_colorAttachments.size(), "");
+
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+		int pixel;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixel);
+		return pixel;
 	}
 }

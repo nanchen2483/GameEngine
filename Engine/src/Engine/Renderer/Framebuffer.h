@@ -8,8 +8,9 @@ namespace Engine
 	{
 		None = 0,
 		RGBA8,
+		RED_INTEGER,
 		DEPTH24STENCIL8,
-		DEPTH = DEPTH24STENCIL8,
+		Depth = DEPTH24STENCIL8,
 	};
 
 	struct FramebufferTextureSpecification
@@ -48,6 +49,7 @@ namespace Engine
 		virtual void Unbind() = 0;
 
 		virtual void Resize(uint32_t width, uint32_t height) = 0;
+		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) = 0;
 
 		virtual uint32_t GetColorAttachmentRendererId(uint32_t index = 0) const = 0;
 		virtual const FramebufferSpecification GetSpecification() const = 0;

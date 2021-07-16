@@ -33,5 +33,7 @@ namespace Engine
 		EditorCamera m_editorCamera;
 		int m_gizmoType = -1;
 		SceneHierarchyPanel m_sceneHierachyPanel;
+
+		glm::vec2 m_viewportBounds[2];
 	};
 }

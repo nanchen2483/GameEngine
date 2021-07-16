@@ -22,7 +22,7 @@ namespace Engine
 		m_texture2D = Texture2D::Create("asserts/textures/blocks.png");
 	
 		FramebufferSpecification fbSpec;
-		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::DEPTH24STENCIL8 });
+		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::DEPTH24STENCIL8 });
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
 		m_framebuffer = Framebuffer::Create(fbSpec);
@@ -141,8 +141,22 @@ namespace Engine
 		}
 #endif // 0
 
-
 		m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
+
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_viewportBounds[0].x;
+		my -= m_viewportBounds[0].y;
+		glm::vec2 viewportSize = { m_viewportBounds[1] - m_viewportBounds[0] };
+		my = m_viewportSize.y - my;
+
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+		
+		if (mouseX > 0 && mouseY > 0 && mouseX < viewportSize.x && mouseY < viewportSize.y)
+		{
+			int data = m_framebuffer->ReadPixel(1, mouseX, mouseY);
+			ENGINE_WARN("entityId {0}", data);
+		}
 
 		m_framebuffer->Unbind();
 	}
@@ -242,43 +256,32 @@ namespace Engine
 		ImGui::Text("Quads: %d", stats.quadCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-		//if (m_squareEntity)
-		//{
-		//	ImGui::Separator();
-		//	auto& tag = m_squareEntity.GetComponent<TagComponent>().tag;
-		//	ImGui::Text("%s", tag.c_str());
-		//	auto& squareColor = m_squareEntity.GetComponent<SpriteRendererComponent>().color;
-		//	ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-		//	ImGui::Separator();
-		//}
-
-		//ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().translation));
-		//if (ImGui::Checkbox("Primary Camera", &m_isPrimaryCamera))
-		//{
-		//	m_cameraEntity.GetComponent<CameraComponent>().primary = m_isPrimaryCamera;
-		//	m_secondCameraEntity.GetComponent<CameraComponent>().primary = !m_isPrimaryCamera;
-		//}
-
-		//{
-		//	auto& camera = m_secondCameraEntity.GetComponent<CameraComponent>().camera;
-		//	float orthoSize = camera.GetOrthographicSize();
-		//	if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
-		//	{
-		//		camera.SetOrthographicSize(orthoSize);
-		//	}
-		//}
 
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("Renderer");
+		ImGui::Begin("Viewpoert");
+		auto viewportOffset = ImGui::GetCursorPos();
+
 		m_viewportFocused = ImGui::IsWindowFocused();
 		m_viewportHovered = ImGui::IsWindowHovered();
 		Application::Get().GetImGuiLayer()->DisableEvents(m_viewportFocused || m_viewportHovered);
+
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		m_viewportSize = glm::vec2(viewportSize.x, viewportSize.y);
-		ImGui::Image((void*)m_framebuffer->GetColorAttachmentRendererId(1), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+
+		uint32_t textureId = m_framebuffer->GetColorAttachmentRendererId(0);
+		ImGui::Image((void*)textureId, ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 		
+		auto windowSize = ImGui::GetWindowSize();
+		auto minBound = ImGui::GetWindowPos();
+		minBound.x += viewportOffset.x;
+		minBound.y += viewportOffset.y;
+
+		glm::vec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
+		m_viewportBounds[0] = { minBound.x, minBound.y };
+		m_viewportBounds[1] = { maxBound.x, maxBound.y };
+
 		// ImGuizmo
 		Entity selectedEntity = m_sceneHierachyPanel.GetSelectedEntity();
 		if (selectedEntity && m_gizmoType != -1)
