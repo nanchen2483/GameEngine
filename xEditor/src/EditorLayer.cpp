@@ -22,6 +22,7 @@ namespace Engine
 		m_texture2D = Texture2D::Create("asserts/textures/blocks.png");
 	
 		FramebufferSpecification fbSpec;
+		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::DEPTH24STENCIL8 });
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
 		m_framebuffer = Framebuffer::Create(fbSpec);
@@ -276,7 +277,7 @@ namespace Engine
 		Application::Get().GetImGuiLayer()->DisableEvents(m_viewportFocused || m_viewportHovered);
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		m_viewportSize = glm::vec2(viewportSize.x, viewportSize.y);
-		ImGui::Image((void*)m_framebuffer->GetColorAttachmentRendererId(), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+		ImGui::Image((void*)m_framebuffer->GetColorAttachmentRendererId(1), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 		
 		// ImGuizmo
 		Entity selectedEntity = m_sceneHierachyPanel.GetSelectedEntity();
