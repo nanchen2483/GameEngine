@@ -12,6 +12,9 @@ namespace Engine
 		glm::vec4 color;
 		glm::vec2 texCoord;
 		float textureIndex;
+
+		// Editor-only
+		int entityId = -1;
 	};
 
 	struct Renderer2DData
@@ -52,6 +55,7 @@ namespace Engine
 			{ ShaderDataType::Float4, "aColor" },
 			{ ShaderDataType::Float2, "aTexCoord" },
 			{ ShaderDataType::Float, "aTexIndex" },
+			{ ShaderDataType::Int, "aEntityId" }
 		});
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 
@@ -186,7 +190,7 @@ namespace Engine
 		DrawQuad(transform, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture, int entityId)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
@@ -226,6 +230,7 @@ namespace Engine
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = textureCoords[i];
 			s_data.vertexBufferPtr->textureIndex = textureIndex;
+			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
 
@@ -234,7 +239,7 @@ namespace Engine
 		s_data.states.quadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityId)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
@@ -253,12 +258,18 @@ namespace Engine
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = textureCoords[i];
 			s_data.vertexBufferPtr->textureIndex = textureIndex;
+			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
 
 		s_data.indexCount += 6;
 
 		s_data.states.quadCount++;
+	}
+
+	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId)
+	{
+		DrawQuad(transform, sprite.color, entityId);
 	}
 
 	void Renderer2D::ResetStates()

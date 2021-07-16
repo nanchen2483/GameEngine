@@ -157,8 +157,17 @@ namespace Engine
 		
 		if (mouseX > 0 && mouseY > 0 && mouseX < viewportSize.x && mouseY < viewportSize.y)
 		{
-			int data = m_framebuffer->ReadPixel(1, mouseX, mouseY);
-			ENGINE_WARN("entityId {0}", data);
+			int pixelData = m_framebuffer->ReadPixel(1, mouseX, mouseY);
+			if (pixelData == -1)
+			{
+				m_hoverdEntity = Entity();
+			}
+			else
+			{
+				m_hoverdEntity = Entity((entt::entity)pixelData, m_activeScene.get());
+			}
+
+			ENGINE_WARN("entityId {0}", pixelData);
 		}
 
 		m_framebuffer->Unbind();
@@ -260,11 +269,23 @@ namespace Engine
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
+		std::string name = "None";
+		if (m_hoverdEntity)
+		{
+			name = m_hoverdEntity.GetComponent<TagComponent>().tag;
+		}
+		ImGui::Text("Hoved entity: %s", name.c_str());
+
+
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		ImGui::Begin("Viewpoert");
-		auto viewportOffset = ImGui::GetCursorPos();
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_viewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_viewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
 		m_viewportFocused = ImGui::IsWindowFocused();
 		m_viewportHovered = ImGui::IsWindowHovered();
@@ -275,15 +296,6 @@ namespace Engine
 
 		uint32_t textureId = m_framebuffer->GetColorAttachmentRendererId(0);
 		ImGui::Image((void*)textureId, ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
-		
-		auto windowSize = ImGui::GetWindowSize();
-		auto minBound = ImGui::GetWindowPos();
-		minBound.x += viewportOffset.x;
-		minBound.y += viewportOffset.y;
-
-		glm::vec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
-		m_viewportBounds[0] = { minBound.x, minBound.y };
-		m_viewportBounds[1] = { maxBound.x, maxBound.y };
 
 		// ImGuizmo
 		Entity selectedEntity = m_sceneHierachyPanel.GetSelectedEntity();
@@ -291,9 +303,7 @@ namespace Engine
 		{
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
-			float windowWidth = (float)ImGui::GetWindowWidth();
-			float windowHeight = (float)ImGui::GetWindowHeight();
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+			ImGuizmo::SetRect(m_viewportBounds[0].x, m_viewportBounds[0].y, m_viewportBounds[1].x - m_viewportBounds[0].x, m_viewportBounds[1].y - m_viewportBounds[0].y);
 			
 			// Camera
 			//auto cameraEntity = m_activeScene->GetPrimaryCameraEntity();

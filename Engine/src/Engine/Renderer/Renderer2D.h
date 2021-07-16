@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "Engine/Renderer/Camera.h"
 #include "Engine/Renderer/EditorCamera.h"
+#include <Engine/Scene/Component.h>
 
 namespace Engine
 {
@@ -26,9 +27,11 @@ namespace Engine
 		static void Flush();
 
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture, int entityId = -1);
 
-		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
+		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityId = -1);
+
+		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent &sprite, int entityId);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); };
 		

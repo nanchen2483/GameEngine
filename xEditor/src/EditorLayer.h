@@ -34,6 +34,7 @@ namespace Engine
 		int m_gizmoType = -1;
 		SceneHierarchyPanel m_sceneHierachyPanel;
 
+		Entity m_hoverdEntity;
 		glm::vec2 m_viewportBounds[2];
 	};
 }

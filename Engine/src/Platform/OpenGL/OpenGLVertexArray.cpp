@@ -57,15 +57,55 @@ namespace Engine
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const auto& element : layout)
 		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(
-				index,
-				element.GetComponentCount(),
-				ShaderDataTypeToOpenGLBaseType(element.type),
-				element.normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				(const void*)element.offset);
-			index++;
+
+			switch (element.type)
+			{
+			case Engine::ShaderDataType::Float:
+			case Engine::ShaderDataType::Float2:
+			case Engine::ShaderDataType::Float3:
+			case Engine::ShaderDataType::Float4:
+				glEnableVertexAttribArray(index);
+				glVertexAttribPointer(
+					index,
+					element.GetComponentCount(),
+					ShaderDataTypeToOpenGLBaseType(element.type),
+					element.normalized ? GL_TRUE : GL_FALSE,
+					layout.GetStride(),
+					(const void*)element.offset);
+				index++;
+				break;
+			case Engine::ShaderDataType::Int:
+			case Engine::ShaderDataType::Int2:
+			case Engine::ShaderDataType::Int3:
+			case Engine::ShaderDataType::Int4:
+			case Engine::ShaderDataType::Bool:
+				glEnableVertexAttribArray(index);
+				glVertexAttribIPointer(
+					index,
+					element.GetComponentCount(),
+					ShaderDataTypeToOpenGLBaseType(element.type),
+					layout.GetStride(),
+					(const void*)element.offset);
+				index++;
+				break;
+			case Engine::ShaderDataType::Mat3:
+			case Engine::ShaderDataType::Mat4:
+				uint8_t count = element.GetComponentCount();
+				for (uint8_t i = 0; i < count; i++)
+				{
+					glEnableVertexAttribArray(index);
+					glVertexAttribPointer(
+						index,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.type),
+						element.normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(),
+						(const void*)(element.offset + sizeof(float) * count * i));
+					glVertexAttribDivisor(index, 1);
+					index++;
+				}
+				break;
+			}
 		}
 
 		m_vertexBuffers.push_back(vertexBuffer);
