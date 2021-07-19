@@ -22,6 +22,7 @@
 #include "Engine/Renderer/VertexArray.h"
 #include "Engine/Renderer/Framebuffer.h"
 #include "Engine/Renderer/Shader.h"
+#include "Engine/Renderer/ShaderLibrary.h"
 #include "Engine/Renderer/Texture.h"
 
 #include "Engine/Renderer/OrthographicCamera.h"

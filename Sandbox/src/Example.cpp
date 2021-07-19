@@ -72,13 +72,13 @@ void ExampleLayer::OnAttach()
 		)";
 
 	auto reatangleshader = m_shaderLibrary.Load("Rectangle", vertexSrc, fragmentSrc);
-	std::dynamic_pointer_cast<Engine::OpenGLShader>(reatangleshader)->Bind();
-	std::dynamic_pointer_cast<Engine::OpenGLShader>(reatangleshader)->UploadUniformInt("uTexture", 0);
+	reatangleshader->Bind();
+	reatangleshader->SetInt("uTexture", 0);
 
 	auto textureShader = m_shaderLibrary.Load("Texture", "asserts/shaders/Texture.glsl");
 	m_texture2D = Engine::Texture2D::Create("asserts/textures/blocks.png");
-	std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->Bind();
-	std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->UploadUniformInt("uTexture", 0);
+	textureShader->Bind();
+	textureShader->SetInt("uTexture", 0);
 }
 
 void ExampleLayer::OnDetach()
@@ -106,11 +106,11 @@ void ExampleLayer::OnUpdate(Engine::TimeStep timeStep)
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 			if ((x + y) % 2)
 			{
-				std::dynamic_pointer_cast<Engine::OpenGLShader>(reatangleShader)->UploadUniformFloat3("uColor", m_color);
+				reatangleShader->SetFloat3("uColor", m_color);
 			}
 			else
 			{
-				std::dynamic_pointer_cast<Engine::OpenGLShader>(reatangleShader)->UploadUniformFloat3("uColor", glm::vec3(0.0f, 0.0f, 1.0f));
+				reatangleShader->SetFloat3("uColor", glm::vec3(0.0f, 0.0f, 1.0f));
 			}
 			Engine::Renderer::Submit(reatangleShader, m_vertexArray, transform);
 		}
