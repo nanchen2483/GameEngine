@@ -36,6 +36,6 @@ namespace Engine
 		SceneHierarchyPanel m_sceneHierachyPanel;
 
 		Entity m_hoverdEntity;
-		glm::vec2 m_viewportBounds[2];
+		glm::vec2 m_viewportBounds[2] = { glm::vec2(0.0f), glm::vec2(0.0f) };
 	};
 }

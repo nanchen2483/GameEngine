@@ -6,7 +6,7 @@ namespace Engine
 	class SceneCamera : public Camera
 	{
 	public:
-		enum class ProjectionType { Perspective = 0, Orthographic = 1 };
+		enum class ProjectionType { Perspective = 1, Orthographic = 2 };
 	public:
 		SceneCamera();
 		virtual ~SceneCamera();
@@ -35,7 +35,7 @@ namespace Engine
 	private:
 		void RecalculateProjection();
 	private:
-		ProjectionType m_projectionType = ProjectionType::Orthographic;
+		ProjectionType m_projectionType = ProjectionType::Perspective;
 
 		float m_perspectiveFOV = glm::radians(45.0f);
 		float m_perspectiveNear = 0.01f, m_perspectiveFar = 1000.0f;
