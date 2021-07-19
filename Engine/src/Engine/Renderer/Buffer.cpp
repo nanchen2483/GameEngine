@@ -11,7 +11,7 @@ namespace Engine
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return std::make_shared<OpenGLVertexBuffer>(size);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(size);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
@@ -23,7 +23,7 @@ namespace Engine
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return std::make_shared<OpenGLVertexBuffer>(vertices, size);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
@@ -35,7 +35,7 @@ namespace Engine
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return std::make_shared<OpenGLIndexBuffer>(indices, count);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLIndexBuffer>(indices, count);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");

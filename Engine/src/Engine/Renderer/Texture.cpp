@@ -11,7 +11,7 @@ namespace Engine
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return std::make_shared<OpenGLTexture2D>(width, height);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture2D>(width, height);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
@@ -22,7 +22,7 @@ namespace Engine
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return std::make_shared<OpenGLTexture2D>(filePath);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture2D>(filePath);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
