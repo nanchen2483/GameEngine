@@ -1,6 +1,8 @@
 .vs/
 bin/
 imd/
+Sandbox/*.json
+*Editor/*json
 
 *.user
 *.vcxproj

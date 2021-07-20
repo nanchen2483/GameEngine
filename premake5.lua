@@ -1,6 +1,9 @@
+include "./util/premake/premake_customization/solution_items.lua"
+include "dependencies.lua"
+
 workspace "GameEngine"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "xEditor"
 
 	configurations
 	{
@@ -9,135 +12,26 @@ workspace "GameEngine"
 		"Dist"
 	}
 
+	solution_items
+	{
+		".editorconfig"
+	}
+
+	flags
+	{
+		"MultiProcessorCompile"
+	}
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- Include directory relative to root folder (solution directory)
-IncludeDir = {}
-IncludeDir["glfw"] = "Engine/util/glfw/include"
-IncludeDir["glad"] = "Engine/util/glad/include"
-IncludeDir["glm"] = "Engine/util/glm"
-IncludeDir["imgui"] = "Engine/util/imgui"
-
 group "Dependencies"
+	include "util/premake"
 	include "Engine/util/glfw"
 	include "Engine/util/glad"
 	include "Engine/util/imgui"
+	include "Engine/util/yaml-cpp"
 group ""
 
-project "Engine"
-	location "Engine"
-	kind "SharedLib"
-	language "C++"
-	staticruntime "off"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("imd/" .. outputdir .. "/%{prj.name}")
-
-	pchheader "enginepch.h"
-	pchsource "Engine/src/enginepch.cpp"
-	
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
-	}
-
-	includedirs
-	{
-		"%{prj.name}/src",
-		"%{prj.name}/util/spdlog/include",
-		"%{IncludeDir.glfw}",
-		"%{IncludeDir.glad}",
-		"%{IncludeDir.imgui}",
-		"%{IncludeDir.glm}"
-	}
-
-	links
-	{
-		"GLFW",
-		"glad",
-		"imgui",
-		"opengl32.lib"
-	}
-
-	filter "system:windows"
-		cppdialect "C++17"
-		systemversion "latest"
-
-		defines
-		{
-			"ENGINE_PLATFORM_WINDOWS",
-			"ENGINE_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
-		}
-
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-		}
-
-	filter "configurations:Debug"
-		defines "ENGINE_DEBUG"
-		runtime "Debug"
-		symbols "On"
-
-	filter "configurations:Release"
-		defines "ENGINE_RELEASE"
-		runtime "Release"
-		symbols "On"
-
-	filter "configurations:Dist"
-		defines "ENGINE_DIST"
-		runtime "Release"
-		symbols "On"
-
-project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
-	language "C++"
-	staticruntime "off"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("imd/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
-	}
-
-	includedirs
-	{
-		"Engine/util/spdlog/include",
-		"Engine/src",
-		"%{IncludeDir.glm}"
-	}
-
-	links
-	{
-		"Engine"
-	}
-
-	filter "system:windows"
-		cppdialect "C++17"
-		systemversion "latest"
-
-		defines
-		{
-			"ENGINE_PLATFORM_WINDOWS",
-		}
-
-	filter "configurations:Debug"
-		defines "ENGINE_DEBUG"
-		runtime "Debug"
-		symbols "On"
-
-	filter "configurations:Release"
-		defines "ENGINE_RELEASE"
-		runtime "Release"
-		symbols "On"
-
-	filter "configurations:Dist"
-		defines "ENGINE_DIST"
-		runtime "Release"
-		symbols "On"
+include "Engine"
+include "Sandbox"
+include "xEditor"

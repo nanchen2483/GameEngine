@@ -1,34 +1,24 @@
 #pragma once
 
-#include <Engine.h>
+#include "Engine.h"
+#include "Engine/Core/EntryPoint.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
-class ExampleLayer : public Engine::Layer
-{
-public:
-	ExampleLayer()
-		: Layer("Example")
-	{
-	}
+#include <imgui.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-	void OnUpdate() override
-	{
-		ENGINE_INFO("ExampleLayer::Update");
-	}
 
-	void OnEvent(Engine::Event& event) override
-	{
-		ENGINE_TRACE("{0}", event);
-	}
-};
-
+#include "Sandbox2D.h"
+#include "Example.h"
 
 class Sandbox : public Engine::Application
 {
 public:
 	Sandbox()
 	{
-		PushLayer(new ExampleLayer());
-		PushOverlay(new Engine::ImGuiLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox()
