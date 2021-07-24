@@ -3,6 +3,8 @@ bin/
 imd/
 Sandbox/*.json
 *Editor/*json
+packages/
+packages.config
 
 *.user
 *.vcxproj
