@@ -124,10 +124,10 @@ namespace Engine
 			ENGINE_PROFILE_SCOPE("Renderer Draw");
 			Renderer2D::BeginScene(m_cameraController.GetCamera());
 			{
-				m_activeScene->OnUpdate(timeStep);
+				m_activeScene->OnUpdateRuntime(timeStep);
 				Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(1.0f), m_color);
 				Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_color);
-				Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0, -0.1f), glm::vec2(10.0f), m_texture2D);
+				Renderer2D::DrawQuad(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0, -0.1f)), m_texture2D);
 			}
 			Renderer2D::EndScene();
 
@@ -260,6 +260,7 @@ namespace Engine
 		}
 
 		m_sceneHierachyPanel.OnImGuiRender();
+		m_contentBrowserPanel.OnImGuiRender();
 
 		ImGui::Begin("Settings");
 		auto stats = Renderer2D::GetState();
@@ -296,6 +297,15 @@ namespace Engine
 
 		uint32_t textureId = m_framebuffer->GetColorAttachmentRendererId(0);
 		ImGui::Image((void*)textureId, ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				OpenScene(path);
+			}
+		}
 
 		// ImGuizmo
 		Entity selectedEntity = m_sceneHierachyPanel.GetSelectedEntity();
@@ -419,7 +429,7 @@ namespace Engine
 		return false;
 	}
 
-	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& event)
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& event) 
 	{
 		if (event.GetMouseButton() == ENGINE_MOUSE_BUTTON_LEFT)
 		{
@@ -445,13 +455,18 @@ namespace Engine
 
 		if (!filepath.empty())
 		{
-			m_activeScene = CreatePtr<Scene>();
-			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-			m_sceneHierachyPanel.SetContext(m_activeScene);
-
-			SceneSerializer serializer(m_activeScene);
-			serializer.Deserialize(filepath);
+			OpenScene(filepath);
 		}
+	}
+
+	void EditorLayer::OpenScene(const std::filesystem::path& filepath)
+	{
+		m_activeScene = CreatePtr<Scene>();
+		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+		m_sceneHierachyPanel.SetContext(m_activeScene);
+
+		SceneSerializer serializer(m_activeScene);
+		serializer.Deserialize(filepath.string());
 	}
 	
 	void EditorLayer::SaveSceneAs()

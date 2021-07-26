@@ -2,6 +2,7 @@
 
 #include "Engine.h"
 #include "Panel/SceneHierarchyPanel.h"
+#include "Panel/ContentBrowserPanel.h"
 
 namespace Engine
 {
@@ -20,6 +21,7 @@ namespace Engine
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& event);
 		void NewScene();
 		void OpenScene();
+		void OpenScene(const std::filesystem::path& filepath);
 		void SaveSceneAs();
 	private:
 		OrthographicCameraController m_cameraController;
@@ -34,6 +36,7 @@ namespace Engine
 		EditorCamera m_editorCamera;
 		int m_gizmoType = -1;
 		SceneHierarchyPanel m_sceneHierachyPanel;
+		ContentBrowserPanel m_contentBrowserPanel;
 
 		Entity m_hoverdEntity;
 		glm::vec2 m_viewportBounds[2] = { glm::vec2(0.0f), glm::vec2(0.0f) };
