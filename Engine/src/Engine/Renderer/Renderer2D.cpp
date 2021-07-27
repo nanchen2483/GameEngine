@@ -190,7 +190,7 @@ namespace Engine
 		DrawQuad(transform, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture, int entityId)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color, int entityId)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
@@ -217,12 +217,7 @@ namespace Engine
 		}
 
 		constexpr size_t quadVertexCount = 4;
-		constexpr glm::vec4 color = glm::uvec4(1.0f);
 		constexpr glm::vec2 textureCoords[] = { glm::vec2(0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f), glm::vec2(0.0f, 1.0f) };
-
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
-
 
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
@@ -269,7 +264,14 @@ namespace Engine
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId)
 	{
-		DrawQuad(transform, sprite.color, entityId);
+		if (sprite.texture != nullptr)
+		{
+			DrawQuad(transform, sprite.texture, sprite.color, entityId);
+		}
+		else
+		{
+			DrawQuad(transform, sprite.color, entityId);
+		}
 	}
 
 	void Renderer2D::ResetStates()

@@ -2,6 +2,7 @@
 
 #include "Engine/Scene/SceneCamera.h"
 #include "ScriptableEntity.h"
+#include "Engine/Renderer/Texture.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -44,11 +45,14 @@ namespace Engine
 	struct SpriteRendererComponent
 	{
 		glm::vec4 color = glm::vec4(1.0f);
+		Ptr<Texture2D> texture = nullptr;
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent& renderer) = default;
 		SpriteRendererComponent(const glm::vec4& color)
 			: color(color) {}
+		SpriteRendererComponent(Ptr<Texture2D> texture)
+			: texture(texture) {}
 	};
 
 	struct CameraComponent

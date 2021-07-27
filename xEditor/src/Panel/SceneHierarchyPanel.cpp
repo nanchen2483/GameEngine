@@ -1,8 +1,10 @@
 #include "SceneHierarchyPanel.h"
-#include "imgui.h"
+#include "Engine/Scene/Component.h"
 
 #include <glm/gtc/type_ptr.hpp>
+#include <imgui.h>
 #include <imgui_internal.h>
+#include <filesystem>
 
 namespace Engine
 {
@@ -63,7 +65,7 @@ namespace Engine
 
 				if (ImGui::MenuItem("Spriite Renderer"))
 				{
-					m_selectionContext.AddComponent<SpriteRendererComponent>();
+					auto& entity = m_selectionContext.AddComponent<SpriteRendererComponent>();
 					ImGui::CloseCurrentPopup();
 				}
 				
@@ -339,8 +341,25 @@ namespace Engine
 
 			if (open)
 			{
-				auto& comp= entity.GetComponent<SpriteRendererComponent>();
-				ImGui::ColorEdit4("Color", glm::value_ptr(comp.color));
+				auto& component = entity.GetComponent<SpriteRendererComponent>();
+				ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+				ImGui::Text("Texture");
+				uint32_t textureId = 0;
+				if (component.texture != nullptr)
+				{
+					textureId = component.texture->GetRendererId();
+				}
+
+				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* filepath = (const wchar_t*)payload->Data;
+						const std::filesystem::path path = filepath;
+						component.texture = Texture2D::Create(path.string());
+					}
+				}
 
 				ImGui::TreePop();
 			}

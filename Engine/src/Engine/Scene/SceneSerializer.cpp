@@ -145,6 +145,10 @@ namespace Engine {
 			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
 
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.color;
+			if (spriteRendererComponent.texture != nullptr)
+			{
+				out << YAML::Key << "TextureFilePath" << YAML::Value << spriteRendererComponent.texture->GetFilePath();
+			}
 
 			out << YAML::EndMap;
 		}
@@ -250,6 +254,11 @@ namespace Engine {
 					auto& deserializedSRC = deserializedEntity.AddComponent<SpriteRendererComponent>();
 
 					deserializedSRC.color = spriteRendererComponent["Color"].as<glm::vec4>();
+					auto& filePathNode = spriteRendererComponent["TextureFilePath"];
+					if (filePathNode)
+					{
+						deserializedSRC.texture = Texture2D::Create(filePathNode.as<std::string>());
+					}
 				}
 			}
 		}
