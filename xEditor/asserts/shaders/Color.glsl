@@ -26,7 +26,7 @@ void main()
 #type fragment
 #version 450 core
 
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 FragColor;
 layout(location = 1) out int color2;
 
 in vec4 vColor;
@@ -38,6 +38,6 @@ uniform sampler2D uTextures[32];
 
 void main()
 {
-	color = texture(uTextures[int(round(vTexIndex))], vTexCoord * 2.0f) * vColor;
+	FragColor = texture(uTextures[int(round(vTexIndex))], vTexCoord) * vColor;
 	color2 = vEntityId;
 }

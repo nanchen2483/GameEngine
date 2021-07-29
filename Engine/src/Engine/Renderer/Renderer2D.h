@@ -13,6 +13,17 @@
 
 namespace Engine
 {
+	struct Vertex
+	{
+		glm::vec3 position = {};
+		glm::vec4 color = {};
+		glm::vec2 texCoord = {};
+		float textureIndex = 0;
+
+		// Editor-only
+		int entityId = -1;
+	};
+
 	class Renderer2D
 	{
 	public:

@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "Entity.h"
 #include "Engine/Renderer/Renderer2D.h"
+#include "Engine/Renderer/Renderer3D.h"
 
 namespace Engine
 {
@@ -31,17 +32,17 @@ namespace Engine
 
 	void Scene::OnUpdateEditor(TimeStep time, EditorCamera& camera)
 	{
-		Renderer2D::BeginScene(camera);
+		Renderer3D::BeginScene(camera);
 
 		auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 		for (auto entity : group)
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			Renderer3D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 		}
 
-		Renderer2D::EndScene();
+		Renderer3D::EndScene();
 	}
 
 	void Scene::OnUpdateRuntime(TimeStep time)
@@ -79,17 +80,17 @@ namespace Engine
 
 		if (mainCamera != nullptr)
 		{
-			Renderer2D::BeginScene(*mainCamera, mainTrnasform);
+			Renderer3D::BeginScene(*mainCamera, mainTrnasform);
 
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				Renderer3D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			}
 
-			Renderer2D::EndScene();
+			Renderer3D::EndScene();
 		}
 
 	}

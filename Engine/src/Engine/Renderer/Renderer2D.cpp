@@ -5,18 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Engine
-{	
-	struct Vertex
-	{
-		glm::vec3 position;
-		glm::vec4 color;
-		glm::vec2 texCoord;
-		float textureIndex;
-
-		// Editor-only
-		int entityId = -1;
-	};
-
+{
 	struct Renderer2DData
 	{
 		static const uint32_t maxQuads = 20000;
@@ -36,7 +25,7 @@ namespace Engine
 		std::array<Ptr<Texture2D>, maxTextureSlots> textureSlots;
 		uint32_t textureSlotIndex = 1;
 
-		glm::vec4 vertexPosition[4];
+		glm::vec4 vertexPosition[4] = {};
 
 		Renderer2D::Statistics states;
 	};
@@ -117,9 +106,7 @@ namespace Engine
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);
 
-		s_data.indexCount = 0;
-		s_data.vertexBufferPtr = s_data.vertexBufferBase;
-		s_data.textureSlotIndex = 1;
+		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(OrthographicCamera& camera)
@@ -175,10 +162,7 @@ namespace Engine
 	void Renderer2D::FlushAndReset()
 	{
 		EndScene();
-
-		s_data.indexCount = 0;
-		s_data.vertexBufferPtr = s_data.vertexBufferBase;
-		s_data.textureSlotIndex = 1;
+		StartBatch();
 	}
 
 
@@ -200,20 +184,23 @@ namespace Engine
 		}
 
 		float textureIndex = 0.0f;
-		for (uint32_t i = 1; i < s_data.textureSlotIndex; i++)
+		if (texture != nullptr)
 		{
-			if (*s_data.textureSlots[i].get() == *texture.get())
+			for (uint32_t i = 1; i < s_data.textureSlotIndex; i++)
 			{
-				textureIndex = (float)i;
-				break;
+				if (*s_data.textureSlots[i].get() == *texture.get())
+				{
+					textureIndex = (float)i;
+					break;
+				}
 			}
-		}
 
-		if (textureIndex == 0.0f)
-		{
-			textureIndex = s_data.textureSlotIndex;
-			s_data.textureSlots[s_data.textureSlotIndex] = texture;
-			s_data.textureSlotIndex++;
+			if (textureIndex == 0.0f)
+			{
+				textureIndex = s_data.textureSlotIndex;
+				s_data.textureSlots[s_data.textureSlotIndex] = texture;
+				s_data.textureSlotIndex++;
+			}
 		}
 
 		constexpr size_t quadVertexCount = 4;
@@ -264,14 +251,7 @@ namespace Engine
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId)
 	{
-		if (sprite.texture != nullptr)
-		{
-			DrawQuad(transform, sprite.texture, sprite.color, entityId);
-		}
-		else
-		{
-			DrawQuad(transform, sprite.color, entityId);
-		}
+		DrawQuad(transform, sprite.texture, sprite.color, entityId);
 	}
 
 	void Renderer2D::ResetStates()

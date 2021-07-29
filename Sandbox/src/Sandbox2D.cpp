@@ -44,7 +44,7 @@ void Sandbox2D::OnUpdate(Engine::TimeStep timeStep)
 		Engine::Renderer2D::BeginScene(m_cameraController.GetCamera());
 		Engine::Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(1.0f), m_color);
 		Engine::Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_color);
-		Engine::Renderer2D::DrawQuad(glm::vec3(0.0f, 0.0, -0.1f), glm::vec2(10.0f), m_texture2D);
+		Engine::Renderer2D::DrawQuad(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0, -0.1f)), m_texture2D);
 
 		Engine::Renderer2D::EndScene();
 

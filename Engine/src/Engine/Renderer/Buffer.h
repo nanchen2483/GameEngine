@@ -19,7 +19,7 @@ namespace Engine
 		Bool
 	};
 
-	static uint32_t ShaderDataTypeSzie(ShaderDataType type)
+	static uint32_t ShaderDataTypeSize(ShaderDataType type)
 	{
 		switch (type)
 		{
@@ -49,7 +49,7 @@ namespace Engine
 		bool normalized;
 
 		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
-			: name(name), type(type), size(ShaderDataTypeSzie(type)), offset(0), normalized(normalized)
+			: name(name), type(type), size(ShaderDataTypeSize(type)), offset(0), normalized(normalized)
 		{
 		}
 
