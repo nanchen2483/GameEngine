@@ -202,7 +202,7 @@ namespace Engine
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
 			bool open = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treeNodeFlags, "Transform");
-			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			ImGui::SameLine(ImGui::GetWindowWidth() - 35.0f);
 			if (ImGui::Button("+", ImVec2(20, 20)))
 			{
 				ImGui::OpenPopup("ComponentSettings");
@@ -321,7 +321,7 @@ namespace Engine
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
 			bool open = ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), treeNodeFlags, "Sprite Renderer");
-			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			ImGui::SameLine(ImGui::GetWindowWidth() - 35.0f);
 			if (ImGui::Button("+", ImVec2(20, 20)))
 			{
 				ImGui::OpenPopup("ComponentSettings");
