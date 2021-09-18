@@ -96,7 +96,7 @@ namespace Engine {
 	{
 		auto [xSpeed, ySpeed] = PanSpeed();
 		m_focusPoint -= GetRightDirection() * delta.x * xSpeed * m_distance;
-		m_focusPoint += GetRightDirection() * delta.y * ySpeed * m_distance;
+		m_focusPoint += GetUpDirection() * delta.y * ySpeed * m_distance;
 	}
 	
 	void EditorCamera::MouseRotate(const glm::vec2& delta)
