@@ -5,13 +5,13 @@ namespace Engine
 {
 	struct Renderer3DData
 	{
-		static const uint32_t numOfVertices = 8;
-		static const uint32_t numOfVertexIndices = 36;
+		static const uint32_t NUM_OF_VERTICES = 8;
+		static const uint32_t NUM_OF_VERTEX_INDICES = 36;
 
-		static const uint32_t maxQuads = 20000;
-		static const uint32_t maxVertices = maxQuads * numOfVertices;
-		static const uint32_t maxIndices = maxQuads * numOfVertexIndices;
-		static const uint32_t maxTextureSlots = 32;
+		static const uint32_t MAX_QUADS = 20000;
+		static const uint32_t MAX_VERTICES = MAX_QUADS * NUM_OF_VERTICES;
+		static const uint32_t MAX_INDICES = MAX_QUADS * NUM_OF_VERTEX_INDICES;
+		static const uint32_t MAX_TEXTURE_SLOTS = 32;
 
 		Ptr<VertexArray> vertexArray;
 		Ptr<VertexBuffer> vertexBuffer;
@@ -19,14 +19,15 @@ namespace Engine
 		Ptr<Texture2D> whiteTexture;
 
 		uint32_t indexCount = 0;
-		Vertex* vertexBufferBase = nullptr;
+		const Vertex* vertexBufferBase = new Vertex[Renderer3DData::MAX_VERTICES];
 		Vertex* vertexBufferPtr = nullptr;
 
-		std::array<Ptr<Texture2D>, maxTextureSlots> textureSlots;
-		uint32_t textureSlotIndex = 1;
+		static const uint32_t NUM_OF_DEFAULT_TEXTURES = 1; // The first texture slot is white block
+		std::array<Ptr<Texture2D>, MAX_TEXTURE_SLOTS> textureSlots;
+		uint32_t numOfTextureSlots = NUM_OF_DEFAULT_TEXTURES;
 
-		glm::vec4 vertexPosition[numOfVertices] = {};
-		glm::vec2 textureCoords[numOfVertices] = {};
+		glm::vec4 vertexPosition[NUM_OF_VERTICES] = {};
+		glm::vec2 textureCoords[NUM_OF_VERTICES] = {};
 	};
 
 	static Renderer3DData s_data;
@@ -37,67 +38,65 @@ namespace Engine
 
 		s_data.vertexArray = VertexArray::Create();
 
-		s_data.vertexBuffer = VertexBuffer::Create(s_data.maxVertices * sizeof(Vertex));
-		s_data.vertexBuffer->SetLayout({
+		s_data.vertexBuffer = VertexBuffer::Create(Renderer3DData::MAX_VERTICES * sizeof(Vertex));
+		s_data.vertexBuffer->SetLayout(BufferLayout
+		{
 			{ ShaderDataType::Float3, "aPosition" },
 			{ ShaderDataType::Float4, "aColor" },
 			{ ShaderDataType::Float2, "aTexCoord" },
 			{ ShaderDataType::Float, "aTexIndex" },
 			{ ShaderDataType::Int, "aEntityId" }
-			});
+		});
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 
-		s_data.vertexBufferBase = new Vertex[s_data.maxVertices];
-
-		uint32_t* indices = new uint32_t[s_data.maxIndices];
-		uint32_t indicesOffset = 0;
-		for (uint32_t i = 0; i < s_data.maxIndices; i += s_data.numOfVertexIndices)
+		uint32_t* indices = new uint32_t[Renderer3DData::MAX_INDICES];
+		for (uint32_t i = 0, indicesOffset = 0; i < Renderer3DData::MAX_INDICES; i += Renderer3DData::NUM_OF_VERTEX_INDICES, indicesOffset += Renderer3DData::NUM_OF_VERTICES)
 		{
+			// Front
 			indices[i + 0] = indicesOffset + 0;
 			indices[i + 1] = indicesOffset + 1;
 			indices[i + 2] = indicesOffset + 2;
 			indices[i + 3] = indicesOffset + 2;
 			indices[i + 4] = indicesOffset + 3;
 			indices[i + 5] = indicesOffset + 0;
-
+			// Back
 			indices[i + 6] = indicesOffset + 4;
 			indices[i + 7] = indicesOffset + 5;
 			indices[i + 8] = indicesOffset + 6;
-			indices[i + 9] = indicesOffset + 5;
-			indices[i + 10] = indicesOffset + 4;
-			indices[i + 11] = indicesOffset + 7;
-
-			indices[i + 12] = indicesOffset + 3;
-			indices[i + 13] = indicesOffset + 7;
-			indices[i + 14] = indicesOffset + 4;
-			indices[i + 15] = indicesOffset + 4;
-			indices[i + 16] = indicesOffset + 0;
-			indices[i + 17] = indicesOffset + 3;
-
-			indices[i + 18] = indicesOffset + 2;
-			indices[i + 19] = indicesOffset + 6;
-			indices[i + 20] = indicesOffset + 5;
-			indices[i + 21] = indicesOffset + 6;
+			indices[i + 9] = indicesOffset + 6;
+			indices[i + 10] = indicesOffset + 7;
+			indices[i + 11] = indicesOffset + 4;
+			// Left
+			indices[i + 12] = indicesOffset + 5;
+			indices[i + 13] = indicesOffset + 0;
+			indices[i + 14] = indicesOffset + 3;
+			indices[i + 15] = indicesOffset + 3;
+			indices[i + 16] = indicesOffset + 6;
+			indices[i + 17] = indicesOffset + 5;
+			// Right
+			indices[i + 18] = indicesOffset + 1;
+			indices[i + 19] = indicesOffset + 4;
+			indices[i + 20] = indicesOffset + 7;
+			indices[i + 21] = indicesOffset + 7;
 			indices[i + 22] = indicesOffset + 2;
 			indices[i + 23] = indicesOffset + 1;
-
-			indices[i + 24] = indicesOffset + 4;
-			indices[i + 25] = indicesOffset + 6;
-			indices[i + 26] = indicesOffset + 1;
-			indices[i + 27] = indicesOffset + 1;
-			indices[i + 28] = indicesOffset + 0;
-			indices[i + 29] = indicesOffset + 4;
-
-			indices[i + 30] = indicesOffset + 7;
-			indices[i + 31] = indicesOffset + 2;
-			indices[i + 32] = indicesOffset + 5;
-			indices[i + 33] = indicesOffset + 2;
-			indices[i + 34] = indicesOffset + 7;
-			indices[i + 35] = indicesOffset + 3;
-
-			indicesOffset += s_data.numOfVertices;
+			// Top
+			indices[i + 24] = indicesOffset + 3;
+			indices[i + 25] = indicesOffset + 2;
+			indices[i + 26] = indicesOffset + 7;
+			indices[i + 27] = indicesOffset + 7;
+			indices[i + 28] = indicesOffset + 6;
+			indices[i + 29] = indicesOffset + 3;
+			// Bottom
+			indices[i + 30] = indicesOffset + 5;
+			indices[i + 31] = indicesOffset + 4;
+			indices[i + 32] = indicesOffset + 1;
+			indices[i + 33] = indicesOffset + 1;
+			indices[i + 34] = indicesOffset + 0;
+			indices[i + 35] = indicesOffset + 5;
 		}
-		Ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, s_data.maxIndices);
+
+		Ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, Renderer3DData::MAX_INDICES);
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
@@ -105,34 +104,34 @@ namespace Engine
 		uint32_t whiteTextureData = 0xffffffff;
 		s_data.whiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
 
-		int32_t samplers[s_data.maxTextureSlots];
-		for (uint32_t i = 0; i < s_data.maxTextureSlots; i++)
+		int32_t samplers[Renderer3DData::MAX_TEXTURE_SLOTS];
+		for (uint32_t i = 0; i < s_data.MAX_TEXTURE_SLOTS; i++)
 		{
 			samplers[i] = i;
 		}
 
 		s_data.shader = Shader::Create("asserts/shaders/Color.glsl");
 		s_data.shader->Bind();
-		s_data.shader->SetIntArray("uTextures", samplers, s_data.maxTextureSlots);
+		s_data.shader->SetIntArray("uTextures", samplers, Renderer3DData::MAX_TEXTURE_SLOTS);
 		s_data.textureSlots[0] = s_data.whiteTexture;
 
 		s_data.vertexPosition[0] = { -0.5, -0.5f,  0.5f, 1.0f };
 		s_data.vertexPosition[1] = {  0.5, -0.5f,  0.5f, 1.0f };
 		s_data.vertexPosition[2] = {  0.5,  0.5f,  0.5f, 1.0f };
 		s_data.vertexPosition[3] = { -0.5,  0.5f,  0.5f, 1.0f };
-		s_data.vertexPosition[4] = { -0.5, -0.5f, -0.5f, 1.0f };
-		s_data.vertexPosition[5] = {  0.5,  0.5f, -0.5f, 1.0f };
-		s_data.vertexPosition[6] = {  0.5, -0.5f, -0.5f, 1.0f };
-		s_data.vertexPosition[7] = { -0.5,  0.5f, -0.5f, 1.0f };
+		s_data.vertexPosition[4] = {  0.5, -0.5f, -0.5f, 1.0f };
+		s_data.vertexPosition[5] = { -0.5, -0.5f, -0.5f, 1.0f };
+		s_data.vertexPosition[6] = { -0.5,  0.5f, -0.5f, 1.0f };
+		s_data.vertexPosition[7] = {  0.5,  0.5f, -0.5f, 1.0f };
 
 		s_data.textureCoords[0] = { 0.0f, 0.0f };
 		s_data.textureCoords[1] = { 1.0f, 0.0f };
 		s_data.textureCoords[2] = { 1.0f, 1.0f };
 		s_data.textureCoords[3] = { 0.0f, 1.0f };
-		s_data.textureCoords[4] = { 0.0f, 0.0f };
-		s_data.textureCoords[5] = { 1.0f, 1.0f };
-		s_data.textureCoords[6] = { 1.0f, 0.0f };
-		s_data.textureCoords[7] = { 0.0f, 1.0f };
+		s_data.textureCoords[4] = { 1.0f, 0.0f };
+		s_data.textureCoords[5] = { 0.0f, 0.0f };
+		s_data.textureCoords[6] = { 0.0f, 1.0f };
+		s_data.textureCoords[7] = { 1.0f, 1.0f };
 	}
 	
 	void Renderer3D::Shutdown()
@@ -153,7 +152,7 @@ namespace Engine
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);
 
-		StartBatch();
+		ResetRendererData();
 	}
 	
 	void Renderer3D::BeginScene(const Camera& camera, const glm::mat4& transform)
@@ -168,78 +167,79 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		uint32_t dataSize = (uint8_t*)s_data.vertexBufferPtr - (uint8_t*)s_data.vertexBufferBase;
-		s_data.vertexBuffer->SetData(s_data.vertexBufferBase, dataSize);
-		Flush();
-	}
-	
-	void Renderer3D::Flush()
-	{
-		for (uint32_t i = 0; i < s_data.textureSlotIndex; i++)
+		const uint32_t vertexBufferSize = (uint8_t*)s_data.vertexBufferPtr - (uint8_t*)s_data.vertexBufferBase;
+		s_data.vertexBuffer->SetData(s_data.vertexBufferBase, vertexBufferSize);
+		for (uint32_t i = 0; i < s_data.numOfTextureSlots; i++)
 		{
 			s_data.textureSlots[i]->Bind(i);
 		}
 
 		RendererCommand::DrawIndexed(s_data.indexCount);
+		ResetRendererData();
+	}
+
+	void Renderer3D::ResetRendererData()
+	{
+		s_data.indexCount = 0;
+		s_data.vertexBufferPtr = (Vertex*)s_data.vertexBufferBase;
+		s_data.numOfTextureSlots = Renderer3DData::NUM_OF_DEFAULT_TEXTURES;
+	}
+
+	void Renderer3D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId)
+	{
+		DrawCube(transform, sprite.texture, sprite.color, entityId);
 	}
 	
 	void Renderer3D::DrawCube(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color, int entityId)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		if (s_data.indexCount >= s_data.maxIndices)
+		if (s_data.indexCount >= Renderer3DData::MAX_INDICES)
 		{
-			FlushAndReset();
+			DrawAndReset();
 		}
 
-		float textureIndex = 0.0f;
-		if (texture != nullptr)
-		{
-			for (uint32_t i = 1; i < s_data.textureSlotIndex; i++)
-			{
-				if (*s_data.textureSlots[i].get() == *texture.get())
-				{
-					textureIndex = (float)i;
-					break;
-				}
-			}
-
-			if (textureIndex == 0.0f)
-			{
-				textureIndex = s_data.textureSlotIndex;
-				s_data.textureSlots[s_data.textureSlotIndex] = texture;
-				s_data.textureSlotIndex++;
-			}
-		}
-
-		for (size_t i = 0; i < s_data.numOfVertices; i++)
+		uint32_t currentTextureIndex = GetTextureIndex(texture);
+		for (size_t i = 0; i < Renderer3DData::NUM_OF_VERTICES; i++)
 		{
 			s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[i];
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = s_data.textureCoords[i];
-			s_data.vertexBufferPtr->textureIndex = textureIndex;
+			s_data.vertexBufferPtr->textureIndex = currentTextureIndex;
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
 
-		s_data.indexCount += s_data.numOfVertexIndices;
+		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
-	
-	void Renderer3D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId)
+
+	uint32_t Renderer3D::GetTextureIndex(const Ptr<Texture2D>& texture)
 	{
-		DrawCube(transform, sprite.texture, sprite.color, entityId);
+		uint32_t currentTextureIndex = 0;
+		if (texture != nullptr)
+		{
+			for (uint32_t i = 1; i < s_data.numOfTextureSlots; i++)
+			{
+				if (*s_data.textureSlots[i].get() == *texture.get())
+				{
+					return i;
+					break;
+				}
+			}
+
+			if (currentTextureIndex == 0.0f)
+			{
+				currentTextureIndex = s_data.numOfTextureSlots;
+				s_data.textureSlots[s_data.numOfTextureSlots] = texture;
+				s_data.numOfTextureSlots++;
+			}
+		}
+
+		return currentTextureIndex;
 	}
 	
-	void Renderer3D::StartBatch()
-	{
-		s_data.indexCount = 0;
-		s_data.vertexBufferPtr = s_data.vertexBufferBase;
-		s_data.textureSlotIndex = 1;
-	}
-	
-	void Renderer3D::FlushAndReset()
+	void Renderer3D::DrawAndReset()
 	{
 		EndScene();
-		StartBatch();
 	}
 }

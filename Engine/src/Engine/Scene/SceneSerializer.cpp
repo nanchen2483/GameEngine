@@ -85,7 +85,7 @@ namespace Engine {
 	void static SerializeEntity(YAML::Emitter& out, Entity& entity)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "Entity" << YAML::Value << "123";
+		out << YAML::Key << "Entity" << YAML::Value;
 		
 		if (entity.HasComponent<TagComponent>())
 		{

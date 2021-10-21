@@ -24,5 +24,5 @@ namespace Engine
 	Application* CreateApplication()
 	{
 		return new Editor();
-}
+	}
 }
