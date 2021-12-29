@@ -57,7 +57,6 @@ namespace Engine
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const auto& element : layout)
 		{
-
 			switch (element.type)
 			{
 			case Engine::ShaderDataType::Float:

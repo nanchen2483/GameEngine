@@ -24,8 +24,8 @@ void ExampleLayer::OnAttach()
 	Engine::Ptr<Engine::VertexBuffer> vertexBuffer;
 	vertexBuffer = Engine::VertexBuffer::Create(vertices, sizeof(vertices));
 	vertexBuffer->SetLayout({
-		{ Engine::ShaderDataType::Float3, "aPosition" },
-		{ Engine::ShaderDataType::Float2, "aTexCoord" },
+		{ Engine::ShaderDataType::Float3, Engine::ShaderDataName::Position },
+		{ Engine::ShaderDataType::Float2, Engine::ShaderDataName::TexCoord },
 		});
 	m_vertexArray->AddVertexBuffer(vertexBuffer);
 

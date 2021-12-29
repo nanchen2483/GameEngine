@@ -41,11 +41,11 @@ namespace Engine
 		s_data.vertexBuffer = VertexBuffer::Create(Renderer3DData::MAX_VERTICES * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(BufferLayout
 		{
-			{ ShaderDataType::Float3, "aPosition" },
-			{ ShaderDataType::Float4, "aColor" },
-			{ ShaderDataType::Float2, "aTexCoord" },
-			{ ShaderDataType::Float, "aTexIndex" },
-			{ ShaderDataType::Int, "aEntityId" }
+			{ ShaderDataType::Float3, ShaderDataName::Position },
+			{ ShaderDataType::Float4, ShaderDataName::Color },
+			{ ShaderDataType::Float2, ShaderDataName::TexCoord },
+			{ ShaderDataType::Float, ShaderDataName::TexIndex },
+			{ ShaderDataType::Int, ShaderDataName::EntityId }
 		});
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 

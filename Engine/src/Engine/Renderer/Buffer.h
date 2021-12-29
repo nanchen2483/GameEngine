@@ -19,6 +19,16 @@ namespace Engine
 		Bool
 	};
 
+	enum class ShaderDataName
+	{
+		None = 0,
+		Position,
+		Color,
+		TexCoord,
+		TexIndex,
+		EntityId
+	};
+
 	static uint32_t ShaderDataTypeSize(ShaderDataType type)
 	{
 		switch (type)
@@ -42,13 +52,13 @@ namespace Engine
 
 	struct BufferElement
 	{
-		std::string name;
+		ShaderDataName name;
 		ShaderDataType type;
 		uint32_t size;
 		uint32_t offset;
 		bool normalized;
 
-		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
+		BufferElement(ShaderDataType type, ShaderDataName name, bool normalized = false)
 			: name(name), type(type), size(ShaderDataTypeSize(type)), offset(0), normalized(normalized)
 		{
 		}
