@@ -1,6 +1,6 @@
-[submodule "Engine/util/spdlog"]
+[submodule "Engine/vendor/spdlog"]
 	path = Engine/vendor/spdlog
-	url = https://github.com/gabime/spdlog.git
+	url = https://github.com/nanchen24/spdlog.git
 [submodule "Engine/util/glfw"]
 	path = Engine/vendor/glfw
 	url = https://github.com/nanchen24/glfw.git
