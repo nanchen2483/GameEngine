@@ -24,15 +24,10 @@ namespace Engine
 		void OpenScene(const std::filesystem::path& filepath);
 		void SaveSceneAs();
 	private:
-		OrthographicCameraController m_cameraController;
-		Ptr<Texture2D> m_texture2D;
 		Ptr<Framebuffer> m_framebuffer;
-		glm::vec4 m_color;
 		glm::vec2 m_viewportSize = glm::vec2(0.0f);
 		bool m_viewportFocused = false, m_viewportHovered = false;
 		Ptr<Scene> m_activeScene;
-		Entity m_squareEntity;
-		bool m_isPrimaryCamera = true;
 		EditorCamera m_editorCamera;
 		int m_gizmoType = -1;
 		SceneHierarchyPanel m_sceneHierachyPanel;
@@ -40,5 +35,7 @@ namespace Engine
 
 		Entity m_hoverdEntity;
 		glm::vec2 m_viewportBounds[2] = { glm::vec2(0.0f), glm::vec2(0.0f) };
+
+		int m_textureId = -1;
 	};
 }

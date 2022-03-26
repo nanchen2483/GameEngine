@@ -11,7 +11,7 @@
 namespace Engine
 {
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_cameraController(1280.0f / 720.0f), m_color(0.2, 0.2, 1.0f, 1.0f)
+		: Layer("EditorLayer")
 	{
 	}
 
@@ -19,8 +19,6 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		m_texture2D = Texture2D::Create("asserts/textures/blocks.png");
-	
 		FramebufferSpecification fbSpec;
 		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::DEPTH24STENCIL8 });
 		fbSpec.width = 1280;
@@ -98,7 +96,6 @@ namespace Engine
 			(spec.width != m_viewportSize.x || spec.height != m_viewportSize.y))
 		{
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-			m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
 			m_editorCamera.SetViewportSize(m_viewportSize.x, m_viewportSize.y);
 			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		}
@@ -106,7 +103,6 @@ namespace Engine
 		if (m_viewportFocused)
 		{
 			ENGINE_PROFILE_SCOPE("Camera OnUpdate");
-			m_cameraController.OnUpdate(timeStep);
 		}
 
 		m_editorCamera.OnUpdate(timeStep);
@@ -280,6 +276,9 @@ namespace Engine
 				ImGui::Text("Quads: %d", stats.quadCount);
 				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+				ImGui::NewLine();
+				ImGui::InputInt("Texture id", &m_textureId);
+				ImGui::ImageButton((void*)m_textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 
 				ImGui::End();
 			}
@@ -385,7 +384,6 @@ namespace Engine
 		}
 
 		m_editorCamera.OnEvent(event);
-		m_cameraController.OnEvent(event);
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 		dispatcher.Dispatch<MouseButtonPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
