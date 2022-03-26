@@ -1,4 +1,4 @@
-include "./util/premake/premake_customization/solution_items.lua"
+include "./vendor/premake/premake_customization/solution_items.lua"
 include "dependencies.lua"
 
 workspace "GameEngine"
@@ -25,10 +25,10 @@ workspace "GameEngine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
-	include "Engine/util/glfw"
-	include "Engine/util/glad"
-	include "Engine/util/imgui"
-	include "Engine/util/yaml-cpp"
+	include "Engine/vendor/glfw"
+	include "Engine/vendor/glad"
+	include "Engine/vendor/imgui"
+	include "Engine/vendor/yaml-cpp"
 group ""
 
 include "Engine"

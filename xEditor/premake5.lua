@@ -15,12 +15,12 @@ project "xEditor"
 
 	includedirs
 	{
-		"%{wks.location}/Engine/util/spdlog/include",
-		"%{wks.location}/Engine/util/imgui",
 		"%{wks.location}/Engine/src",
-		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.ImGuizmo}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.spdlog}",
 	}
 
 	links

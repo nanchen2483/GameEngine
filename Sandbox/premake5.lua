@@ -15,11 +15,11 @@ project "Sandbox"
 
 	includedirs
 	{
-		"%{wks.location}/Engine/util/spdlog/include",
-		"%{wks.location}/Engine/util/imgui",
 		"%{wks.location}/Engine/src",
-		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.spdlog}",
 	}
 
 	links

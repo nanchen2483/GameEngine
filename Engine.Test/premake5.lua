@@ -10,7 +10,7 @@ project "Engine.Test"
 	pchheader "enginetestpch.h"
 	pchsource "src/enginetestpch.cpp"
 
-	nuget {"Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn:1.8.1.4"}
+	nuget {"Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn:1.8.1.5"}
 
 	files
 	{
@@ -21,12 +21,12 @@ project "Engine.Test"
 	includedirs
 	{
 		"src",
-		"%{wks.location}/Engine/util/spdlog/include",
-		"%{wks.location}/Engine/util/imgui",
 		"%{wks.location}/Engine/src",
-		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.ImGuizmo}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.spdlog}",
 	}
 
 	links

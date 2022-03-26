@@ -14,10 +14,10 @@ project "Engine"
 	{
 		"src/**.h",
 		"src/**.cpp",
-		"util/stb_image/**.h",
-		"util/stb_image/**.cpp",
-		"util/ImGuizmo/ImGuizmo.h",
-		"util/ImGuizmo/ImGuizmo.cpp",
+		"%{IncludeDir.ImGuizmo}/ImGuizmo.h",
+		"%{IncludeDir.ImGuizmo}/ImGuizmo.cpp",
+		"%{IncludeDir.stb_image}/**.h",
+		"%{IncludeDir.stb_image}/**.cpp",
 	}
 
 	defines
@@ -28,13 +28,13 @@ project "Engine"
 	includedirs
 	{
 		"src",
-		"util/spdlog/include",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.yaml_cpp}",
 	}
@@ -48,7 +48,7 @@ project "Engine"
 		"yaml-cpp"
 	}
 
-	filter "files:util/ImGuizmo/**.cpp" 
+	filter "files:vendor/ImGuizmo/**.cpp" 
 		flags { "NoPCH" }
 
 	filter "system:windows"
