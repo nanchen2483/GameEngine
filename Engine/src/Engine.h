@@ -6,8 +6,8 @@
 #include "Engine/Core/Log.h"
 #include "Engine/ImGui/ImGuiLayer.h"
 #include "Engine/Core/Input.h"
-#include "Engine/Core/KeyCodes.h"
-#include "Engine/Core/MouseButtonCodes.h"
+#include "Engine/Core/Enum/KeyCodes.h"
+#include "Engine/Core/Enum/MouseButtonCodes.h"
 
 // Renderer
 #include "Engine/Renderer/EditorCamera.h"

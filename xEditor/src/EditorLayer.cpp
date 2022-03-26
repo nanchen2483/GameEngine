@@ -335,7 +335,7 @@ namespace Engine
 					glm::mat4 transform = tc.GetTransform();
 
 					// Snapping
-					bool snap = Input::IsKeyPressed(ENGINE_KEY_LEFT_CONTROL);
+					bool snap = Input::IsKeyPressed(KeyCode::LEFT_CONTROL);
 					float snapValue = 0.5f; // 0.5 meter for translation/scale
 					if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
 					{
@@ -393,39 +393,39 @@ namespace Engine
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& event)
 	{
-		bool control = Input::IsKeyPressed(ENGINE_KEY_LEFT_CONTROL) || Input::IsKeyPressed(ENGINE_KEY_RIGHT_CONTROL);
-		bool shift = Input::IsKeyPressed(ENGINE_KEY_LEFT_SHIFT) || Input::IsKeyPressed(ENGINE_KEY_RIGHT_SHIFT);
+		bool control = Input::IsKeyPressed(KeyCode::LEFT_CONTROL) || Input::IsKeyPressed(KeyCode::RIGHT_CONTROL);
+		bool shift = Input::IsKeyPressed(KeyCode::LEFT_SHIFT) || Input::IsKeyPressed(KeyCode::RIGHT_SHIFT);
 
 		switch (event.GetKeyCode())
 		{
-		case ENGINE_KEY_N:
+		case KeyCode::N:
 			if (control)
 			{
 				NewScene();
 			}
 			break;
-		case ENGINE_KEY_O:
+		case KeyCode::O:
 			if (control)
 			{
 				OpenScene();
 			}
 			break;
-		case ENGINE_KEY_S:
+		case KeyCode::S:
 			if (control && shift)
 			{
 				SaveSceneAs();
 			}
 			break;
-		case ENGINE_KEY_Q:
+		case KeyCode::Q:
 			m_gizmoType = -1;
 			break;
-		case ENGINE_KEY_W:
+		case KeyCode::W:
 			m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
 			break;
-		case ENGINE_KEY_E:
+		case KeyCode::E:
 			m_gizmoType = ImGuizmo::OPERATION::SCALE;
 			break;
-		case ENGINE_KEY_R:
+		case KeyCode::R:
 			m_gizmoType = ImGuizmo::OPERATION::ROTATE;
 			break;
 		default:
@@ -437,9 +437,9 @@ namespace Engine
 
 	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& event) 
 	{
-		if (event.GetMouseButton() == ENGINE_MOUSE_BUTTON_LEFT)
+		if (event.GetMouseButton() == MouseButton::LEFT_BUTTON)
 		{
-			if (m_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(ENGINE_KEY_LEFT_ALT))
+			if (m_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(KeyCode::LEFT_ALT))
 			{
 				m_sceneHierachyPanel.SetSelectedEntity(m_hoverdEntity);
 			}

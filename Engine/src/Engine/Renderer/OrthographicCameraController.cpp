@@ -2,7 +2,7 @@
 #include "OrthographicCameraController.h"
 
 #include "Engine/Core/Input.h"
-#include "Engine/Core/KeyCodes.h"
+#include "Engine/Core/Enum/KeyCodes.h"
 
 namespace Engine
 {
@@ -15,31 +15,31 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		if (Input::IsKeyPressed(ENGINE_KEY_A))
+		if (Input::IsKeyPressed(KeyCode::A))
 		{
 			m_cameraPosition.x -= m_cameraMoveSpeed * timeStep;
 		}
-		else if (Input::IsKeyPressed(ENGINE_KEY_D))
+		else if (Input::IsKeyPressed(KeyCode::D))
 		{
 			m_cameraPosition.x += m_cameraMoveSpeed * timeStep;
 		}
 
-		if (Input::IsKeyPressed(ENGINE_KEY_W))
+		if (Input::IsKeyPressed(KeyCode::W))
 		{
 			m_cameraPosition.y += m_cameraMoveSpeed * timeStep;
 		}
-		else if (Input::IsKeyPressed(ENGINE_KEY_S))
+		else if (Input::IsKeyPressed(KeyCode::S))
 		{
 			m_cameraPosition.y -= m_cameraMoveSpeed * timeStep;
 		}
 
 		if (m_rotation)
 		{
-			if (Input::IsKeyPressed(ENGINE_KEY_Q))
+			if (Input::IsKeyPressed(KeyCode::Q))
 			{
 				m_cameraRotation += m_cameraRotationSpeed * timeStep;
 			}
-			else if (Input::IsKeyPressed(ENGINE_KEY_E))
+			else if (Input::IsKeyPressed(KeyCode::E))
 			{
 				m_cameraRotation -= m_cameraRotationSpeed * timeStep;
 			}

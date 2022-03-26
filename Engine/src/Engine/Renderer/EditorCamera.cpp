@@ -1,8 +1,8 @@
 #include "enginepch.h"
 #include "EditorCamera.h"
 #include "Engine/Core/Input.h"
-#include "Engine/Core/KeyCodes.h"
-#include "Engine/Core/MouseButtonCodes.h"
+#include "Engine/Core/Enum/KeyCodes.h"
+#include "Engine/Core/Enum/MouseButtonCodes.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -20,21 +20,21 @@ namespace Engine {
 
 	void EditorCamera::OnUpdate(TimeStep ts)
 	{
-		if (Input::IsKeyPressed(ENGINE_KEY_LEFT_ALT))
+		if (Input::IsKeyPressed(KeyCode::LEFT_ALT))
 		{
 			const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
 			glm::vec2 delta = (mouse - m_initialMousePosition) * 0.003f;
 			m_initialMousePosition = mouse;
 
-			if (Input::IsMouseButtonPressed(ENGINE_MOUSE_BUTTON_MIDDLE))
+			if (Input::IsMouseButtonPressed(MouseButton::MIDDLE_BUTTON))
 			{
 				MousePan(delta);
 			}
-			else if (Input::IsMouseButtonPressed(ENGINE_MOUSE_BUTTON_LEFT))
+			else if (Input::IsMouseButtonPressed(MouseButton::LEFT_BUTTON))
 			{
 				MouseRotate(delta);
 			}
-			else if (Input::IsMouseButtonPressed(ENGINE_MOUSE_BUTTON_RIGHT))
+			else if (Input::IsMouseButtonPressed(MouseButton::RIGHT_BUTTON))
 			{
 				MouseZoom(delta.y);
 			}
