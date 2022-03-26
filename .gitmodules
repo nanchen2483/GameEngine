@@ -1,18 +1,18 @@
 [submodule "Engine/util/spdlog"]
-	path = Engine/util/spdlog
+	path = Engine/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
 [submodule "Engine/util/glfw"]
-	path = Engine/util/glfw
+	path = Engine/vendor/glfw
 	url = https://github.com/nanchen24/glfw.git
 [submodule "Engine/util/imgui"]
-	path = Engine/util/imgui
+	path = Engine/vendor/imgui
 	url = https://github.com/nanchen24/imgui.git
 [submodule "Engine/util/glm"]
-	path = Engine/util/glm
+	path = Engine/vendor/glm
 	url = https://github.com/nanchen24/glm.git
 [submodule "Engine/util/yaml-cpp"]
-	path = Engine/util/yaml-cpp
+	path = Engine/vendor/yaml-cpp
 	url = https://github.com/nanchen24/yaml-cpp.git
 [submodule "Engine/util/ImGuizmo"]
-	path = Engine/util/ImGuizmo
+	path = Engine/vendor/ImGuizmo
 	url = https://github.com/nanchen24/ImGuizmo.git
