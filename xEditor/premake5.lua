@@ -16,6 +16,7 @@ project "xEditor"
 	includedirs
 	{
 		"%{wks.location}/Engine/src",
+		"%{IncludeDir.assimp}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.imgui}",

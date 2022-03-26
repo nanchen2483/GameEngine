@@ -28,6 +28,7 @@ project "Engine"
 	includedirs
 	{
 		"src",
+		"%{IncludeDir.assimp}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
@@ -41,6 +42,7 @@ project "Engine"
 
 	links
 	{
+		"assimp",
 		"GLFW",
 		"glad",
 		"imgui",

@@ -2,6 +2,7 @@
 -- Dependencies
 
 IncludeDir = {}
+IncludeDir["assimp"] = "%{wks.location}/Engine/vendor/assimp/include"
 IncludeDir["entt"] = "%{wks.location}/Engine/vendor/entt/include"
 IncludeDir["glad"] = "%{wks.location}/Engine/vendor/glad/include"
 IncludeDir["glfw"] = "%{wks.location}/Engine/vendor/glfw/include"

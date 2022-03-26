@@ -9,7 +9,7 @@ void main(int argc, char** argv)
 {
 	Engine::Log::Init();
 
-	ENGINE_PROFILE_BEGIN_SESSION("Startup", "Engine_Startuo.json");
+	ENGINE_PROFILE_BEGIN_SESSION("Startup", "Engine_Startup.json");
 	auto app = Engine::CreateApplication();
 	ENGINE_PROFILE_END_SESSION();
 	

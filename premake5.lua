@@ -25,6 +25,7 @@ workspace "GameEngine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
+	include "Engine/vendor/assimp"
 	include "Engine/vendor/glfw"
 	include "Engine/vendor/glad"
 	include "Engine/vendor/imgui"
