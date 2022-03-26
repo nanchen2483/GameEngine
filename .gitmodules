@@ -16,3 +16,6 @@
 [submodule "Engine/util/ImGuizmo"]
 	path = Engine/vendor/ImGuizmo
 	url = https://github.com/nanchen24/ImGuizmo.git
+[submodule "Engine/vendor/assimp"]
+	path = Engine/vendor/assimp
+	url = https://github.com/nanchen24/assimp-1.git
