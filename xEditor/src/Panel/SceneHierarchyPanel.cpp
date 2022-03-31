@@ -63,12 +63,24 @@ namespace Engine
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (ImGui::MenuItem("Spriite Renderer"))
+				if (ImGui::MenuItem("Sprite Renderer"))
 				{
-					auto& entity = m_selectionContext.AddComponent<SpriteRendererComponent>();
+					m_selectionContext.AddComponent<SpriteRendererComponent>();
 					ImGui::CloseCurrentPopup();
 				}
-				
+
+				if (ImGui::MenuItem("Model"))
+				{
+					m_selectionContext.AddComponent<ModelComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+				if (ImGui::MenuItem("Animation"))
+				{
+					m_selectionContext.AddComponent<SkeletonAnimationComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
 				ImGui::EndPopup();
 			}
 		}
@@ -367,6 +379,98 @@ namespace Engine
 			if (removeComponent)
 			{
 				m_selectionContext.RemoveComponent<SpriteRendererComponent>();
+			}
+		}
+
+		if (entity.HasComponent<ModelComponent>())
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
+			bool open = ImGui::TreeNodeEx((void*)typeid(ModelComponent).hash_code(), treeNodeFlags, "Model Renderer");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 35.0f);
+			if (ImGui::Button("+", ImVec2(20, 20)))
+			{
+				ImGui::OpenPopup("ComponentSettings");
+			}
+			ImGui::PopStyleVar();
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove component"))
+				{
+					removeComponent = true;
+				}
+
+				ImGui::EndPopup();
+			}
+
+			if (open)
+			{
+				auto& component = entity.GetComponent<ModelComponent>();
+				uint32_t textureId = 0;
+				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* filepath = (const wchar_t*)payload->Data;
+						const std::filesystem::path path = filepath;
+						component.model = ModelFactory::Create(path.string());
+					}
+				}
+
+				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+			{
+				m_selectionContext.RemoveComponent<ModelComponent>();
+			}
+		}
+
+		if (entity.HasComponent<SkeletonAnimationComponent>())
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
+			bool open = ImGui::TreeNodeEx((void*)typeid(SkeletonAnimationComponent).hash_code(), treeNodeFlags, "Model Renderer");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 35.0f);
+			if (ImGui::Button("+", ImVec2(20, 20)))
+			{
+				ImGui::OpenPopup("ComponentSettings");
+			}
+			ImGui::PopStyleVar();
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove component"))
+				{
+					removeComponent = true;
+				}
+
+				ImGui::EndPopup();
+			}
+
+			if (open)
+			{
+				auto& component = entity.GetComponent<SkeletonAnimationComponent>();
+				uint32_t textureId = 0;
+				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* filepath = (const wchar_t*)payload->Data;
+						const std::filesystem::path path = filepath;
+						component.model = ModelFactory::Create(path.string());
+					}
+				}
+
+				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+			{
+				m_selectionContext.RemoveComponent<SkeletonAnimationComponent>();
 			}
 		}
 	}
