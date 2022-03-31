@@ -41,11 +41,18 @@ namespace Engine
 		s_data.vertexBuffer = VertexBuffer::Create(Renderer3DData::MAX_VERTICES * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(BufferLayout
 		{
-			{ ShaderDataType::Float3, ShaderDataName::Position },
-			{ ShaderDataType::Float4, ShaderDataName::Color },
-			{ ShaderDataType::Float2, ShaderDataName::TexCoord },
-			{ ShaderDataType::Float, ShaderDataName::TexIndex },
-			{ ShaderDataType::Int, ShaderDataName::EntityId }
+			{ ShaderDataType::Float3,	ShaderDataName::Position },
+			{ ShaderDataType::Float3,	ShaderDataName::Normal },
+			{ ShaderDataType::Float4,	ShaderDataName::Color },
+			{ ShaderDataType::Float2,	ShaderDataName::TexCoord },
+			{ ShaderDataType::Float,	ShaderDataName::TexIndex },
+			{ ShaderDataType::Float3,	ShaderDataName::Tangent },
+			{ ShaderDataType::Float3,	ShaderDataName::Bitangent },
+			{ ShaderDataType::Float4,	ShaderDataName::Bone1 },
+			{ ShaderDataType::Float4,	ShaderDataName::Bone2 },
+			{ ShaderDataType::Int4,		ShaderDataName::BoneIds },
+			{ ShaderDataType::Float4,	ShaderDataName::Weights },
+			{ ShaderDataType::Int,		ShaderDataName::EntityId }
 		});
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 
@@ -151,7 +158,7 @@ namespace Engine
 		ENGINE_CORE_ASSERT(s_data.shader, "");
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);
-
+		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}
 	
@@ -211,6 +218,29 @@ namespace Engine
 		}
 
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
+	}
+
+	void Renderer3D::DrawModel(const glm::mat4& transform, ModelComponent& component, int entityId)
+	{
+		if (component.model != nullptr)
+		{
+			component.model->Draw();
+		}
+	}
+
+	void Renderer3D::DrawAnimation(const glm::mat4& transform, SkeletonAnimationComponent& component, int entityId)
+	{
+		if (component.model != nullptr)
+		{
+			s_data.shader->Bind();
+			auto transforms = component.model->GetPoseTransforms();
+			for (int i = 0; i < transforms.size(); ++i)
+			{
+				s_data.shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+			}
+
+			component.model->Draw();
+		}
 	}
 
 	uint32_t Renderer3D::GetTextureIndex(const Ptr<Texture2D>& texture)

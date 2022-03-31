@@ -29,14 +29,17 @@
 #include "Engine/Renderer/OrthographicCamera.h"
 
 // Entity
-#include "Engine/Scene/Component.h";
-#include "Engine/Scene/Entity.h";
-#include "Engine/Scene/Scene.h";
+#include "Engine/Scene/Component.h"
+#include "Engine/Scene/Entity.h"
+#include "Engine/Scene/Scene.h"
 #include "Engine/Scene/SceneSerializer.h"
-#include "Engine/Scene/ScriptableEntity.h";
+#include "Engine/Scene/ScriptableEntity.h"
 
-// Utils
-#include "Engine/Utils/PlatformUtils.h"
+// Util
+#include "Engine/Util/PlatformUtil.h"
 
 // Math
 #include "Engine/Math/Math.h"
+
+#include "Engine/Renderer/Vertex.h"
+#include "Engine/Renderer/Model/ModelFactory.h"

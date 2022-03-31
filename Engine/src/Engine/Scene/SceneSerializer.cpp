@@ -85,7 +85,7 @@ namespace Engine {
 	void static SerializeEntity(YAML::Emitter& out, Entity& entity)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "Entity" << YAML::Value;
+		out << YAML::Key << "Entity" << YAML::Value << 123;
 		
 		if (entity.HasComponent<TagComponent>())
 		{
@@ -150,6 +150,17 @@ namespace Engine {
 				out << YAML::Key << "TextureFilePath" << YAML::Value << spriteRendererComponent.texture->GetFilePath();
 			}
 
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<SkeletonAnimationComponent>())
+		{
+			out << YAML::Key << "SkeletonAnimationComponent";
+			out << YAML::BeginMap;
+
+			auto& skeletonAnimationComponent = entity.GetComponent<SkeletonAnimationComponent>();
+
+			out << YAML::Key << "Path" << YAML::Value << skeletonAnimationComponent.model->GetPath();
 			out << YAML::EndMap;
 		}
 
@@ -259,6 +270,15 @@ namespace Engine {
 					{
 						deserializedSRC.texture = Texture2D::Create(filePathNode.as<std::string>());
 					}
+				}
+
+				auto skeletonAnimationComponent = entity["SkeletonAnimationComponent"];
+				if (skeletonAnimationComponent)
+				{
+					auto& deserializedSRC = deserializedEntity.AddComponent<SkeletonAnimationComponent>();
+
+					auto path = skeletonAnimationComponent["Path"].as<std::string>();
+					deserializedSRC.model = ModelFactory::Create(path);
 				}
 			}
 		}

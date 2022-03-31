@@ -43,6 +43,27 @@ namespace Engine
 		}
 
 		Renderer3D::EndScene();
+
+		auto modelGroup = m_registry.view<TransformComponent, ModelComponent>();
+		for (auto entity : modelGroup)
+		{
+			auto [transform, model] = modelGroup.get<TransformComponent, ModelComponent>(entity);
+
+			Renderer3D::DrawModel(transform.GetTransform(), model, (int)entity);
+		}
+
+		auto animationGroup = m_registry.view<TransformComponent, SkeletonAnimationComponent>();
+		for (auto entity : animationGroup)
+		{
+			auto [transform, animation] = animationGroup.get<TransformComponent, SkeletonAnimationComponent>(entity);
+
+			if (animation.model != nullptr)
+			{
+				animation.model->UpdateAnimation(time);
+			}
+
+			Renderer3D::DrawAnimation(transform.GetTransform(), animation, (int)entity);
+		}
 	}
 
 	void Scene::OnUpdateRuntime(TimeStep time)
@@ -88,6 +109,27 @@ namespace Engine
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
 				Renderer3D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			}
+
+			auto modelGroup = m_registry.group<TransformComponent>(entt::get<ModelComponent>);
+			for (auto entity : modelGroup)
+			{
+				auto [transform, model] = modelGroup.get<TransformComponent, ModelComponent>(entity);
+
+				Renderer3D::DrawModel(transform.GetTransform(), model, (int)entity);
+			}
+
+			auto animationGroup = m_registry.view<TransformComponent, SkeletonAnimationComponent>();
+			for (auto entity : animationGroup)
+			{
+				auto [transform, animation] = animationGroup.get<TransformComponent, SkeletonAnimationComponent>(entity);
+
+				if (animation.model != nullptr)
+				{
+					animation.model->UpdateAnimation(time);
+				}
+
+				Renderer3D::DrawAnimation(transform.GetTransform(), animation, (int)entity);
 			}
 
 			Renderer3D::EndScene();
@@ -148,6 +190,16 @@ namespace Engine
 
 	template<>
 	void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<ModelComponent>(Entity entity, ModelComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<SkeletonAnimationComponent>(Entity entity, SkeletonAnimationComponent& component)
 	{
 	}
 

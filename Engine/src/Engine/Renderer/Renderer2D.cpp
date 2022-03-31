@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "Renderer2D.h"
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Engine/Renderer/Vertex.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -42,13 +43,19 @@ namespace Engine
 		s_data.vertexBuffer->SetLayout(BufferLayout
 		{
 			{ ShaderDataType::Float3,  ShaderDataName::Position },
+			{ ShaderDataType::Float3,  ShaderDataName::Normal },
 			{ ShaderDataType::Float4,  ShaderDataName::Color },
 			{ ShaderDataType::Float2,  ShaderDataName::TexCoord },
 			{ ShaderDataType::Float,  ShaderDataName::TexIndex },
+			{ ShaderDataType::Float3,  ShaderDataName::Tangent },
+			{ ShaderDataType::Float3,  ShaderDataName::Bitangent },
+			{ ShaderDataType::Float4,  ShaderDataName::Bone1 },
+			{ ShaderDataType::Float4,  ShaderDataName::Bone2 },
+			{ ShaderDataType::Int4,  ShaderDataName::BoneIds },
+			{ ShaderDataType::Float4,  ShaderDataName::Weights },
 			{ ShaderDataType::Int,  ShaderDataName::EntityId }
 		});
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
-
 		s_data.vertexBufferBase = new Vertex[s_data.maxVertices];
 
 		uint32_t* indices = new uint32_t[s_data.maxIndices];

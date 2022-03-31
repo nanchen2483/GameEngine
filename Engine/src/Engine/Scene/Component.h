@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Engine/Scene/SceneCamera.h"
 #include "ScriptableEntity.h"
+#include "Engine/Scene/SceneCamera.h"
 #include "Engine/Renderer/Texture.h"
+#include "Engine/Renderer/Model/IModel.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
-
 
 namespace Engine
 {
@@ -53,6 +53,26 @@ namespace Engine
 			: color(color) {}
 		SpriteRendererComponent(Ptr<Texture2D> texture)
 			: texture(texture) {}
+	};
+
+	struct ModelComponent
+	{
+		Ptr<IModel> model = nullptr;
+
+		ModelComponent() = default;
+		ModelComponent(const ModelComponent& modelComponent) = default;
+		ModelComponent(const Ptr<IModel>& model)
+			: model(model) {}
+	};
+
+	struct SkeletonAnimationComponent
+	{
+		Ptr<IModel> model = nullptr;
+
+		SkeletonAnimationComponent() = default;
+		SkeletonAnimationComponent(const SkeletonAnimationComponent& skeletonAnimationComponent) = default;
+		SkeletonAnimationComponent(const Ptr<IModel>& model)
+			: model(model) {}
 	};
 
 	struct CameraComponent

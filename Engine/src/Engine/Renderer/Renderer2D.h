@@ -9,21 +9,10 @@
 #include "Texture.h"
 #include "Engine/Renderer/Camera.h"
 #include "Engine/Renderer/EditorCamera.h"
-#include <Engine/Scene/Component.h>
+#include "Engine/Scene/Component.h"
 
 namespace Engine
 {
-	struct Vertex
-	{
-		glm::vec3 position = {};
-		glm::vec4 color = {};
-		glm::vec2 texCoord = {};
-		float textureIndex = 0;
-
-		// Editor-only
-		int entityId = -1;
-	};
-
 	class Renderer2D
 	{
 	public:
@@ -40,7 +29,7 @@ namespace Engine
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
 		static void DrawQuad(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), int entityId = -1);
 		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityId = -1);
-		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent &sprite, int entityId);
+		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); };
 		

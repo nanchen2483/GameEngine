@@ -23,9 +23,16 @@ namespace Engine
 	{
 		None = 0,
 		Position,
+		Normal,
 		Color,
 		TexCoord,
 		TexIndex,
+		Tangent,
+		Bitangent,
+		Bone1,
+		Bone2,
+		BoneIds,
+		Weights,
 		EntityId
 	};
 

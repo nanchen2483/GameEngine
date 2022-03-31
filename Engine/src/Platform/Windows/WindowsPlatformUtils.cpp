@@ -1,5 +1,5 @@
 #include "enginepch.h"
-#include "Engine/Utils/PlatformUtils.h"
+#include "Engine/Util/PlatformUtil.h"
 
 #include <commdlg.h>
 #include <GLFW/glfw3.h>

@@ -16,7 +16,9 @@ namespace Engine
 		
 		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId);
 		static void DrawCube(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), int entityId = -1);
-		
+		static void DrawModel(const glm::mat4& transform, ModelComponent& component, int entityId);
+		static void DrawAnimation(const glm::mat4& transform, SkeletonAnimationComponent& component, int entityId);
+
 		static void EndScene();
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); };
