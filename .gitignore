@@ -9,3 +9,4 @@ packages.config
 *.user
 *.vcxproj
 *.vcxproj.filters
+*.sln
