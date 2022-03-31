@@ -4,6 +4,7 @@
 #include "Engine/Core/EntryPoint.h"
 
 #include "EditorLayer.h"
+#include "ExampleLayer.h"
 
 namespace Engine
 {
