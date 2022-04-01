@@ -5,6 +5,7 @@ Sandbox/*.json
 *Editor/*json
 packages/
 packages.config
+!vendor/bin
 
 *.user
 *.vcxproj
