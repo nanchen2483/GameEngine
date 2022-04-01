@@ -17,7 +17,7 @@ namespace Engine
 	class ENGINE_API Application
 	{
 	public:
-		Application(const std::string & name = "");
+		Application(const std::string& name = "");
 		virtual ~Application();
 
 		void Run();

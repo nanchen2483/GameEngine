@@ -34,7 +34,7 @@ namespace EngineTest
 		EXPECT_EQ(1000.0f, camera.GetPerspectiveFarClip());
 		EXPECT_EQ(glm::radians(45.0f), camera.GetPerspectiveFOV());
 		EXPECT_EQ(Engine::SceneCamera::ProjectionType::Perspective, camera.GetProjectionType());
-		auto& perspective = glm::perspective(glm::radians(45.0f), 0.0f, 0.01f, 1000.0f);
+		glm::mat4& perspective = glm::perspective(glm::radians(45.0f), 0.0f, 0.01f, 1000.0f);
 		EXPECT_EQ(perspective, camera.GetProjection());
 	}
 
@@ -59,7 +59,7 @@ namespace EngineTest
 		EXPECT_EQ(expectedNear, camera.GetOrthographicNearClip());
 		EXPECT_EQ(expectedFar, camera.GetOrthographicFarClip());
 		EXPECT_EQ(expectedSize, camera.GetOrthographicSize());
-		auto actualProjection = CalculateOrthoProjection(expectedSize, viewportSize.x / viewportSize.y, expectedNear, expectedFar);
+		glm::mat4 actualProjection = CalculateOrthoProjection(expectedSize, viewportSize.x / viewportSize.y, expectedNear, expectedFar);
 		EXPECT_EQ(expectedProjection, actualProjection);
 
 		// Act
@@ -94,7 +94,7 @@ namespace EngineTest
 		EXPECT_EQ(expectedNear, camera.GetPerspectiveNearClip());
 		EXPECT_EQ(expectedFar, camera.GetPerspectiveFarClip());
 		EXPECT_EQ(fov, camera.GetPerspectiveFOV());
-		auto actualProjection = CalculatePerspectiveProjection(fov, viewportSize.x / viewportSize.y, expectedNear, expectedFar);
+		glm::mat4 actualProjection = CalculatePerspectiveProjection(fov, viewportSize.x / viewportSize.y, expectedNear, expectedFar);
 		EXPECT_EQ(expectedProjection, actualProjection);
 
 		// Act

@@ -25,7 +25,7 @@ namespace EngineTest
 
 		// Assert
 		EXPECT_TRUE(entity.HasComponent<Engine::SpriteRendererComponent>());
-		auto& actualSpriteComponent = entity.GetComponent<Engine::SpriteRendererComponent>();
+		Engine::SpriteRendererComponent& actualSpriteComponent = entity.GetComponent<Engine::SpriteRendererComponent>();
 		EXPECT_EQ(glm::vec4(1.0f), actualSpriteComponent.color);
 	}
 
@@ -38,7 +38,7 @@ namespace EngineTest
 
 		// Assert
 		EXPECT_TRUE(entity.HasComponent<Engine::CameraComponent>());
-		auto& expectedCameraComponent = entity.GetComponent<Engine::CameraComponent>();
+		Engine::CameraComponent& expectedCameraComponent = entity.GetComponent<Engine::CameraComponent>();
 		EXPECT_TRUE(expectedCameraComponent.primary);
 		EXPECT_FALSE(expectedCameraComponent.fixedAspectRatio);
 		EXPECT_EQ(-1.0f, expectedCameraComponent.camera.GetOrthographicNearClip());
@@ -48,7 +48,7 @@ namespace EngineTest
 		EXPECT_EQ(1000.0f, expectedCameraComponent.camera.GetPerspectiveFarClip());
 		EXPECT_EQ(glm::radians(45.0f), expectedCameraComponent.camera.GetPerspectiveFOV());
 		EXPECT_EQ(Engine::SceneCamera::ProjectionType::Perspective, expectedCameraComponent.camera.GetProjectionType());
-		auto& perspective = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 1000.0f);
+		glm::mat4& perspective = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 1000.0f);
 		EXPECT_EQ(perspective, expectedCameraComponent.camera.GetProjection());
 	}
 

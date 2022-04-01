@@ -71,11 +71,11 @@ void ExampleLayer::OnAttach()
 			}
 		)";
 
-	auto reatangleshader = m_shaderLibrary.Load("Rectangle", vertexSrc, fragmentSrc);
+	Engine::Ptr<Engine::Shader> reatangleshader = m_shaderLibrary.Load("Rectangle", vertexSrc, fragmentSrc);
 	reatangleshader->Bind();
 	reatangleshader->SetInt("uTexture", 0);
 
-	auto textureShader = m_shaderLibrary.Load("Texture", "asserts/shaders/Texture.glsl");
+	Engine::Ptr<Engine::Shader> textureShader = m_shaderLibrary.Load("Texture", "asserts/shaders/Texture.glsl");
 	m_texture2D = Engine::Texture2D::Create("asserts/textures/blocks.png");
 	textureShader->Bind();
 	textureShader->SetInt("uTexture", 0);
@@ -95,7 +95,7 @@ void ExampleLayer::OnUpdate(Engine::TimeStep timeStep)
 
 	Engine::Renderer::BeginScene(m_cameraController.GetCamera());
 
-	auto reatangleShader = m_shaderLibrary.Get("Rectangle");
+	Engine::Ptr<Engine::Shader> reatangleShader = m_shaderLibrary.Get("Rectangle");
 	reatangleShader->Bind();
 	static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 	for (int y = 0; y < 20; y++)
@@ -116,7 +116,7 @@ void ExampleLayer::OnUpdate(Engine::TimeStep timeStep)
 		}
 	}
 
-	auto textureShader = m_shaderLibrary.Get("Texture");
+	Engine::Ptr<Engine::Shader> textureShader = m_shaderLibrary.Get("Texture");
 	textureShader->Bind();
 	m_texture2D->Bind();
 	Engine::Renderer::Submit(textureShader, m_vertexArray);

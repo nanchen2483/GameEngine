@@ -11,27 +11,27 @@ namespace Engine
 
 	void ShaderLibrary::Add(const Ptr<Shader>& shader)
 	{
-		auto shaderName = shader->GetName();
+		std::string shaderName = shader->GetName();
 		ShaderLibrary::Add(shaderName, shader);
 	}
 
 	Ptr<Shader> ShaderLibrary::Load(const std::string& filePath)
 	{
-		auto shader = Shader::Create(filePath);
+		Ptr<Shader> shader = Shader::Create(filePath);
 		Add(shader);
 		return shader;
 	}
 
 	Ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filePath)
 	{
-		auto shader = Shader::Create(filePath);
+		Ptr<Shader> shader = Shader::Create(filePath);
 		Add(name, shader);
 		return shader;
 	}
 
 	Ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
-		auto shader = Shader::Create(name, vertexSrc, fragmentSrc);
+		Ptr<Shader> shader = Shader::Create(name, vertexSrc, fragmentSrc);
 		Add(name, shader);
 		return shader;
 	}

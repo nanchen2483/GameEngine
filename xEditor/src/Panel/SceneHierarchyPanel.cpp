@@ -22,7 +22,7 @@ namespace Engine
 	void SceneHierarchyPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Scene Hierarchy");
-		m_context->m_registry.each([&](auto entityId) {
+		m_context->m_registry.each([&](entt::entity entityId) {
 			Entity entity = Entity{ entityId, m_context.get() };
 			DrawEntityNode(entity);
 		});
@@ -95,7 +95,7 @@ namespace Engine
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{
-		auto& tag = entity.GetComponent<TagComponent>().tag;
+		std::string& tag = entity.GetComponent<TagComponent>().tag;
 		ImGuiTreeNodeFlags flags = ((m_selectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, tag.c_str());
 		if (ImGui::IsItemClicked())
@@ -197,7 +197,7 @@ namespace Engine
 
 		if (entity.HasComponent<TagComponent>())
 		{
-			auto& tag = entity.GetComponent<TagComponent>().tag;
+			std::string& tag = entity.GetComponent<TagComponent>().tag;
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
@@ -234,9 +234,9 @@ namespace Engine
 
 			if (open)
 			{
-				auto& transformComponent = entity.GetComponent<TransformComponent>();
+				TransformComponent& transformComponent = entity.GetComponent<TransformComponent>();
 				DrawVec3Control("Translation", transformComponent.translation);
-				auto& rotation = glm::degrees(transformComponent.rotation);
+				glm::vec3& rotation = glm::degrees(transformComponent.rotation);
 				DrawVec3Control("Rotation", rotation);
 				transformComponent.rotation = glm::radians(rotation);
 				DrawVec3Control("Scale", transformComponent.scale, 1.0f);
@@ -255,8 +255,8 @@ namespace Engine
 		{
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treeNodeFlags, "Camera"))
 			{
-				auto& cameraComponent = entity.GetComponent<CameraComponent>();
-				auto& camera = cameraComponent.camera;
+				CameraComponent& cameraComponent = entity.GetComponent<CameraComponent>();
+				SceneCamera& camera = cameraComponent.camera;
 
 				ImGui::Checkbox("Primary", &cameraComponent.primary);
 
@@ -353,7 +353,7 @@ namespace Engine
 
 			if (open)
 			{
-				auto& component = entity.GetComponent<SpriteRendererComponent>();
+				SpriteRendererComponent& component = entity.GetComponent<SpriteRendererComponent>();
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 				ImGui::Text("Texture");
 				uint32_t textureId = 0;
@@ -406,7 +406,7 @@ namespace Engine
 
 			if (open)
 			{
-				auto& component = entity.GetComponent<ModelComponent>();
+				ModelComponent& component = entity.GetComponent<ModelComponent>();
 				uint32_t textureId = 0;
 				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
@@ -452,7 +452,7 @@ namespace Engine
 
 			if (open)
 			{
-				auto& component = entity.GetComponent<SkeletonAnimationComponent>();
+				SkeletonAnimationComponent& component = entity.GetComponent<SkeletonAnimationComponent>();
 				uint32_t textureId = 0;
 				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())

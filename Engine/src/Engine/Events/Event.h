@@ -42,7 +42,7 @@ namespace Engine
 
 		bool IsIncategory(EventCategory category)
 		{
-			return GetCategoryFlags() & category;
+			return GetCategoryFlags() && category;
 		}
 	};
 

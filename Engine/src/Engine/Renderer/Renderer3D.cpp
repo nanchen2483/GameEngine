@@ -153,7 +153,7 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		auto& viewProjection = camera.GetViewProjection();
+		glm::mat4& viewProjection = camera.GetViewProjection();
 
 		ENGINE_CORE_ASSERT(s_data.shader, "");
 		s_data.shader->Bind();
@@ -233,7 +233,7 @@ namespace Engine
 		if (component.model != nullptr)
 		{
 			s_data.shader->Bind();
-			auto transforms = component.model->GetPoseTransforms();
+			std::vector<glm::mat4> transforms = component.model->GetPoseTransforms();
 			for (int i = 0; i < transforms.size(); ++i)
 			{
 				s_data.shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);

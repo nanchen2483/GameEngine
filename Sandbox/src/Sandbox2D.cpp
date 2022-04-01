@@ -68,7 +68,7 @@ void Sandbox2D::OnImGuiRender()
 	
 	ImGui::Begin("Settings");
 
-	auto stats = Engine::Renderer2D::GetState();
+	Engine::Renderer2D::Statistics stats = Engine::Renderer2D::GetState();
 	ImGui::Text("Renderer stats");
 	ImGui::Text("Draw Calls: %d", stats.drawCalls);
 	ImGui::Text("Quads: %d", stats.quadCount);

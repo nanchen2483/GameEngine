@@ -25,13 +25,13 @@ namespace Engine
 	OpenGLShader::OpenGLShader(const std::string& filePath)
 	{
 		std::string source = ReadFile(filePath);
-		auto shaderSource = PreProcess(source);
+		std::unordered_map<GLenum, std::string> shaderSource = PreProcess(source);
 		Compile(shaderSource);
 
-		auto lastSlash = filePath.find_last_of("/\\");
+		size_t lastSlash = filePath.find_last_of("/\\");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		auto lastDot = filePath.rfind('.');
-		auto nameSize = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
+		size_t lastDot = filePath.rfind('.');
+		size_t nameSize = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
 		m_shaderName = filePath.substr(lastSlash, nameSize);
 	}
 
@@ -110,7 +110,7 @@ namespace Engine
 		ENGINE_CORE_ASSERT(shaderSources.size() <= 5, "Only supprt max 5 shaders!");
 		std::array<GLuint, 5> shaders;
 		int shaderIndex = 0;
-		for (auto& kv : shaderSources)
+		for (std::pair<const GLenum, std::string> &kv : shaderSources)
 		{
 			GLenum shaderType = kv.first;
 			const std::string& shaderSource = kv.second;
@@ -171,7 +171,7 @@ namespace Engine
 			// We don't need the program anymore.
 			glDeleteProgram(program);
 			// Don't leak shaders either.
-			for (auto shader : shaders)
+			for (GLuint shader : shaders)
 			{
 				glDeleteShader(shader);
 			}
@@ -184,7 +184,7 @@ namespace Engine
 			return;
 		}
 
-		for (auto shader : shaders)
+		for (GLuint shader : shaders)
 		{
 			// Always detach shaders after a successful link.
 			glDetachShader(program, shader);

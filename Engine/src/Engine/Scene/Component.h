@@ -90,7 +90,7 @@ namespace Engine
 	{
 		ScriptableEntity* instance = nullptr;
 		
-		ScriptableEntity*(*InstantiateScript)();
+		ScriptableEntity* (*InstantiateScript)();
 		void (*DestroyScript)(NativeScriptComponent* nsc);
 
 		template<typename T>

@@ -199,7 +199,7 @@ namespace Engine
 
 		// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
 		// and handle the pass-thru hole, so we ask Begin() to not render a background.
-		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+		if (dockspace_flags && ImGuiDockNodeFlags_PassthruCentralNode)
 		{
 			window_flags |= ImGuiWindowFlags_NoBackground;
 		}
@@ -228,7 +228,7 @@ namespace Engine
 
 			// DockSpace
 			ImGuiIO& io = ImGui::GetIO();
-			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+			if (io.ConfigFlags && ImGuiConfigFlags_DockingEnable)
 			{
 				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);

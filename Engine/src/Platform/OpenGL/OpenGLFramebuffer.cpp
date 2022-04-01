@@ -95,7 +95,7 @@ namespace Engine
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		: m_specification(spec)
 	{
-		for (auto format : m_specification.attachments.attachments)
+		for (FramebufferTextureSpecification format : m_specification.attachments.attachments)
 		{
 			if (!Utils::IsDepthFormat(format.textureFormat))
 			{
@@ -218,7 +218,7 @@ namespace Engine
 	{
 		ENGINE_CORE_ASSERT(attachmentIndex < m_colorAttachments.size(), "");
 
-		auto& spec = m_colorAttachmentSpecifications[attachmentIndex];
+		FramebufferTextureSpecification& spec = m_colorAttachmentSpecifications[attachmentIndex];
 
 		glClearTexImage(m_colorAttachments[attachmentIndex], 0, Utils::GetGLTextureFormat(spec.textureFormat), GL_INT, &value);
 

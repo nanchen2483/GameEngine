@@ -20,7 +20,7 @@ namespace Engine
 	{
 		Entity entity(m_registry.create(), this);
 		entity.AddComponent<TransformComponent>();
-		auto& tagComp = entity.AddComponent<TagComponent>();
+		TagComponent& tagComp = entity.AddComponent<TagComponent>();
 		tagComp.tag = name.empty() ? "Entity" : name;
 		return entity;
 	}
@@ -35,28 +35,25 @@ namespace Engine
 		Renderer3D::BeginScene(camera);
 
 		auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
+		for (entt::entity entity : group)
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
 			Renderer3D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 		}
 
 		Renderer3D::EndScene();
 
 		auto modelGroup = m_registry.view<TransformComponent, ModelComponent>();
-		for (auto entity : modelGroup)
+		for (entt::entity entity : modelGroup)
 		{
 			auto [transform, model] = modelGroup.get<TransformComponent, ModelComponent>(entity);
-
 			Renderer3D::DrawModel(transform.GetTransform(), model, (int)entity);
 		}
 
 		auto animationGroup = m_registry.view<TransformComponent, SkeletonAnimationComponent>();
-		for (auto entity : animationGroup)
+		for (entt::entity entity : animationGroup)
 		{
 			auto [transform, animation] = animationGroup.get<TransformComponent, SkeletonAnimationComponent>(entity);
-
 			if (animation.model != nullptr)
 			{
 				animation.model->UpdateAnimation(time);
@@ -70,7 +67,7 @@ namespace Engine
 	{
 		// Script
 		{
-			m_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+			m_registry.view<NativeScriptComponent>().each([=](entt::entity entity, NativeScriptComponent& nsc) {
 				if (!nsc.instance)
 				{
 					nsc.instance = nsc.InstantiateScript();
@@ -86,10 +83,9 @@ namespace Engine
 		glm::mat4 mainTrnasform;
 		{
 			auto view = m_registry.view<TransformComponent, CameraComponent>();
-			for (auto entity : view)
+			for (entt::entity entity : view)
 			{
 				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-
 				if (camera.primary)
 				{
 					mainCamera = &camera.camera;
@@ -104,26 +100,23 @@ namespace Engine
 			Renderer3D::BeginScene(*mainCamera, mainTrnasform);
 
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-			for (auto entity : group)
+			for (entt::entity entity : group)
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
 				Renderer3D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			}
 
 			auto modelGroup = m_registry.group<TransformComponent>(entt::get<ModelComponent>);
-			for (auto entity : modelGroup)
+			for (entt::entity entity : modelGroup)
 			{
 				auto [transform, model] = modelGroup.get<TransformComponent, ModelComponent>(entity);
-
 				Renderer3D::DrawModel(transform.GetTransform(), model, (int)entity);
 			}
 
 			auto animationGroup = m_registry.view<TransformComponent, SkeletonAnimationComponent>();
-			for (auto entity : animationGroup)
+			for (entt::entity entity : animationGroup)
 			{
 				auto [transform, animation] = animationGroup.get<TransformComponent, SkeletonAnimationComponent>(entity);
-
 				if (animation.model != nullptr)
 				{
 					animation.model->UpdateAnimation(time);
@@ -143,9 +136,9 @@ namespace Engine
 		m_viewportHeight = height;
 
 		auto view = m_registry.view<CameraComponent>();
-		for (auto entity : view)
+		for (entt::entity entity : view)
 		{
-			auto& cameraComponent = view.get<CameraComponent>(entity);
+			CameraComponent& cameraComponent = view.get<CameraComponent>(entity);
 			if (!cameraComponent.fixedAspectRatio)
 			{
 				cameraComponent.camera.SetViewportSize(width, height);
@@ -156,9 +149,9 @@ namespace Engine
 	Entity Scene::GetPrimaryCameraEntity()
 	{
 		auto view = m_registry.view<CameraComponent>();
-		for (auto entity : view)
+		for (entt::entity entity : view)
 		{
-			const auto& camera = view.get<CameraComponent>(entity);
+			const CameraComponent& camera = view.get<CameraComponent>(entity);
 			if (camera.primary)
 			{
 				return Entity(entity, this);

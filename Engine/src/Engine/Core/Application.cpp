@@ -51,7 +51,7 @@ namespace Engine
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 
-		for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
+		for (std::vector<Engine::Layer*>::iterator it = m_layerStack.end(); it != m_layerStack.begin();)
 		{
 			if (e.handled)
 			{

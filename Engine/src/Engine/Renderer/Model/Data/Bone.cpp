@@ -60,7 +60,7 @@ namespace Engine::ModelData
 	{
 		if (m_numRotations == 1)
 		{
-			auto rotation = glm::normalize(m_rotations[0].orientation);
+			glm::quat rotation = glm::normalize(m_rotations[0].orientation);
 			return glm::toMat4(rotation);
 		}
 

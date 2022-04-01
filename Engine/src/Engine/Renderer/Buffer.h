@@ -115,7 +115,7 @@ namespace Engine
 		{
 			uint32_t offset = 0;
 			m_stride = 0;
-			for (auto& element : m_elements)
+			for (Engine::BufferElement& element : m_elements)
 			{
 				element.offset = offset;
 				offset += element.size;

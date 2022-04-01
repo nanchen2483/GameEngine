@@ -11,7 +11,7 @@ namespace Engine::ModelData
 
 	Ptr<Bone> Animation::GetBoneByName(const std::string& name)
 	{
-		auto iter = std::find_if(m_bones.begin(), m_bones.end(),
+		std::vector<Ptr<Bone>>::iterator iter = std::find_if(m_bones.begin(), m_bones.end(),
 			[&](const Ptr<Bone> bone)
 			{
 				return bone->GetBoneName() == name;

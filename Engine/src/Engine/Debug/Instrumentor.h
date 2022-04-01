@@ -152,9 +152,9 @@ namespace Engine
 
 		void Stop()
 		{
-			auto endTimepoint = std::chrono::steady_clock::now();
-			auto highResStart = FloatingPointMicroseconds{ m_StartTimepoint.time_since_epoch() };
-			auto elapsedTime = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch() - std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch();
+			std::chrono::steady_clock::time_point endTimepoint = std::chrono::steady_clock::now();
+			FloatingPointMicroseconds highResStart = FloatingPointMicroseconds{ m_StartTimepoint.time_since_epoch() };
+			std::chrono::microseconds elapsedTime = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch() - std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch();
 
 			Instrumentor::Get().WriteProfile({ m_Name, highResStart, elapsedTime, std::this_thread::get_id() });
 
@@ -175,7 +175,7 @@ namespace Engine
 		};
 
 		template <size_t N, size_t K>
-		constexpr auto CleanupOutputString(const char(&expr)[N], const char(&remove)[K])
+		constexpr InstrumentorUtils::ChangeResult<N> CleanupOutputString(const char(&expr)[N], const char(&remove)[K])
 		{
 			ChangeResult<N> result = {};
 

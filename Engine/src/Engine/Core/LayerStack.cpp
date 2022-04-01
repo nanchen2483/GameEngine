@@ -28,7 +28,7 @@ namespace Engine
 
 	void LayerStack::PopLayer(Layer* layer)
 	{
-		auto it = std::find(m_layers.begin(), m_layers.end(), layer);
+		std::vector<Engine::Layer*>::iterator it = std::find(m_layers.begin(), m_layers.end(), layer);
 		if (it != m_layers.end())
 		{
 			m_layers.erase(it);
@@ -38,7 +38,7 @@ namespace Engine
 
 	void LayerStack::PopOverlay(Layer* overlay)
 	{
-		auto it = std::find(m_layers.begin(), m_layers.end(), overlay);
+		std::vector<Engine::Layer*>::iterator it = std::find(m_layers.begin(), m_layers.end(), overlay);
 		if (it != m_layers.end())
 		{
 			m_layers.erase(it);

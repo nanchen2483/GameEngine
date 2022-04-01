@@ -50,10 +50,10 @@ namespace Engine
 
 			ImGui::Columns(columnCount, 0, false);
 
-			for (auto& directoryEntry : std::filesystem::directory_iterator(m_currentDirectory))
+			for (const std::filesystem::directory_entry& directoryEntry : std::filesystem::directory_iterator(m_currentDirectory))
 			{
-				const auto& path = directoryEntry.path();
-				auto relativePath = std::filesystem::relative(path, s_assertPath);
+				const std::filesystem::path& path = directoryEntry.path();
+				std::filesystem::path relativePath = std::filesystem::relative(path, s_assertPath);
 				std::string filenameString = relativePath.filename().string();
 
 				ImGui::PushID(filenameString.c_str());

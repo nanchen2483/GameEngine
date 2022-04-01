@@ -54,8 +54,8 @@ namespace Engine
 		vertexBuffer->Bind();
 
 		uint32_t index = 0;
-		const auto& layout = vertexBuffer->GetLayout();
-		for (const auto& element : layout)
+		const BufferLayout& layout = vertexBuffer->GetLayout();
+		for (const BufferElement& element : layout)
 		{
 			switch (element.type)
 			{
