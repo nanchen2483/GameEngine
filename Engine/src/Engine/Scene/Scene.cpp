@@ -47,7 +47,7 @@ namespace Engine
 		for (entt::entity entity : modelGroup)
 		{
 			auto [transform, model] = modelGroup.get<TransformComponent, ModelComponent>(entity);
-			Renderer3D::DrawModel(transform.GetTransform(), model, (int)entity);
+			Renderer3D::DrawModel(transform.GetTransform(), model);
 		}
 
 		auto animationGroup = m_registry.view<TransformComponent, SkeletonAnimationComponent>();
@@ -59,7 +59,7 @@ namespace Engine
 				animation.model->UpdateAnimation(time);
 			}
 
-			Renderer3D::DrawAnimation(transform.GetTransform(), animation, (int)entity);
+			Renderer3D::DrawAnimation(transform.GetTransform(), animation);
 		}
 	}
 
@@ -110,7 +110,7 @@ namespace Engine
 			for (entt::entity entity : modelGroup)
 			{
 				auto [transform, model] = modelGroup.get<TransformComponent, ModelComponent>(entity);
-				Renderer3D::DrawModel(transform.GetTransform(), model, (int)entity);
+				Renderer3D::DrawModel(transform.GetTransform(), model);
 			}
 
 			auto animationGroup = m_registry.view<TransformComponent, SkeletonAnimationComponent>();
@@ -122,7 +122,7 @@ namespace Engine
 					animation.model->UpdateAnimation(time);
 				}
 
-				Renderer3D::DrawAnimation(transform.GetTransform(), animation, (int)entity);
+				Renderer3D::DrawAnimation(transform.GetTransform(), animation);
 			}
 
 			Renderer3D::EndScene();
@@ -144,6 +144,11 @@ namespace Engine
 				cameraComponent.camera.SetViewportSize(width, height);
 			}
 		}
+	}
+
+	bool Scene::EntityExists(entt::entity entity)
+	{
+		return m_registry.valid(entity);
 	}
 
 	Entity Scene::GetPrimaryCameraEntity()

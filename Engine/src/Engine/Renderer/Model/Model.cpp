@@ -11,15 +11,26 @@
 
 namespace Engine
 {
-	Model::Model(std::string const& path, bool gamma)
-		: m_path(path), m_gammaCorrection(gamma)
+	Model::Model(std::string const& path)
+		: Model(path, false)
 	{
-		Load(path);
+	}
+
+	Model::Model(std::string const& path, bool gamma)
+		: Model(path, gamma, -1)
+	{
+	}
+
+	Model::Model(std::string const& path, bool gamma, int entityId)
+		: m_path(path), m_gammaCorrection(gamma), m_entityId(entityId)
+	{
 		m_transforms.reserve(100);
 		for (int i = 0; i < 100; i++)
 		{
 			m_transforms.push_back(glm::mat4(1.0f));
 		}
+
+		Load(path);
 	}
 
 	void Model::Load(std::string const& path)
@@ -82,6 +93,7 @@ namespace Engine
 				vertex.texCoord = glm::vec2(0.0f, 0.0f);
 			}
 
+			vertex.entityId = m_entityId;
 			vertices.push_back(vertex);
 		}
 

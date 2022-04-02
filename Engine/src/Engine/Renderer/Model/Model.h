@@ -38,7 +38,9 @@ namespace Engine
 	class Model: public IModel
 	{
 	public:
-		Model(std::string const& path, bool gamma = false);
+		Model(std::string const& path);
+		Model(std::string const& path, bool gamma);
+		Model(std::string const& path, bool gamma, int entityId);
 		virtual std::string& GetPath() override { return m_path; }
 		virtual void UpdateAnimation(float deltaTime) override;
 		virtual std::vector<glm::mat4> GetPoseTransforms() override { return m_transforms; }
@@ -62,5 +64,6 @@ namespace Engine
 		Ptr<ModelData::Node> m_rootNode;
 		std::vector<glm::mat4> m_transforms;
 		float m_animationTime = 0.0f;
+		int m_entityId;
 	};
 }

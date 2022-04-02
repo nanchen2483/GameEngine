@@ -106,7 +106,8 @@ namespace Engine
 				m_depthAttachmentSpecification = format;
 			}
 		}
-		Invalidate();
+
+		Setup();
 	}
 
 	OpenGLFramebuffer::~OpenGLFramebuffer()
@@ -116,7 +117,7 @@ namespace Engine
 		glDeleteTextures(1, &m_depthAttachment);
 	}
 
-	void OpenGLFramebuffer::Invalidate()
+	void OpenGLFramebuffer::Setup()
 	{
 		if (m_rendererId)
 		{
@@ -216,7 +217,7 @@ namespace Engine
 
 	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
 	{
-		ENGINE_CORE_ASSERT(attachmentIndex < m_colorAttachments.size(), "");
+		ENGINE_CORE_ASSERT(attachmentIndex < m_colorAttachments.size(), "Invalid attachment index {0}", attachmentIndex);
 
 		FramebufferTextureSpecification& spec = m_colorAttachmentSpecifications[attachmentIndex];
 
@@ -234,12 +235,12 @@ namespace Engine
 		m_specification.width = width;
 		m_specification.height = height;
 
-		Invalidate();
+		Setup();
 	}
 
 	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
 	{
-		ENGINE_CORE_ASSERT(attachmentIndex < m_colorAttachments.size(), "");
+		ENGINE_CORE_ASSERT(attachmentIndex < m_colorAttachments.size(), "Invalid attachment index {0}", attachmentIndex);
 
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 		int pixel;

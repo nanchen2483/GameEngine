@@ -22,10 +22,10 @@ const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
 uniform mat4 finalBonesMatrices[MAX_BONES];
 
-out vec2 TexCoords;
 out vec4 vColor;
 out vec2 vTexCoord;
 out float vTexIndex;
+out flat int vEntityId;
 
 void main()
 {
@@ -48,24 +48,28 @@ void main()
         totalPosition += localPosition * aWeights[i];
    }
 	
-    gl_Position =  projection * view * model * totalPosition;
-
 	vColor = aColor;
 	vTexCoord = aTexCoord;
 	vTexIndex = aTexIndex;
+	vEntityId = aEntityId;
+    gl_Position =  projection * view * model * totalPosition;
 }
 
 #type fragment
-#version 430 core
-out vec4 FragColor;
+#version 450 core
+
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out int EntityId;
 
 in vec4 vColor;
 in vec2 vTexCoord;
 in float vTexIndex;
+in flat int vEntityId;
 
 uniform sampler2D uTextures[32];
 
 void main()
 {    
 	FragColor = texture(uTextures[int(round(vTexIndex))], vTexCoord) * vColor;
+	EntityId = vEntityId;
 }

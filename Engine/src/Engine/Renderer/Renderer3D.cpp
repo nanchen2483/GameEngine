@@ -220,7 +220,7 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& transform, ModelComponent& component, int entityId)
+	void Renderer3D::DrawModel(const glm::mat4& transform, ModelComponent& component)
 	{
 		if (component.model != nullptr)
 		{
@@ -228,7 +228,7 @@ namespace Engine
 		}
 	}
 
-	void Renderer3D::DrawAnimation(const glm::mat4& transform, SkeletonAnimationComponent& component, int entityId)
+	void Renderer3D::DrawAnimation(const glm::mat4& transform, SkeletonAnimationComponent& component)
 	{
 		if (component.model != nullptr)
 		{

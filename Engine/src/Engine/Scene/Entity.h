@@ -44,9 +44,12 @@ namespace Engine
 			m_scene->m_registry.remove<T>(m_entityHandle);
 		}
 
-		operator bool() const { return m_entityHandle != entt::null; }
 		operator entt::entity() const { return m_entityHandle; }
 		operator uint32_t() const { return (uint32_t)m_entityHandle; }
+		operator bool() const
+		{
+			return m_entityHandle != entt::null && m_scene != nullptr && m_scene->EntityExists(m_entityHandle);
+		}
 
 		bool operator==(const Entity& other) const
 		{
@@ -57,6 +60,7 @@ namespace Engine
 		{
 			return !(*this == other);
 		}
+
 	private:
 		entt::entity m_entityHandle{ entt::null };
 		Scene* m_scene = nullptr;

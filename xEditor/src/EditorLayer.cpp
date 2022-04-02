@@ -8,6 +8,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
+#define ENTITY_ID_ATTACHMENT_INDEX 1
+
 namespace Engine
 {
 	EditorLayer::EditorLayer()
@@ -20,7 +22,12 @@ namespace Engine
 		ENGINE_PROFILE_FUNCTION();
 
 		FramebufferSpecification fbSpec;
-		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::DEPTH24STENCIL8 });
+		fbSpec.attachments = FramebufferAttachmentSpecification(
+			{
+				FramebufferTextureFormat::RGBA8, // Main framebuffer
+				FramebufferTextureFormat::RED_INTEGER, // EntityId
+				FramebufferTextureFormat::DEPTH24STENCIL8
+			});
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
 		m_framebuffer = Framebuffer::Create(fbSpec);
@@ -113,7 +120,7 @@ namespace Engine
 		RendererCommand::Clear();
 
 		// Clear entity id buffer attachment to -1
-		m_framebuffer->ClearAttachment(1, -1);
+		m_framebuffer->ClearAttachment(ENTITY_ID_ATTACHMENT_INDEX, -1);
 
 #if 0
 		{
@@ -141,7 +148,13 @@ namespace Engine
 #endif // 0
 
 		m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
+		UpdateHoveredEntity();
 
+		m_framebuffer->Unbind();
+	}
+
+	void EditorLayer::UpdateHoveredEntity()
+	{
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_viewportBounds[0].x;
 		my -= m_viewportBounds[0].y;
@@ -150,23 +163,28 @@ namespace Engine
 
 		int mouseX = (int)mx;
 		int mouseY = (int)my;
-		
 		if (mouseX > 0 && mouseY > 0 && mouseX < viewportSize.x && mouseY < viewportSize.y)
 		{
-			int pixelData = m_framebuffer->ReadPixel(1, mouseX, mouseY);
+			int pixelData = m_framebuffer->ReadPixel(ENTITY_ID_ATTACHMENT_INDEX, mouseX, mouseY);
 			if (pixelData == -1)
 			{
-				m_hoverdEntity = Entity();
+				m_hoveredEntity = Entity();
+				ENGINE_WARN("entityId -1");
 			}
 			else
 			{
-				m_hoverdEntity = Entity((entt::entity)pixelData, m_activeScene.get());
+				entt::entity entity = (entt::entity)pixelData;
+				if (m_activeScene->EntityExists(entity))
+				{
+					m_hoveredEntity = Entity(entity, m_activeScene.get());
+					ENGINE_WARN("entityId {0}", pixelData);
+				}
+				else
+				{
+					ENGINE_WARN("entityId {0} not found", pixelData);
+				}
 			}
-
-			ENGINE_WARN("entityId {0}", pixelData);
 		}
-
-		m_framebuffer->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -277,6 +295,10 @@ namespace Engine
 				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 				ImGui::NewLine();
+				ImGui::Separator();
+				ImGui::Text("Hovered entityId: %d", m_hoveredEntity ? (uint32_t)m_hoveredEntity : -1);
+				ImGui::NewLine();
+				ImGui::Separator();
 				ImGui::InputInt("Texture id", &m_textureId);
 				ImGui::ImageButton((void*)m_textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 
@@ -439,7 +461,7 @@ namespace Engine
 		{
 			if (m_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(KeyCode::LEFT_ALT))
 			{
-				m_sceneHierachyPanel.SetSelectedEntity(m_hoverdEntity);
+				m_sceneHierachyPanel.SetSelectedEntity(m_hoveredEntity);
 			}
 		}
 

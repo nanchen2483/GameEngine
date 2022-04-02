@@ -8,5 +8,7 @@ namespace Engine
 	{
 	public:
 		static Ptr<IModel> Create(std::string path);
+		static Ptr<IModel> Create(std::string path, bool gamma);
+		static Ptr<IModel> Create(std::string path, bool gamma, uint32_t entityId);
 	};
 }

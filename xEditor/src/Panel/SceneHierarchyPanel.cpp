@@ -194,7 +194,6 @@ namespace Engine
 
 	void SceneHierarchyPanel::DrawComponents(Entity entity)
 	{
-
 		if (entity.HasComponent<TagComponent>())
 		{
 			std::string& tag = entity.GetComponent<TagComponent>().tag;
@@ -461,7 +460,7 @@ namespace Engine
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
-						component.model = ModelFactory::Create(path.string());
+						component.model = ModelFactory::Create(path.string(), false, entity);
 					}
 				}
 

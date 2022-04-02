@@ -17,6 +17,7 @@ namespace Engine
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override;
 	private:
+		void UpdateHoveredEntity();
 		bool OnKeyPressed(KeyPressedEvent& event);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& event);
 		void NewScene();
@@ -33,7 +34,7 @@ namespace Engine
 		SceneHierarchyPanel m_sceneHierachyPanel;
 		ContentBrowserPanel m_contentBrowserPanel;
 
-		Entity m_hoverdEntity;
+		Entity m_hoveredEntity;
 		glm::vec2 m_viewportBounds[2] = { glm::vec2(0.0f), glm::vec2(0.0f) };
 
 		int m_textureId = -1;

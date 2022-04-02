@@ -10,8 +10,6 @@ namespace Engine
 		OpenGLFramebuffer(const FramebufferSpecification& spec);
 		~OpenGLFramebuffer();
 
-		void Invalidate();
-
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
@@ -20,9 +18,9 @@ namespace Engine
 		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) override;
 
 		inline virtual uint32_t GetColorAttachmentRendererId(uint32_t index = 0) const override { ENGINE_CORE_ASSERT(index < m_colorAttachments.size(), ""); return m_colorAttachments[index]; };
-
 		inline virtual const FramebufferSpecification GetSpecification() const override { return m_specification; };
 	private:
+		void Setup();
 		uint32_t m_rendererId = 0;
 		FramebufferSpecification m_specification;
 

@@ -21,6 +21,8 @@ namespace Engine
 		void OnUpdateRuntime(TimeStep time);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
+		bool EntityExists(entt::entity entity);
+
 		Entity GetPrimaryCameraEntity();
 	private:
 		template<typename T>

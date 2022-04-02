@@ -63,6 +63,9 @@ namespace Engine::ModelData
 		// weights
 		glEnableVertexAttribArray(10);
 		glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, weights));
+		// entityId
+		glEnableVertexAttribArray(11);
+		glVertexAttribIPointer(11, 1, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, entityId));
 
 		glBindVertexArray(0);
 	}
