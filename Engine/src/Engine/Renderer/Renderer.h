@@ -4,8 +4,8 @@
 #include "RendererAPI.h"
 
 #include "RendererCommand.h"
-#include "OrthographicCamera.h"
-#include "Shader.h"
+#include "Camera/OrthographicCamera.h"
+#include "Shader/Shader.h"
 
 namespace Engine
 {

@@ -17,7 +17,7 @@ namespace Engine
 		m_activeScene = CreatePtr<Scene>();
 		m_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
-		m_model = ModelFactory::Create("asserts\\models\\vampire\\dancing_vampire.dae");
+		m_model = Model::Create("asserts\\models\\vampire\\dancing_vampire.dae");
 		m_shader = Shader::Create("asserts\\shaders\\Animation.glsl");
 		m_shader->Bind();
 
@@ -49,7 +49,7 @@ namespace Engine
 		m_shader->SetMat4("projection", m_editorCamera.GetProjection());
 		m_shader->SetMat4("view", m_editorCamera.GetViewMatrix());
 
-		auto transforms = m_model->GetPoseTransforms();
+		std::vector<glm::mat4> transforms = m_model->GetPoseTransforms();
 		for (int i = 0; i < transforms.size(); ++i)
 		{
 			m_shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);

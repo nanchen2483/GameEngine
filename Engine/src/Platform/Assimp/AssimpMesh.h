@@ -1,19 +1,19 @@
 #pragma once
 
-#include "Engine/Renderer/Shader.h"
-#include <Engine/Renderer/Texture.h>
-#include <Engine/Renderer/Vertex.h>
+#include "Engine/Renderer/Shader/Shader.h"
+#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Vertex/Vertex.h"
 
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
 
-namespace Engine::ModelData
+namespace Engine
 {
-	class Mesh
+	class AssimpMesh
 	{
 	public:
-		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Ptr<Texture>> textures);
+		AssimpMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Ptr<Texture>> textures);
 		void Draw();
 
 	private:

@@ -1,11 +1,11 @@
 #include "enginepch.h"
+#include "AssimpBone.h"
 
-#include "Bone.h"
 #include "Engine\Util\AssimpUtil.h"
 
-namespace Engine::ModelData
+namespace Engine
 {
-	Bone::Bone(int id, std::string boneName, const aiNodeAnim* channel)
+	AssimpBone::AssimpBone(int id, std::string boneName, const aiNodeAnim* channel)
 		: m_id(id), m_name(boneName)
 	{
 		m_numPositions = channel->mNumPositionKeys;
@@ -27,7 +27,7 @@ namespace Engine::ModelData
 		}
 	}
 	
-	glm::mat4 Bone::GetLocalTransform(float animationTime)
+	glm::mat4 AssimpBone::GetLocalTransform(float animationTime)
 	{
 		glm::mat4 translation = InterpolatePosition(animationTime);
 		glm::mat4 rotation = InterpolateRotation(animationTime);
@@ -35,12 +35,12 @@ namespace Engine::ModelData
 		return translation * rotation * scale;
 	}
 
-	void Bone::SetBoneOffset(glm::mat4 offset)
+	void AssimpBone::SetBoneOffset(glm::mat4 offset)
 	{
 		m_offset = offset;
 	}
 
-	glm::mat4 Bone::InterpolatePosition(float animationTime)
+	glm::mat4 AssimpBone::InterpolatePosition(float animationTime)
 	{
 		if (m_numPositions == 1)
 		{
@@ -56,7 +56,7 @@ namespace Engine::ModelData
 		return glm::translate(glm::mat4(1.0f), finalPosition);
 	}
 	
-	glm::mat4 Bone::InterpolateRotation(float animationTime)
+	glm::mat4 AssimpBone::InterpolateRotation(float animationTime)
 	{
 		if (m_numRotations == 1)
 		{
@@ -74,7 +74,7 @@ namespace Engine::ModelData
 		return glm::toMat4(finalRotation);
 	}
 	
-	glm::mat4 Bone::InterpolateScaling(float animationTime)
+	glm::mat4 AssimpBone::InterpolateScaling(float animationTime)
 	{
 		if (m_numScalings == 1)
 		{
@@ -90,7 +90,7 @@ namespace Engine::ModelData
 		return glm::scale(glm::mat4(1.0f), finalScale);
 	}
 	
-	float Bone::GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime)
+	float AssimpBone::GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime)
 	{
 		float midWayLength = animationTime - lastTimeStamp;
 		float framesDiff = nextTimeStamp - lastTimeStamp;
@@ -98,7 +98,7 @@ namespace Engine::ModelData
 		return midWayLength / framesDiff;
 	}
 
-	int Bone::GetLastPositionIndex(float animationTime)
+	int AssimpBone::GetLastPositionIndex(float animationTime)
 	{
 		for (int index = 1; index < m_numPositions; ++index)
 		{
@@ -111,7 +111,7 @@ namespace Engine::ModelData
 		ENGINE_CORE_ASSERT(0, "Poisition index not found! AnimationTime {0}, Duration: {1}", animationTime);
 	}
 	
-	int Bone::GetLastRotationIndex(float animationTime)
+	int AssimpBone::GetLastRotationIndex(float animationTime)
 	{
 		for (int index = 1; index < m_numRotations; ++index)
 		{
@@ -124,7 +124,7 @@ namespace Engine::ModelData
 		ENGINE_CORE_ASSERT(0, "Rotation index not found! AnimationTime {0}, Duration: {1}", animationTime);
 	}
 	
-	int Bone::GetLastScaleIndex(float animationTime)
+	int AssimpBone::GetLastScaleIndex(float animationTime)
 	{
 		for (int index = 1; index < m_numScalings; ++index)
 		{

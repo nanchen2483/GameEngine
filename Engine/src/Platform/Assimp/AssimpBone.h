@@ -10,7 +10,7 @@
 
 #include "Engine/Util/AssimpUtil.h"
 
-namespace Engine::ModelData
+namespace Engine
 {
 	struct KeyPosition
 	{
@@ -48,10 +48,10 @@ namespace Engine::ModelData
 		}
 	};
 
-	class Bone
+	class AssimpBone
 	{
 	public:
-		Bone(int id, std::string boneName, const aiNodeAnim* channel);
+		AssimpBone(int id, std::string boneName, const aiNodeAnim* channel);
 
 		glm::mat4 GetLocalTransform(float animationTime);
 		int GetBoneId() { return m_id; }

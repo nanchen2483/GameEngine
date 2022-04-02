@@ -20,11 +20,10 @@ namespace Engine
 		EditorCamera m_editorCamera;
 
 		ShaderLibrary m_shaderLibrary;
-		Ptr<Engine::VertexArray> m_vertexArray;
-		Ptr<Engine::Texture2D> m_texture2D;
+		Ptr<Texture2D> m_texture2D;
 
 		glm::vec3 m_color;
-		Ptr<IModel> m_model;
+		Ptr<Model> m_model;
 		Ptr<Shader> m_shader;
 	};
 }

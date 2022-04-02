@@ -1,17 +1,17 @@
 #include "enginepch.h"
-#include "Mesh.h"
+#include "AssimpMesh.h"
 
 #include <glad/glad.h>
 
-namespace Engine::ModelData
+namespace Engine
 {
-	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Ptr<Texture>> textures)
+	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Ptr<Texture>> textures)
 		: m_vertices(vertices), m_indices(indices), m_textures(textures)
 	{
 		SetupMesh();
 	}
 
-	void Mesh::SetupMesh()
+	void AssimpMesh::SetupMesh()
 	{
 		// create buffers/arrays
 		glGenVertexArrays(1, &m_VAO);
@@ -70,7 +70,7 @@ namespace Engine::ModelData
 		glBindVertexArray(0);
 	}
 
-	void Mesh::Draw()
+	void AssimpMesh::Draw()
 	{
 		for (unsigned int i = 0; i < m_textures.size(); i++)
 		{

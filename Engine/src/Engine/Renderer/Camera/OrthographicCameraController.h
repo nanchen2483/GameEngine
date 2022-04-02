@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Renderer/OrthographicCamera.h"
+#include "OrthographicCamera.h"
 #include "Engine/Core/TimeStep.h"
 
 #include "Engine/Events/ApplicationEvent.h"

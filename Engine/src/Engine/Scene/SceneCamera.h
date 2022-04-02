@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Engine/Renderer/Camera.h"
+#include "Engine/Renderer/Camera/Camera.h"
+
 namespace Engine
 {
 	class SceneCamera : public Camera

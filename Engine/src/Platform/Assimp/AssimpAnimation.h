@@ -1,15 +1,16 @@
 #pragma once
-#include "Bone.h"
+
+#include "AssimpBone.h"
 
 #include <vector>
 
-namespace Engine::ModelData
+namespace Engine
 {
-	class Animation
+	class AssimpAnimation
 	{
 	public:
-		Animation(aiAnimation* animation);
-		Ptr<Bone> GetBoneByName(const std::string& name);
+		AssimpAnimation(aiAnimation* animation);
+		Ptr<AssimpBone> GetBoneByName(const std::string& name);
 		float GetAnimationTime(float deltaTime);
 
 	private:
@@ -18,6 +19,6 @@ namespace Engine::ModelData
 		float m_currentTime;
 		float m_duration;
 		int m_ticksPerSecond;
-		std::vector<Ptr<Bone>> m_bones;
+		std::vector<Ptr<AssimpBone>> m_bones;
 	};
 }

@@ -1,29 +1,29 @@
 #include "enginepch.h"
-#include "Shader.h"
+#include "Texture.h"
 
-#include "Renderer.h"
-#include "Platform/OpenGL/OpenGLShader.h"
+#include "Engine/Renderer/Renderer.h"
+#include "Platform/OpenGL/OpenGLTexture.h"
 
 namespace Engine
 {
-	Ptr<Shader> Shader::Create(const std::string& filePath)
+	Ptr<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLShader>(filePath);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture2D>(width, height);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
 		return nullptr;
 	}
-	
-	Ptr<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+
+	Ptr<Texture2D> Texture2D::Create(const std::string& filePath, const TextureType type, bool flipVertically)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLShader>(name, vertexSrc, fragmentSrc);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture2D>(filePath, type, flipVertically);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");

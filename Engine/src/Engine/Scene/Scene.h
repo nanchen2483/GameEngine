@@ -2,7 +2,7 @@
 
 #include <entt.hpp>
 #include "Engine/Core/TimeStep.h"
-#include "Engine/Renderer/EditorCamera.h"
+#include "Engine/Renderer/Camera/EditorCamera.h"
 
 namespace Engine
 {

@@ -414,7 +414,7 @@ namespace Engine
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
-						component.model = ModelFactory::Create(path.string());
+						component.model = Model::Create(path.string());
 					}
 				}
 
@@ -460,7 +460,7 @@ namespace Engine
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
-						component.model = ModelFactory::Create(path.string(), false, entity);
+						component.model = Model::Create(path.string(), false, entity);
 					}
 				}
 

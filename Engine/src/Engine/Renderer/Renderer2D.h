@@ -4,11 +4,11 @@
 #include "RendererAPI.h"
 
 #include "RendererCommand.h"
-#include "OrthographicCamera.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "Engine/Renderer/Camera.h"
-#include "Engine/Renderer/EditorCamera.h"
+#include "Camera/Camera.h"
+#include "Camera/EditorCamera.h"
+#include "Camera/OrthographicCamera.h"
+#include "Shader/Shader.h"
+#include "Texture/Texture.h"
 #include "Engine/Scene/Component.h"
 
 namespace Engine

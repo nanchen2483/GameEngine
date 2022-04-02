@@ -2,8 +2,8 @@
 
 #include "ScriptableEntity.h"
 #include "Engine/Scene/SceneCamera.h"
-#include "Engine/Renderer/Texture.h"
-#include "Engine/Renderer/Model/IModel.h"
+#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Model/Model.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -57,21 +57,21 @@ namespace Engine
 
 	struct ModelComponent
 	{
-		Ptr<IModel> model = nullptr;
+		Ptr<Model> model = nullptr;
 
 		ModelComponent() = default;
 		ModelComponent(const ModelComponent& modelComponent) = default;
-		ModelComponent(const Ptr<IModel>& model)
+		ModelComponent(const Ptr<Model>& model)
 			: model(model) {}
 	};
 
 	struct SkeletonAnimationComponent
 	{
-		Ptr<IModel> model = nullptr;
+		Ptr<Model> model = nullptr;
 
 		SkeletonAnimationComponent() = default;
 		SkeletonAnimationComponent(const SkeletonAnimationComponent& skeletonAnimationComponent) = default;
-		SkeletonAnimationComponent(const Ptr<IModel>& model)
+		SkeletonAnimationComponent(const Ptr<Model>& model)
 			: model(model) {}
 	};
 

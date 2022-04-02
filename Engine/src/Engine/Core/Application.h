@@ -5,9 +5,8 @@
 #include "Window.h"
 #include "Engine/ImGui/ImGuiLayer.h"
 #include "Engine/Core/LayerStack.h"
-#include "Engine/Renderer/Shader.h"
-#include "Engine/Renderer/VertexArray.h"
-#include "Engine/Renderer/OrthographicCamera.h"
+#include "Engine/Renderer/Shader/Shader.h"
+#include "Engine/Renderer/Camera/OrthographicCamera.h"
 
 class WindowCloseEvent;
 

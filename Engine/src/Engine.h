@@ -10,25 +10,24 @@
 #include "Engine/Core/Enum/MouseButtonCodes.h"
 
 // Renderer
-#include "Engine/Renderer/EditorCamera.h"
-
-#include "Engine/Renderer/OrthographicCameraController.h"
-
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/Renderer3D.h"
 #include "Engine/Renderer/RendererCommand.h"
 
-#include "Engine/Renderer/Buffer.h"
-#include "Engine/Renderer/Vertex.h"
-#include "Engine/Renderer/VertexArray.h"
-#include "Engine/Renderer/Framebuffer.h"
-#include "Engine/Renderer/Shader.h"
-#include "Engine/Renderer/ShaderLibrary.h"
-#include "Engine/Renderer/Texture.h"
-#include "Engine/Renderer/Model/ModelFactory.h"
+#include "Engine/Renderer/Buffer/Buffer.h"
+#include "Engine/Renderer/Buffer/Framebuffer.h"
 
-#include "Engine/Renderer/OrthographicCamera.h"
+#include "Engine/Renderer/Camera/EditorCamera.h"
+#include "Engine/Renderer/Camera/OrthographicCamera.h"
+#include "Engine/Renderer/Camera/OrthographicCameraController.h"
+
+#include "Engine/Renderer/Model/Model.h"
+#include "Engine/Renderer/Shader/Shader.h"
+#include "Engine/Renderer/Shader/ShaderLibrary.h"
+#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Vertex/Vertex.h"
+#include "Engine/Renderer/Vertex/VertexArray.h"
 
 // Entity
 #include "Engine/Scene/Component.h"

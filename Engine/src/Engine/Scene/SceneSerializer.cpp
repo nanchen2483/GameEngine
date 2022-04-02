@@ -278,7 +278,7 @@ namespace Engine {
 					SkeletonAnimationComponent& deserializedSRC = deserializedEntity.AddComponent<SkeletonAnimationComponent>();
 
 					std::string path = skeletonAnimationComponent["Path"].as<std::string>();
-					deserializedSRC.model = ModelFactory::Create(path, false, deserializedEntity);
+					deserializedSRC.model = Model::Create(path, false, deserializedEntity);
 				}
 			}
 		}

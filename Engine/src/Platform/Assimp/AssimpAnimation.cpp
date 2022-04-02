@@ -1,18 +1,18 @@
 #include "enginepch.h"
-#include "Animation.h"
+#include "AssimpAnimation.h"
 
-namespace Engine::ModelData
+namespace Engine
 {
-	Animation::Animation(aiAnimation* animation)
+	AssimpAnimation::AssimpAnimation(aiAnimation* animation)
 		: m_currentTime(0.0f), m_duration(animation->mDuration), m_ticksPerSecond(animation->mTicksPerSecond)
 	{
 		SetupBones(animation);
 	}
 
-	Ptr<Bone> Animation::GetBoneByName(const std::string& name)
+	Ptr<AssimpBone> AssimpAnimation::GetBoneByName(const std::string& name)
 	{
-		std::vector<Ptr<Bone>>::iterator iter = std::find_if(m_bones.begin(), m_bones.end(),
-			[&](const Ptr<Bone> bone)
+		std::vector<Ptr<AssimpBone>>::iterator iter = std::find_if(m_bones.begin(), m_bones.end(),
+			[&](const Ptr<AssimpBone> bone)
 			{
 				return bone->GetBoneName() == name;
 			});
@@ -26,7 +26,7 @@ namespace Engine::ModelData
 		}
 	}
 
-	float Animation::GetAnimationTime(float deltaTime)
+	float AssimpAnimation::GetAnimationTime(float deltaTime)
 	{
 		m_currentTime += m_ticksPerSecond * deltaTime;
 		m_currentTime = fmod(m_currentTime, m_duration);
@@ -34,13 +34,13 @@ namespace Engine::ModelData
 		return m_currentTime;
 	}
 
-	void Animation::SetupBones(const aiAnimation* animation)
+	void AssimpAnimation::SetupBones(const aiAnimation* animation)
 	{
 		for (uint32_t i = 0; i < animation->mNumChannels; i++)
 		{
 			aiNodeAnim* channel = animation->mChannels[i];
 			std::string boneName = channel->mNodeName.data;
-			m_bones.push_back(CreatePtr<Bone>(i, boneName, channel));
+			m_bones.push_back(CreatePtr<AssimpBone>(i, boneName, channel));
 		}
 	}
 }
