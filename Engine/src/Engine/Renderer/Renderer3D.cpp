@@ -117,7 +117,7 @@ namespace Engine
 			samplers[i] = i;
 		}
 
-		s_data.shader = Shader::Create("asserts/shaders/Color.glsl");
+		s_data.shader = Shader::Create("asserts/shaders/Default.glsl");
 		s_data.shader->Bind();
 		s_data.shader->SetIntArray("uTextures", samplers, Renderer3DData::MAX_TEXTURE_SLOTS);
 		s_data.textureSlots[0] = s_data.whiteTexture;
@@ -224,7 +224,10 @@ namespace Engine
 	{
 		if (component.model != nullptr)
 		{
+			s_data.shader->SetBool("uEnableModel", true);
+			s_data.shader->SetMat4("uModel", transform);
 			component.model->Draw();
+			s_data.shader->SetBool("uEnableModel", false);
 		}
 	}
 
@@ -232,14 +235,16 @@ namespace Engine
 	{
 		if (component.model != nullptr)
 		{
-			s_data.shader->Bind();
+			s_data.shader->SetBool("uEnableModel", true);
+			s_data.shader->SetMat4("uModel", transform);
 			std::vector<glm::mat4> transforms = component.model->GetPoseTransforms();
 			for (int i = 0; i < transforms.size(); ++i)
 			{
-				s_data.shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+				s_data.shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
 			}
 
 			component.model->Draw();
+			s_data.shader->SetBool("uEnableModel", false);
 		}
 	}
 

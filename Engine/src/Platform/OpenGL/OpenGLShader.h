@@ -17,6 +17,7 @@ namespace Engine
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
+		virtual void SetBool(const std::string& name, const bool value) override;
 		virtual void SetInt(const std::string& name, const int value) override;
 		virtual void SetIntArray(const std::string& name, int* values, uint32_t count) override;
 		virtual void SetFloat(const std::string& name, const float value) override;

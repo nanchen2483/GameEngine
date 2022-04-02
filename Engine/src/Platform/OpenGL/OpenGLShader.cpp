@@ -203,6 +203,12 @@ namespace Engine
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::SetBool(const std::string& name, const bool value)
+	{
+		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		glUniform1i(location, value);
+	}
+
 	void OpenGLShader::SetInt(const std::string& name, const int value)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());

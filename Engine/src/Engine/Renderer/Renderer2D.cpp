@@ -86,7 +86,7 @@ namespace Engine
 			samplers[i] = i;
 		}
 
-		s_data.shader = Shader::Create("asserts/shaders/Color.glsl");
+		s_data.shader = Shader::Create("asserts/shaders/Default.glsl");
 		s_data.shader->Bind();
 		s_data.shader->SetIntArray("uTextures", samplers, s_data.maxTextureSlots);
 		s_data.textureSlots[0] = s_data.whiteTexture;

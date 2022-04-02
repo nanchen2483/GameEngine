@@ -1,5 +1,5 @@
 #type vertex
-#version 430 core
+#version 450 core
 
 layout(location = 0) in vec3 aPosition;
 layout(location = 1) in vec3 aNormal;
@@ -14,13 +14,13 @@ layout(location = 9) in ivec4 aBoneIds;
 layout(location = 10) in vec4 aWeights;
 layout(location = 11) in int aEntityId;
 
-uniform mat4 projection;
-uniform mat4 view;
-uniform mat4 model;
-
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
-uniform mat4 finalBonesMatrices[MAX_BONES];
+
+uniform bool uEnableModel;
+uniform mat4 uModel;
+uniform mat4 uViewProjection;
+uniform mat4 uFinalBonesMatrices[MAX_BONES];
 
 out vec4 vColor;
 out vec2 vTexCoord;
@@ -30,29 +30,38 @@ out flat int vEntityId;
 void main()
 {
     vec4 totalPosition = vec4(0.0f);
-    for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
-    {
-		int boneId = aBoneIds[i];
-        if (boneId == -1)
+	if (uEnableModel)
+	{
+		for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
 		{
-            continue;
+			int boneId = aBoneIds[i];
+			if (boneId == -1)
+			{
+				continue;
+			}
+
+			if (boneId >= MAX_BONES)
+			{
+				totalPosition = vec4(aPosition, 1.0f);
+				break;
+			}
+
+			vec4 localPosition = uFinalBonesMatrices[aBoneIds[i]] * vec4(aPosition, 1.0f);
+			totalPosition += localPosition * aWeights[i];
 		}
-
-        if (boneId >= MAX_BONES)
-        {
-            totalPosition = vec4(aPosition, 1.0f);
-            break;
-        }
-
-        vec4 localPosition = finalBonesMatrices[aBoneIds[i]] * vec4(aPosition, 1.0f);
-        totalPosition += localPosition * aWeights[i];
-   }
+		
+		totalPosition = uModel * totalPosition;
+	}
+	else
+	{
+		totalPosition = vec4(aPosition, 1.0f);
+	}
 	
 	vColor = aColor;
 	vTexCoord = aTexCoord;
 	vTexIndex = aTexIndex;
 	vEntityId = aEntityId;
-    gl_Position =  projection * view * model * totalPosition;
+	gl_Position = uViewProjection * totalPosition;
 }
 
 #type fragment
@@ -69,7 +78,7 @@ in flat int vEntityId;
 uniform sampler2D uTextures[32];
 
 void main()
-{    
+{
 	FragColor = texture(uTextures[int(round(vTexIndex))], vTexCoord) * vColor;
 	EntityId = vEntityId;
 }
