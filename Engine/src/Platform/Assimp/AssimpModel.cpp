@@ -46,15 +46,18 @@ namespace Engine
 		}
 
 		m_directory = path.substr(0, path.find_last_of('\\'));
-		m_animation = CreatePtr<AssimpAnimation>(scene->mAnimations[0]);
-		m_rootNode = CreatePtr<AssimpNode>(scene->mRootNode, m_animation);
+		if (scene->mNumAnimations)
+		{
+			m_includeAnimation = true;
+			m_animation = CreatePtr<AssimpAnimation>(scene->mAnimations[0]);
+			m_rootNode = CreatePtr<AssimpNode>(scene->mRootNode, m_animation);
+		}
+
 		ProcessNode(scene->mRootNode, scene);
 	}
 
 	void AssimpModel::ProcessNode(const aiNode* node, const aiScene* scene)
 	{
-		ENGINE_CORE_ASSERT(m_animation != nullptr, "Animation is not initialized");
-
 		// process each mesh located at the current node
 		for (uint32_t i = 0; i < node->mNumMeshes; i++)
 		{
@@ -106,7 +109,10 @@ namespace Engine
 			}
 		}
 
-		ExtractBoneWeightForVertices(vertices, mesh);
+		if (m_includeAnimation)
+		{
+			ExtractBoneWeightForVertices(vertices, mesh);
+		}
 
 		std::vector<Ptr<Texture>> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::Diffuse);
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
@@ -184,8 +190,11 @@ namespace Engine
 
 	void AssimpModel::UpdateAnimation(float deltaTime)
 	{
-		m_animationTime = m_animation->GetAnimationTime(deltaTime);
-		CalculateBoneTransform(m_rootNode, glm::mat4(1.0f));
+		if (m_includeAnimation)
+		{
+			m_animationTime = m_animation->GetAnimationTime(deltaTime);
+			CalculateBoneTransform(m_rootNode, glm::mat4(1.0f));
+		}
 	}
 
 	void AssimpModel::CalculateBoneTransform(const Ptr<AssimpNode> node, glm::mat4 parentTransform)

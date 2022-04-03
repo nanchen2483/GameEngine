@@ -21,6 +21,7 @@ namespace Engine
 		virtual std::string& GetPath() override { return m_path; }
 		virtual void UpdateAnimation(float deltaTime) override;
 		virtual std::vector<glm::mat4> GetPoseTransforms() override { return m_transforms; }
+		virtual bool IsAnimationModel() override { return m_includeAnimation; };
 		virtual void Draw() override;
 		
 	private:
@@ -37,10 +38,15 @@ namespace Engine
 		bool m_gammaCorrection;
 		std::vector<Ptr<AssimpMesh>> m_meshes;
 		std::vector<Ptr<Texture>> m_textures;
+
+		// Animation
+		bool m_includeAnimation = false;
 		Ptr<AssimpAnimation> m_animation;
 		Ptr<AssimpNode> m_rootNode;
 		std::vector<glm::mat4> m_transforms;
 		float m_animationTime = 0.0f;
+
+		// Editor-only
 		int m_entityId;
 	};
 }

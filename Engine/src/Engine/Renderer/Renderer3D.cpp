@@ -233,27 +233,21 @@ namespace Engine
 	{
 		if (component.model != nullptr)
 		{
-			s_data.shader->SetBool("uEnableModel", true);
+			s_data.shader->SetBool("uUseModel", true);
 			s_data.shader->SetMat4("uModel", transform);
-			component.model->Draw();
-			s_data.shader->SetBool("uEnableModel", false);
-		}
-	}
-
-	void Renderer3D::DrawAnimation(const glm::mat4& transform, SkeletonAnimationComponent& component)
-	{
-		if (component.model != nullptr)
-		{
-			s_data.shader->SetBool("uEnableModel", true);
-			s_data.shader->SetMat4("uModel", transform);
-			std::vector<glm::mat4> transforms = component.model->GetPoseTransforms();
-			for (int i = 0; i < transforms.size(); ++i)
+			s_data.shader->SetBool("uEnableAnimation", component.model->IsAnimationModel());
+			if (component.model->IsAnimationModel())
 			{
-				s_data.shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+				std::vector<glm::mat4> transforms = component.model->GetPoseTransforms();
+				for (int i = 0; i < transforms.size(); ++i)
+				{
+					s_data.shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+				}
 			}
 
 			component.model->Draw();
-			s_data.shader->SetBool("uEnableModel", false);
+			s_data.shader->SetBool("uEnableAnimation", false);
+			s_data.shader->SetBool("uUseModel", false);
 		}
 	}
 

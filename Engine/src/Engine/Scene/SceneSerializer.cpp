@@ -153,14 +153,14 @@ namespace Engine {
 			out << YAML::EndMap;
 		}
 
-		if (entity.HasComponent<SkeletonAnimationComponent>())
+		if (entity.HasComponent<ModelComponent>())
 		{
-			out << YAML::Key << "SkeletonAnimationComponent";
+			out << YAML::Key << "ModelComponent";
 			out << YAML::BeginMap;
 
-			SkeletonAnimationComponent& skeletonAnimationComponent = entity.GetComponent<SkeletonAnimationComponent>();
+			ModelComponent& modelComponent = entity.GetComponent<ModelComponent>();
 
-			out << YAML::Key << "Path" << YAML::Value << skeletonAnimationComponent.model->GetPath();
+			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetPath();
 			out << YAML::EndMap;
 		}
 
@@ -272,12 +272,12 @@ namespace Engine {
 					}
 				}
 
-				YAML::Node skeletonAnimationComponent = entity["SkeletonAnimationComponent"];
-				if (skeletonAnimationComponent)
+				YAML::Node modelComponent = entity["ModelComponent"];
+				if (modelComponent)
 				{
-					SkeletonAnimationComponent& deserializedSRC = deserializedEntity.AddComponent<SkeletonAnimationComponent>();
+					ModelComponent& deserializedSRC = deserializedEntity.AddComponent<ModelComponent>();
 
-					std::string path = skeletonAnimationComponent["Path"].as<std::string>();
+					std::string path = modelComponent["Path"].as<std::string>();
 					deserializedSRC.model = Model::Create(path, false, deserializedEntity);
 				}
 			}

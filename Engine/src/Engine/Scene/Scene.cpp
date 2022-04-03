@@ -46,20 +46,13 @@ namespace Engine
 		auto modelGroup = m_registry.view<TransformComponent, ModelComponent>();
 		for (entt::entity entity : modelGroup)
 		{
-			auto [transform, model] = modelGroup.get<TransformComponent, ModelComponent>(entity);
-			Renderer3D::DrawModel(transform.GetTransform(), model);
-		}
-
-		auto animationGroup = m_registry.view<TransformComponent, SkeletonAnimationComponent>();
-		for (entt::entity entity : animationGroup)
-		{
-			auto [transform, animation] = animationGroup.get<TransformComponent, SkeletonAnimationComponent>(entity);
-			if (animation.model != nullptr)
+			auto [transform, modelComponent] = modelGroup.get<TransformComponent, ModelComponent>(entity);
+			if (modelComponent.model != nullptr)
 			{
-				animation.model->UpdateAnimation(time);
+				modelComponent.model->UpdateAnimation(time);
 			}
 
-			Renderer3D::DrawAnimation(transform.GetTransform(), animation);
+			Renderer3D::DrawModel(transform.GetTransform(), modelComponent);
 		}
 	}
 
@@ -111,20 +104,13 @@ namespace Engine
 			auto modelGroup = m_registry.view<TransformComponent, ModelComponent>();
 			for (entt::entity entity : modelGroup)
 			{
-				auto [transform, model] = modelGroup.get<TransformComponent, ModelComponent>(entity);
-				Renderer3D::DrawModel(transform.GetTransform(), model);
-			}
-
-			auto animationGroup = m_registry.view<TransformComponent, SkeletonAnimationComponent>();
-			for (entt::entity entity : animationGroup)
-			{
-				auto [transform, animation] = animationGroup.get<TransformComponent, SkeletonAnimationComponent>(entity);
-				if (animation.model != nullptr)
+				auto [transform, modelComponent] = modelGroup.get<TransformComponent, ModelComponent>(entity);
+				if (modelComponent.model != nullptr)
 				{
-					animation.model->UpdateAnimation(time);
+					modelComponent.model->UpdateAnimation(time);
 				}
 
-				Renderer3D::DrawAnimation(transform.GetTransform(), animation);
+				Renderer3D::DrawModel(transform.GetTransform(), modelComponent);
 			}
 		}
 
@@ -193,11 +179,6 @@ namespace Engine
 
 	template<>
 	void Scene::OnComponentAdded<ModelComponent>(Entity entity, ModelComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<SkeletonAnimationComponent>(Entity entity, SkeletonAnimationComponent& component)
 	{
 	}
 

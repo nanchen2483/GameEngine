@@ -17,7 +17,8 @@ layout(location = 11) in int aEntityId;
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
 
-uniform bool uEnableModel;
+uniform bool uEnableAnimation;
+uniform bool uUseModel;
 uniform mat4 uModel;
 uniform mat4 uViewProjection;
 uniform mat4 uFinalBonesMatrices[MAX_BONES];
@@ -30,7 +31,7 @@ out flat int vEntityId;
 void main()
 {
     vec4 totalPosition = vec4(0.0f);
-	if (uEnableModel)
+	if (uEnableAnimation)
 	{
 		for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
 		{
@@ -49,12 +50,15 @@ void main()
 			vec4 localPosition = uFinalBonesMatrices[aBoneIds[i]] * vec4(aPosition, 1.0f);
 			totalPosition += localPosition * aWeights[i];
 		}
-		
-		totalPosition = uModel * totalPosition;
 	}
 	else
 	{
 		totalPosition = vec4(aPosition, 1.0f);
+	}
+
+	if (uUseModel)
+	{
+		totalPosition = uModel * totalPosition;
 	}
 	
 	vColor = aColor;

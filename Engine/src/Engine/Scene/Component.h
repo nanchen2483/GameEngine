@@ -65,16 +65,6 @@ namespace Engine
 			: model(model) {}
 	};
 
-	struct SkeletonAnimationComponent
-	{
-		Ptr<Model> model = nullptr;
-
-		SkeletonAnimationComponent() = default;
-		SkeletonAnimationComponent(const SkeletonAnimationComponent& skeletonAnimationComponent) = default;
-		SkeletonAnimationComponent(const Ptr<Model>& model)
-			: model(model) {}
-	};
-
 	struct CameraComponent
 	{
 		SceneCamera camera;

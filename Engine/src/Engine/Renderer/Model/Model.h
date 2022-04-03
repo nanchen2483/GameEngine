@@ -12,6 +12,7 @@ namespace Engine
 		virtual std::string& GetPath() = 0;
 		virtual void UpdateAnimation(float deltaTime) = 0;
 		virtual std::vector<glm::mat4> GetPoseTransforms() = 0;
+		virtual bool IsAnimationModel() = 0;
 		virtual void Draw() = 0;
 
 		static Ptr<Model> Create(std::string path);
