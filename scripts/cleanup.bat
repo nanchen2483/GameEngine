@@ -2,4 +2,4 @@
 pushd ..\
 call git clean -dfx -e .vs
 popd
-PAUSE
+if /i not "%~1"=="nopause" pause

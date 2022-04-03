@@ -3,5 +3,5 @@
 ## How to build
 ```
 cd scripts
-Win-GenProjects.bat
+gen_projects.bat
 ```
