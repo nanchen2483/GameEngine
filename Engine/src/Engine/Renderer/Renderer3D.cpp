@@ -155,7 +155,7 @@ namespace Engine
 
 		glm::mat4& viewProjection = camera.GetViewProjection();
 
-		ENGINE_CORE_ASSERT(s_data.shader, "");
+		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);
 		s_data.vertexArray->Bind();
@@ -164,6 +164,15 @@ namespace Engine
 	
 	void Renderer3D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
+		ENGINE_PROFILE_FUNCTION();
+
+		const glm::mat4& viewProjection = camera.GetProjection() * glm::inverse(transform);
+
+		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
+		s_data.shader->Bind();
+		s_data.shader->SetMat4("uViewProjection", viewProjection);
+		s_data.vertexArray->Bind();
+		ResetRendererData();
 	}
 	
 	void Renderer3D::BeginScene(OrthographicCamera& camera)

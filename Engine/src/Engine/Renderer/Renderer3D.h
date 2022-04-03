@@ -14,7 +14,7 @@ namespace Engine
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 		static void BeginScene(OrthographicCamera& camera);
 		
-		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId);
+		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId = -1);
 		static void DrawCube(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), int entityId = -1);
 		static void DrawModel(const glm::mat4& transform, ModelComponent& component);
 		static void DrawAnimation(const glm::mat4& transform, SkeletonAnimationComponent& component);

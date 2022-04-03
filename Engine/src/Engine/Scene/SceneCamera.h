@@ -2,12 +2,18 @@
 
 #include "Engine/Renderer/Camera/Camera.h"
 
+#include <map>
+
 namespace Engine
 {
 	class SceneCamera : public Camera
 	{
 	public:
-		enum class ProjectionType { Perspective = 1, Orthographic = 2 };
+		enum class ProjectionType
+		{
+			Perspective = 1,
+			Orthographic = 2
+		};
 	public:
 		SceneCamera();
 		virtual ~SceneCamera();
@@ -32,6 +38,8 @@ namespace Engine
 		void SetOrthographicFarClip(float farClip) { m_orthographicFar = farClip; RecalculateProjection(); }
 
 		ProjectionType GetProjectionType() { return m_projectionType; }
+		std::string GetProjectionTypeString() { return m_projectionTypeMap[m_projectionType]; }
+		std::map<ProjectionType, std::string> GetProjectionTypeMap() { return m_projectionTypeMap; }
 		void SetProjectionType(ProjectionType type) { m_projectionType = type; RecalculateProjection(); }
 	private:
 		void RecalculateProjection();
@@ -44,7 +52,12 @@ namespace Engine
 		float m_orthographicSize = 10.0f;
 		float m_orthographicNear = -1.0f, m_orthographicFar = 1.0f;
 
-
 		float m_aspectRatio = 0.0f;
+
+		std::map<ProjectionType, std::string> m_projectionTypeMap =
+		{
+			{ ProjectionType::Perspective, "Perspective" },
+			{ ProjectionType::Orthographic, "Orthographic" }
+		};
 	};
 }
