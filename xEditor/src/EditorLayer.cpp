@@ -1,6 +1,4 @@
-
 #include "EditorLayer.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
 #include <imgui.h>
 #include <ImGuizmo.h>

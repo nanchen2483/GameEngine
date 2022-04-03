@@ -1,5 +1,4 @@
 #include "ExampleLayer.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,7 +7,7 @@
 namespace Engine
 {
 	ExampleLayer::ExampleLayer()
-		: Layer("Example"), m_cameraController(1280.0f / 720.0f, true), m_color(glm::vec3(1.0f, 0.0f, 0.0f))
+		: Layer("Example")
 	{
 	}
 
@@ -18,7 +17,7 @@ namespace Engine
 		m_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 		m_model = Model::Create("asserts\\models\\vampire\\dancing_vampire.dae");
-		m_shader = Shader::Create("asserts\\shaders\\Animation.glsl");
+		m_shader = Shader::Create("asserts\\shaders\\Default.glsl");
 		m_shader->Bind();
 
 		int32_t samplers[32];
@@ -46,19 +45,18 @@ namespace Engine
 
 		// view/projection transformations
 		m_shader->Bind();
-		m_shader->SetMat4("projection", m_editorCamera.GetProjection());
-		m_shader->SetMat4("view", m_editorCamera.GetViewMatrix());
-
+		m_shader->SetBool("uEnableModel", true);
+		m_shader->SetMat4("uViewProjection", m_editorCamera.GetProjection() * m_editorCamera.GetViewMatrix());
 		std::vector<glm::mat4> transforms = m_model->GetPoseTransforms();
 		for (int i = 0; i < transforms.size(); ++i)
 		{
-			m_shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+			m_shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
 		}
 
 		// render the loaded model
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(.5f));	// it's a bit too big for our scene, so scale it down
-		m_shader->SetMat4("model", model);
+		m_shader->SetMat4("uModel", model);
 		m_model->Draw();
 	}
 
@@ -68,6 +66,5 @@ namespace Engine
 
 	void ExampleLayer::OnEvent(Engine::Event& event)
 	{
-		m_cameraController.OnEvent(event);
 	}
 }

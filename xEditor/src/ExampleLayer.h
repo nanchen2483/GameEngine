@@ -15,14 +15,9 @@ namespace Engine
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Engine::Event& event) override;
 	private:
-		OrthographicCameraController m_cameraController;
 		Ptr<Scene> m_activeScene;
 		EditorCamera m_editorCamera;
 
-		ShaderLibrary m_shaderLibrary;
-		Ptr<Texture2D> m_texture2D;
-
-		glm::vec3 m_color;
 		Ptr<Model> m_model;
 		Ptr<Shader> m_shader;
 	};
