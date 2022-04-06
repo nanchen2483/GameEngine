@@ -18,24 +18,36 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
+	Ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t numOfVertices)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(vertices, size);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(vertices, numOfVertices);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
 		return nullptr;
 	}
 
-	Ptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	Ptr<VertexBuffer> VertexBuffer::Create(Vertex* vertices, uint32_t numOfVertices)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLIndexBuffer>(indices, count);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(vertices, numOfVertices);
+		}
+
+		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		return nullptr;
+	}
+
+	Ptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t numOfIndices)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLIndexBuffer>(indices, numOfIndices);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");

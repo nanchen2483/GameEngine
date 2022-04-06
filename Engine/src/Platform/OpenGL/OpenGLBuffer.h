@@ -8,7 +8,8 @@ namespace Engine
 	{
 	public:
 		OpenGLVertexBuffer(uint32_t size);
-		OpenGLVertexBuffer(float* vertices, uint32_t size);
+		OpenGLVertexBuffer(float* vertices, uint32_t numOfVertices);
+		OpenGLVertexBuffer(Vertex* vertices, uint32_t numOfVertices);
 		~OpenGLVertexBuffer();
 
 		virtual void Bind() const override;
@@ -27,13 +28,13 @@ namespace Engine
 	class OpenGLIndexBuffer : public IndexBuffer
 	{
 	public:
-		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
+		OpenGLIndexBuffer(uint32_t* indices, uint32_t numOfIndices);
 		~OpenGLIndexBuffer();
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
-		virtual uint32_t GetCount() const { return m_count; }
+		virtual uint32_t GetNumOfIndices() const { return m_numOfIndices; }
 	private:
 		uint32_t m_rendererId;
-		uint32_t m_count;
+		uint32_t m_numOfIndices;
 	};
 }

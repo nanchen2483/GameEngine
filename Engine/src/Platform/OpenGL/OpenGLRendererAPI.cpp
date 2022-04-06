@@ -30,7 +30,7 @@ namespace Engine
 
 	void OpenGLRendererAPI::DrawIndexed(const Ptr<VertexArray>& vertexArray)
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 	}
 
 	void OpenGLRendererAPI::DrawIndexed(uint32_t count)

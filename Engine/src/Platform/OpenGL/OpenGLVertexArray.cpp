@@ -117,4 +117,14 @@ namespace Engine
 
 		m_indexBuffer = indexBuffer;
 	}
+
+	const uint32_t OpenGLVertexArray::GetNumOfIndices() const
+	{
+		if (m_indexBuffer == nullptr)
+		{
+			return 0;
+		}
+
+		return m_indexBuffer->GetNumOfIndices();
+	}
 }
