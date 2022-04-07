@@ -73,7 +73,7 @@ namespace Engine
 		}
 
 		Camera* mainCamera = nullptr;
-		glm::mat4 mainTransform;
+		TransformComponent* mainTransform;
 		{
 			auto view = m_registry.view<TransformComponent, CameraComponent>();
 			for (entt::entity entity : view)
@@ -82,7 +82,7 @@ namespace Engine
 				if (camera.primary)
 				{
 					mainCamera = &camera.camera;
-					mainTransform = transform.GetTransform();
+					mainTransform = &transform;
 					break;
 				}
 			}
@@ -90,7 +90,7 @@ namespace Engine
 
 		if (mainCamera != nullptr)
 		{
-			Renderer3D::BeginScene(*mainCamera, mainTransform);
+			Renderer3D::BeginScene(*mainCamera, *mainTransform);
 
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (entt::entity entity : group)

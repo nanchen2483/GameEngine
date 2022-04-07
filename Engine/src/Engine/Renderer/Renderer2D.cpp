@@ -47,7 +47,7 @@ namespace Engine
 			{ ShaderDataType::Float3,  ShaderDataName::Normal },
 			{ ShaderDataType::Float4,  ShaderDataName::Color },
 			{ ShaderDataType::Float2,  ShaderDataName::TexCoord },
-			{ ShaderDataType::Float,  ShaderDataName::TexIndex },
+			{ ShaderDataType::Float3,  ShaderDataName::Material },
 			{ ShaderDataType::Float3,  ShaderDataName::Tangent },
 			{ ShaderDataType::Float3,  ShaderDataName::Bitangent },
 			{ ShaderDataType::Float4,  ShaderDataName::Bone1 },
@@ -220,7 +220,7 @@ namespace Engine
 			s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[i];
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = textureCoords[i];
-			s_data.vertexBufferPtr->textureIndex = textureIndex;
+			s_data.vertexBufferPtr->material = glm::vec3(textureIndex, -1, 0);
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
@@ -248,7 +248,7 @@ namespace Engine
 			s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[i];
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = textureCoords[i];
-			s_data.vertexBufferPtr->textureIndex = textureIndex;
+			s_data.vertexBufferPtr->material = glm::vec3(textureIndex, -1, 0);
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}

@@ -28,7 +28,7 @@ namespace Engine
 		void Load(std::string const& path);
 		void ProcessNode(const aiNode* node, const aiScene* scene);
 		Ptr<AssimpMesh> ProcessMesh(const aiMesh* mesh, const aiMaterial* material);
-		std::vector<Ptr<Texture>> LoadMaterialTextures(const aiMaterial* material, aiTextureType type, TextureType textureType);
+		Ptr<Texture> LoadMaterialTexture(const aiMaterial* material, aiTextureType type, TextureType textureType);
 		void ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, const aiMesh* mesh);
 		void CalculateBoneTransform(const Ptr<AssimpNode> node, glm::mat4 parentTransform);
 

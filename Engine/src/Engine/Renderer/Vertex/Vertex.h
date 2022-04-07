@@ -13,7 +13,7 @@ namespace Engine
 		glm::vec3 normal = {};
 		glm::vec4 color = {};
 		glm::vec2 texCoord = {};
-		float textureIndex = 0;
+		glm::vec3 material = {};
 		glm::vec3 tangent = {};
 		glm::vec3 bitangent = {};
 		glm::vec4 bone1 = {};

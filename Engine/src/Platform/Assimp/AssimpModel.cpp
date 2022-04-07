@@ -77,16 +77,43 @@ namespace Engine
 
 	Ptr<AssimpMesh> AssimpModel::ProcessMesh(const aiMesh* mesh, const aiMaterial* material)
 	{
-		std::vector<Vertex> vertices;
-		std::vector<unsigned int> indices;
+		glm::vec3 materialIndex = glm::vec3(-1, -1, 64.0f);
 		std::vector<Ptr<Texture>> textures;
+		Ptr<Texture> diffuseTexture = LoadMaterialTexture(material, aiTextureType_DIFFUSE, TextureType::Diffuse);
+		if (diffuseTexture)
+		{
+			materialIndex.x += 1;
+			textures.push_back(diffuseTexture);
+		}
+
+		Ptr<Texture> specularTexture = LoadMaterialTexture(material, aiTextureType_SPECULAR, TextureType::Specular);
+		if (specularTexture)
+		{
+			materialIndex.y = materialIndex.x + 1;
+			textures.push_back(specularTexture);
+		}
+
+		Ptr<Texture> normalTexture = LoadMaterialTexture(material, aiTextureType_HEIGHT, TextureType::Normal);
+		if (normalTexture)
+		{
+			textures.push_back(normalTexture);
+		}
+		
+		Ptr<Texture> heightTexture = LoadMaterialTexture(material, aiTextureType_AMBIENT, TextureType::Height);
+		if (heightTexture)
+		{
+			textures.push_back(heightTexture);
+		}
+
+		std::vector<Vertex> vertices;
+		std::vector<uint32_t> indices;
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
 			Vertex vertex;
 			vertex.position = AssimpUtil::ToGlm(mesh->mVertices[i]);
 			vertex.normal = AssimpUtil::ToGlm(mesh->mNormals[i]);
 			vertex.color = glm::vec4(1.0f);
-			vertex.textureIndex = 0;
+			vertex.material = materialIndex;
 			if (mesh->mTextureCoords[0])
 			{
 				vertex.texCoord = AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]);
@@ -114,22 +141,13 @@ namespace Engine
 			ExtractBoneWeightForVertices(vertices, mesh);
 		}
 
-		std::vector<Ptr<Texture>> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::Diffuse);
-		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-		std::vector<Ptr<Texture>> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TextureType::Specular);
-		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-		std::vector<Ptr<Texture>> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, TextureType::Normal);
-		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-		std::vector<Ptr<Texture>> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, TextureType::Height);
-		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-
 		// return a mesh object created from the extracted mesh data
 		return CreatePtr<AssimpMesh>(vertices, indices, textures);
 	}
 
-	std::vector<Ptr<Texture>> AssimpModel::LoadMaterialTextures(const aiMaterial* material, aiTextureType type, TextureType textureType)
+	Ptr<Texture> AssimpModel::LoadMaterialTexture(const aiMaterial* material, aiTextureType type, TextureType textureType)
 	{
-		std::vector<Ptr<Texture>> materialTextures;
+		Ptr<Texture> materialTexture = nullptr;
 		for (uint32_t i = 0; i < material->GetTextureCount(type); i++)
 		{
 			aiString filename;
@@ -140,7 +158,7 @@ namespace Engine
 			{
 				if (std::strcmp(m_textures[j]->GetFilePath().c_str(), path.c_str()) == 0)
 				{
-					materialTextures.push_back(m_textures[j]);
+					materialTexture = m_textures[j];
 					alreadyLoaded = true;
 					break;
 				}
@@ -148,13 +166,12 @@ namespace Engine
 
 			if (!alreadyLoaded)
 			{
-				Ptr<Texture> texture = Texture2D::Create(path, textureType, false);
-				materialTextures.push_back(texture);
-				m_textures.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
+				materialTexture = Texture2D::Create(path, textureType, false);
+				m_textures.push_back(materialTexture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
 			}
 		}
 
-		return materialTextures;
+		return materialTexture;
 	}
 
 	void AssimpModel::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, const aiMesh* mesh)

@@ -45,7 +45,7 @@ namespace Engine
 			{ ShaderDataType::Float3,	ShaderDataName::Normal },
 			{ ShaderDataType::Float4,	ShaderDataName::Color },
 			{ ShaderDataType::Float2,	ShaderDataName::TexCoord },
-			{ ShaderDataType::Float,	ShaderDataName::TexIndex },
+			{ ShaderDataType::Float3,	ShaderDataName::Material },
 			{ ShaderDataType::Float3,	ShaderDataName::Tangent },
 			{ ShaderDataType::Float3,	ShaderDataName::Bitangent },
 			{ ShaderDataType::Float4,	ShaderDataName::Bone1 },
@@ -139,6 +139,11 @@ namespace Engine
 		s_data.textureCoords[5] = { 0.0f, 0.0f };
 		s_data.textureCoords[6] = { 0.0f, 1.0f };
 		s_data.textureCoords[7] = { 1.0f, 1.0f };
+
+		s_data.shader->SetFloat3("uDirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+		s_data.shader->SetFloat3("uDirLight.ambient", glm::vec3(0.05f));
+		s_data.shader->SetFloat3("uDirLight.diffuse", glm::vec3(0.4f));
+		s_data.shader->SetFloat3("uDirLight.specular", glm::vec3(0.5f));
 	}
 	
 	void Renderer3D::Shutdown()
@@ -152,25 +157,25 @@ namespace Engine
 	void Renderer3D::BeginScene(const EditorCamera& camera)
 	{
 		ENGINE_PROFILE_FUNCTION();
-
-		glm::mat4& viewProjection = camera.GetViewProjection();
-
 		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
+
 		s_data.shader->Bind();
-		s_data.shader->SetMat4("uViewProjection", viewProjection);
+		s_data.shader->SetMat4("uViewProjection", camera.GetViewProjection());
+		s_data.shader->SetFloat3("uViewPos", camera.GetPosition());
 		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}
 	
-	void Renderer3D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	void Renderer3D::BeginScene(const Camera& camera, const TransformComponent& transform)
 	{
 		ENGINE_PROFILE_FUNCTION();
-
-		const glm::mat4& viewProjection = camera.GetProjection() * glm::inverse(transform);
-
 		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
+
+		const glm::mat4& viewProjection = camera.GetProjection() * glm::inverse(transform.GetTransform());
+
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);
+		s_data.shader->SetFloat3("uViewPos", transform.translation);
 		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}
@@ -219,9 +224,10 @@ namespace Engine
 		for (size_t i = 0; i < Renderer3DData::NUM_OF_VERTICES; i++)
 		{
 			s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[i];
+			s_data.vertexBufferPtr->normal = s_data.vertexPosition[i];
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = s_data.textureCoords[i];
-			s_data.vertexBufferPtr->textureIndex = currentTextureIndex;
+			s_data.vertexBufferPtr->material = glm::vec3(currentTextureIndex, -1, 0);
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}

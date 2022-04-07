@@ -2,6 +2,15 @@ Scene: Untitled
 Entities:
   - Entity: 123
     TagComponent:
+      Tag: Backpack-model
+    TransformComponent:
+      Translation: [-6.43440962, -1.9533695, -1.07366931]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      Path: asserts\models\backpack\backpack.obj
+  - Entity: 123
+    TagComponent:
       Tag: Cube
     TransformComponent:
       Translation: [2.02971911, 1.3626895, -11.4038324]
@@ -59,8 +68,8 @@ Entities:
       Tag: Plan
     TransformComponent:
       Translation: [0, -4.23649549, 4.04193997e-06]
-      Rotation: [-1.57079732, 0, 0]
-      Scale: [1065.76819, 1006.71277, 0.999981582]
+      Rotation: [0, 0, 0]
+      Scale: [500, 1, 500]
     SpriteRendererComponent:
       Color: [0.813725471, 0.813717306, 0.813717306, 1]
       TextureFilePath: asserts\textures\blocks.png
@@ -68,8 +77,8 @@ Entities:
     TagComponent:
       Tag: Vampire-model
     TransformComponent:
-      Translation: [0, 0, 0]
+      Translation: [5.06982422, -3.3338623, 1.56835938]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Scale: [4.36239958, 4.36239958, 4.36239958]
     ModelComponent:
       Path: asserts\models\vampire\dancing_vampire.dae

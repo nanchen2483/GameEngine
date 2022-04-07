@@ -27,7 +27,7 @@ namespace Engine
 		Normal,
 		Color,
 		TexCoord,
-		TexIndex,
+		Material,
 		Tangent,
 		Bitangent,
 		Bone1,
