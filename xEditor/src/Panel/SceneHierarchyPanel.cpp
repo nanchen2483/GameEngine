@@ -193,9 +193,8 @@ namespace Engine
 			std::string& tag = entity.GetComponent<TagComponent>().tag;
 
 			char buffer[256];
-			memset(buffer, 0, sizeof(buffer));
-			memcpy(buffer, tag.c_str(), sizeof(buffer));
-			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+			strcpy(buffer, tag.c_str());
+			if (ImGui::InputText("Tag", buffer, IM_ARRAYSIZE(buffer)))
 			{
 				tag = std::string(buffer);
 			}
@@ -410,7 +409,7 @@ namespace Engine
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
-						component.model = Model::Create(path.string(), false, entity);
+						component.model = Model::Create(path.string(), false, entity, m_context->GetLoadedTextureMap());
 					}
 				}
 

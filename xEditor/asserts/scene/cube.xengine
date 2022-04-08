@@ -48,7 +48,7 @@ Entities:
       FixedAspectRatio: false
   - Entity: 123
     TagComponent:
-      Tag: Lightblue square
+      Tag: Lightblue cube
     TransformComponent:
       Translation: [-0.555010855, -0.179317594, -10.7059622]
       Rotation: [-0.500811815, 0.0608921349, 0.00290317717]
@@ -57,7 +57,7 @@ Entities:
       Color: [0.600000024, 0.800000012, 1, 1]
   - Entity: 123
     TagComponent:
-      Tag: Cube
+      Tag: Red cube
     TransformComponent:
       Translation: [2.02971911, 1.3626895, -11.4038324]
       Rotation: [-0.000229859652, 0.0398453586, 0.012294312]

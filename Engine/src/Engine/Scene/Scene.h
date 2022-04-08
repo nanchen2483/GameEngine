@@ -3,6 +3,7 @@
 #include <entt.hpp>
 #include "Engine/Core/TimeStep.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
+#include "Engine/Renderer/Texture/Texture.h"
 
 namespace Engine
 {
@@ -22,14 +23,15 @@ namespace Engine
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		bool EntityExists(entt::entity entity);
-
 		Entity GetPrimaryCameraEntity();
+		TextureMap* GetLoadedTextureMap() { return &m_textureMap; }
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
 	private:
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
+		TextureMap m_textureMap;
 
 		friend class Entity;
 		friend class SceneSerializer;

@@ -120,31 +120,6 @@ namespace Engine
 		// Clear entity id buffer attachment to -1
 		m_framebuffer->ClearAttachment(ENTITY_ID_ATTACHMENT_INDEX, -1);
 
-#if 0
-		{
-			ENGINE_PROFILE_SCOPE("Renderer Draw");
-			Renderer2D::BeginScene(m_cameraController.GetCamera());
-			{
-				m_activeScene->OnUpdateRuntime(timeStep);
-				Renderer2D::DrawQuad(glm::vec3(1.0f), glm::vec2(1.0f), m_color);
-				Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_color);
-				Renderer2D::DrawQuad(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0, -0.1f)), m_texture2D);
-			}
-			Renderer2D::EndScene();
-
-			Renderer2D::BeginScene(m_cameraController.GetCamera());
-			for (float y = -4.5f; y < 5.0f; y += 0.5f)
-			{
-				for (float x = -4.5f; x < 5.0f; x += 0.5f)
-				{
-					glm::vec4 color = glm::vec4((x + 0.5f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f);
-					Renderer2D::DrawQuad(glm::vec3(x, y, 0.0f), glm::vec2(0.45f, 0.45f), color);
-				}
-			}
-			Renderer2D::EndScene();
-		}
-#endif // 0
-
 		m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
 		UpdateHoveredEntity();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <map>
 
 namespace Engine
 {
@@ -35,4 +36,6 @@ namespace Engine
 		static Ptr<Texture2D> Create(uint32_t width, uint32_t height);
 		static Ptr<Texture2D> Create(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = true);
 	};
+
+	typedef std::map<std::string, Ptr<Texture>> TextureMap;
 }

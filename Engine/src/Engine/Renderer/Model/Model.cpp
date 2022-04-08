@@ -15,9 +15,9 @@ namespace Engine
 		return CreatePtr<AssimpModel>(path, gamma);
 	}
 
-	Ptr<Model> Model::Create(std::string path, bool gamma, uint32_t entityId)
+	Ptr<Model> Model::Create(std::string path, bool gamma, uint32_t entityId, TextureMap* textureMap)
 	{
-		return CreatePtr<AssimpModel>(path, gamma, entityId);
+		return CreatePtr<AssimpModel>(path, gamma, entityId, textureMap);
 	}
 }
 

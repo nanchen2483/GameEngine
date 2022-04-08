@@ -278,7 +278,7 @@ namespace Engine {
 					ModelComponent& deserializedSRC = deserializedEntity.AddComponent<ModelComponent>();
 
 					std::string path = modelComponent["Path"].as<std::string>();
-					deserializedSRC.model = Model::Create(path, false, deserializedEntity);
+					deserializedSRC.model = Model::Create(path, false, deserializedEntity, m_scene->GetLoadedTextureMap());
 				}
 			}
 		}

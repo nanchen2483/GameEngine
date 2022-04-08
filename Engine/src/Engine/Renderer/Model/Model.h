@@ -1,8 +1,9 @@
 #pragma once
 
-#include <string>
 #include <vector>
 #include <glm/glm.hpp>
+
+#include "Engine/Renderer/Texture/Texture.h"
 
 namespace Engine
 {
@@ -17,6 +18,6 @@ namespace Engine
 
 		static Ptr<Model> Create(std::string path);
 		static Ptr<Model> Create(std::string path, bool gamma);
-		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId);
+		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, TextureMap* textureMap);
 	};
 }

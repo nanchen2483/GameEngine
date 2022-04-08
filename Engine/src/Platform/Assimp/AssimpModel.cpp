@@ -17,12 +17,12 @@ namespace Engine
 	}
 
 	AssimpModel::AssimpModel(std::string const& path, bool gamma)
-		: AssimpModel(path, gamma, -1)
+		: AssimpModel(path, gamma, -1, &TextureMap())
 	{
 	}
 
-	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId)
-		: m_path(path), m_gammaCorrection(gamma), m_entityId(entityId)
+	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap)
+		: m_path(path), m_gammaCorrection(gamma), m_entityId(entityId), m_textureMap(textureMap)
 	{
 		m_transforms.reserve(100);
 		for (int i = 0; i < 100; i++)
@@ -75,31 +75,31 @@ namespace Engine
 		}
 	}
 
-	Ptr<AssimpMesh> AssimpModel::ProcessMesh(const aiMesh* mesh, const aiMaterial* material)
+	AssimpMesh AssimpModel::ProcessMesh(const aiMesh* mesh, const aiMaterial* material)
 	{
 		glm::vec3 materialIndex = glm::vec3(-1, -1, 64.0f);
 		std::vector<Ptr<Texture>> textures;
-		Ptr<Texture> diffuseTexture = LoadMaterialTexture(material, aiTextureType_DIFFUSE, TextureType::Diffuse);
+		Ptr<Texture> diffuseTexture = LoadMaterialTexture(material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
 		if (diffuseTexture)
 		{
 			materialIndex.x += 1;
 			textures.push_back(diffuseTexture);
 		}
 
-		Ptr<Texture> specularTexture = LoadMaterialTexture(material, aiTextureType_SPECULAR, TextureType::Specular);
+		Ptr<Texture> specularTexture = LoadMaterialTexture(material, aiTextureType::aiTextureType_SPECULAR, TextureType::Specular);
 		if (specularTexture)
 		{
 			materialIndex.y = materialIndex.x + 1;
 			textures.push_back(specularTexture);
 		}
 
-		Ptr<Texture> normalTexture = LoadMaterialTexture(material, aiTextureType_HEIGHT, TextureType::Normal);
+		Ptr<Texture> normalTexture = LoadMaterialTexture(material, aiTextureType::aiTextureType_HEIGHT, TextureType::Normal);
 		if (normalTexture)
 		{
 			textures.push_back(normalTexture);
 		}
 		
-		Ptr<Texture> heightTexture = LoadMaterialTexture(material, aiTextureType_AMBIENT, TextureType::Height);
+		Ptr<Texture> heightTexture = LoadMaterialTexture(material, aiTextureType::aiTextureType_AMBIENT, TextureType::Height);
 		if (heightTexture)
 		{
 			textures.push_back(heightTexture);
@@ -142,36 +142,27 @@ namespace Engine
 		}
 
 		// return a mesh object created from the extracted mesh data
-		return CreatePtr<AssimpMesh>(vertices, indices, textures);
+		return AssimpMesh(vertices, indices, textures);
 	}
 
 	Ptr<Texture> AssimpModel::LoadMaterialTexture(const aiMaterial* material, aiTextureType type, TextureType textureType)
 	{
-		Ptr<Texture> materialTexture = nullptr;
-		for (uint32_t i = 0; i < material->GetTextureCount(type); i++)
+		if (material->GetTextureCount(type) > 0)
 		{
 			aiString filename;
-			material->GetTexture(type, i, &filename);
+			material->GetTexture(type, 0, &filename);
 			std::string path = this->m_directory + '/' + filename.C_Str();
-			bool alreadyLoaded = false;
-			for (uint32_t j = 0; j < m_textures.size(); j++)
-			{
-				if (std::strcmp(m_textures[j]->GetFilePath().c_str(), path.c_str()) == 0)
-				{
-					materialTexture = m_textures[j];
-					alreadyLoaded = true;
-					break;
-				}
-			}
-
-			if (!alreadyLoaded)
+			Ptr<Texture> materialTexture = (*m_textureMap)[path];
+			if (materialTexture == nullptr)
 			{
 				materialTexture = Texture2D::Create(path, textureType, false);
-				m_textures.push_back(materialTexture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
+				(*m_textureMap)[path] = materialTexture;  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
 			}
+
+			return materialTexture;
 		}
 
-		return materialTexture;
+		return nullptr;
 	}
 
 	void AssimpModel::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, const aiMesh* mesh)
@@ -214,7 +205,7 @@ namespace Engine
 		}
 	}
 
-	void AssimpModel::CalculateBoneTransform(const Ptr<AssimpNode> node, glm::mat4 parentTransform)
+	void AssimpModel::CalculateBoneTransform(const Ptr<AssimpNode>& node, glm::mat4 parentTransform)
 	{
 		glm::mat4 globalTransformation = parentTransform * node->transformation;
 		Ptr<AssimpBone> bone = node->bone;
@@ -236,7 +227,7 @@ namespace Engine
 	{
 		for (uint32_t i = 0; i < m_meshes.size(); i++)
 		{
-			m_meshes[i]->Draw();
+			m_meshes[i].Draw();
 		}
 	}
 }
