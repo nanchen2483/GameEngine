@@ -17,7 +17,7 @@ namespace Engine
 		AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::vector<Ptr<Texture>> textures);
 		void Draw();
 	private:
-		Ptr<VertexArray> m_vertexArray;
-		std::vector<Ptr<Texture>> m_textures;
+		const Ptr<VertexArray> m_vertexArray;
+		const std::vector<Ptr<Texture>> m_textures;
 	};
 }

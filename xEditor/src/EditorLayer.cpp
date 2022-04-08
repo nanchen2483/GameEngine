@@ -474,6 +474,12 @@ namespace Engine
 
 		if (!filepath.empty())
 		{
+			std::filesystem::path extension = std::filesystem::path(filepath).extension();
+			if (extension != ".xengine")
+			{
+				filepath += ".xengine";
+			}
+
 			SceneSerializer serializer(m_activeScene);
 			serializer.Serialize(filepath);
 		}

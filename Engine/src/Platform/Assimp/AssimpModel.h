@@ -9,6 +9,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <string>
+#include <filesystem>
 
 namespace Engine
 {
@@ -18,7 +19,7 @@ namespace Engine
 		AssimpModel(std::string const& path);
 		AssimpModel(std::string const& path, bool gamma);
 		AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap);
-		virtual std::string& GetPath() override { return m_path; }
+		virtual std::string& GetPath() override { return m_path.string(); }
 		virtual void UpdateAnimation(float deltaTime) override;
 		virtual std::vector<glm::mat4> GetPoseTransforms() override { return m_transforms; }
 		virtual bool IsAnimationModel() override { return m_includeAnimation; };
@@ -33,9 +34,9 @@ namespace Engine
 		void CalculateBoneTransform(const Ptr<AssimpNode>& node, glm::mat4 parentTransform);
 
 	private:
-		std::string m_path;
-		std::string m_directory;
-		bool m_gammaCorrection;
+		const std::filesystem::path m_path;
+		const std::filesystem::path m_directory = m_path.parent_path();
+		const bool m_gammaCorrection;
 		std::vector<AssimpMesh> m_meshes;
 		TextureMap* m_textureMap;
 
@@ -47,6 +48,6 @@ namespace Engine
 		float m_animationTime = 0.0f;
 
 		// Editor-only
-		int m_entityId;
+		const int m_entityId;
 	};
 }

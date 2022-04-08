@@ -8,9 +8,8 @@
 namespace Engine
 {
 	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::vector<Ptr<Texture>> textures)
-		: m_textures(textures)
+		: m_textures(textures), m_vertexArray(VertexArray::Create())
 	{
-		m_vertexArray = VertexArray::Create();
 		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(&vertices[0], vertices.size());
 		vertexBuffer->SetLayout(BufferLayout
 			{

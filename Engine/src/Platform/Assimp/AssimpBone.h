@@ -75,8 +75,8 @@ namespace Engine
 		std::vector<KeyScale> m_scales;
 		int m_numScalings;
 
-		int m_id;
-		std::string m_name;
+		const int m_id;
+		const std::string m_name;
 		glm::mat4 m_offset = glm::mat4();
 	};
 

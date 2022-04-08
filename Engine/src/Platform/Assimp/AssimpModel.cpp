@@ -45,7 +45,6 @@ namespace Engine
 			return;
 		}
 
-		m_directory = path.substr(0, path.find_last_of('\\'));
 		if (scene->mNumAnimations)
 		{
 			m_includeAnimation = true;
@@ -151,7 +150,7 @@ namespace Engine
 		{
 			aiString filename;
 			material->GetTexture(type, 0, &filename);
-			std::string path = this->m_directory + '/' + filename.C_Str();
+			std::string path = (this->m_directory /+ filename.C_Str()).string();
 			Ptr<Texture> materialTexture = (*m_textureMap)[path];
 			if (materialTexture == nullptr)
 			{
