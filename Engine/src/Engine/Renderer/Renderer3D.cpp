@@ -39,21 +39,7 @@ namespace Engine
 		s_data.vertexArray = VertexArray::Create();
 
 		s_data.vertexBuffer = VertexBuffer::Create(Renderer3DData::MAX_VERTICES * sizeof(Vertex));
-		s_data.vertexBuffer->SetLayout(BufferLayout
-		{
-			{ ShaderDataType::Float3,	ShaderDataName::Position },
-			{ ShaderDataType::Float3,	ShaderDataName::Normal },
-			{ ShaderDataType::Float4,	ShaderDataName::Color },
-			{ ShaderDataType::Float2,	ShaderDataName::TexCoord },
-			{ ShaderDataType::Float3,	ShaderDataName::Material },
-			{ ShaderDataType::Float3,	ShaderDataName::Tangent },
-			{ ShaderDataType::Float3,	ShaderDataName::Bitangent },
-			{ ShaderDataType::Float4,	ShaderDataName::Bone1 },
-			{ ShaderDataType::Float4,	ShaderDataName::Bone2 },
-			{ ShaderDataType::Int4,		ShaderDataName::BoneIds },
-			{ ShaderDataType::Float4,	ShaderDataName::Weights },
-			{ ShaderDataType::Int,		ShaderDataName::EntityId }
-		});
+		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 
 		uint32_t* indices = new uint32_t[Renderer3DData::MAX_INDICES];
