@@ -17,10 +17,15 @@ layout(location = 11) in int aEntityId;
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
 
+layout (std140, binding = 0) uniform CameraBlock
+{
+    mat4 viewProjection;
+	vec3 viewPosition;
+} uCamera;
+
 uniform bool uEnableAnimation;
 uniform bool uUseModel;
 uniform mat4 uModel;
-uniform mat4 uViewProjection;
 uniform mat4 uFinalBonesMatrices[MAX_BONES];
 
 out Vertex
@@ -46,7 +51,7 @@ void main()
 	vertex.material = aMaterial;
 	vertex.entityId = aEntityId;
 	
-	gl_Position = uViewProjection * position;
+	gl_Position = uCamera.viewProjection * position;
 }
 
 vec4 CalcPosition()
@@ -91,6 +96,22 @@ vec4 CalcPosition()
 layout(location = 0) out vec4 FragColor;
 layout(location = 1) out int EntityId;
 
+layout (std140, binding = 0) uniform CameraBlock
+{
+    mat4 viewProjection;
+	vec3 viewPosition;
+} uCamera;
+
+layout (std140, binding = 1) uniform DirLightBlock
+{
+	vec3 direction;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+} uDirLight;
+
+uniform sampler2D uTextures[32];
+
 struct Material
 {
 	vec3 diffuse;
@@ -98,18 +119,6 @@ struct Material
 	float shininess;
 	vec4 color;
 } material; 
-
-struct DirLight
-{
-	vec3 direction;
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
-};
-
-uniform vec3 uViewPos;
-uniform DirLight uDirLight;
-uniform sampler2D uTextures[32];
 
 in Vertex
 {
@@ -122,18 +131,18 @@ in Vertex
 } vertex;
 
 void SetupMaterial();
-vec3 CalcDirectionalLight(Material material, DirLight light, vec3 normal, vec3 viewDir);
+vec3 CalcDirectionalLight(vec3 normal, vec3 viewDir);
 
 void main()
 {
 	// Properties
 	vec3 normal = normalize(vertex.normal);
-	vec3 viewDir = normalize(uViewPos - vertex.fragPos);
+	vec3 viewDir = normalize(uCamera.viewPosition - vertex.fragPos);
 
 	SetupMaterial();
 
-	vec3 result = CalcDirectionalLight(material, uDirLight, normal, viewDir);
-	FragColor = vec4(result, 1.0) * material.color;
+	vec3 result = CalcDirectionalLight(normal, viewDir);
+	FragColor = vec4(result, 1.0f) * material.color;
 	EntityId = vertex.entityId;
 }
 
@@ -157,22 +166,22 @@ void SetupMaterial()
 	}
 }
 
-vec3 CalcDirectionalLight(Material material, DirLight light, vec3 normal, vec3 viewDir)
+vec3 CalcDirectionalLight(vec3 normal, vec3 viewDir)
 {
 	// Ambient
-	vec3 ambient = light.ambient * material.diffuse;
+	vec3 ambient = uDirLight.ambient * material.diffuse;
 	
 	// Diffuse
-	vec3 lightDir = normalize(-light.direction);
+	vec3 lightDir = normalize(-uDirLight.direction);
 	float diff = max(dot(normal, lightDir), 0.0);
-	vec3 diffuse = light.diffuse * diff * material.diffuse;  
+	vec3 diffuse = uDirLight.diffuse * diff * material.diffuse;  
 
 	// Specular
 	if (vertex.material.y != -1)
 	{
 		vec3 halfwayDir = normalize(lightDir + viewDir);
 		float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
-		vec3 specular = light.specular * spec * material.specular;
+		vec3 specular = uDirLight.specular * spec * material.specular;
 
 		return ambient + diffuse + specular;
 	}

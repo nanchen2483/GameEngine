@@ -32,4 +32,17 @@ namespace Engine
 
 		static Ptr<IndexBuffer> Create(uint32_t* indices, uint32_t numOfIndices);
 	};
+
+	class UniformBuffer
+	{
+	public:
+		virtual ~UniformBuffer() {}
+
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
+		virtual void SetData(const std::vector<const void*>& data) = 0;
+		
+		static Ptr<UniformBuffer> Create(uint32_t index, const BufferLayout layout);
+
+	};
 }

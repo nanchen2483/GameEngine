@@ -17,7 +17,6 @@ namespace Engine
 
 		virtual const BufferLayout GetLayout() const override { return m_layout; };
 		virtual void SetLayout(const BufferLayout layout) override { m_layout = layout; };
-
 		virtual void SetData(const void* data, uint32_t size) override;
 
 	private:
@@ -35,6 +34,19 @@ namespace Engine
 		virtual uint32_t GetNumOfIndices() const { return m_numOfIndices; }
 	private:
 		uint32_t m_rendererId;
-		uint32_t m_numOfIndices;
+		const uint32_t m_numOfIndices;
+	};
+
+	class OpenGLUniformBuffer : public UniformBuffer
+	{
+	public:
+		OpenGLUniformBuffer(uint32_t index, const BufferLayout layout);
+		~OpenGLUniformBuffer();
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
+		virtual void SetData(const std::vector<const void*>& data) override;
+	private:
+		uint32_t m_rendererId;
+		BufferLayout m_layout;
 	};
 }

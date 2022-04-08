@@ -53,4 +53,16 @@ namespace Engine
 		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
 		return nullptr;
 	}
+	
+	Ptr<UniformBuffer> UniformBuffer::Create(uint32_t index, const BufferLayout layout)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLUniformBuffer>(index, layout);
+		}
+
+		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		return nullptr;
+	}
 }

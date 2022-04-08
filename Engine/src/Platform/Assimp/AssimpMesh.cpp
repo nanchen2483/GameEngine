@@ -10,9 +10,7 @@ namespace Engine
 	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::vector<Ptr<Texture>> textures)
 		: m_textures(textures), m_vertexArray(VertexArray::Create())
 	{
-		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(&vertices[0], vertices.size());
-		vertexBuffer->SetLayout(Vertex::GetBufferLayout());
-		m_vertexArray->AddVertexBuffer(vertexBuffer);
+		m_vertexArray->AddVertexBuffer(VertexBuffer::Create(&vertices[0], vertices.size()));
 		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(&indices[0], indices.size()));
 	}
 

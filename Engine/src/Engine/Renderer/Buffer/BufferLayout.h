@@ -18,23 +18,6 @@ namespace Engine
 		Bool
 	};
 
-	enum class ShaderDataName
-	{
-		None = 0,
-		Position,
-		Normal,
-		Color,
-		TexCoord,
-		Material,
-		Tangent,
-		Bitangent,
-		Bone1,
-		Bone2,
-		BoneIds,
-		Weights,
-		EntityId
-	};
-
 	static uint32_t ShaderDataTypeSize(ShaderDataType type)
 	{
 		switch (type)
@@ -58,14 +41,13 @@ namespace Engine
 
 	struct BufferElement
 	{
-		ShaderDataName name;
 		ShaderDataType type;
 		uint32_t size;
 		uint32_t offset;
 		bool normalized;
 
-		BufferElement(ShaderDataType type, ShaderDataName name, bool normalized = false)
-			: name(name), type(type), size(ShaderDataTypeSize(type)), offset(0), normalized(normalized)
+		BufferElement(ShaderDataType type, bool normalized = false)
+			: type(type), size(ShaderDataTypeSize(type)), offset(0), normalized(normalized)
 		{
 		}
 
@@ -103,21 +85,22 @@ namespace Engine
 		}
 
 		inline uint32_t GetStride() const { return m_stride; }
+		inline uint32_t GetNumOfElements() const { return m_elements.size(); }
 		inline const std::vector<BufferElement> GetElements() const { return m_elements; }
 
 		std::vector<BufferElement>::iterator begin() { return m_elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_elements.end(); }
 		std::vector<BufferElement>::const_iterator begin() const { return m_elements.begin(); }
 		std::vector<BufferElement>::const_iterator end() const { return m_elements.end(); }
+
+		const BufferElement& operator[] (const uint32_t index) { return m_elements[index]; }
 	private:
 		void CalculateOffset()
 		{
-			uint32_t offset = 0;
 			m_stride = 0;
 			for (Engine::BufferElement& element : m_elements)
 			{
-				element.offset = offset;
-				offset += element.size;
+				element.offset = m_stride;
 				m_stride += element.size;
 			}
 		}

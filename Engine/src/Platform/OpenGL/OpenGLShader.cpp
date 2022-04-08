@@ -251,5 +251,10 @@ namespace Engine
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 	}
 
+	void OpenGLShader::SetBlockBinding(const std::string& name, const int value)
+	{
+		GLuint blockIndex = glGetUniformBlockIndex(m_rendererId, name.c_str());
+		glUniformBlockBinding(m_rendererId, blockIndex, value);
+	}
 }
 

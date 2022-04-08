@@ -38,18 +38,18 @@ namespace Engine
 		{
 			return BufferLayout
 			{
-				{ ShaderDataType::Float3,	ShaderDataName::Position },
-				{ ShaderDataType::Float3,	ShaderDataName::Normal },
-				{ ShaderDataType::Float4,	ShaderDataName::Color },
-				{ ShaderDataType::Float2,	ShaderDataName::TexCoord },
-				{ ShaderDataType::Float3,	ShaderDataName::Material },
-				{ ShaderDataType::Float3,	ShaderDataName::Tangent },
-				{ ShaderDataType::Float3,	ShaderDataName::Bitangent },
-				{ ShaderDataType::Float4,	ShaderDataName::Bone1 },
-				{ ShaderDataType::Float4,	ShaderDataName::Bone2 },
-				{ ShaderDataType::Int4,		ShaderDataName::BoneIds },
-				{ ShaderDataType::Float4,	ShaderDataName::Weights },
-				{ ShaderDataType::Int,		ShaderDataName::EntityId }
+				{ ShaderDataType::Float3 },
+				{ ShaderDataType::Float3 },
+				{ ShaderDataType::Float4 },
+				{ ShaderDataType::Float2 },
+				{ ShaderDataType::Float3 },
+				{ ShaderDataType::Float3 },
+				{ ShaderDataType::Float3 },
+				{ ShaderDataType::Float4 },
+				{ ShaderDataType::Float4 },
+				{ ShaderDataType::Int4 },
+				{ ShaderDataType::Float4 },
+				{ ShaderDataType::Int }
 			};
 		}
 	};

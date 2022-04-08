@@ -26,6 +26,8 @@ namespace Engine
 		virtual void SetFloat4(const std::string& name, const glm::vec4& value) override;
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) override;
 
+		virtual void SetBlockBinding(const std::string& name, const int value) override;
+
 		inline virtual const std::string& GetName() const override { return m_shaderName; };
 	private:
 		std::string ReadFile(const std::string& path);

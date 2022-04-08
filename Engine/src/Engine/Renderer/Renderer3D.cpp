@@ -1,6 +1,8 @@
 #include "enginepch.h"
 #include "Renderer3D.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace Engine
 {
 	struct Renderer3DData
@@ -15,6 +17,8 @@ namespace Engine
 
 		Ptr<VertexArray> vertexArray;
 		Ptr<VertexBuffer> vertexBuffer;
+		Ptr<UniformBuffer> cameraUniformBuffer;
+		Ptr<UniformBuffer> dirLightUniformBuffer;
 		Ptr<Shader> shader;
 		Ptr<Texture2D> whiteTexture;
 
@@ -105,9 +109,9 @@ namespace Engine
 
 		s_data.shader = Shader::Create("asserts/shaders/Default.glsl");
 		s_data.shader->Bind();
-		s_data.shader->SetIntArray("uTextures", samplers, Renderer3DData::MAX_TEXTURE_SLOTS);
 		s_data.textureSlots[0] = s_data.whiteTexture;
-
+		s_data.shader->SetIntArray("uTextures", samplers, Renderer3DData::MAX_TEXTURE_SLOTS);
+		
 		s_data.vertexPosition[0] = { -0.5, -0.5f,  0.5f, 1.0f };
 		s_data.vertexPosition[1] = {  0.5, -0.5f,  0.5f, 1.0f };
 		s_data.vertexPosition[2] = {  0.5,  0.5f,  0.5f, 1.0f };
@@ -126,10 +130,24 @@ namespace Engine
 		s_data.textureCoords[6] = { 0.0f, 1.0f };
 		s_data.textureCoords[7] = { 1.0f, 1.0f };
 
-		s_data.shader->SetFloat3("uDirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-		s_data.shader->SetFloat3("uDirLight.ambient", glm::vec3(0.05f));
-		s_data.shader->SetFloat3("uDirLight.diffuse", glm::vec3(0.4f));
-		s_data.shader->SetFloat3("uDirLight.specular", glm::vec3(0.5f));
+		s_data.cameraUniformBuffer = UniformBuffer::Create(0, {
+			{ ShaderDataType::Mat4 },
+			{ ShaderDataType::Float4 },
+		});
+
+		s_data.dirLightUniformBuffer = UniformBuffer::Create(1, {
+			{ ShaderDataType::Float4 },
+			{ ShaderDataType::Float4 },
+			{ ShaderDataType::Float4 },
+			{ ShaderDataType::Float4 },
+		});
+
+		s_data.dirLightUniformBuffer->SetData({
+			glm::value_ptr(glm::vec3(-0.2f, -1.0f, -0.3f)),
+			glm::value_ptr(glm::vec3(0.05f)),
+			glm::value_ptr(glm::vec3(0.4f)),
+			glm::value_ptr(glm::vec3(0.5f)),
+		});
 	}
 	
 	void Renderer3D::Shutdown()
@@ -146,8 +164,7 @@ namespace Engine
 		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
 
 		s_data.shader->Bind();
-		s_data.shader->SetMat4("uViewProjection", camera.GetViewProjection());
-		s_data.shader->SetFloat3("uViewPos", camera.GetPosition());
+		s_data.cameraUniformBuffer->SetData({ &camera.GetViewProjection(), &camera.GetPosition() });
 		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}
@@ -160,8 +177,7 @@ namespace Engine
 		const glm::mat4& viewProjection = camera.GetProjection() * glm::inverse(transform.GetTransform());
 
 		s_data.shader->Bind();
-		s_data.shader->SetMat4("uViewProjection", viewProjection);
-		s_data.shader->SetFloat3("uViewPos", transform.translation);
+		s_data.cameraUniformBuffer->SetData({ &viewProjection, &transform.translation });
 		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}
