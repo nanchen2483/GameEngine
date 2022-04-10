@@ -38,23 +38,23 @@ out Vertex
 	flat int entityId;
 } vertex;
 
-vec4 CalcPosition();
+vec4 CalcWorldPosition();
 
 void main()
 {
-	vec4 position = CalcPosition();
+	vec4 worldPosition = CalcWorldPosition();
 
-	vertex.fragPos = vec3(position);
-	vertex.normal = aNormal;
+	vertex.fragPos = vec3(worldPosition);
+	vertex.normal = uUseModel ? transpose(inverse(mat3(uModel))) * aNormal : aNormal;
 	vertex.color = aColor;
 	vertex.texCoord = aTexCoord;
 	vertex.material = aMaterial;
 	vertex.entityId = aEntityId;
 	
-	gl_Position = uCamera.viewProjection * position;
+	gl_Position = uCamera.viewProjection * worldPosition;
 }
 
-vec4 CalcPosition()
+vec4 CalcWorldPosition()
 {
 	vec4 finalPosition = vec4(0.0f);
 	if (uEnableAnimation)
@@ -93,8 +93,8 @@ vec4 CalcPosition()
 #type fragment
 #version 450 core
 
-layout(location = 0) out vec4 FragColor;
-layout(location = 1) out int EntityId;
+layout(location = 0) out vec4 aFragColor;
+layout(location = 1) out int aEntityId;
 
 layout (std140, binding = 0) uniform CameraBlock
 {
@@ -142,8 +142,8 @@ void main()
 
 	vec3 result = CalcDirectionalLight(material, normal, viewDir);
 
-	FragColor = vec4(result, 1.0f) * material.color;
-	EntityId = vertex.entityId;
+	aFragColor = vec4(result, 1.0f) * material.color;
+	aEntityId = vertex.entityId;
 }
 
 Material SetupMaterial()

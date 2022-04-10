@@ -222,11 +222,12 @@ namespace Engine
 			DrawAndReset();
 		}
 
+		glm::mat3 inverseTransform = glm::transpose(glm::inverse(glm::mat3(transform)));
 		uint32_t currentTextureIndex = GetTextureIndex(texture);
 		for (size_t i = 0; i < Renderer3DData::NUM_OF_VERTICES; i++)
 		{
 			s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[i];
-			s_data.vertexBufferPtr->normal = s_data.vertexPosition[i];
+			s_data.vertexBufferPtr->normal = inverseTransform * s_data.vertexPosition[i];
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = s_data.textureCoords[i];
 			s_data.vertexBufferPtr->material = glm::vec3(currentTextureIndex, -1, 0);
