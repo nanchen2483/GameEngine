@@ -1,5 +1,4 @@
 #pragma once
-#include <cstdint>
 
 #include "Engine/Renderer/Vertex/Vertex.h"
 
@@ -43,6 +42,5 @@ namespace Engine
 		virtual void SetData(const std::vector<const void*>& data) = 0;
 		
 		static Ptr<UniformBuffer> Create(uint32_t index, const BufferLayout layout);
-
 	};
 }

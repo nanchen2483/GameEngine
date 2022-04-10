@@ -118,7 +118,7 @@ struct Material
 	vec3 specular;
 	float shininess;
 	vec4 color;
-} material; 
+};
 
 in Vertex
 {
@@ -130,24 +130,25 @@ in Vertex
 	flat int entityId;
 } vertex;
 
-void SetupMaterial();
-vec3 CalcDirectionalLight(vec3 normal, vec3 viewDir);
+Material SetupMaterial();
+vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir);
 
 void main()
 {
 	// Properties
 	vec3 normal = normalize(vertex.normal);
 	vec3 viewDir = normalize(uCamera.viewPosition - vertex.fragPos);
+	Material material = SetupMaterial();
 
-	SetupMaterial();
+	vec3 result = CalcDirectionalLight(material, normal, viewDir);
 
-	vec3 result = CalcDirectionalLight(normal, viewDir);
 	FragColor = vec4(result, 1.0f) * material.color;
 	EntityId = vertex.entityId;
 }
 
-void SetupMaterial()
+Material SetupMaterial()
 {
+	Material material;
 	if (vertex.material.x != -1)
 	{
 		material.diffuse = texture(uTextures[int(round(vertex.material.x))], vertex.texCoord).rgb;
@@ -164,9 +165,11 @@ void SetupMaterial()
 		material.specular = texture(uTextures[int(round(vertex.material.y))], vertex.texCoord).rgb;
 		material.shininess = vertex.material.z;
 	}
+
+	return material;
 }
 
-vec3 CalcDirectionalLight(vec3 normal, vec3 viewDir)
+vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir)
 {
 	// Ambient
 	vec3 ambient = uDirLight.ambient * material.diffuse;

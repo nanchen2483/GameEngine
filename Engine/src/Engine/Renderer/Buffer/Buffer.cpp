@@ -2,7 +2,9 @@
 #include "Buffer.h"
 
 #include "Engine/Renderer/Renderer.h"
-#include "Platform/OpenGL/OpenGLBuffer.h"
+#include "Platform/OpenGL/Buffer/OpenGLIndexBuffer.h"
+#include "Platform/OpenGL/Buffer/OpenGLUniformBuffer.h"
+#include "Platform/OpenGL/Buffer/OpenGLVertexBuffer.h"
 
 namespace Engine
 {
