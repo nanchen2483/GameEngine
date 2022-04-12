@@ -57,19 +57,25 @@ namespace Engine
 
 			if (ImGui::BeginPopup("AddComponent"))
 			{
-				if (ImGui::MenuItem("Camera"))
+				if (!m_selectionContext.HasComponent<CameraComponent>() && ImGui::MenuItem("Camera"))
 				{
 					m_selectionContext.AddComponent<CameraComponent>();
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (ImGui::MenuItem("Sprite Renderer"))
+				if (!m_selectionContext.HasComponent<LightComponent>() && ImGui::MenuItem("Light"))
+				{
+					m_selectionContext.AddComponent<LightComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+				if (!m_selectionContext.HasComponent<SpriteRendererComponent>() && ImGui::MenuItem("Sprite Renderer"))
 				{
 					m_selectionContext.AddComponent<SpriteRendererComponent>();
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (ImGui::MenuItem("Model"))
+				if (!m_selectionContext.HasComponent<ModelComponent>() && ImGui::MenuItem("Model"))
 				{
 					m_selectionContext.AddComponent<ModelComponent>();
 					ImGui::CloseCurrentPopup();
@@ -121,6 +127,39 @@ namespace Engine
 				m_selectionContext = {};
 			}
 		}
+	}
+
+	static void DrawFloatControl(const std::string& label, float& value, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f)
+	{
+		ImGui::PushID(label.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, 100.0f);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushMultiItemsWidths(1, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.4f, 0.4f, 1.0f));
+		if (ImGui::Button("V", buttonSize))
+		{
+			value = resetValue;
+		}
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##V", &value, speed, min, max, "%.2f");
+
+		ImGui::PopStyleVar();
+
+		ImGui::Columns(1);
+
+		ImGui::PopID();
 	}
 
 	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
@@ -240,7 +279,6 @@ namespace Engine
 			{
 				m_selectionContext.RemoveComponent<TransformComponent>();
 			}
-
 		}
 
 		if (entity.HasComponent<CameraComponent>())
@@ -320,6 +358,48 @@ namespace Engine
 				}
 
 				ImGui::TreePop();
+			}
+		}
+
+		if (entity.HasComponent<LightComponent>())
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
+			bool open = ImGui::TreeNodeEx((void*)typeid(LightComponent).hash_code(), treeNodeFlags, "Light");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 35.0f);
+			if (ImGui::Button("+", ImVec2(20, 20)))
+			{
+				ImGui::OpenPopup("ComponentSettings");
+			}
+			ImGui::PopStyleVar();
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove component"))
+				{
+					removeComponent = true;
+				}
+
+				ImGui::EndPopup();
+			}
+
+			if (open)
+			{
+				LightComponent& component = entity.GetComponent<LightComponent>();
+				DrawFloatControl("Constant", component.constant, 1.0f, 0.01f, 0.0f, 1.0f);
+				DrawFloatControl("Linear", component.linear, 0.9f, 0.001f, 0.001f, 1.0f);
+				DrawFloatControl("Quadratic", component.quadratic, 0.03f, 0.001f, 0.01f, 2.0f);
+				ImGui::NewLine();
+				DrawVec3Control("Ambient", component.ambient);
+				DrawVec3Control("Diffuse", component.diffuse);
+				DrawVec3Control("Specular", component.specular);
+
+				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+			{
+				m_selectionContext.RemoveComponent<LightComponent>();
 			}
 		}
 

@@ -110,7 +110,21 @@ layout (std140, binding = 1) uniform DirLightBlock
 	vec3 specular;
 } uDirLight;
 
+layout (std140, binding = 2) uniform PointLightBlock
+{
+    vec3 position;
+    
+    float constant;
+    float linear;
+    float quadratic;
+	
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+} uPointLight;
+
 uniform sampler2D uTextures[32];
+uniform bool uHasPointLight;
 
 struct Material
 {
@@ -132,6 +146,7 @@ in Vertex
 
 Material SetupMaterial();
 vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir);
+vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir);
 
 void main()
 {
@@ -141,6 +156,10 @@ void main()
 	Material material = SetupMaterial();
 
 	vec3 result = CalcDirectionalLight(material, normal, viewDir);
+	if (uHasPointLight)
+	{
+		result += CalcPointLight(material, normal, viewDir);
+	}
 
 	aFragColor = vec4(result, 1.0f) * material.color;
 	aEntityId = vertex.entityId;
@@ -186,6 +205,33 @@ vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir)
 		float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
 		vec3 specular = uDirLight.specular * spec * material.specular;
 
+		return ambient + diffuse + specular;
+	}
+
+	return ambient + diffuse;
+}
+
+vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir)
+{
+    // Attenuation
+    float distance = length(uPointLight.position - vertex.fragPos);
+    float attenuation = 1.0 / (uPointLight.constant + uPointLight.linear * distance + uPointLight.quadratic * (distance * distance));    
+
+	// Ambient
+    vec3 ambient = uPointLight.ambient * material.diffuse * attenuation;
+
+    // Diffuse
+    vec3 lightDir = normalize(uPointLight.position - vertex.fragPos);
+    float diff = max(dot(normal, lightDir), 0.0);
+    vec3 diffuse = uPointLight.diffuse * diff * material.diffuse * attenuation;
+    
+	// Specular
+	if (vertex.material.y != -1)
+	{
+		vec3 reflectDir = reflect(-lightDir, normal);
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+		vec3 specular = uPointLight.specular * spec * material.specular * attenuation;
+		
 		return ambient + diffuse + specular;
 	}
 

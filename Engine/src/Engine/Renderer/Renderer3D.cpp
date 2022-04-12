@@ -19,6 +19,7 @@ namespace Engine
 		Ptr<VertexBuffer> vertexBuffer;
 		Ptr<UniformBuffer> cameraUniformBuffer;
 		Ptr<UniformBuffer> dirLightUniformBuffer;
+		Ptr<UniformBuffer> pointLightUniformBuffer;
 		Ptr<Shader> shader;
 		Ptr<Texture2D> whiteTexture;
 
@@ -131,16 +132,22 @@ namespace Engine
 		s_data.textureCoords[7] = { 1.0f, 1.0f };
 
 		s_data.cameraUniformBuffer = UniformBuffer::Create(0, {
-			{ ShaderDataType::Mat4 },
-			{ ShaderDataType::Float4 },
-		});
+				BufferLayoutType::Std140,
+				{
+					{ ShaderDataType::Mat4 },
+					{ ShaderDataType::Float3 },
+				}
+			});
 
 		s_data.dirLightUniformBuffer = UniformBuffer::Create(1, {
-			{ ShaderDataType::Float4 },
-			{ ShaderDataType::Float4 },
-			{ ShaderDataType::Float4 },
-			{ ShaderDataType::Float4 },
-		});
+				BufferLayoutType::Std140,
+				{
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+				}
+			});
 
 		s_data.dirLightUniformBuffer->SetData({
 			glm::value_ptr(glm::vec3(-0.2f, -1.0f, -0.3f)),
@@ -148,6 +155,19 @@ namespace Engine
 			glm::value_ptr(glm::vec3(0.4f)),
 			glm::value_ptr(glm::vec3(0.5f)),
 		});
+
+		s_data.pointLightUniformBuffer = UniformBuffer::Create(2, {
+				BufferLayoutType::Std140,
+				{
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float },
+					{ ShaderDataType::Float },
+					{ ShaderDataType::Float },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+				}
+			});
 	}
 	
 	void Renderer3D::Shutdown()
@@ -158,18 +178,19 @@ namespace Engine
 	{
 	}
 	
-	void Renderer3D::BeginScene(const EditorCamera& camera)
+	void Renderer3D::BeginScene(const EditorCamera& camera, uint32_t numOfPointLights)
 	{
 		ENGINE_PROFILE_FUNCTION();
 		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
 
 		s_data.shader->Bind();
+		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
 		s_data.cameraUniformBuffer->SetData({ &camera.GetViewProjection(), &camera.GetPosition() });
 		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}
 	
-	void Renderer3D::BeginScene(const Camera& camera, const TransformComponent& transform)
+	void Renderer3D::BeginScene(const Camera& camera, const TransformComponent& transform, uint32_t numOfPointLights)
 	{
 		ENGINE_PROFILE_FUNCTION();
 		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
@@ -177,6 +198,7 @@ namespace Engine
 		const glm::mat4& viewProjection = camera.GetProjection() * glm::inverse(transform.GetTransform());
 
 		s_data.shader->Bind();
+		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
 		s_data.cameraUniformBuffer->SetData({ &viewProjection, &transform.translation });
 		s_data.vertexArray->Bind();
 		ResetRendererData();
@@ -212,6 +234,13 @@ namespace Engine
 	{
 		DrawCube(transform, sprite.texture, sprite.color, entityId);
 	}
+
+	void Renderer3D::DrawLight(const TransformComponent& transform, LightComponent& light, int entityId)
+	{
+		light.position = transform.translation;
+		s_data.pointLightUniformBuffer->SetData(light.GetData());
+		DrawCube(transform.GetTransform(), nullptr, glm::vec4(1.0f), entityId);
+	}
 	
 	void Renderer3D::DrawCube(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color, int entityId)
 	{
@@ -238,10 +267,12 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& transform, ModelComponent& component)
+	void Renderer3D::DrawModel(const glm::mat4& transform, ModelComponent& component, const float deltaTime)
 	{
 		if (component.model != nullptr)
 		{
+			component.model->UpdateAnimation(deltaTime);
+
 			s_data.shader->SetBool("uUseModel", true);
 			s_data.shader->SetMat4("uModel", transform);
 			s_data.shader->SetBool("uEnableAnimation", component.model->IsAnimationModel());

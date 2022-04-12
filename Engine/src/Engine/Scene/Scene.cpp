@@ -32,44 +32,45 @@ namespace Engine
 
 	void Scene::OnUpdateEditor(TimeStep time, EditorCamera& camera)
 	{
-		Renderer3D::BeginScene(camera);
+		auto lightView = m_registry.view<TransformComponent, LightComponent>();
+		Renderer3D::BeginScene(camera, lightView.size_hint());
 
-		auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (entt::entity entity : group)
-		{
-			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			Renderer3D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-		}
+		m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
+			.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& sprite)
+				{
+					Renderer3D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				});
+
+		lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
+				{
+					Renderer3D::DrawLight(transform, light, (int)entity);
+				});
 
 		Renderer3D::EndScene();
 
-		auto modelGroup = m_registry.view<TransformComponent, ModelComponent>();
-		for (entt::entity entity : modelGroup)
-		{
-			auto [transform, modelComponent] = modelGroup.get<TransformComponent, ModelComponent>(entity);
-			if (modelComponent.model != nullptr)
-			{
-				modelComponent.model->UpdateAnimation(time);
-			}
-
-			Renderer3D::DrawModel(transform.GetTransform(), modelComponent);
-		}
+		m_registry.view<TransformComponent, ModelComponent>()
+			.each([=](TransformComponent& transform, ModelComponent& model)
+				{
+					Renderer3D::DrawModel(transform.GetTransform(), model, time);
+				});
 	}
 
 	void Scene::OnUpdateRuntime(TimeStep time)
 	{
 		// Script
 		{
-			m_registry.view<NativeScriptComponent>().each([=](entt::entity entity, NativeScriptComponent& nsc) {
-				if (!nsc.instance)
-				{
-					nsc.instance = nsc.InstantiateScript();
-					nsc.instance->m_entity = Entity{ entity, this };
-					nsc.instance->OnCreate();
-				}
+			m_registry.view<NativeScriptComponent>()
+				.each([=](entt::entity entity, NativeScriptComponent& nsc)
+					{
+						if (!nsc.instance)
+						{
+							nsc.instance = nsc.InstantiateScript();
+							nsc.instance->m_entity = Entity{ entity, this };
+							nsc.instance->OnCreate();
+						}
 
-				nsc.instance->OnUpdate(time);
-			});
+						nsc.instance->OnUpdate(time);
+					});
 		}
 
 		Camera* mainCamera = nullptr;
@@ -90,28 +91,27 @@ namespace Engine
 
 		if (mainCamera != nullptr)
 		{
-			Renderer3D::BeginScene(*mainCamera, *mainTransform);
+			auto lightView = m_registry.view<TransformComponent, LightComponent>();
+			Renderer3D::BeginScene(*mainCamera, *mainTransform, lightView.size_hint());
 
-			auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-			for (entt::entity entity : group)
-			{
-				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer3D::DrawSprite(transform.GetTransform(), sprite);
-			}
+			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
+				.each([](TransformComponent& transform, SpriteRendererComponent& sprite)
+					{
+						Renderer3D::DrawSprite(transform.GetTransform(), sprite);
+					});
+
+			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
+					{
+						Renderer3D::DrawLight(transform, light, (int)entity);
+					});
 
 			Renderer3D::EndScene();
 
-			auto modelGroup = m_registry.view<TransformComponent, ModelComponent>();
-			for (entt::entity entity : modelGroup)
-			{
-				auto [transform, modelComponent] = modelGroup.get<TransformComponent, ModelComponent>(entity);
-				if (modelComponent.model != nullptr)
-				{
-					modelComponent.model->UpdateAnimation(time);
-				}
-
-				Renderer3D::DrawModel(transform.GetTransform(), modelComponent);
-			}
+			m_registry.view<TransformComponent, ModelComponent>()
+				.each([=](TransformComponent& transform, ModelComponent& model)
+					{
+						Renderer3D::DrawModel(transform.GetTransform(), model, time);
+					});
 		}
 
 	}
@@ -174,6 +174,11 @@ namespace Engine
 
 	template<>
 	void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<LightComponent>(Entity entity, LightComponent& component)
 	{
 	}
 

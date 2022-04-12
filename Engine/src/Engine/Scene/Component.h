@@ -25,9 +25,9 @@ namespace Engine
 
 	struct TransformComponent
 	{
-		glm::vec3 translation = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 rotation = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 scale = { 1.0f, 1.0f, 1.0f };
+		glm::vec3 translation = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent& transform) = default;
@@ -39,6 +39,41 @@ namespace Engine
 			return glm::translate(glm::mat4(1.0f), translation)
 				* glm::toMat4(glm::quat(rotation))
 				* glm::scale(glm::mat4(1.0f), scale);
+		}
+	};
+
+	struct CameraComponent
+	{
+		SceneCamera camera;
+		bool primary;
+		bool fixedAspectRatio = false;
+
+		CameraComponent(bool isPrimary = true)
+			: primary(isPrimary) {}
+		CameraComponent(const CameraComponent& transform) = default;
+	};
+
+	struct LightComponent
+	{
+		float constant = 1.0f;
+		float linear = 0.1f;
+		float quadratic = 0.03f;
+
+		glm::vec3 position = glm::vec3(1.0f);
+		glm::vec3 ambient = glm::vec3(1.0f);
+		glm::vec3 diffuse = glm::vec3(1.0f);
+		glm::vec3 specular = glm::vec3(1.0f);
+
+		LightComponent() = default;
+		LightComponent(const LightComponent& renderer) = default;
+		LightComponent(const float constant, const float linear, const float quadratic,
+					   const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
+			: constant(constant), linear(linear), quadratic(quadratic),
+				ambient(ambient), diffuse(diffuse), specular(specular) {}
+
+		const std::vector<const void *> GetData() const
+		{
+			return { &position, &constant, &linear, &quadratic, &ambient, &diffuse, &specular };
 		}
 	};
 
@@ -63,17 +98,6 @@ namespace Engine
 		ModelComponent(const ModelComponent& modelComponent) = default;
 		ModelComponent(const Ptr<Model>& model)
 			: model(model) {}
-	};
-
-	struct CameraComponent
-	{
-		SceneCamera camera;
-		bool primary;
-		bool fixedAspectRatio = false;
-
-		CameraComponent(bool isPrimary = true)
-			: primary(isPrimary) {}
-		CameraComponent(const CameraComponent& transform) = default;
 	};
 
 	struct NativeScriptComponent

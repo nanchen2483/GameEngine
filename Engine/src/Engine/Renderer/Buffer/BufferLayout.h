@@ -1,86 +1,19 @@
 #pragma once
 
+#include "BufferElement.h"
+#include "Engine/Util/BufferLayoutUtil.h"
+
 namespace Engine
 {
-	enum class ShaderDataType
-	{
-		None = 0,
-		Float,
-		Float2,
-		Float3,
-		Float4,
-		Mat3,
-		Mat4,
-		Int,
-		Int2,
-		Int3,
-		Int4,
-		Bool
-	};
-
-	static uint32_t ShaderDataTypeSize(ShaderDataType type)
-	{
-		switch (type)
-		{
-		case Engine::ShaderDataType::Float:		return 4;
-		case Engine::ShaderDataType::Float2:	return 4 * 2;
-		case Engine::ShaderDataType::Float3:	return 4 * 3;
-		case Engine::ShaderDataType::Float4:	return 4 * 4;
-		case Engine::ShaderDataType::Mat3:		return 4 * 3 * 3;
-		case Engine::ShaderDataType::Mat4:		return 4 * 4 * 4;
-		case Engine::ShaderDataType::Int:		return 4;
-		case Engine::ShaderDataType::Int2:		return 4 * 2;
-		case Engine::ShaderDataType::Int3:		return 4 * 3;
-		case Engine::ShaderDataType::Int4:		return 4 * 4;
-		case Engine::ShaderDataType::Bool:		return 1;
-		}
-
-		ENGINE_CORE_ASSERT(false, "Uknow ShaderDataType!");
-		return 0;
-	}
-
-	struct BufferElement
-	{
-		ShaderDataType type;
-		uint32_t size;
-		uint32_t offset;
-		bool normalized;
-
-		BufferElement(ShaderDataType type, bool normalized = false)
-			: type(type), size(ShaderDataTypeSize(type)), offset(0), normalized(normalized)
-		{
-		}
-
-		uint32_t GetComponentCount() const
-		{
-			switch (type)
-			{
-			case Engine::ShaderDataType::Float:		return 1;
-			case Engine::ShaderDataType::Float2:	return 2;
-			case Engine::ShaderDataType::Float3:	return 3;
-			case Engine::ShaderDataType::Float4:	return 4;
-			case Engine::ShaderDataType::Mat3:		return 3 * 3;
-			case Engine::ShaderDataType::Mat4:		return 4 * 4;
-			case Engine::ShaderDataType::Int:		return 1;
-			case Engine::ShaderDataType::Int2:		return 2;
-			case Engine::ShaderDataType::Int3:		return 3;
-			case Engine::ShaderDataType::Int4:		return 4;
-			case Engine::ShaderDataType::Bool:		return 1;
-			}
-
-			ENGINE_CORE_ASSERT(false, "Unknow ShaderDataType!");
-			return 0;
-		}
-	};
-
 	class BufferLayout
 	{
 	public:
 		BufferLayout() {}
 
-		BufferLayout(const std::initializer_list<BufferElement>& elements)
-			: m_elements(elements)
+		BufferLayout(const BufferLayoutType type, const std::initializer_list<BufferElement>& elements)
+			: m_type(type), m_elements(elements)
 		{
+			BufferLayoutUtil::RecalculateSize(m_type, m_elements);
 			CalculateOffset();
 		}
 
@@ -98,7 +31,7 @@ namespace Engine
 		void CalculateOffset()
 		{
 			m_stride = 0;
-			for (Engine::BufferElement& element : m_elements)
+			for (BufferElement& element : m_elements)
 			{
 				element.offset = m_stride;
 				m_stride += element.size;
@@ -107,5 +40,6 @@ namespace Engine
 	private:
 		std::vector<BufferElement> m_elements;
 		uint32_t m_stride = 0;
+		BufferLayoutType m_type = BufferLayoutType::Default;
 	};
 }

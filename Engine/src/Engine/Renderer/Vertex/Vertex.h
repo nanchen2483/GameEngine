@@ -36,21 +36,23 @@ namespace Engine
 
 		static BufferLayout GetBufferLayout()
 		{
-			return BufferLayout
-			{
-				{ ShaderDataType::Float3 },
-				{ ShaderDataType::Float3 },
-				{ ShaderDataType::Float4 },
-				{ ShaderDataType::Float2 },
-				{ ShaderDataType::Float3 },
-				{ ShaderDataType::Float3 },
-				{ ShaderDataType::Float3 },
-				{ ShaderDataType::Float4 },
-				{ ShaderDataType::Float4 },
-				{ ShaderDataType::Int4 },
-				{ ShaderDataType::Float4 },
-				{ ShaderDataType::Int }
-			};
+			return BufferLayout(
+				BufferLayoutType::Default,
+				{
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float4 },
+					{ ShaderDataType::Float2 },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float4 },
+					{ ShaderDataType::Float4 },
+					{ ShaderDataType::Int4 },
+					{ ShaderDataType::Float4 },
+					{ ShaderDataType::Int }
+				}
+			);
 		}
 	};
 }
