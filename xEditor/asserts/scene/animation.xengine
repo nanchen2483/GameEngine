@@ -2,50 +2,38 @@ Scene: Untitled
 Entities:
   - Entity: 123
     TagComponent:
-      Tag: Backpack-model
+      Tag: Light
     TransformComponent:
-      Translation: [-4, 1.5, 1.20000005]
+      Translation: [3.5, 10.3999996, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
+    LightComponent:
+      Constant: 1
+      Linear: 0.100000001
+      Quadratic: 0.0299999993
+      Ambient: [1, 1, 1]
+      Diffuse: [1, 1, 1]
+      Specular: [1, 1, 1]
+  - Entity: 123
+    TagComponent:
+      Tag: Vampire-model
+    TransformComponent:
+      Translation: [6, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [4.36239958, 4.36239958, 4.36239958]
     ModelComponent:
-      Path: asserts\models\backpack\backpack.obj
-      EnableAnimation: false
+      Path: asserts\models\vampire\dancing_vampire.dae
+      EnableAnimation: true
   - Entity: 123
     TagComponent:
-      Tag: Cube
+      Tag: Plan
     TransformComponent:
-      Translation: [2.02971911, 4.46000004, -11.4038324]
-      Rotation: [-0.000229859652, 0.0398453586, 0.012294312]
-      Scale: [9.10000038, 9, 2.20000219]
-    SpriteRendererComponent:
-      Color: [0.931372523, 0.228277594, 0.228277594, 1]
-  - Entity: 123
-    TagComponent:
-      Tag: Lightblue square
-    TransformComponent:
-      Translation: [0, 4, -11]
-      Rotation: [-0.500811815, 0.0608921349, 0.00290317717]
-      Scale: [9, 9, 1]
-    SpriteRendererComponent:
-      Color: [0.600000024, 0.800000012, 1, 1]
-  - Entity: 123
-    TagComponent:
-      Tag: Camera entity
-    TransformComponent:
-      Translation: [0, 0, 0]
+      Translation: [0, -0.600000024, 4.04193997e-06]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 1
-        PerspectiveFOV: 0.785398185
-        PerspectiveNear: 0.00999999978
-        PerspectiveFar: 1000
-        OrthographicSize: 10
-        OrthographicNear: -1
-        OrthographicFar: 1
-      Primary: true
-      FixedAspectRatio: false
+      Scale: [500, 1, 500]
+    SpriteRendererComponent:
+      Color: [0.813725471, 0.813717306, 0.813717306, 1]
+      TextureFilePath: asserts\textures\blocks.png
   - Entity: 123
     TagComponent:
       Tag: Second camera entity
@@ -66,35 +54,47 @@ Entities:
       FixedAspectRatio: false
   - Entity: 123
     TagComponent:
-      Tag: Plan
+      Tag: Camera entity
     TransformComponent:
-      Translation: [0, -0.600000024, 4.04193997e-06]
-      Rotation: [0, 0, 0]
-      Scale: [500, 1, 500]
-    SpriteRendererComponent:
-      Color: [0.813725471, 0.813717306, 0.813717306, 1]
-      TextureFilePath: asserts\textures\blocks.png
-  - Entity: 123
-    TagComponent:
-      Tag: Vampire-model
-    TransformComponent:
-      Translation: [6, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [4.36239958, 4.36239958, 4.36239958]
-    ModelComponent:
-      Path: asserts\models\vampire\dancing_vampire.dae
-      EnableAnimation: true
-  - Entity: 123
-    TagComponent:
-      Tag: Empty Entity
-    TransformComponent:
-      Translation: [0, 10.3999996, 0]
+      Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
-    LightComponent:
-      Constant: 1
-      Linear: 0.100000001
-      Quadratic: 0.0299999993
-      Ambient: [1, 1, 1]
-      Diffuse: [1, 1, 1]
-      Specular: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 123
+    TagComponent:
+      Tag: Lightblue square
+    TransformComponent:
+      Translation: [0, 4, -11]
+      Rotation: [-0.500811815, 0.0608921349, 0.00290317717]
+      Scale: [9, 9, 1]
+    SpriteRendererComponent:
+      Color: [0.600000024, 0.800000012, 1, 1]
+  - Entity: 123
+    TagComponent:
+      Tag: Cube
+    TransformComponent:
+      Translation: [2.02971911, 4.46000004, -11.4038324]
+      Rotation: [-0.000229859652, 0.0398453586, 0.012294312]
+      Scale: [9.10000038, 9, 2.20000219]
+    SpriteRendererComponent:
+      Color: [0.931372523, 0.228277594, 0.228277594, 1]
+  - Entity: 123
+    TagComponent:
+      Tag: Backpack-model
+    TransformComponent:
+      Translation: [-4, 1.5, 1.20000005]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      Path: asserts\models\backpack\backpack.obj
+      EnableAnimation: false

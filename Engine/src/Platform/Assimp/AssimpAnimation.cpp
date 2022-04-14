@@ -5,8 +5,8 @@ namespace Engine
 {
 	AssimpAnimation::AssimpAnimation(const aiScene* scene)
 		: m_currentTime(0.0f),
-		  m_duration(scene->mAnimations[0]->mDuration),
-		  m_ticksPerSecond(scene->mAnimations[0]->mTicksPerSecond)
+		  DURATION(scene->mAnimations[0]->mDuration),
+		  TICKS_PER_SECOND(scene->mAnimations[0]->mTicksPerSecond)
 	{
 		SetupBones(scene);
 		SetupNodes(m_rootNode, scene->mRootNode);
@@ -91,8 +91,8 @@ namespace Engine
 
 	void AssimpAnimation::CalculateAnimationTime(float deltaTime)
 	{
-		m_currentTime += m_ticksPerSecond * deltaTime;
-		m_currentTime = fmod(m_currentTime, m_duration);
+		m_currentTime += TICKS_PER_SECOND * deltaTime;
+		m_currentTime = fmod(m_currentTime, DURATION);
 	}
 
 	void AssimpAnimation::CalculateBoneTransform(const AssimpData::Node& node, glm::mat4 globalTransformation)

@@ -37,9 +37,10 @@ namespace Engine
 		void CalculateAnimationTime(float deltaTime);
 		void CalculateBoneTransform(const AssimpData::Node& node, glm::mat4 globalTransformation);
 		
+		const float DURATION;
+		const float TICKS_PER_SECOND;
+
 		float m_currentTime;
-		const float m_duration;
-		const float m_ticksPerSecond;
 		std::map<std::string, Ptr<AssimpBone>> m_boneMap;
 		AssimpData::Node m_rootNode;
 		std::vector<glm::mat4> m_transforms;

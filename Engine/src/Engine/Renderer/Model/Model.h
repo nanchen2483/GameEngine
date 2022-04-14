@@ -12,7 +12,7 @@ namespace Engine
 	public:
 		virtual std::string GetFilePath() = 0;
 		virtual void UpdateAnimation(float deltaTime) = 0;
-		virtual std::vector<glm::mat4> GetPoseTransforms() = 0;
+		virtual std::vector<glm::mat4> GetBoneTransforms() = 0;
 		virtual bool HasAnimations() = 0;
 		virtual void Draw() = 0;
 

@@ -277,7 +277,7 @@ namespace Engine
 			if (component.enableAnimation && component.model->HasAnimations())
 			{
 				s_data.shader->SetBool("uEnableAnimation", true);
-				std::vector<glm::mat4> transforms = component.model->GetPoseTransforms();
+				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms();
 				for (uint32_t i = 0; i < transforms.size(); i++)
 				{
 					s_data.shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);

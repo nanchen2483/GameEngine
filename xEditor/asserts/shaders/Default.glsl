@@ -177,7 +177,7 @@ Material SetupMaterial()
 		material.color = vec4(vec3(1.0f), vertex.color.a);;
 	}
 
-	if (vertex.material.x != -1)
+	if (vertex.material.y != -1)
 	{
 		material.specular = texture(uTextures[int(round(vertex.material.y))], vertex.texCoord).rgb;
 		material.shininess = vertex.material.z;

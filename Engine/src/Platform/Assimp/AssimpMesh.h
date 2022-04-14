@@ -1,5 +1,7 @@
 #pragma once
 
+#include "AssimpMaterial.h"
+
 #include "Engine/Renderer/Shader/Shader.h"
 #include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Renderer/Vertex/Vertex.h"
@@ -14,10 +16,10 @@ namespace Engine
 	class AssimpMesh
 	{
 	public:
-		AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::vector<Ptr<Texture>> textures);
+		AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, AssimpMaterial material);
 		void Draw();
 	private:
 		const Ptr<VertexArray> m_vertexArray;
-		const std::vector<Ptr<Texture>> m_textures;
+		AssimpMaterial m_material;
 	};
 }
