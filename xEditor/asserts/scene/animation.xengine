@@ -4,16 +4,17 @@ Entities:
     TagComponent:
       Tag: Backpack-model
     TransformComponent:
-      Translation: [-6.43440962, -1.9533695, -1.07366931]
+      Translation: [-4, 1.5, 1.20000005]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelComponent:
       Path: asserts\models\backpack\backpack.obj
+      EnableAnimation: false
   - Entity: 123
     TagComponent:
       Tag: Cube
     TransformComponent:
-      Translation: [2.02971911, 1.3626895, -11.4038324]
+      Translation: [2.02971911, 4.46000004, -11.4038324]
       Rotation: [-0.000229859652, 0.0398453586, 0.012294312]
       Scale: [9.10000038, 9, 2.20000219]
     SpriteRendererComponent:
@@ -22,7 +23,7 @@ Entities:
     TagComponent:
       Tag: Lightblue square
     TransformComponent:
-      Translation: [-0.555010855, -0.179317594, -10.7059622]
+      Translation: [0, 4, -11]
       Rotation: [-0.500811815, 0.0608921349, 0.00290317717]
       Scale: [9, 9, 1]
     SpriteRendererComponent:
@@ -67,7 +68,7 @@ Entities:
     TagComponent:
       Tag: Plan
     TransformComponent:
-      Translation: [0, -4.23649549, 4.04193997e-06]
+      Translation: [0, -0.600000024, 4.04193997e-06]
       Rotation: [0, 0, 0]
       Scale: [500, 1, 500]
     SpriteRendererComponent:
@@ -77,8 +78,23 @@ Entities:
     TagComponent:
       Tag: Vampire-model
     TransformComponent:
-      Translation: [5.06982422, -3.3338623, 1.56835938]
+      Translation: [6, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [4.36239958, 4.36239958, 4.36239958]
     ModelComponent:
       Path: asserts\models\vampire\dancing_vampire.dae
+      EnableAnimation: true
+  - Entity: 123
+    TagComponent:
+      Tag: Empty Entity
+    TransformComponent:
+      Translation: [0, 10.3999996, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Constant: 1
+      Linear: 0.100000001
+      Quadratic: 0.0299999993
+      Ambient: [1, 1, 1]
+      Diffuse: [1, 1, 1]
+      Specular: [1, 1, 1]

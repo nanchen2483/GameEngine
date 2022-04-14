@@ -17,8 +17,6 @@ namespace Engine
 		glm::vec3 material = {};
 		glm::vec3 tangent = {};
 		glm::vec3 bitangent = {};
-		glm::vec4 bone1 = {};
-		glm::vec4 bone2 = {};
 		int boneIds[MAX_BONE_WEIGHTS] = {};
 		float weights[MAX_BONE_WEIGHTS] = {};
 
@@ -27,10 +25,23 @@ namespace Engine
 
 		Vertex()
 		{
-			for (int i = 0; i < MAX_BONE_WEIGHTS; i++)
+			for (uint32_t i = 0; i < MAX_BONE_WEIGHTS; i++)
 			{
 				boneIds[i] = UNINITIALIZED_BONE_ID;
 				weights[i] = 0.0f;
+			}
+		}
+
+		void SetBone(uint32_t boneId, float weight)
+		{
+			for (uint32_t i = 0; i < MAX_BONE_WEIGHTS; i++)
+			{
+				if (boneIds[i] == UNINITIALIZED_BONE_ID)
+				{
+					boneIds[i] = boneId;
+					weights[i] = weight;
+					break;
+				}
 			}
 		}
 
@@ -46,8 +57,6 @@ namespace Engine
 					{ ShaderDataType::Float3 },
 					{ ShaderDataType::Float3 },
 					{ ShaderDataType::Float3 },
-					{ ShaderDataType::Float4 },
-					{ ShaderDataType::Float4 },
 					{ ShaderDataType::Int4 },
 					{ ShaderDataType::Float4 },
 					{ ShaderDataType::Int }

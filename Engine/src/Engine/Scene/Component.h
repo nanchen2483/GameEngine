@@ -92,6 +92,7 @@ namespace Engine
 
 	struct ModelComponent
 	{
+		bool enableAnimation = false;
 		Ptr<Model> model = nullptr;
 
 		ModelComponent() = default;

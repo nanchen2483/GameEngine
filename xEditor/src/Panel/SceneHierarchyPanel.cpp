@@ -481,8 +481,8 @@ namespace Engine
 			if (open)
 			{
 				ModelComponent& component = entity.GetComponent<ModelComponent>();
-				uint32_t textureId = 0;
-				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+				uint32_t modelId = 0;
+				ImGui::ImageButton((void*)modelId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
 				{
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
@@ -491,6 +491,11 @@ namespace Engine
 						const std::filesystem::path path = filepath;
 						component.model = Model::Create(path.string(), false, entity, m_context->GetLoadedTextureMap());
 					}
+				}
+
+				if (component.model != nullptr && component.model->HasAnimations())
+				{
+					ImGui::Checkbox("Animation", &component.enableAnimation);
 				}
 
 				ImGui::TreePop();

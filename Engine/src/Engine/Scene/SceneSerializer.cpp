@@ -137,6 +137,24 @@ namespace Engine {
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<LightComponent>())
+		{
+			out << YAML::Key << "LightComponent";
+			out << YAML::BeginMap;
+
+			LightComponent& lightComponent = entity.GetComponent<LightComponent>();
+
+			out << YAML::Key << "Constant" << YAML::Value << lightComponent.constant;
+			out << YAML::Key << "Linear" << YAML::Value << lightComponent.linear;
+			out << YAML::Key << "Quadratic" << YAML::Value << lightComponent.quadratic;
+
+			out << YAML::Key << "Ambient" << YAML::Value << lightComponent.ambient;
+			out << YAML::Key << "Diffuse" << YAML::Value << lightComponent.diffuse;
+			out << YAML::Key << "Specular" << YAML::Value << lightComponent.specular;
+
+			out << YAML::EndMap;
+		}
+
 		if (entity.HasComponent<SpriteRendererComponent>())
 		{
 			out << YAML::Key << "SpriteRendererComponent";
@@ -160,7 +178,8 @@ namespace Engine {
 
 			ModelComponent& modelComponent = entity.GetComponent<ModelComponent>();
 
-			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetPath();
+			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetFilePath();
+			out << YAML::Key << "EnableAnimation" << YAML::Value << modelComponent.enableAnimation;
 			out << YAML::EndMap;
 		}
 
@@ -259,6 +278,20 @@ namespace Engine {
 					deserializedCC.fixedAspectRatio = cameraComponent["FixedAspectRatio"].as<bool>();
 				}
 
+				YAML::Node lightComponent = entity["LightComponent"];
+				if (lightComponent)
+				{
+					LightComponent& deserializedSRC = deserializedEntity.AddComponent<LightComponent>();
+
+					deserializedSRC.constant = lightComponent["Constant"].as<float>();
+					deserializedSRC.linear = lightComponent["Linear"].as<float>();
+					deserializedSRC.quadratic = lightComponent["Quadratic"].as<float>();
+
+					deserializedSRC.ambient = lightComponent["Ambient"].as<glm::vec3>();
+					deserializedSRC.diffuse = lightComponent["Diffuse"].as<glm::vec3>();
+					deserializedSRC.specular = lightComponent["Specular"].as<glm::vec3>();
+				}
+
 				YAML::Node spriteRendererComponent = entity["SpriteRendererComponent"];
 				if (spriteRendererComponent)
 				{
@@ -278,6 +311,7 @@ namespace Engine {
 					ModelComponent& deserializedSRC = deserializedEntity.AddComponent<ModelComponent>();
 
 					std::string path = modelComponent["Path"].as<std::string>();
+					deserializedSRC.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
 					deserializedSRC.model = Model::Create(path, false, deserializedEntity, m_scene->GetLoadedTextureMap());
 				}
 			}

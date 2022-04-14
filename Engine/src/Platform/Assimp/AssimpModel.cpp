@@ -1,7 +1,6 @@
 #include "enginepch.h"
 #include "AssimpModel.h"
 
-#include "Engine/Renderer/Shader/Shader.h"
 #include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Util/AssimpUtil.h"
 
@@ -22,14 +21,8 @@ namespace Engine
 	}
 
 	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap)
-		: m_path(path), m_gammaCorrection(gamma), m_entityId(entityId), m_textureMap(textureMap)
+		: m_filePath(path), m_gammaCorrection(gamma), m_entityId(entityId), m_textureMap(textureMap)
 	{
-		m_transforms.reserve(100);
-		for (int i = 0; i < 100; i++)
-		{
-			m_transforms.push_back(glm::mat4(1.0f));
-		}
-
 		Load(path);
 	}
 
@@ -45,11 +38,9 @@ namespace Engine
 			return;
 		}
 
-		if (scene->mNumAnimations)
+		if (scene->HasAnimations())
 		{
-			m_includeAnimation = true;
-			m_animation = CreatePtr<AssimpAnimation>(scene->mAnimations[0]);
-			m_rootNode = CreatePtr<AssimpNode>(scene->mRootNode, m_animation);
+			m_animation = CreatePtr<AssimpAnimation>(scene);
 		}
 
 		ProcessNode(scene->mRootNode, scene);
@@ -62,8 +53,8 @@ namespace Engine
 		{
 			// the node object only contains indices to index the actual objects in the scene. 
 			// the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
-			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+			const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+			const aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 			m_meshes.push_back(ProcessMesh(mesh, material));
 		}
 
@@ -105,40 +96,32 @@ namespace Engine
 		}
 
 		std::vector<Vertex> vertices;
-		std::vector<uint32_t> indices;
-		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		vertices.reserve(mesh->mNumVertices);
+		for (uint32_t i = 0; i < mesh->mNumVertices; i++)
 		{
 			Vertex vertex;
 			vertex.position = AssimpUtil::ToGlm(mesh->mVertices[i]);
 			vertex.normal = AssimpUtil::ToGlm(mesh->mNormals[i]);
 			vertex.color = glm::vec4(1.0f);
 			vertex.material = materialIndex;
-			if (mesh->mTextureCoords[0])
-			{
-				vertex.texCoord = AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]);
-			}
-			else
-			{
-				vertex.texCoord = glm::vec2(0.0f, 0.0f);
-			}
-
+			vertex.texCoord = mesh->HasTextureCoords(0) ? AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]) : glm::vec2(0.0f);
 			vertex.entityId = m_entityId;
 			vertices.push_back(vertex);
 		}
 
-		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+		std::vector<uint32_t> indices;
+		indices.reserve((mesh->mNumFaces * 3));
+		for (uint32_t i = 0; i < mesh->mNumFaces; i++)
 		{
-			aiFace face = mesh->mFaces[i];
-			for (unsigned int j = 0; j < face.mNumIndices; j++)
+			const aiFace face = mesh->mFaces[i];
+			ENGINE_CORE_ASSERT(face.mNumIndices == 3, "Number of indices must be 3!");
+			for (uint32_t j = 0; j < face.mNumIndices; j++)
 			{
 				indices.push_back(face.mIndices[j]);
 			}
 		}
 
-		if (m_includeAnimation)
-		{
-			ExtractBoneWeightForVertices(vertices, mesh);
-		}
+		ExtractBoneWeight(vertices, mesh);
 
 		// return a mesh object created from the extracted mesh data
 		return AssimpMesh(vertices, indices, textures);
@@ -164,62 +147,38 @@ namespace Engine
 		return nullptr;
 	}
 
-	void AssimpModel::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, const aiMesh* mesh)
+	void AssimpModel::ExtractBoneWeight(std::vector<Vertex>& vertices, const aiMesh* mesh)
 	{
-		for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
+		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++)
 		{
-			aiBone* aiBone = mesh->mBones[boneIndex];
-			std::string boneName = aiBone->mName.C_Str();
-			Ptr<AssimpBone>& bone = m_animation->GetBoneByName(boneName);
-			ENGINE_CORE_ASSERT(bone != nullptr, "Bone not found with boneName: {0}", boneName);
-			bone->SetBoneOffset(AssimpUtil::ToGlm(aiBone->mOffsetMatrix));
-
-			for (int weightIndex = 0; weightIndex < aiBone->mNumWeights; weightIndex++)
+			const aiBone* aiBone = mesh->mBones[boneIndex];
+			const uint32_t boneId = m_animation->GetBoneId(aiBone->mName.data);
+			for (uint32_t weightIndex = 0; weightIndex < aiBone->mNumWeights; weightIndex++)
 			{
-				aiVertexWeight& vertexWeight = aiBone->mWeights[weightIndex];
-				int vertexId = vertexWeight.mVertexId;
-				float weight = vertexWeight.mWeight;
+				const aiVertexWeight& vertexWeight = aiBone->mWeights[weightIndex];
+				const uint32_t vertexId = vertexWeight.mVertexId;
 				ENGINE_CORE_ASSERT(vertexId <= vertices.size(), "Invalid vertexId: {0}", vertexId);
-
-				Vertex& vertex = vertices[vertexId];
-				for (int i = 0; i < MAX_BONE_WEIGHTS; i++)
-				{
-					if (vertex.boneIds[i] == UNINITIALIZED_BONE_ID)
-					{
-						vertex.boneIds[i] = bone->GetBoneId();
-						vertex.weights[i] = weight;
-						break;
-					}
-				}
+				vertices[vertexId].SetBone(boneId, vertexWeight.mWeight);
 			}
 		}
 	}
 
 	void AssimpModel::UpdateAnimation(float deltaTime)
 	{
-		if (m_includeAnimation)
+		if (m_animation != nullptr)
 		{
-			m_animationTime = m_animation->GetAnimationTime(deltaTime);
-			CalculateBoneTransform(m_rootNode, glm::mat4(1.0f));
+			m_animation->UpdateBoneTransform(deltaTime);
 		}
 	}
 
-	void AssimpModel::CalculateBoneTransform(const Ptr<AssimpNode>& node, glm::mat4 parentTransform)
+	std::vector<glm::mat4> AssimpModel::GetPoseTransforms()
 	{
-		glm::mat4 globalTransformation = parentTransform * node->transformation;
-		Ptr<AssimpBone> bone = node->bone;
-		if (bone != nullptr)
+		if (m_animation != nullptr)
 		{
-			int boneId = bone->GetBoneId();
-			glm::mat4 offset = bone->GetBoneOffset();
-			globalTransformation = parentTransform * bone->GetLocalTransform(m_animationTime);
-			m_transforms[boneId] = globalTransformation * offset;
+			return m_animation->GetBoneTransforms();
 		}
 
-		for (int i = 0; i < node->numOfchildren; i++)
-		{
-			CalculateBoneTransform(node->children[i], globalTransformation);
-		}
+		return std::vector<glm::mat4>();
 	}
 	
 	void AssimpModel::Draw()

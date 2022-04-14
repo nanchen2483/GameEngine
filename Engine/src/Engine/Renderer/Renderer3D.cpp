@@ -272,14 +272,13 @@ namespace Engine
 		if (component.model != nullptr)
 		{
 			component.model->UpdateAnimation(deltaTime);
-
 			s_data.shader->SetBool("uUseModel", true);
 			s_data.shader->SetMat4("uModel", transform);
-			s_data.shader->SetBool("uEnableAnimation", component.model->IsAnimationModel());
-			if (component.model->IsAnimationModel())
+			if (component.enableAnimation && component.model->HasAnimations())
 			{
+				s_data.shader->SetBool("uEnableAnimation", true);
 				std::vector<glm::mat4> transforms = component.model->GetPoseTransforms();
-				for (int i = 0; i < transforms.size(); ++i)
+				for (uint32_t i = 0; i < transforms.size(); i++)
 				{
 					s_data.shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
 				}

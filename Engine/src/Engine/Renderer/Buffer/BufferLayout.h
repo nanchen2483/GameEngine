@@ -10,6 +10,11 @@ namespace Engine
 	public:
 		BufferLayout() {}
 
+		BufferLayout(const std::initializer_list<BufferElement>& elements)
+			: BufferLayout(BufferLayoutType::Default, elements)
+		{
+		}
+
 		BufferLayout(const BufferLayoutType type, const std::initializer_list<BufferElement>& elements)
 			: m_type(type), m_elements(elements)
 		{
@@ -40,6 +45,6 @@ namespace Engine
 	private:
 		std::vector<BufferElement> m_elements;
 		uint32_t m_stride = 0;
-		BufferLayoutType m_type = BufferLayoutType::Default;
+		BufferLayoutType m_type;
 	};
 }

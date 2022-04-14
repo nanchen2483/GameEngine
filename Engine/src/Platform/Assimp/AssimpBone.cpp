@@ -5,8 +5,13 @@
 
 namespace Engine
 {
-	AssimpBone::AssimpBone(int id, std::string boneName, const aiNodeAnim* channel)
-		: m_id(id), m_name(boneName)
+	AssimpBone::AssimpBone(int id, const aiNodeAnim* channel)
+		: AssimpBone(id, glm::mat4(), channel)
+	{
+	}
+
+	AssimpBone::AssimpBone(int id, glm::mat4 offset, const aiNodeAnim* channel)
+		: m_id(id), m_offset(offset)
 	{
 		m_numPositions = channel->mNumPositionKeys;
 		for (int positionIndex = 0; positionIndex < m_numPositions; ++positionIndex)
@@ -33,11 +38,6 @@ namespace Engine
 		glm::mat4 rotation = InterpolateRotation(animationTime);
 		glm::mat4 scale = InterpolateScaling(animationTime);
 		return translation * rotation * scale;
-	}
-
-	void AssimpBone::SetBoneOffset(glm::mat4 offset)
-	{
-		m_offset = offset;
 	}
 
 	glm::mat4 AssimpBone::InterpolatePosition(float animationTime)
@@ -98,9 +98,9 @@ namespace Engine
 		return midWayLength / framesDiff;
 	}
 
-	int AssimpBone::GetLastPositionIndex(float animationTime)
+	uint32_t AssimpBone::GetLastPositionIndex(float animationTime)
 	{
-		for (int index = 1; index < m_numPositions; ++index)
+		for (uint32_t index = 1; index < m_numPositions; ++index)
 		{
 			if (animationTime < m_positions[index].timeStamp)
 			{
@@ -108,12 +108,12 @@ namespace Engine
 			}
 		}
 
-		ENGINE_CORE_ASSERT(0, "Poisition index not found! AnimationTime {0}, Duration: {1}", animationTime);
+		ENGINE_CORE_ASSERT(false, "Poisition index not found! AnimationTime {0}, Duration: {1}", animationTime);
 	}
 	
-	int AssimpBone::GetLastRotationIndex(float animationTime)
+	uint32_t AssimpBone::GetLastRotationIndex(float animationTime)
 	{
-		for (int index = 1; index < m_numRotations; ++index)
+		for (uint32_t index = 1; index < m_numRotations; ++index)
 		{
 			if (animationTime < m_rotations[index].timeStamp)
 			{
@@ -121,12 +121,12 @@ namespace Engine
 			}
 		}
 
-		ENGINE_CORE_ASSERT(0, "Rotation index not found! AnimationTime {0}, Duration: {1}", animationTime);
+		ENGINE_CORE_ASSERT(false, "Rotation index not found! AnimationTime {0}, Duration: {1}", animationTime);
 	}
 	
-	int AssimpBone::GetLastScaleIndex(float animationTime)
+	uint32_t AssimpBone::GetLastScaleIndex(float animationTime)
 	{
-		for (int index = 1; index < m_numScalings; ++index)
+		for (uint32_t index = 1; index < m_numScalings; ++index)
 		{
 			if (animationTime < m_scales[index].timeStamp)
 			{

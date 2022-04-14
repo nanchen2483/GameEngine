@@ -8,11 +8,9 @@ layout(location = 3) in vec2 aTexCoord;
 layout(location = 4) in vec3 aMaterial;
 layout(location = 5) in vec3 aTangent;
 layout(location = 6) in vec3 aBitangent;
-layout(location = 7) in vec4 aBone1;
-layout(location = 8) in vec4 aBone2;
-layout(location = 9) in ivec4 aBoneIds;
-layout(location = 10) in vec4 aWeights;
-layout(location = 11) in int aEntityId;
+layout(location = 7) in ivec4 aBoneIds;
+layout(location = 8) in vec4 aWeights;
+layout(location = 9) in int aEntityId;
 
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
@@ -73,7 +71,7 @@ vec4 CalcWorldPosition()
 				break;
 			}
 
-			vec4 localPosition = uFinalBonesMatrices[aBoneIds[i]] * vec4(aPosition, 1.0f);
+			vec4 localPosition = uFinalBonesMatrices[boneId] * vec4(aPosition, 1.0f);
 			finalPosition += localPosition * aWeights[i];
 		}
 	}

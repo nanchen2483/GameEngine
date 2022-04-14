@@ -51,33 +51,29 @@ namespace Engine
 	class AssimpBone
 	{
 	public:
-		AssimpBone(int id, std::string boneName, const aiNodeAnim* channel);
+		AssimpBone(int id, const aiNodeAnim* channel);
+		AssimpBone(int id, glm::mat4 offset, const aiNodeAnim* channel);
 
 		glm::mat4 GetLocalTransform(float animationTime);
-		int GetBoneId() { return m_id; }
-		std::string GetBoneName() const { return m_name; }
+		uint32_t GetBoneId() { return m_id; }
 		glm::mat4 GetBoneOffset() const { return m_offset; }
-		void SetBoneOffset(glm::mat4 offset);
-	
 	private:
 		glm::mat4 InterpolatePosition(float animationTime);
 		glm::mat4 InterpolateRotation(float animationTime);
 		glm::mat4 InterpolateScaling(float animationTime);
 		float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
-		int GetLastPositionIndex(float animationTime);
-		int GetLastRotationIndex(float animationTime);
-		int GetLastScaleIndex(float animationTime);
+		uint32_t GetLastPositionIndex(float animationTime);
+		uint32_t GetLastRotationIndex(float animationTime);
+		uint32_t GetLastScaleIndex(float animationTime);
 
+		uint32_t m_numPositions;
 		std::vector<KeyPosition> m_positions;
-		int m_numPositions;
+		uint32_t m_numRotations;
 		std::vector<KeyRotation> m_rotations;
-		int m_numRotations;
+		uint32_t m_numScalings;
 		std::vector<KeyScale> m_scales;
-		int m_numScalings;
 
-		const int m_id;
-		const std::string m_name;
+		const uint32_t m_id;
 		glm::mat4 m_offset = glm::mat4();
 	};
-
 }
