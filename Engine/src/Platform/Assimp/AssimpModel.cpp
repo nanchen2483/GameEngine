@@ -1,7 +1,6 @@
 #include "enginepch.h"
 #include "AssimpModel.h"
 
-#include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Util/AssimpUtil.h"
 
 #include <glm/glm.hpp>
@@ -34,13 +33,13 @@ namespace Engine
 		// check for errors
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 		{
-			std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+			ENGINE_CORE_ERROR("Could not import model: {0} with error message: {1}", path, importer.GetErrorString());
 			return;
 		}
 
 		if (scene->HasAnimations())
 		{
-			m_animation = CreatePtr<AssimpAnimation>(scene);
+			m_animation = CreateUniq<AssimpAnimation>(scene);
 		}
 
 		ProcessNode(scene->mRootNode, scene);
@@ -149,24 +148,36 @@ namespace Engine
 		}
 	}
 
-	void AssimpModel::UpdateAnimation(float deltaTime)
+	std::vector<glm::mat4> AssimpModel::GetBoneTransforms(float deltaTime)
 	{
 		if (HasAnimations())
 		{
-			m_animation->UpdateBoneTransform(deltaTime);
-		}
-	}
-
-	std::vector<glm::mat4> AssimpModel::GetBoneTransforms()
-	{
-		if (HasAnimations())
-		{
-			return m_animation->GetBoneTransforms();
+			return m_animation->GetBoneTransform(deltaTime);
 		}
 
 		return std::vector<glm::mat4>();
 	}
 	
+	float* AssimpModel::GetAnimationTime()
+	{
+		if (HasAnimations())
+		{
+			return m_animation->GetTime();
+		}
+
+		return nullptr;
+	}
+
+	const float AssimpModel::GetAnimationDuration()
+	{
+		if (HasAnimations())
+		{
+			return m_animation->GetDuration();
+		}
+
+		return 0.0f;
+	}
+
 	void AssimpModel::Draw()
 	{
 		for (uint32_t i = 0; i < m_meshes.size(); i++)

@@ -1,48 +1,39 @@
 #pragma once
 
 #include "AssimpBone.h"
+
 #include <vector>
 #include <map>
 
 namespace Engine
 {
-	namespace AssimpData
-	{
-		struct Node
-		{
-			glm::mat4 transformation = glm::mat4();
-			Ptr<AssimpBone> bone = nullptr;
-			int numOfchildren = 0;
-			std::vector<Node> children;
-		};
-
-		struct BoneOffset
-		{
-			uint32_t id;
-			glm::mat4 offset;
-		};
-	}
-
 	class AssimpAnimation
 	{
 	public:
 		AssimpAnimation(const aiScene* scene);
+		std::vector<glm::mat4> GetBoneTransform(float deltaTime);
 		const uint32_t GetBoneId(const std::string& name);
-		void UpdateBoneTransform(float deltaTime);
-		std::vector<glm::mat4> GetBoneTransforms() { return m_transforms; }
+		float* GetTime() { return &m_currentTime; }
+		const float GetDuration() const { return m_duration; }
 	private:
-		void SetupBones(const aiScene* scene);
-		void SetupNodes(AssimpData::Node& dest, const aiNode* node);
-		
-		void CalculateAnimationTime(float deltaTime);
-		void CalculateBoneTransform(const AssimpData::Node& node, glm::mat4 globalTransformation);
-		
-		const float DURATION;
-		const float TICKS_PER_SECOND;
+		struct Node
+		{
+			glm::mat4 transformation = glm::mat4();
+			AssimpBone bone = {};
+			int numOfchildren = 0;
+			std::vector<Node> children;
+		};
 
+		void SetupBones(const aiScene* scene);
+		void SetupNodes(Node& dest, const aiNode* node);
+		void CalculateAnimationTime(float deltaTime);
+		void CalculateBoneTransform(const Node& node, glm::mat4 globalTransformation);
+		
 		float m_currentTime;
-		std::map<std::string, Ptr<AssimpBone>> m_boneMap;
-		AssimpData::Node m_rootNode;
+		const float m_duration;
+		const float m_ticksPerSecond;
+		std::map<std::string, AssimpBone> m_boneMap;
+		Node m_rootNode;
 		std::vector<glm::mat4> m_transforms;
 	};
 }

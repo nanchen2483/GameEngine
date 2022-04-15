@@ -496,6 +496,9 @@ namespace Engine
 				if (component.model != nullptr && component.model->HasAnimations())
 				{
 					ImGui::Checkbox("Animation", &component.enableAnimation);
+					float* time = component.model->GetAnimationTime();
+					const float duration = component.model->GetAnimationDuration();
+					ImGui::SliderFloat("Time", time, 0.0f, duration, "%.3f sec.");
 				}
 
 				ImGui::TreePop();

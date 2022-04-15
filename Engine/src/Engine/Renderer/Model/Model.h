@@ -11,9 +11,10 @@ namespace Engine
 	{
 	public:
 		virtual std::string GetFilePath() = 0;
-		virtual void UpdateAnimation(float deltaTime) = 0;
-		virtual std::vector<glm::mat4> GetBoneTransforms() = 0;
 		virtual bool HasAnimations() = 0;
+		virtual std::vector<glm::mat4> GetBoneTransforms(float deltaTime) = 0;
+		virtual float* GetAnimationTime() = 0;
+		virtual const float GetAnimationDuration() = 0;
 		virtual void Draw() = 0;
 
 		static Ptr<Model> Create(std::string path);

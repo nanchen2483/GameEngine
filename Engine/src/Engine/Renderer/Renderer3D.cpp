@@ -277,12 +277,11 @@ namespace Engine
 	{
 		if (component.model != nullptr)
 		{
-			component.model->UpdateAnimation(deltaTime);
 			s_data.shader->SetMat4("uModel", transform);
 			s_data.shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
 			if (component.enableAnimation && component.model->HasAnimations())
 			{
-				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms();
+				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms(deltaTime);
 				for (uint32_t i = 0; i < transforms.size(); i++)
 				{
 					s_data.shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);

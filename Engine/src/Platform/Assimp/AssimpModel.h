@@ -19,9 +19,12 @@ namespace Engine
 		AssimpModel(std::string const& path, bool gamma);
 		AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap);
 		virtual std::string GetFilePath() override { return m_filePath.string(); }
-		virtual void UpdateAnimation(float deltaTime) override;
-		virtual std::vector<glm::mat4> GetBoneTransforms() override;
-		virtual bool HasAnimations() override { return m_animation != nullptr; };
+		
+		virtual bool HasAnimations() override { return m_animation != nullptr; }
+		virtual std::vector<glm::mat4> GetBoneTransforms(float deltaTime) override;
+		virtual float* GetAnimationTime() override;
+		virtual const float GetAnimationDuration() override;
+		
 		virtual void Draw() override;
 	private:
 		void Load(std::string const& path);
@@ -34,11 +37,11 @@ namespace Engine
 		const std::filesystem::path m_filePath;
 		const std::filesystem::path m_directory = m_filePath.parent_path();
 		const bool m_gammaCorrection;
-		std::vector<AssimpMesh> m_meshes;
 		TextureMap* m_textureMap;
+		std::vector<AssimpMesh> m_meshes;
 
 		// Animation
-		Ptr<AssimpAnimation> m_animation;
+		Uniq<AssimpAnimation> m_animation;
 
 		// Editor-only
 		const int m_entityId;

@@ -36,7 +36,6 @@ namespace Engine
 	void ExampleLayer::OnUpdate(Engine::TimeStep timeStep)
 	{
 		m_editorCamera.OnUpdate(timeStep);
-		m_model->UpdateAnimation(timeStep);
 		m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
 
 		Renderer2D::ResetStates();
@@ -48,7 +47,7 @@ namespace Engine
 		m_shader->SetBool("uEnableAnimation", true);
 		m_shader->SetBool("uUseModel", true);
 		m_shader->SetMat4("uViewProjection", m_editorCamera.GetProjection() * m_editorCamera.GetViewMatrix());
-		std::vector<glm::mat4> transforms = m_model->GetBoneTransforms();
+		std::vector<glm::mat4> transforms = m_model->GetBoneTransforms(timeStep);
 		for (int i = 0; i < transforms.size(); ++i)
 		{
 			m_shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);

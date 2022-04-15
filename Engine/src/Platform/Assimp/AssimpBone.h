@@ -10,6 +10,8 @@
 
 #include "Engine/Util/AssimpUtil.h"
 
+#define UNINITIALIZED_BONE_ID -1
+
 namespace Engine
 {
 	struct KeyPosition
@@ -51,12 +53,15 @@ namespace Engine
 	class AssimpBone
 	{
 	public:
-		AssimpBone(int id, const aiNodeAnim* channel);
-		AssimpBone(int id, glm::mat4 offset, const aiNodeAnim* channel);
+		AssimpBone() = default;
+		AssimpBone(uint32_t id, const aiNodeAnim* channel);
+		AssimpBone(uint32_t id, glm::mat4 offset, const aiNodeAnim* channel);
 
 		glm::mat4 GetLocalTransform(float animationTime);
-		uint32_t GetBoneId() { return m_id; }
+		const uint32_t GetBoneId() const { return m_id; }
 		glm::mat4 GetBoneOffset() const { return m_offset; }
+
+		operator bool() const { return m_id != UNINITIALIZED_BONE_ID; }
 	private:
 		glm::mat4 InterpolatePosition(float animationTime);
 		glm::mat4 InterpolateRotation(float animationTime);
@@ -73,7 +78,7 @@ namespace Engine
 		uint32_t m_numScalings;
 		std::vector<KeyScale> m_scales;
 
-		const uint32_t m_id;
+		int m_id = UNINITIALIZED_BONE_ID;
 		glm::mat4 m_offset = glm::mat4();
 	};
 }

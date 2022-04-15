@@ -5,12 +5,12 @@
 
 namespace Engine
 {
-	AssimpBone::AssimpBone(int id, const aiNodeAnim* channel)
+	AssimpBone::AssimpBone(uint32_t id, const aiNodeAnim* channel)
 		: AssimpBone(id, glm::mat4(), channel)
 	{
 	}
 
-	AssimpBone::AssimpBone(int id, glm::mat4 offset, const aiNodeAnim* channel)
+	AssimpBone::AssimpBone(uint32_t id, glm::mat4 offset, const aiNodeAnim* channel)
 		: m_id(id), m_offset(offset)
 	{
 		m_numPositions = channel->mNumPositionKeys;
