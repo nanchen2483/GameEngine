@@ -151,7 +151,7 @@ namespace Engine
 
 	void AssimpModel::UpdateAnimation(float deltaTime)
 	{
-		if (m_animation != nullptr)
+		if (HasAnimations())
 		{
 			m_animation->UpdateBoneTransform(deltaTime);
 		}
@@ -159,7 +159,7 @@ namespace Engine
 
 	std::vector<glm::mat4> AssimpModel::GetBoneTransforms()
 	{
-		if (m_animation != nullptr)
+		if (HasAnimations())
 		{
 			return m_animation->GetBoneTransforms();
 		}

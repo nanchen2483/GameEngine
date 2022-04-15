@@ -368,14 +368,18 @@ namespace Engine
 	{
 		if (event.GetEventType() == EventType::WindowResize)
 		{
-			auto e = (WindowResizeEvent*)&event;
+			WindowResizeEvent* e = (WindowResizeEvent*)&event;
 			if (e->GetWidth() == 0 || e->GetHeight() == 0)
 			{
 				m_viewportSize = glm::vec2(0.0f);
 			}
 		}
 
-		m_editorCamera.OnEvent(event);
+		if (m_viewportHovered)
+		{
+			m_editorCamera.OnEvent(event);
+		}
+
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 		dispatcher.Dispatch<MouseButtonPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
