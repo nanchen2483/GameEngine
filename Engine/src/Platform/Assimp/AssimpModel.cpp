@@ -37,15 +37,12 @@ namespace Engine
 			return;
 		}
 
-		if (scene->HasAnimations())
-		{
-			m_animation = CreateUniq<AssimpAnimation>(scene);
-		}
-
-		ProcessNode(scene->mRootNode, scene);
+		m_hasAnimation = scene->HasAnimations();
+		SetupMeshes(scene->mRootNode, scene);
+		SetupAnimations(scene);
 	}
 
-	void AssimpModel::ProcessNode(const aiNode* node, const aiScene* scene)
+	void AssimpModel::SetupMeshes(const aiNode* node, const aiScene* scene)
 	{
 		// process each mesh located at the current node
 		for (uint32_t i = 0; i < node->mNumMeshes; i++)
@@ -60,11 +57,20 @@ namespace Engine
 		// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
-			ProcessNode(node->mChildren[i], scene);
+			SetupMeshes(node->mChildren[i], scene);
 		}
 	}
 
-	AssimpMesh AssimpModel::CreateMesh(const aiMesh* mesh, const aiMaterial* material)
+	void AssimpModel::SetupAnimations(const aiScene* scene)
+	{
+		for (uint32_t i = 0; i < scene->mNumAnimations; i++)
+		{
+			ENGINE_CORE_ASSERT(m_boneOffsetDict.Size() > 0, "BoneInfoDict is empty");
+			m_animations.push_back(AssimpAnimation(scene->mAnimations[i], scene->mRootNode, m_boneOffsetDict));
+		}
+	}
+
+	const AssimpMesh AssimpModel::CreateMesh(const aiMesh* mesh, const aiMaterial* material)
 	{
 		AssimpMaterial materialData = LoadMaterial(material);
 		std::vector<Vertex> vertices;
@@ -78,7 +84,7 @@ namespace Engine
 			vertex.material = materialData.GetIndex();
 			vertex.texCoord = mesh->HasTextureCoords(0) ? AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]) : glm::vec2(0.0f);
 			vertex.isWorldPos = false;
-			vertex.hasAnimation = m_animation != nullptr;
+			vertex.hasAnimation = m_hasAnimation;
 			vertex.entityId = m_entityId;
 			vertices.push_back(vertex);
 		}
@@ -101,7 +107,7 @@ namespace Engine
 		return AssimpMesh(vertices, indices, materialData);
 	}
 
-	AssimpMaterial AssimpModel::LoadMaterial(const aiMaterial* material)
+	const AssimpMaterial AssimpModel::LoadMaterial(const aiMaterial* material)
 	{
 		AssimpMaterial data;
 		data.diffuse = LoadTexture(material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
@@ -112,7 +118,7 @@ namespace Engine
 		return data;
 	}
 
-	Ptr<Texture> AssimpModel::LoadTexture(const aiMaterial* material, const aiTextureType type, const TextureType textureType)
+	const Ptr<Texture> AssimpModel::LoadTexture(const aiMaterial* material, const aiTextureType type, const TextureType textureType)
 	{
 		if (material->GetTextureCount(type) > 0)
 		{
@@ -137,22 +143,22 @@ namespace Engine
 		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++)
 		{
 			const aiBone* aiBone = mesh->mBones[boneIndex];
-			const uint32_t boneId = m_animation->GetBoneId(aiBone->mName.data);
+			const auto& bone = m_boneOffsetDict.AddIfNew(aiBone->mName.data, AssimpUtil::ToGlm(aiBone->mOffsetMatrix));
 			for (uint32_t weightIndex = 0; weightIndex < aiBone->mNumWeights; weightIndex++)
 			{
 				const aiVertexWeight& vertexWeight = aiBone->mWeights[weightIndex];
 				const uint32_t vertexId = vertexWeight.mVertexId;
 				ENGINE_CORE_ASSERT(vertexId <= vertices.size(), "Invalid vertexId: {0}", vertexId);
-				vertices[vertexId].SetBone(boneId, vertexWeight.mWeight);
+				vertices[vertexId].SetBone(bone.id, vertexWeight.mWeight);
 			}
 		}
 	}
 
 	std::vector<glm::mat4> AssimpModel::GetBoneTransforms(float deltaTime)
 	{
-		if (HasAnimations())
+		if (m_hasAnimation)
 		{
-			return m_animation->GetBoneTransform(deltaTime);
+			return m_animations[m_selectedAnimation].GetBoneTransform(deltaTime);
 		}
 
 		return std::vector<glm::mat4>();
@@ -160,9 +166,9 @@ namespace Engine
 	
 	float* AssimpModel::GetAnimationTime()
 	{
-		if (HasAnimations())
+		if (m_hasAnimation)
 		{
-			return m_animation->GetTime();
+			return m_animations[m_selectedAnimation].GetTime();
 		}
 
 		return nullptr;
@@ -170,9 +176,9 @@ namespace Engine
 
 	const float AssimpModel::GetAnimationDuration()
 	{
-		if (HasAnimations())
+		if (m_hasAnimation)
 		{
-			return m_animation->GetDuration();
+			return m_animations[m_selectedAnimation].GetDuration();
 		}
 
 		return 0.0f;

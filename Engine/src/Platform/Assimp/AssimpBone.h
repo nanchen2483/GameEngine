@@ -54,28 +54,27 @@ namespace Engine
 	{
 	public:
 		AssimpBone() = default;
-		AssimpBone(uint32_t id, const aiNodeAnim* channel);
 		AssimpBone(uint32_t id, glm::mat4 offset, const aiNodeAnim* channel);
 
-		glm::mat4 GetLocalTransform(float animationTime);
+		const glm::mat4 GetLocalTransform(float animationTime) const;
 		const uint32_t GetBoneId() const { return m_id; }
-		glm::mat4 GetBoneOffset() const { return m_offset; }
+		const glm::mat4 GetBoneOffset() const { return m_offset; }
 
 		operator bool() const { return m_id != UNINITIALIZED_BONE_ID; }
 	private:
-		glm::mat4 InterpolatePosition(float animationTime);
-		glm::mat4 InterpolateRotation(float animationTime);
-		glm::mat4 InterpolateScaling(float animationTime);
-		float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
-		uint32_t GetLastPositionIndex(float animationTime);
-		uint32_t GetLastRotationIndex(float animationTime);
-		uint32_t GetLastScaleIndex(float animationTime);
+		const glm::mat4 InterpolatePosition(const float animationTime) const;
+		const glm::mat4 InterpolateRotation(const float animationTime) const;
+		const glm::mat4 InterpolateScaling(const float animationTime) const;
+		const float GetScaleFactor(const float lastTimeStamp, const float nextTimeStamp, const float animationTime) const;
+		const uint32_t GetLastPositionIndex(const float animationTime) const;
+		const uint32_t GetLastRotationIndex(const float animationTime) const;
+		const uint32_t GetLastScaleIndex(const float animationTime) const;
 
-		uint32_t m_numPositions;
+		uint32_t m_numPositions = 0;
 		std::vector<KeyPosition> m_positions;
-		uint32_t m_numRotations;
+		uint32_t m_numRotations = 0;
 		std::vector<KeyRotation> m_rotations;
-		uint32_t m_numScalings;
+		uint32_t m_numScalings = 0;
 		std::vector<KeyScale> m_scales;
 
 		int m_id = UNINITIALIZED_BONE_ID;

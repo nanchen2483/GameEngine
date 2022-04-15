@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include "Engine/Renderer/Buffer/BufferLayout.h"
 
-#define MAX_BONE_WEIGHTS 4
+#define MAX_BONE_INFLUENCE 4
 #define UNINITIALIZED_BONE_ID -1
 
 namespace Engine
@@ -17,8 +17,8 @@ namespace Engine
 		glm::vec3 material = {};
 		glm::vec3 tangent = {};
 		glm::vec3 bitangent = {};
-		int boneIds[MAX_BONE_WEIGHTS] = {};
-		float weights[MAX_BONE_WEIGHTS] = {};
+		int boneIds[MAX_BONE_INFLUENCE] = {};
+		float weights[MAX_BONE_INFLUENCE] = {};
 		uint32_t isWorldPos = false;
 		uint32_t hasAnimation = false;
 
@@ -27,7 +27,7 @@ namespace Engine
 
 		Vertex()
 		{
-			for (uint32_t i = 0; i < MAX_BONE_WEIGHTS; i++)
+			for (uint32_t i = 0; i < MAX_BONE_INFLUENCE; i++)
 			{
 				boneIds[i] = UNINITIALIZED_BONE_ID;
 				weights[i] = 0.0f;
@@ -36,7 +36,7 @@ namespace Engine
 
 		void SetBone(const uint32_t boneId, const float weight)
 		{
-			for (uint32_t i = 0; i < MAX_BONE_WEIGHTS; i++)
+			for (uint32_t i = 0; i < MAX_BONE_INFLUENCE; i++)
 			{
 				if (boneIds[i] == UNINITIALIZED_BONE_ID)
 				{
