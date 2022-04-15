@@ -33,6 +33,8 @@ namespace Engine
 
 		glm::vec4 vertexPosition[NUM_OF_VERTICES] = {};
 		glm::vec2 textureCoords[NUM_OF_VERTICES] = {};
+
+		Renderer3D::Statistics states;
 	};
 
 	static Renderer3DData s_data;
@@ -220,6 +222,8 @@ namespace Engine
 		}
 
 		RendererCommand::DrawIndexed(s_data.indexCount);
+
+		s_data.states.drawCalls++;
 		ResetRendererData();
 	}
 
@@ -286,7 +290,20 @@ namespace Engine
 			}
 
 			component.model->Draw();
+
+			s_data.states.drawModels++;
 		}
+	}
+
+	void Renderer3D::ResetStates()
+	{
+		s_data.states.drawCalls = 0;
+		s_data.states.drawModels = 0;
+	}
+
+	Renderer3D::Statistics Renderer3D::GetState()
+	{
+		return s_data.states;
 	}
 
 	uint32_t Renderer3D::GetTextureIndex(const Ptr<Texture2D>& texture)

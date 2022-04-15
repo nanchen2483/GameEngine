@@ -22,6 +22,14 @@ namespace Engine
 		static void EndScene();
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); };
+
+		struct Statistics
+		{
+			uint32_t drawCalls = 0;
+			uint32_t drawModels = 0;
+		};
+		static void ResetStates();
+		static Statistics GetState();
 	private:
 		static uint32_t GetTextureIndex(const Ptr<Texture2D>& texture);
 		static void DrawAndReset();

@@ -9,6 +9,9 @@
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
 
+// Debug
+#include "Engine/Debug/FPSCalculator.h"
+
 // Renderer
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/Renderer2D.h"

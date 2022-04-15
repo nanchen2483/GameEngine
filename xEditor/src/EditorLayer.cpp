@@ -96,6 +96,8 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
+		m_FPSCalculator.Update();
+
 		if (FramebufferSpecification spec = m_framebuffer->GetSpecification();
 			m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f && // zero sized framebuffer is invalid
 			(spec.width != m_viewportSize.x || spec.height != m_viewportSize.y))
@@ -112,7 +114,7 @@ namespace Engine
 
 		m_editorCamera.OnUpdate(timeStep);
 
-		Renderer2D::ResetStates();
+		Renderer3D::ResetStates();
 		m_framebuffer->Bind();
 		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RendererCommand::Clear();
@@ -142,7 +144,6 @@ namespace Engine
 			if (pixelData == -1)
 			{
 				m_hoveredEntity = Entity();
-				ENGINE_WARN("entityId -1");
 			}
 			else
 			{
@@ -150,11 +151,6 @@ namespace Engine
 				if (m_activeScene->EntityExists(entity))
 				{
 					m_hoveredEntity = Entity(entity, m_activeScene.get());
-					ENGINE_WARN("entityId {0}", pixelData);
-				}
-				else
-				{
-					ENGINE_WARN("entityId {0} not found", pixelData);
 				}
 			}
 		}
@@ -261,12 +257,13 @@ namespace Engine
 
 			if (ImGui::Begin("Settings"))
 			{
-				auto stats = Renderer2D::GetState();
+				auto stats = Renderer3D::GetState();
 				ImGui::Text("Renderer stats");
 				ImGui::Text("Draw Calls: %d", stats.drawCalls);
-				ImGui::Text("Quads: %d", stats.quadCount);
-				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+				ImGui::Text("Num of models: %d", stats.drawModels);
+				ImGui::NewLine();
+				ImGui::Separator();
+				ImGui::Text("FPS: %f", m_FPSCalculator.GetFPS());
 				ImGui::NewLine();
 				ImGui::Separator();
 				ImGui::Text("Hovered entityId: %d", m_hoveredEntity ? (uint32_t)m_hoveredEntity : -1);

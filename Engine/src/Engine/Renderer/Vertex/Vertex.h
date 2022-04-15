@@ -34,7 +34,7 @@ namespace Engine
 			}
 		}
 
-		void SetBone(uint32_t boneId, float weight)
+		void SetBone(const uint32_t boneId, const float weight)
 		{
 			for (uint32_t i = 0; i < MAX_BONE_WEIGHTS; i++)
 			{
@@ -47,7 +47,7 @@ namespace Engine
 			}
 		}
 
-		static BufferLayout GetBufferLayout()
+		static const BufferLayout GetBufferLayout()
 		{
 			return BufferLayout(
 				BufferLayoutType::Default,

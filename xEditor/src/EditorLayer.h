@@ -37,6 +37,8 @@ namespace Engine
 		Entity m_hoveredEntity;
 		glm::vec2 m_viewportBounds[2] = { glm::vec2(0.0f), glm::vec2(0.0f) };
 
+		FPSCalculator m_FPSCalculator;
+
 		int m_textureId = -1;
 	};
 }
