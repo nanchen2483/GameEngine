@@ -260,6 +260,8 @@ namespace Engine
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = s_data.textureCoords[i];
 			s_data.vertexBufferPtr->material = glm::vec3(currentTextureIndex, -1, 0);
+			s_data.vertexBufferPtr->isWorldPos = true;
+			s_data.vertexBufferPtr->hasAnimation = false;
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
@@ -272,21 +274,18 @@ namespace Engine
 		if (component.model != nullptr)
 		{
 			component.model->UpdateAnimation(deltaTime);
-			s_data.shader->SetBool("uUseModel", true);
 			s_data.shader->SetMat4("uModel", transform);
+			s_data.shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
 			if (component.enableAnimation && component.model->HasAnimations())
 			{
-				s_data.shader->SetBool("uEnableAnimation", true);
 				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms();
 				for (uint32_t i = 0; i < transforms.size(); i++)
 				{
-					s_data.shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+					s_data.shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
 				}
 			}
 
 			component.model->Draw();
-			s_data.shader->SetBool("uEnableAnimation", false);
-			s_data.shader->SetBool("uUseModel", false);
 		}
 	}
 

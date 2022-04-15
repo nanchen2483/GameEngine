@@ -78,6 +78,8 @@ namespace Engine
 			vertex.color = glm::vec4(1.0f);
 			vertex.material = materialData.GetIndex();
 			vertex.texCoord = mesh->HasTextureCoords(0) ? AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]) : glm::vec2(0.0f);
+			vertex.isWorldPos = false;
+			vertex.hasAnimation = m_animation != nullptr;
 			vertex.entityId = m_entityId;
 			vertices.push_back(vertex);
 		}

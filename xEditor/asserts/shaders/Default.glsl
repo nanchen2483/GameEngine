@@ -10,7 +10,9 @@ layout(location = 5) in vec3 aTangent;
 layout(location = 6) in vec3 aBitangent;
 layout(location = 7) in ivec4 aBoneIds;
 layout(location = 8) in vec4 aWeights;
-layout(location = 9) in int aEntityId;
+layout(location = 9) in int aIsWorldPos;
+layout(location = 10) in int aHasAnimation;
+layout(location = 11) in int aEntityId;
 
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
@@ -21,10 +23,9 @@ layout (std140, binding = 0) uniform CameraBlock
 	vec3 viewPosition;
 } uCamera;
 
-uniform bool uEnableAnimation;
-uniform bool uUseModel;
 uniform mat4 uModel;
-uniform mat4 uFinalBonesMatrices[MAX_BONES];
+uniform mat3 uInverseModel;
+uniform mat4 uBoneTransforms[MAX_BONES];
 
 out Vertex
 {
@@ -37,13 +38,16 @@ out Vertex
 } vertex;
 
 vec4 CalcWorldPosition();
+vec4 CalcBonePosition();
+vec3 CalcWorldNormal();
 
 void main()
 {
 	vec4 worldPosition = CalcWorldPosition();
+	vec3 worldNormal = CalcWorldNormal();
 
 	vertex.fragPos = vec3(worldPosition);
-	vertex.normal = uUseModel ? transpose(inverse(mat3(uModel))) * aNormal : aNormal;
+	vertex.normal = worldNormal;
 	vertex.color = aColor;
 	vertex.texCoord = aTexCoord;
 	vertex.material = aMaterial;
@@ -54,38 +58,56 @@ void main()
 
 vec4 CalcWorldPosition()
 {
-	vec4 finalPosition = vec4(0.0f);
-	if (uEnableAnimation)
+	vec4 position = vec4(0.0f);
+	if (aHasAnimation == 1)
 	{
-		for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
-		{
-			int boneId = aBoneIds[i];
-			if (boneId == -1)
-			{
-				continue;
-			}
-
-			if (boneId >= MAX_BONES)
-			{
-				finalPosition = vec4(aPosition, 1.0f);
-				break;
-			}
-
-			vec4 localPosition = uFinalBonesMatrices[boneId] * vec4(aPosition, 1.0f);
-			finalPosition += localPosition * aWeights[i];
-		}
+		position = CalcBonePosition();
 	}
 	else
 	{
-		finalPosition = vec4(aPosition, 1.0f);
+		position = vec4(aPosition, 1.0f);
 	}
 
-	if (uUseModel)
+	if (aIsWorldPos == 0)
 	{
-		finalPosition = uModel * finalPosition;
+		position = uModel * position;
 	}
 	
-	return finalPosition;
+	return position;
+}
+
+vec4 CalcBonePosition()
+{
+	vec4 bonePosition = vec4(0.0f);
+	for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
+	{
+		int boneId = aBoneIds[i];
+		if (boneId == -1)
+		{
+			continue;
+		}
+
+		if (boneId >= MAX_BONES)
+		{
+			return vec4(aPosition, 1.0f);
+		}
+
+		bonePosition += uBoneTransforms[boneId] * vec4(aPosition, 1.0f) * aWeights[i];
+	}
+
+	return bonePosition;
+}
+
+vec3 CalcWorldNormal()
+{
+	if (aIsWorldPos == 0)
+	{
+		return uInverseModel * aNormal;
+	}
+	else
+	{
+		return aNormal;
+	}
 }
 
 #type fragment
@@ -111,11 +133,11 @@ layout (std140, binding = 1) uniform DirLightBlock
 layout (std140, binding = 2) uniform PointLightBlock
 {
     vec3 position;
-    
+
     float constant;
     float linear;
     float quadratic;
-	
+
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
