@@ -11,7 +11,7 @@ layout(location = 6) in vec3 aBitangent;
 layout(location = 7) in ivec4 aBoneIds;
 layout(location = 8) in vec4 aWeights;
 layout(location = 9) in int aIsWorldPos;
-layout(location = 10) in int aHasAnimation;
+layout(location = 10) in int aHasAnimations;
 layout(location = 11) in int aEntityId;
 
 const int MAX_BONES = 100;
@@ -59,7 +59,7 @@ void main()
 vec4 CalcWorldPosition()
 {
 	vec4 position = vec4(0.0f);
-	if (aHasAnimation == 1)
+	if (aHasAnimations == 1)
 	{
 		position = CalcBonePosition();
 	}

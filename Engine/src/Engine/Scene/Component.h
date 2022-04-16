@@ -99,6 +99,14 @@ namespace Engine
 		ModelComponent(const ModelComponent& modelComponent) = default;
 		ModelComponent(const Ptr<Model>& model)
 			: model(model) {}
+
+		void OnUpdate(float deltaTime)
+		{
+			if (enableAnimation && model != nullptr)
+			{
+				model->OnUpdate(deltaTime);
+			}
+		}
 	};
 
 	struct NativeScriptComponent

@@ -49,9 +49,10 @@ namespace Engine
 		Renderer3D::EndScene();
 
 		m_registry.view<TransformComponent, ModelComponent>()
-			.each([=](TransformComponent& transform, ModelComponent& model)
+			.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 				{
-					Renderer3D::DrawModel(transform.GetTransform(), model, time);
+					modelComponent.OnUpdate(time);
+					Renderer3D::DrawModel(transform.GetTransform(), modelComponent);
 				});
 	}
 
@@ -108,9 +109,10 @@ namespace Engine
 			Renderer3D::EndScene();
 
 			m_registry.view<TransformComponent, ModelComponent>()
-				.each([=](TransformComponent& transform, ModelComponent& model)
+				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 					{
-						Renderer3D::DrawModel(transform.GetTransform(), model, time);
+						modelComponent.OnUpdate(time);
+						Renderer3D::DrawModel(transform.GetTransform(), modelComponent);
 					});
 		}
 

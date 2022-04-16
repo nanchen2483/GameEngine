@@ -3,8 +3,6 @@
 
 #include "Engine/Renderer/RendererCommand.h"
 
-#include <glad/glad.h>
-
 namespace Engine
 {
 	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, AssimpMaterial material)

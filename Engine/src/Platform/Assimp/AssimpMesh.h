@@ -1,9 +1,6 @@
 #pragma once
 
 #include "AssimpMaterial.h"
-
-#include "Engine/Renderer/Shader/Shader.h"
-#include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Renderer/Vertex/Vertex.h"
 #include "Engine/Renderer/Vertex/VertexArray.h"
 

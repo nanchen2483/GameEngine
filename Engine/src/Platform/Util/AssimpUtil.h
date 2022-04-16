@@ -1,5 +1,4 @@
 #pragma once
-
 #include <assimp/scene.h>
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -10,7 +9,6 @@ namespace Engine
 	class AssimpUtil
 	{
 	public:
-
 		static inline glm::mat4 ToGlm(const aiMatrix4x4& from)
 		{
 			glm::mat4 to;

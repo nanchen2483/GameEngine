@@ -1,5 +1,6 @@
 #include "Example.h"
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Engine/Renderer/Renderer.h"
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>

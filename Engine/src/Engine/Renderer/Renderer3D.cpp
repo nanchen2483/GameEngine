@@ -265,7 +265,7 @@ namespace Engine
 			s_data.vertexBufferPtr->texCoord = s_data.textureCoords[i];
 			s_data.vertexBufferPtr->material = glm::vec3(currentTextureIndex, -1, 0);
 			s_data.vertexBufferPtr->isWorldPos = true;
-			s_data.vertexBufferPtr->hasAnimation = false;
+			s_data.vertexBufferPtr->hasAnimations = false;
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
@@ -273,15 +273,15 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& transform, ModelComponent& component, const float deltaTime)
+	void Renderer3D::DrawModel(const glm::mat4& transform, ModelComponent& component)
 	{
 		if (component.model != nullptr)
 		{
 			s_data.shader->SetMat4("uModel", transform);
 			s_data.shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
-			if (component.enableAnimation && component.model->HasAnimations())
+			if (component.model->HasAnimations())
 			{
-				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms(deltaTime);
+				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms();
 				for (uint32_t i = 0; i < transforms.size(); i++)
 				{
 					s_data.shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);

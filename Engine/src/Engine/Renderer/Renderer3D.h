@@ -17,7 +17,7 @@ namespace Engine
 		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId = -1);
 		static void DrawLight(const TransformComponent& transform, LightComponent& light, int entityId = -1);
 		static void DrawCube(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), int entityId = -1);
-		static void DrawModel(const glm::mat4& transform, ModelComponent& component, const float deltaTime);
+		static void DrawModel(const glm::mat4& transform, ModelComponent& component);
 
 		static void EndScene();
 

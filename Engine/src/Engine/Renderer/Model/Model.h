@@ -7,14 +7,25 @@
 
 namespace Engine
 {
+	struct AnimationInfo
+	{
+		uint32_t id;
+		std::string displayName;
+		Ptr<float> animationTime;
+		float duration;
+		float ticksPerSecond;
+	};
+
 	class Model
 	{
 	public:
 		virtual std::string GetFilePath() = 0;
 		virtual bool HasAnimations() = 0;
-		virtual std::vector<glm::mat4> GetBoneTransforms(float deltaTime) = 0;
-		virtual float* GetAnimationTime() = 0;
-		virtual const float GetAnimationDuration() = 0;
+		virtual void OnUpdate(float deltaTime) = 0;
+		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
+		virtual const std::vector<AnimationInfo> GetAnimations() const = 0;
+		virtual const AnimationInfo GetSelectedAnimation() const = 0;
+		virtual void SetSelectedAnimation(const AnimationInfo animation) = 0;
 		virtual void Draw() = 0;
 
 		static Ptr<Model> Create(std::string path);

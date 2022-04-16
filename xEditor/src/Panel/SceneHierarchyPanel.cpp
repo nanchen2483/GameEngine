@@ -496,9 +496,28 @@ namespace Engine
 				if (component.model != nullptr && component.model->HasAnimations())
 				{
 					ImGui::Checkbox("Animation", &component.enableAnimation);
-					float* time = component.model->GetAnimationTime();
-					const float duration = component.model->GetAnimationDuration();
-					ImGui::SliderFloat("Time", time, 0.0f, duration, "%.3f sec.");
+					AnimationInfo selectedAnimation = component.model->GetSelectedAnimation();
+					std::vector<AnimationInfo> animations = component.model->GetAnimations();
+					if (ImGui::BeginCombo("Action", selectedAnimation.displayName.c_str()))
+					{
+						for (AnimationInfo currentAnimation : animations)
+						{
+							bool isSelected = selectedAnimation.id == currentAnimation.id;
+							if (ImGui::Selectable(currentAnimation.displayName.c_str(), isSelected))
+							{
+								selectedAnimation = currentAnimation;
+								component.model->SetSelectedAnimation(currentAnimation);
+							}
+
+							if (isSelected) {
+								ImGui::SetItemDefaultFocus();
+							}
+						}
+
+						ImGui::EndCombo();
+					}
+
+					ImGui::SliderFloat("Time", selectedAnimation.animationTime.get(), 0.0f, selectedAnimation.duration, "%.3f sec.");
 				}
 
 				ImGui::TreePop();

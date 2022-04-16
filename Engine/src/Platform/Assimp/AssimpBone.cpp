@@ -1,8 +1,6 @@
 #include "enginepch.h"
 #include "AssimpBone.h"
 
-#include "Engine\Util\AssimpUtil.h"
-
 namespace Engine
 {
 	AssimpBone::AssimpBone(uint32_t id, glm::mat4 offset, const aiNodeAnim* channel)

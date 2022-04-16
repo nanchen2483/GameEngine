@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include "Engine/Renderer/Buffer/BufferLayout.h"
 
-#define MAX_BONE_INFLUENCE 4
+#define MAX_BONE_WEIGHTS 4
 #define UNINITIALIZED_BONE_ID -1
 
 namespace Engine
@@ -17,34 +17,36 @@ namespace Engine
 		glm::vec3 material = {};
 		glm::vec3 tangent = {};
 		glm::vec3 bitangent = {};
-		int boneIds[MAX_BONE_INFLUENCE] = {};
-		float weights[MAX_BONE_INFLUENCE] = {};
+		int boneIds[MAX_BONE_WEIGHTS] = {};
+		float weights[MAX_BONE_WEIGHTS] = {};
 		uint32_t isWorldPos = false;
-		uint32_t hasAnimation = false;
+		uint32_t hasAnimations = false;
 
 		// Editor-only
 		int entityId = -1;
 
 		Vertex()
 		{
-			for (uint32_t i = 0; i < MAX_BONE_INFLUENCE; i++)
+			for (uint32_t i = 0; i < MAX_BONE_WEIGHTS; i++)
 			{
 				boneIds[i] = UNINITIALIZED_BONE_ID;
 				weights[i] = 0.0f;
 			}
 		}
 
-		void SetBone(const uint32_t boneId, const float weight)
+		bool SetBone(const uint32_t boneId, const float weight)
 		{
-			for (uint32_t i = 0; i < MAX_BONE_INFLUENCE; i++)
+			for (uint32_t i = 0; i < MAX_BONE_WEIGHTS; i++)
 			{
 				if (boneIds[i] == UNINITIALIZED_BONE_ID)
 				{
 					boneIds[i] = boneId;
 					weights[i] = weight;
-					break;
+					return true;
 				}
 			}
+
+			return false;
 		}
 
 		static const BufferLayout GetBufferLayout()

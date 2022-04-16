@@ -37,6 +37,7 @@ namespace Engine
 	{
 		m_editorCamera.OnUpdate(timeStep);
 		m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
+		m_model->OnUpdate(timeStep);
 
 		Renderer2D::ResetStates();
 		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
@@ -47,7 +48,7 @@ namespace Engine
 		m_shader->SetBool("uEnableAnimation", true);
 		m_shader->SetBool("uUseModel", true);
 		m_shader->SetMat4("uViewProjection", m_editorCamera.GetProjection() * m_editorCamera.GetViewMatrix());
-		std::vector<glm::mat4> transforms = m_model->GetBoneTransforms(timeStep);
+		std::vector<glm::mat4> transforms = m_model->GetBoneTransforms();
 		for (int i = 0; i < transforms.size(); ++i)
 		{
 			m_shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);

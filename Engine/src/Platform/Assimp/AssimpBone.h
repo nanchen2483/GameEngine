@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "Engine/Util/AssimpUtil.h"
+#include "Platform/Util/AssimpUtil.h"
 
 #define UNINITIALIZED_BONE_ID -1
 
@@ -57,8 +57,8 @@ namespace Engine
 		AssimpBone(uint32_t id, glm::mat4 offset, const aiNodeAnim* channel);
 
 		const glm::mat4 GetLocalTransform(float animationTime) const;
-		const uint32_t GetBoneId() const { return m_id; }
-		const glm::mat4 GetBoneOffset() const { return m_offset; }
+		const uint32_t GetId() const { return m_id; }
+		const glm::mat4 GetOffset() const { return m_offset; }
 
 		operator bool() const { return m_id != UNINITIALIZED_BONE_ID; }
 	private:
