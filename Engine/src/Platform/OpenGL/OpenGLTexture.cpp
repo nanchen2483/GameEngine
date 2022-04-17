@@ -22,6 +22,45 @@ namespace Engine
 		glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
+	OpenGLTexture2D::OpenGLTexture2D(const Ptr<Image> image, const TextureType type)
+		: m_filePath(image->GetFilePath()), m_type(type), m_width(image->GetWidth()), m_height(image->GetHeight())
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		GLenum internalFormat = 0, dataFormat = 0;
+		if (image->GetChannels() == 1)
+		{
+			internalFormat = GL_RED;
+			dataFormat = GL_RED;
+		}
+		else if (image->GetChannels() == 3)
+		{
+			internalFormat = GL_RGB8;
+			dataFormat = GL_RGB;
+		}
+		else if (image->GetChannels() == 4)
+		{
+			internalFormat = GL_RGBA8;
+			dataFormat = GL_RGBA;
+		}
+
+		m_internalFormat = internalFormat;
+		m_dataFormat = dataFormat;
+
+		ENGINE_CORE_ASSERT(m_internalFormat & m_dataFormat, "Format not supported!");
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererId);
+		glTextureStorage2D(m_rendererId, 1, m_internalFormat, m_width, m_height);
+
+		glTextureParameteri(m_rendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_rendererId, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		glTextureSubImage2D(m_rendererId, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, image->GetData());
+	}
+
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& filePath, const TextureType type, const bool flipVertically)
 		: m_filePath(filePath), m_type(type), m_width(0), m_height(0)
 	{

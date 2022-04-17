@@ -8,6 +8,7 @@ namespace Engine
 	{
 	public:
 		OpenGLTexture2D(uint32_t width, uint32_t height);
+		OpenGLTexture2D(const Ptr<Image> image, const TextureType type);
 		OpenGLTexture2D(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = true);
 		~OpenGLTexture2D();
 

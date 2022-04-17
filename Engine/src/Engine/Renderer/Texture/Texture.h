@@ -3,6 +3,8 @@
 #include <string>
 #include <map>
 
+#include "Image.h"
+
 namespace Engine
 {
 	enum class TextureType
@@ -34,6 +36,7 @@ namespace Engine
 	{
 	public:
 		static Ptr<Texture2D> Create(uint32_t width, uint32_t height);
+		static Ptr<Texture2D> Create(const Ptr<Image> image, const TextureType type = TextureType::None);
 		static Ptr<Texture2D> Create(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = true);
 	};
 
