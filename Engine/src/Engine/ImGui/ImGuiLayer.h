@@ -22,10 +22,10 @@ namespace Engine
 		void Begin();
 		void End();
 
-		void DisableEvents(bool disable) { m_disableEvents = disable; }
+		void BlockEvents(bool block) { m_blockEvents = block; }
 	private:
 		float m_time = 0.0f;
-		bool m_disableEvents = false;
+		bool m_blockEvents = false;
 	};
 }
 

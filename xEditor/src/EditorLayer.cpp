@@ -107,12 +107,12 @@ namespace Engine
 			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		}
 
-		if (m_viewportFocused)
+		if (m_viewportHovered)
 		{
 			ENGINE_PROFILE_SCOPE("Camera OnUpdate");
+			m_editorCamera.OnUpdate(timeStep);
 		}
 
-		m_editorCamera.OnUpdate(timeStep);
 
 		Renderer3D::ResetStates();
 		m_framebuffer->Bind();
@@ -286,7 +286,7 @@ namespace Engine
 
 				m_viewportFocused = ImGui::IsWindowFocused();
 				m_viewportHovered = ImGui::IsWindowHovered();
-				Application::Get().GetImGuiLayer()->DisableEvents(m_viewportFocused || m_viewportHovered);
+				Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportFocused || !m_viewportHovered);
 
 				ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 				m_viewportSize = glm::vec2(viewportSize.x, viewportSize.y);
@@ -359,7 +359,9 @@ namespace Engine
 
 				ImGui::End();
 			}
+
 			ImGui::PopStyleVar();
+
 			ImGui::End();
 		}
 	}
@@ -375,11 +377,7 @@ namespace Engine
 			}
 		}
 
-		if (m_viewportHovered)
-		{
-			m_editorCamera.OnEvent(event);
-		}
-
+		m_editorCamera.OnEvent(event);
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 		dispatcher.Dispatch<MouseButtonPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
