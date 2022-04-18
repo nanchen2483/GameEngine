@@ -18,6 +18,9 @@ namespace Engine
 		Ptr<Scene> m_activeScene;
 		EditorCamera m_editorCamera;
 
+		Ptr<UniformBuffer> m_cameraUniformBuffer;
+		Ptr<UniformBuffer> m_dirLightUniformBuffer;
+
 		Ptr<Model> m_model;
 		Ptr<Shader> m_shader;
 	};

@@ -25,7 +25,34 @@ namespace Engine
 		{
 			samplers[i] = i;
 		}
+
 		m_shader->SetIntArray("uTextures", samplers, 32);
+
+		m_cameraUniformBuffer = UniformBuffer::Create(0, {
+				BufferLayoutType::Std140,
+				{
+					{ ShaderDataType::Mat4 },
+					{ ShaderDataType::Float3 },
+				}
+			});
+
+		m_dirLightUniformBuffer = UniformBuffer::Create(1, {
+				BufferLayoutType::Std140,
+				{
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },
+				}
+			});
+
+		m_dirLightUniformBuffer->SetData(
+			{
+				glm::value_ptr(glm::vec3(-0.2f, -1.0f, -0.3f)),
+				glm::value_ptr(glm::vec3(0.5f)),
+				glm::value_ptr(glm::vec3(0.4f)),
+				glm::value_ptr(glm::vec3(0.5f)),
+			});
 	}
 
 	void ExampleLayer::OnDetach()
@@ -45,28 +72,17 @@ namespace Engine
 
 		// view/projection transformations
 		m_shader->Bind();
-		m_shader->SetBool("uEnableAnimation", true);
-		m_shader->SetBool("uUseModel", true);
-		m_shader->SetMat4("uViewProjection", m_editorCamera.GetProjection() * m_editorCamera.GetViewMatrix());
+		m_cameraUniformBuffer->SetData({ &m_editorCamera.GetViewProjection(), &m_editorCamera.GetPosition() });
+		glm::mat4 transform = glm::mat4(1.0f);
+		m_shader->SetMat4("uModel", transform);
+		m_shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
 		std::vector<glm::mat4> transforms = m_model->GetBoneTransforms();
-		for (int i = 0; i < transforms.size(); ++i)
+		for (uint32_t i = 0; i < transforms.size(); ++i)
 		{
-			m_shader->SetMat4("uFinalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+			m_shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
 		}
 
-		m_shader->SetFloat3("uViewPos", m_editorCamera.GetPosition());
-
-		// light properties
-		float currentFrame = static_cast<float>(timeStep) * 10;
-		ENGINE_CORE_INFO("currentFrame: {0}", currentFrame);
-		m_shader->SetFloat3("uDirLight.position", glm::vec3(currentFrame, 1.0f, currentFrame));
-		m_shader->SetFloat3("uDirLight.ambient", glm::vec3(0.4f));
-		m_shader->SetFloat3("uDirLight.diffuse", glm::vec3(0.5f));
-		m_shader->SetFloat3("uDirLight.specular", glm::vec3(1.0f));
-
 		// render the loaded model
-		glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));	// it's a bit too big for our scene, so scale it down
-		m_shader->SetMat4("uModel", model);
 		m_model->Draw();
 	}
 
