@@ -7,19 +7,22 @@ namespace Engine
 		: m_id(id), m_offset(offset)
 	{
 		m_numPositions = channel->mNumPositionKeys;
-		for (int positionIndex = 0; positionIndex < m_numPositions; ++positionIndex)
+		m_positions.reserve(channel->mNumPositionKeys);
+		for (uint32_t positionIndex = 0; positionIndex < m_numPositions; positionIndex++)
 		{
 			m_positions.push_back(KeyPosition(channel->mPositionKeys[positionIndex]));
 		}
 
 		m_numRotations = channel->mNumRotationKeys;
-		for (int rotationIndex = 0; rotationIndex < m_numRotations; ++rotationIndex)
+		m_rotations.reserve(channel->mNumRotationKeys);
+		for (uint32_t rotationIndex = 0; rotationIndex < m_numRotations; rotationIndex++)
 		{
 			m_rotations.push_back(KeyRotation(channel->mRotationKeys[rotationIndex]));
 		}
 
 		m_numScalings = channel->mNumScalingKeys;
-		for (int keyIndex = 0; keyIndex < m_numScalings; ++keyIndex)
+		m_scales.reserve(channel->mNumScalingKeys);
+		for (uint32_t keyIndex = 0; keyIndex < m_numScalings; keyIndex++)
 		{
 			m_scales.push_back(KeyScale(channel->mScalingKeys[keyIndex]));
 		}

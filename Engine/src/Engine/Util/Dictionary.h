@@ -25,7 +25,18 @@ namespace Engine
 			ENGINE_CORE_ASSERT(false, "Dictionary key not found!");
 		}
 
-		const Value& AddIfNew(const K key, const V value)
+		const Value& Add(const K key, const V value)
+		{
+			if (!Exists(key))
+			{
+				m_map[key] = Value{ GetUniqueId(), value };
+				return m_map[key];
+			}
+
+			ENGINE_CORE_ASSERT(false, "Dictionary key already exists!");
+		}
+
+		const Value& SafeAdd(const K key, const V value)
 		{
 			if (!Exists(key))
 			{
@@ -36,7 +47,6 @@ namespace Engine
 		}
 
 		bool Exists(const K key) const { return m_map.find(key) != m_map.end(); }
-		const V& operator[] (const K key) const { retun Get(key); }
 		const uint32_t Size() const { return m_size; }
 	private:
 		const uint32_t GetUniqueId() { return m_size++; }

@@ -39,18 +39,32 @@ namespace Engine
 			return;
 		}
 
-		SetupMeshes(scene);
-		SetupAnimations(scene);
+		LoadMeshes(scene);
+		LoadAnimations(scene);
 	}
 
-	void AssimpModel::SetupMeshes(const aiScene* scene)
+	void AssimpModel::LoadMeshes(const aiScene* scene)
 	{
 		m_hasAnimations = scene->HasAnimations();
+
+		std::vector<Ptr<Material>> allMaterials;
+		allMaterials.reserve(scene->mNumMaterials);
+		for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; materialIndex++)
+		{
+			const aiMaterial* material = scene->mMaterials[materialIndex];
+			Ptr<Material> currentMaterial = CreatePtr<Material>();
+			currentMaterial->diffuse	= LoadTexture(material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
+			currentMaterial->specular	= LoadTexture(material, aiTextureType::aiTextureType_SPECULAR, TextureType::Specular);
+			currentMaterial->normal		= LoadTexture(material, aiTextureType::aiTextureType_HEIGHT, TextureType::Normal);
+			currentMaterial->height		= LoadTexture(material, aiTextureType::aiTextureType_AMBIENT, TextureType::Height);
+			
+			allMaterials.push_back(currentMaterial);
+		}
+
 		for (uint32_t i = 0; i < scene->mNumMeshes; i++)
 		{
 			const aiMesh* mesh = scene->mMeshes[i];
-			const aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-			AssimpMaterial materialData = LoadMaterial(material);
+			Ptr<Material> materials = allMaterials[mesh->mMaterialIndex];
 			std::vector<Vertex> vertices;
 			vertices.reserve(mesh->mNumVertices);
 			for (uint32_t i = 0; i < mesh->mNumVertices; i++)
@@ -59,7 +73,7 @@ namespace Engine
 				vertex.position = AssimpUtil::ToGlm(mesh->mVertices[i]);
 				vertex.normal = AssimpUtil::ToGlm(mesh->mNormals[i]);
 				vertex.color = glm::vec4(1.0f);
-				vertex.material = materialData.GetIndex();
+				vertex.material = materials->GetTextureSlotIndices();
 				vertex.texCoord = mesh->HasTextureCoords(0) ? AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]) : glm::vec2(0.0f);
 				vertex.isWorldPos = false;
 				vertex.hasAnimations = m_hasAnimations;
@@ -79,13 +93,13 @@ namespace Engine
 				}
 			}
 
-			ExtractBoneWeight(vertices, mesh);
+			LoadBones(vertices, mesh);
 
-			m_meshes.push_back(AssimpMesh(vertices, indices, materialData));
+			m_meshes.push_back(AssimpMesh(vertices, indices, materials));
 		}
 	}
 
-	void AssimpModel::SetupAnimations(const aiScene* scene)
+	void AssimpModel::LoadAnimations(const aiScene* scene)
 	{
 		if (scene->HasAnimations())
 		{
@@ -114,43 +128,12 @@ namespace Engine
 		}
 	}
 
-	const AssimpMaterial AssimpModel::LoadMaterial(const aiMaterial* material)
-	{
-		AssimpMaterial data;
-		data.diffuse = LoadTexture(material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
-		data.specular = LoadTexture(material, aiTextureType::aiTextureType_SPECULAR, TextureType::Specular);
-		data.normal = LoadTexture(material, aiTextureType::aiTextureType_HEIGHT, TextureType::Normal);
-		data.height = LoadTexture(material, aiTextureType::aiTextureType_AMBIENT, TextureType::Height);
-
-		return data;
-	}
-
-	const Ptr<Texture> AssimpModel::LoadTexture(const aiMaterial* material, const aiTextureType type, const TextureType textureType)
-	{
-		if (material->GetTextureCount(type) > 0)
-		{
-			aiString filename;
-			material->GetTexture(type, 0, &filename);
-			std::string path = (this->m_directory /+ filename.C_Str()).string();
-			Ptr<Texture> materialTexture = (*m_textureMap)[path];
-			if (materialTexture == nullptr)
-			{
-				materialTexture = Texture2D::Create(path, textureType, false);
-				(*m_textureMap)[path] = materialTexture;  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
-			}
-
-			return materialTexture;
-		}
-
-		return nullptr;
-	}
-
-	void AssimpModel::ExtractBoneWeight(std::vector<Vertex>& vertices, const aiMesh* mesh)
+	void AssimpModel::LoadBones(std::vector<Vertex>& vertices, const aiMesh* mesh)
 	{
 		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++)
 		{
 			const aiBone* aiBone = mesh->mBones[boneIndex];
-			const auto& bone = m_boneOffsets.AddIfNew(aiBone->mName.data, AssimpUtil::ToGlm(aiBone->mOffsetMatrix));
+			const auto& bone = m_boneOffsets.SafeAdd(aiBone->mName.data, AssimpUtil::ToGlm(aiBone->mOffsetMatrix));
 			for (uint32_t weightIndex = 0; weightIndex < aiBone->mNumWeights; weightIndex++)
 			{
 				const aiVertexWeight& vertexWeight = aiBone->mWeights[weightIndex];
@@ -163,6 +146,30 @@ namespace Engine
 				}
 			}
 		}
+	}
+
+	const Ptr<Material::MaterialTexture> AssimpModel::LoadTexture(const aiMaterial* material, const aiTextureType type, const TextureType textureType)
+	{
+		if (material->GetTextureCount(type) > 0)
+		{
+			aiString filename;
+			material->GetTexture(type, 0, &filename);
+			std::string path = (this->m_directory / +filename.C_Str()).string();
+			Ptr<Texture> texture = (*m_textureMap)[path];
+			Ptr<Material::MaterialTexture> materialTexture = CreatePtr<Material::MaterialTexture>();
+			if (texture == nullptr)
+			{
+				materialTexture->image = CreatePtr<Image>(path, false);
+			}
+			else
+			{
+				materialTexture->texture = texture;
+			}
+
+			return materialTexture;
+		}
+
+		return nullptr;
 	}
 
 	void AssimpModel::OnUpdate(float deltaTime)
@@ -187,6 +194,7 @@ namespace Engine
 	{
 		for (uint32_t i = 0; i < m_meshes.size(); i++)
 		{
+			m_meshes[i].Setup(m_textureMap);
 			m_meshes[i].Draw();
 		}
 	}

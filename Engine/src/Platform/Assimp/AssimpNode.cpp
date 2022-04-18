@@ -11,7 +11,7 @@ namespace Engine
 	{
 	}
 
-	glm::mat4 AssimpNode::GetTransform(float animationTime)
+	const glm::mat4 AssimpNode::GetTransform(float animationTime) const
 	{
 		if (m_hasBone)
 		{
@@ -23,7 +23,7 @@ namespace Engine
 		}
 	}
 
-	uint32_t AssimpNode::GetBoneId()
+	const uint32_t AssimpNode::GetBoneId() const
 	{
 		if (m_hasBone)
 		{
@@ -35,7 +35,7 @@ namespace Engine
 		}
 	}
 
-	glm::mat4 AssimpNode::GetBoneOffset()
+	const glm::mat4 AssimpNode::GetBoneOffset() const
 	{
 		if (m_hasBone)
 		{
@@ -47,12 +47,7 @@ namespace Engine
 		}
 	}
 	
-	void AssimpNode::AddChildNode(const AssimpNode childNode)
-	{
-		m_children.push_back(childNode);
-	}
-	
-	AssimpNode AssimpNode::GetChildNode(const uint32_t index)
+	const AssimpNode& AssimpNode::GetChildNode(const uint32_t index) const
 	{
 		ENGINE_CORE_ASSERT(m_numOfchildren > index, "Invalid index");
 		return m_children[index];

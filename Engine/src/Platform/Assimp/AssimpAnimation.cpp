@@ -29,7 +29,7 @@ namespace Engine
 		*m_animationTime = fmod(*m_animationTime, m_duration);
 	}
 
-	void AssimpAnimation::CalculateBoneTransform(AssimpNode& node, glm::mat4 globalTransformation)
+	void AssimpAnimation::CalculateBoneTransform(const AssimpNode& node, glm::mat4 globalTransformation)
 	{
 		globalTransformation *= node.GetTransform(*m_animationTime);
 		if (node.HasBone())

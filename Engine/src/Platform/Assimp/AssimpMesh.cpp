@@ -5,18 +5,28 @@
 
 namespace Engine
 {
-	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, AssimpMaterial material)
-		: m_material(material), m_vertexArray(VertexArray::Create())
+	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, const Ptr<Material> material)
+		: m_vertices(CreatePtr<std::vector<Vertex>>(vertices)), m_indices(CreatePtr<std::vector<uint32_t>>(indices)), m_material(material)
 	{
-		m_vertexArray->AddVertexBuffer(VertexBuffer::Create(&vertices[0], vertices.size()));
-		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(&indices[0], indices.size()));
+	}
+
+	void AssimpMesh::Setup(TextureMap* textureMap)
+	{
+		if (m_vertexArray == nullptr)
+		{
+			m_vertexArray = VertexArray::Create();
+			m_vertexArray->AddVertexBuffer(VertexBuffer::Create(&(*m_vertices)[0], m_vertices->size()));
+			m_vertexArray->SetIndexBuffer(IndexBuffer::Create(&(*m_indices)[0], m_indices->size()));
+			m_vertices = nullptr;
+			m_indices = nullptr;
+
+			m_material->Setup(textureMap);
+		}
 	}
 
 	void AssimpMesh::Draw()
 	{
-		m_material.Bind();
-
-		// Draw mesh
+		m_material->Bind();
 		m_vertexArray->Bind();
 		RendererCommand::DrawIndexed(m_vertexArray->GetNumOfIndices());
 	}

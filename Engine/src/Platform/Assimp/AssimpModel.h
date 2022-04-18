@@ -32,11 +32,10 @@ namespace Engine
 		virtual void Draw() override;
 	private:
 		void Load(std::string const& path);
-		void SetupMeshes(const aiScene* scene);
-		void SetupAnimations(const aiScene* scene);
-		const AssimpMaterial LoadMaterial(const aiMaterial* material);
-		const Ptr<Texture> LoadTexture(const aiMaterial* material, const aiTextureType type, const TextureType textureType);
-		void ExtractBoneWeight(std::vector<Vertex>& vertices, const aiMesh* mesh);
+		void LoadMeshes(const aiScene* scene);
+		void LoadAnimations(const aiScene* scene);
+		void LoadBones(std::vector<Vertex>& vertices, const aiMesh* mesh);
+		const Ptr<Material::MaterialTexture> LoadTexture(const aiMaterial* material, const aiTextureType type, const TextureType textureType);
 
 		const std::filesystem::path m_filePath;
 		const std::filesystem::path m_directory = m_filePath.parent_path();

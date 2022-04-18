@@ -7,7 +7,6 @@ namespace Engine
 	class AssimpAnimation
 	{
 	public:
-		AssimpAnimation() = default;
 		AssimpAnimation(const aiAnimation* animation, const AssimpNode rootNode);
 		
 		void UpdateBoneTransforms(float deltaTime);
@@ -18,14 +17,14 @@ namespace Engine
 		const float GetTicketPerSecond() const { return m_ticksPerSecond; }
 	private:
 		void CalculateAnimationTime(float deltaTime);
-		void CalculateBoneTransform(AssimpNode& node, glm::mat4 globalTransformation);
+		void CalculateBoneTransform(const AssimpNode& node, glm::mat4 globalTransformation);
 		
-		std::string m_name;
+		const std::string m_name;
 		Ptr<float> m_animationTime;
-		float m_duration;
-		float m_ticksPerSecond;
+		const float m_duration;
+		const float m_ticksPerSecond;
 
-		AssimpNode m_rootNode;
+		const AssimpNode m_rootNode;
 		std::vector<glm::mat4> m_boneTransforms;
 	};
 }
