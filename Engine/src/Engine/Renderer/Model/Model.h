@@ -1,5 +1,5 @@
 #pragma once
-
+#include <filesystem>
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -19,7 +19,7 @@ namespace Engine
 	class Model
 	{
 	public:
-		virtual std::string GetFilePath() = 0;
+		virtual std::filesystem::path GetFilePath() = 0;
 		virtual bool HasAnimations() = 0;
 		virtual void OnUpdate(float deltaTime) = 0;
 		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
@@ -28,8 +28,8 @@ namespace Engine
 		virtual void SetSelectedAnimation(const AnimationInfo animation) = 0;
 		virtual void Draw() = 0;
 
-		static Ptr<Model> Create(std::string path);
-		static Ptr<Model> Create(std::string path, bool gamma);
+		static Ptr<Model> Create(std::string path, bool gamma = false);
 		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, TextureMap* textureMap);
+		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, TextureMap* textureMap, Ptr<float> progression);
 	};
 }

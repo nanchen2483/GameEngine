@@ -92,6 +92,9 @@ namespace Engine
 
 	struct ModelComponent
 	{
+		bool loading = false;
+		Ptr<float> progression = CreatePtr<float>(0.0f);
+		
 		bool enableAnimation = false;
 		Ptr<Model> model = nullptr;
 

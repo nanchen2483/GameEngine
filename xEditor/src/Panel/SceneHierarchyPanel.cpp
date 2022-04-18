@@ -5,6 +5,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <filesystem>
+#include <thread>
 
 namespace Engine
 {
@@ -49,7 +50,11 @@ namespace Engine
 		if (m_selectionContext)
 		{
 			DrawComponents(m_selectionContext);
-				
+			
+			ImGui::NewLine();
+			ImGui::Separator();
+			ImGui::NewLine();
+			
 			if (ImGui::Button("Add Component"))
 			{
 				ImGui::OpenPopup("AddComponent");
@@ -480,24 +485,45 @@ namespace Engine
 
 			if (open)
 			{
-				ModelComponent& component = entity.GetComponent<ModelComponent>();
+				ModelComponent* component = &entity.GetComponent<ModelComponent>();
 				uint32_t modelId = 0;
-				ImGui::ImageButton((void*)modelId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
-				if (ImGui::BeginDragDropTarget())
+				if (component->loading)
 				{
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					ImGui::ProgressBar(*component->progression, ImVec2(0.0f, 0.0f));
+					ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
+					ImGui::Text("Progress Bar");
+				}
+				else
+				{
+					if (component->model != nullptr)
 					{
-						const wchar_t* filepath = (const wchar_t*)payload->Data;
-						const std::filesystem::path path = filepath;
-						component.model = Model::Create(path.string(), false, entity, m_context->GetLoadedTextureMap());
+						ImGui::LabelText("Filename", component->model->GetFilePath().filename().string().c_str());
+					}
+
+					ImGui::ImageButton((void*)modelId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						{
+							const wchar_t* filepath = (const wchar_t*)payload->Data;
+							const std::filesystem::path path = filepath;
+							std::thread([=]()
+								{
+									component->loading = true;
+									component->model = Model::Create(path.string(), false, entity, m_context->GetLoadedTextureMap(), component->progression);
+									component->loading = false;
+									*component->progression = 0.0f;
+								}).detach();
+						}
 					}
 				}
 
-				if (component.model != nullptr && component.model->HasAnimations())
+
+				if (component->model != nullptr && component->model->HasAnimations())
 				{
-					ImGui::Checkbox("Animation", &component.enableAnimation);
-					AnimationInfo selectedAnimation = component.model->GetSelectedAnimation();
-					std::vector<AnimationInfo> animations = component.model->GetAnimations();
+					ImGui::Checkbox("Animation", &component->enableAnimation);
+					AnimationInfo selectedAnimation = component->model->GetSelectedAnimation();
+					std::vector<AnimationInfo> animations = component->model->GetAnimations();
 					if (ImGui::BeginCombo("Action", selectedAnimation.displayName.c_str()))
 					{
 						for (AnimationInfo currentAnimation : animations)
@@ -506,7 +532,7 @@ namespace Engine
 							if (ImGui::Selectable(currentAnimation.displayName.c_str(), isSelected))
 							{
 								selectedAnimation = currentAnimation;
-								component.model->SetSelectedAnimation(currentAnimation);
+								component->model->SetSelectedAnimation(currentAnimation);
 							}
 
 							if (isSelected) {

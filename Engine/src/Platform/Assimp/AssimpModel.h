@@ -9,18 +9,17 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <string>
-#include <filesystem>
 
 namespace Engine
 {
 	class AssimpModel: public Model
 	{
 	public:
-		AssimpModel(std::string const& path);
-		AssimpModel(std::string const& path, bool gamma);
+		AssimpModel(std::string const& path, bool gamma = false);
 		AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap);
+		AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap, Ptr<float> progression);
 		
-		virtual std::string GetFilePath() override { return m_filePath.string(); }
+		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
 		virtual bool HasAnimations() override { return m_hasAnimations; }
 		virtual void OnUpdate(float deltaTime) override;
 		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
@@ -53,5 +52,9 @@ namespace Engine
 
 		// Editor-only
 		const int m_entityId;
+		Ptr<float> m_progression = nullptr;
+		float m_currentProgression = 0.0f;
+		float m_totalProgression;
+		void IncreaseProgression();
 	};
 }

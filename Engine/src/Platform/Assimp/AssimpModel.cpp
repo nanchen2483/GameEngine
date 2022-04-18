@@ -5,18 +5,18 @@
 
 namespace Engine
 {
-	AssimpModel::AssimpModel(std::string const& path)
-		: AssimpModel(path, false)
-	{
-	}
-
 	AssimpModel::AssimpModel(std::string const& path, bool gamma)
 		: AssimpModel(path, gamma, -1, &TextureMap())
 	{
 	}
 
 	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap)
-		: m_filePath(path), m_gammaCorrection(gamma), m_entityId(entityId), m_textureMap(textureMap)
+		: AssimpModel(path, gamma, entityId, textureMap, nullptr)
+	{
+	}
+
+	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap, Ptr<float> progression)
+		: m_filePath(path), m_gammaCorrection(gamma), m_entityId(entityId), m_textureMap(textureMap), m_progression(progression)
 	{
 		Load(path);
 	}
@@ -39,6 +39,8 @@ namespace Engine
 			return;
 		}
 
+		m_totalProgression = (scene->mNumMaterials + scene->mNumMeshes + scene->mNumAnimations);
+
 		LoadMeshes(scene);
 		LoadAnimations(scene);
 	}
@@ -59,6 +61,7 @@ namespace Engine
 			currentMaterial->height		= LoadTexture(material, aiTextureType::aiTextureType_AMBIENT, TextureType::Height);
 			
 			allMaterials.push_back(currentMaterial);
+			IncreaseProgression();
 		}
 
 		for (uint32_t i = 0; i < scene->mNumMeshes; i++)
@@ -96,6 +99,7 @@ namespace Engine
 			LoadBones(vertices, mesh);
 
 			m_meshes.push_back(AssimpMesh(vertices, indices, materials));
+			IncreaseProgression();
 		}
 	}
 
@@ -119,6 +123,7 @@ namespace Engine
 					info.ticksPerSecond = animation.GetTicketPerSecond();
 				}
 				m_animationInfo.push_back(info);
+				IncreaseProgression();
 			}
 
 			m_selectedAnimationInfo = m_animationInfo.front();
@@ -170,6 +175,15 @@ namespace Engine
 		}
 
 		return nullptr;
+	}
+
+	void AssimpModel::IncreaseProgression()
+	{
+		if (m_progression != nullptr)
+		{
+			m_currentProgression++;
+			(*m_progression) = (m_currentProgression / m_totalProgression);
+		}
 	}
 
 	void AssimpModel::OnUpdate(float deltaTime)

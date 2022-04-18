@@ -178,7 +178,7 @@ namespace Engine {
 
 			ModelComponent& modelComponent = entity.GetComponent<ModelComponent>();
 
-			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetFilePath();
+			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetFilePath().string();
 			out << YAML::Key << "EnableAnimation" << YAML::Value << modelComponent.enableAnimation;
 			out << YAML::EndMap;
 		}

@@ -5,11 +5,6 @@
 
 namespace Engine
 {
-	Ptr<Model> Model::Create(std::string path)
-	{
-		return CreatePtr<AssimpModel>(path);
-	}
-
 	Ptr<Model> Model::Create(std::string path, bool gamma)
 	{
 		return CreatePtr<AssimpModel>(path, gamma);
@@ -18,6 +13,11 @@ namespace Engine
 	Ptr<Model> Model::Create(std::string path, bool gamma, uint32_t entityId, TextureMap* textureMap)
 	{
 		return CreatePtr<AssimpModel>(path, gamma, entityId, textureMap);
+	}
+	
+	Ptr<Model> Model::Create(std::string path, bool gamma, uint32_t entityId, TextureMap* textureMap, Ptr<float> progression)
+	{
+		return CreatePtr<AssimpModel>(path, gamma, entityId, textureMap, progression);
 	}
 }
 
