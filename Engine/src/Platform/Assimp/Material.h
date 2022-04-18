@@ -34,7 +34,7 @@ namespace Engine
 			return glm::vec3(diffuseIndex, specularIndex, shininess);
 		}
 
-		void Setup(TextureMap* textureMap)
+		void Setup(Ptr<TextureMap> textureMap)
 		{
 			if (diffuse != nullptr && diffuse->image != nullptr)
 			{

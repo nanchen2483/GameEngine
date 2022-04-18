@@ -10,6 +10,7 @@ namespace Engine
 {
 	Scene::Scene()
 	{
+		m_textureMap = CreatePtr<TextureMap>();
 	}
 
 	Scene::~Scene()

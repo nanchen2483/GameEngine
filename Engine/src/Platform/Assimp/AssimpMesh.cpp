@@ -5,12 +5,15 @@
 
 namespace Engine
 {
-	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, const Ptr<Material> material)
-		: m_vertices(CreatePtr<std::vector<Vertex>>(vertices)), m_indices(CreatePtr<std::vector<uint32_t>>(indices)), m_material(material)
+	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, const Ptr<Material> material, Ptr<TextureMap> textureMap)
+		:	m_vertices(CreatePtr<std::vector<Vertex>>(vertices)),
+			m_indices(CreatePtr<std::vector<uint32_t>>(indices)),
+			m_material(material),
+			m_textureMap(textureMap)
 	{
 	}
 
-	void AssimpMesh::Setup(TextureMap* textureMap)
+	void AssimpMesh::Draw()
 	{
 		if (m_vertexArray == nullptr)
 		{
@@ -20,12 +23,9 @@ namespace Engine
 			m_vertices = nullptr;
 			m_indices = nullptr;
 
-			m_material->Setup(textureMap);
+			m_material->Setup(m_textureMap);
 		}
-	}
 
-	void AssimpMesh::Draw()
-	{
 		m_material->Bind();
 		m_vertexArray->Bind();
 		RendererCommand::DrawIndexed(m_vertexArray->GetNumOfIndices());

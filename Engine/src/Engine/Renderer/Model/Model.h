@@ -29,7 +29,7 @@ namespace Engine
 		virtual void Draw() = 0;
 
 		static Ptr<Model> Create(std::string path, bool gamma = false);
-		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, TextureMap* textureMap);
-		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, TextureMap* textureMap, Ptr<float> progression);
+		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, Ptr<TextureMap> textureMap);
+		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, Ptr<TextureMap> textureMap, Ptr<float> progression);
 	};
 }

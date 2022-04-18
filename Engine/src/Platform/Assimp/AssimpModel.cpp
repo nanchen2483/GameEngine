@@ -6,16 +6,16 @@
 namespace Engine
 {
 	AssimpModel::AssimpModel(std::string const& path, bool gamma)
-		: AssimpModel(path, gamma, -1, &TextureMap())
+		: AssimpModel(path, gamma, -1, CreatePtr<TextureMap>())
 	{
 	}
 
-	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap)
+	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<TextureMap> textureMap)
 		: AssimpModel(path, gamma, entityId, textureMap, nullptr)
 	{
 	}
 
-	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap, Ptr<float> progression)
+	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<TextureMap> textureMap, Ptr<float> progression)
 		: m_filePath(path), m_gammaCorrection(gamma), m_entityId(entityId), m_textureMap(textureMap), m_progression(progression)
 	{
 		Load(path);
@@ -98,7 +98,7 @@ namespace Engine
 
 			LoadBones(vertices, mesh);
 
-			m_meshes.push_back(AssimpMesh(vertices, indices, materials));
+			m_meshes.push_back(AssimpMesh(vertices, indices, materials, m_textureMap));
 			IncreaseProgression();
 		}
 	}
@@ -208,7 +208,6 @@ namespace Engine
 	{
 		for (uint32_t i = 0; i < m_meshes.size(); i++)
 		{
-			m_meshes[i].Setup(m_textureMap);
 			m_meshes[i].Draw();
 		}
 	}

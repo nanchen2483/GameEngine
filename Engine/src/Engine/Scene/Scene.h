@@ -24,14 +24,14 @@ namespace Engine
 
 		bool EntityExists(entt::entity entity);
 		Entity GetPrimaryCameraEntity();
-		TextureMap* GetLoadedTextureMap() { return &m_textureMap; }
+		Ptr<TextureMap> GetLoadedTextureMap() { return m_textureMap; }
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
 	private:
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
-		TextureMap m_textureMap;
+		Ptr<TextureMap> m_textureMap = nullptr;
 
 		friend class Entity;
 		friend class SceneSerializer;

@@ -16,8 +16,8 @@ namespace Engine
 	{
 	public:
 		AssimpModel(std::string const& path, bool gamma = false);
-		AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap);
-		AssimpModel(std::string const& path, bool gamma, int entityId, TextureMap* textureMap, Ptr<float> progression);
+		AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<TextureMap> textureMap);
+		AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<TextureMap> textureMap, Ptr<float> progression);
 		
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
 		virtual bool HasAnimations() override { return m_hasAnimations; }
@@ -40,7 +40,7 @@ namespace Engine
 		const std::filesystem::path m_directory = m_filePath.parent_path();
 		const bool m_gammaCorrection;
 
-		TextureMap* m_textureMap;
+		Ptr<TextureMap> m_textureMap;
 		std::vector<AssimpMesh> m_meshes;
 
 		// Animations
