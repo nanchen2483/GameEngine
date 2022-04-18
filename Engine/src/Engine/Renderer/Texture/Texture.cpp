@@ -2,7 +2,7 @@
 #include "Texture.h"
 
 #include "Engine/Renderer/Renderer.h"
-#include "Platform/OpenGL/OpenGLTexture.h"
+#include "Platform/OpenGL/Texture/OpenGLTexture2D.h"
 
 namespace Engine
 {
