@@ -2,7 +2,7 @@
 #include "Framebuffer.h"
 
 #include "Engine/Renderer/Renderer.h"
-#include "Platform/OpenGL/OpenGLFramebuffer.h"
+#include "Platform/OpenGL/Buffer/OpenGLFramebuffer.h"
 
 namespace Engine
 {
