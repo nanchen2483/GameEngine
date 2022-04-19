@@ -160,8 +160,6 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		ImGui::ShowDemoWindow();
-
 		static bool dockSpaceOpen = true;
 		static bool opt_fullscreen = true;
 		static bool opt_padding = false;
