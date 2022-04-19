@@ -1,6 +1,6 @@
 # GameEngine
 
-## How to build
+## Setup
 ```
 cd scripts
 setup.bat
