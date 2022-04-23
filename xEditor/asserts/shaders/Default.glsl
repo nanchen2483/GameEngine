@@ -19,7 +19,8 @@ const int MAX_BONE_INFLUENCE = 4;
 
 layout (std140, binding = 0) uniform CameraBlock
 {
-    mat4 viewProjection;
+    mat4 view;
+	mat4 projection;
 	vec3 viewPosition;
 } uCamera;
 
@@ -53,7 +54,7 @@ void main()
 	vertex.material = aMaterial;
 	vertex.entityId = aEntityId;
 	
-	gl_Position = uCamera.viewProjection * worldPosition;
+	gl_Position = uCamera.projection * uCamera.view * worldPosition;
 }
 
 vec4 CalcWorldPosition()
@@ -118,7 +119,8 @@ layout(location = 1) out int aEntityId;
 
 layout (std140, binding = 0) uniform CameraBlock
 {
-    mat4 viewProjection;
+    mat4 view;
+	mat4 projection;
 	vec3 viewPosition;
 } uCamera;
 

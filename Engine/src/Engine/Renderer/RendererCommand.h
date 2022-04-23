@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RendererAPI.h"
+#include "Engine/Core/Enum/DepthFunc.h"
 
 namespace Engine
 {
@@ -15,6 +16,11 @@ namespace Engine
 		inline static void  SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 		{
 			s_rendererAPI->SetViewport(x, y, width, height);
+		}
+
+		inline static void SetDepthFunc(DepthFunc func)
+		{
+			s_rendererAPI->SetDepthFunc(func);
 		}
 
 		inline static void SetClearColor(const glm::vec4& color)

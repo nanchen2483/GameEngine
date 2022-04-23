@@ -24,6 +24,7 @@
 #include "Engine/Renderer/Model/Model.h"
 #include "Engine/Renderer/Shader/Shader.h"
 #include "Engine/Renderer/Shader/ShaderLibrary.h"
+#include "Engine/Renderer/Skybox/Skybox.h"
 #include "Engine/Renderer/Texture/Texture.h"
 
 // Entity

@@ -39,12 +39,12 @@ namespace Engine
 		m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 			.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& sprite)
 				{
-					Renderer3D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+					Renderer3D::Draw(transform.GetTransform(), sprite, (int)entity);
 				});
 
 		lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
 				{
-					Renderer3D::DrawLight(transform, light, (int)entity);
+					Renderer3D::Draw(transform, light, (int)entity);
 				});
 
 		Renderer3D::EndScene();
@@ -53,7 +53,13 @@ namespace Engine
 			.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 				{
 					modelComponent.OnUpdate(time);
-					Renderer3D::DrawModel(transform.GetTransform(), modelComponent);
+					Renderer3D::Draw(transform.GetTransform(), modelComponent);
+				});
+
+		m_registry.view<SkyboxComponent>()
+			.each([=](SkyboxComponent& skyboxComponent)
+				{
+					Renderer3D::Draw(skyboxComponent);
 				});
 	}
 
@@ -99,12 +105,12 @@ namespace Engine
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](TransformComponent& transform, SpriteRendererComponent& sprite)
 					{
-						Renderer3D::DrawSprite(transform.GetTransform(), sprite);
+						Renderer3D::Draw(transform.GetTransform(), sprite);
 					});
 
 			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
 					{
-						Renderer3D::DrawLight(transform, light, (int)entity);
+						Renderer3D::Draw(transform, light, (int)entity);
 					});
 
 			Renderer3D::EndScene();
@@ -113,7 +119,7 @@ namespace Engine
 				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 					{
 						modelComponent.OnUpdate(time);
-						Renderer3D::DrawModel(transform.GetTransform(), modelComponent);
+						Renderer3D::Draw(transform.GetTransform(), modelComponent);
 					});
 		}
 
@@ -187,6 +193,11 @@ namespace Engine
 
 	template<>
 	void Scene::OnComponentAdded<ModelComponent>(Entity entity, ModelComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<SkyboxComponent>(Entity entity, SkyboxComponent& component)
 	{
 	}
 

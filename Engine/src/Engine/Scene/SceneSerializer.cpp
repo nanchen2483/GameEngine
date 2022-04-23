@@ -183,6 +183,23 @@ namespace Engine {
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<SkyboxComponent>())
+		{
+			out << YAML::Key << "SkyboxComponent";
+			out << YAML::BeginMap;
+
+			SkyboxComponent& skyboxComponent = entity.GetComponent<SkyboxComponent>();
+
+			out << YAML::Key << "RightFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Right]->GetFilePath();
+			out << YAML::Key << "LeftFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Left]->GetFilePath();
+			out << YAML::Key << "TopFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Top]->GetFilePath();
+			out << YAML::Key << "BottomFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Bottom]->GetFilePath();
+			out << YAML::Key << "BackFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Back]->GetFilePath();
+			out << YAML::Key << "FrontFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Front]->GetFilePath();
+
+			out << YAML::EndMap;
+		}
+
 		out << YAML::EndMap;
 	}
 	
@@ -308,11 +325,26 @@ namespace Engine {
 				YAML::Node modelComponent = entity["ModelComponent"];
 				if (modelComponent)
 				{
-					ModelComponent& deserializedSRC = deserializedEntity.AddComponent<ModelComponent>();
+					ModelComponent& deserializedModel = deserializedEntity.AddComponent<ModelComponent>();
 
 					std::string path = modelComponent["Path"].as<std::string>();
-					deserializedSRC.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
-					deserializedSRC.model = Model::Create(path, false, deserializedEntity, m_scene->GetLoadedTextureMap());
+					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
+					deserializedModel.model = Model::Create(path, false, deserializedEntity, m_scene->GetLoadedTextureMap());
+				}
+
+
+				YAML::Node skyboxComponent = entity["SkyboxComponent"];
+				if (skyboxComponent)
+				{
+					SkyboxComponent& deserializedSkybox = deserializedEntity.AddComponent<SkyboxComponent>();
+					deserializedSkybox.SetFace(TextureOrientationType::Right, skyboxComponent["RightFilePath"].as<std::string>());
+					deserializedSkybox.SetFace(TextureOrientationType::Left, skyboxComponent["LeftFilePath"].as<std::string>());
+					deserializedSkybox.SetFace(TextureOrientationType::Top, skyboxComponent["TopFilePath"].as<std::string>());
+					deserializedSkybox.SetFace(TextureOrientationType::Bottom, skyboxComponent["BottomFilePath"].as<std::string>());
+					deserializedSkybox.SetFace(TextureOrientationType::Back, skyboxComponent["BackFilePath"].as<std::string>());
+					deserializedSkybox.SetFace(TextureOrientationType::Front, skyboxComponent["FrontFilePath"].as<std::string>());
+
+					deserializedSkybox.skybox = CreatePtr<Skybox>(deserializedSkybox.images);
 				}
 			}
 		}

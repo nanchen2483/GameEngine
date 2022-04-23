@@ -137,6 +137,7 @@ namespace Engine
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Mat4 },
+					{ ShaderDataType::Mat4 },
 					{ ShaderDataType::Float3 },
 				}
 			});
@@ -187,7 +188,7 @@ namespace Engine
 
 		s_data.shader->Bind();
 		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
-		s_data.cameraUniformBuffer->SetData({ &camera.GetViewProjection(), &camera.GetPosition() });
+		s_data.cameraUniformBuffer->SetData({ &camera.GetViewMatrix(), &camera.GetProjection(), &camera.GetPosition()});
 		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}
@@ -197,11 +198,9 @@ namespace Engine
 		ENGINE_PROFILE_FUNCTION();
 		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
 
-		const glm::mat4& viewProjection = camera.GetProjection() * glm::inverse(transform.GetTransform());
-
 		s_data.shader->Bind();
 		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
-		s_data.cameraUniformBuffer->SetData({ &viewProjection, &transform.translation });
+		s_data.cameraUniformBuffer->SetData({ &camera.GetProjection(), &glm::inverse(transform.GetTransform()), &transform.translation });
 		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}
@@ -234,19 +233,19 @@ namespace Engine
 		s_data.numOfTextureSlots = Renderer3DData::NUM_OF_DEFAULT_TEXTURES;
 	}
 
-	void Renderer3D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId)
+	void Renderer3D::Draw(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId)
 	{
-		DrawCube(transform, sprite.texture, sprite.color, entityId);
+		Draw(transform, sprite.texture, sprite.color, entityId);
 	}
 
-	void Renderer3D::DrawLight(const TransformComponent& transform, LightComponent& light, int entityId)
+	void Renderer3D::Draw(const TransformComponent& transform, LightComponent& light, int entityId)
 	{
 		light.position = transform.translation;
 		s_data.pointLightUniformBuffer->SetData(light.GetData());
-		DrawCube(transform.GetTransform(), nullptr, glm::vec4(1.0f), entityId);
+		Draw(transform.GetTransform(), nullptr, glm::vec4(1.0f), entityId);
 	}
 	
-	void Renderer3D::DrawCube(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color, int entityId)
+	void Renderer3D::Draw(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color, int entityId)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
@@ -273,7 +272,7 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::DrawModel(const glm::mat4& transform, ModelComponent& component)
+	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component)
 	{
 		if (component.model != nullptr)
 		{
@@ -291,6 +290,14 @@ namespace Engine
 			component.model->Draw();
 
 			s_data.states.drawModels++;
+		}
+	}
+
+	void Renderer3D::Draw(SkyboxComponent& component)
+	{
+		if (component.skybox != nullptr)
+		{
+			component.skybox->Draw();
 		}
 	}
 

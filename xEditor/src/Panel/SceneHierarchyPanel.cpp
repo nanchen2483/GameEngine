@@ -86,6 +86,12 @@ namespace Engine
 					ImGui::CloseCurrentPopup();
 				}
 
+				if (!m_selectionContext.HasComponent<SkyboxComponent>() && ImGui::MenuItem("Skybox"))
+				{
+					m_selectionContext.AddComponent<SkyboxComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
 				ImGui::EndPopup();
 			}
 		}
@@ -552,6 +558,89 @@ namespace Engine
 			if (removeComponent)
 			{
 				m_selectionContext.RemoveComponent<ModelComponent>();
+			}
+		}
+
+		if (entity.HasComponent<SkyboxComponent>())
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
+			bool open = ImGui::TreeNodeEx((void*)typeid(SkyboxComponent).hash_code(), treeNodeFlags, "Skybox");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 35.0f);
+			if (ImGui::Button("+", ImVec2(20, 20)))
+			{
+				ImGui::OpenPopup("ComponentSettings");
+			}
+			ImGui::PopStyleVar();
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove component"))
+				{
+					removeComponent = true;
+				}
+
+				ImGui::EndPopup();
+			}
+
+			if (open)
+			{
+				static const TextureOrientationType layout[10]
+				{
+					TextureOrientationType::None,	TextureOrientationType::Top,	TextureOrientationType::None,	TextureOrientationType::None,
+					TextureOrientationType::Left,	TextureOrientationType::Front,	TextureOrientationType::Right,	TextureOrientationType::Back,
+					TextureOrientationType::None,	TextureOrientationType::Bottom
+				};
+				ImGui::Text("Textures");
+				for (uint32_t i = 0; i < 10; i++)
+				{
+					ImGui::PushID(i);
+					if ((i % 4) != 0)
+					{
+						ImGui::SameLine();
+					}
+
+					TextureOrientationType type = layout[i];
+					const char* buttonName = Enum::ToString(type);
+					if (buttonName == nullptr)
+					{
+						ImGui::Dummy(ImVec2(72, 70));
+						ImGui::PopID();
+						continue;
+					}
+					else
+					{
+						SkyboxComponent& component = entity.GetComponent<SkyboxComponent>();
+						uint32_t textureId = component.GetTextureId(type, 0);
+						if (textureId == 0)
+						{
+							ImGui::Button(buttonName, ImVec2(72, 70));
+						}
+						else
+						{
+							ImGui::ImageButton((void*)textureId, ImVec2(64, 64), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+						}
+
+						if (ImGui::BeginDragDropTarget())
+						{
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+							{
+								const wchar_t* filepath = (const wchar_t*)payload->Data;
+								const std::filesystem::path path = filepath;
+								component.SetFace(type, path.string());
+							}
+							ImGui::EndDragDropTarget();
+						}
+						ImGui::PopID();
+					}
+
+				}
+				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+			{
+				m_selectionContext.RemoveComponent<LightComponent>();
 			}
 		}
 	}
