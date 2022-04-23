@@ -23,5 +23,6 @@ namespace Engine
 
 		Ptr<Model> m_model;
 		Ptr<Shader> m_shader;
+		Ptr<Skybox> m_skybox;
 	};
 }

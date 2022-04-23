@@ -16,10 +16,18 @@ namespace Engine
 		m_activeScene = CreatePtr<Scene>();
 		m_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
+		m_skybox = CreatePtr<Skybox>(std::vector<Ptr<Image>>
+		{
+			CreatePtr<Image>("asserts/textures/skybox/right.jpg"),
+			CreatePtr<Image>("asserts/textures/skybox/left.jpg"),
+			CreatePtr<Image>("asserts/textures/skybox/top.jpg"),
+			CreatePtr<Image>("asserts/textures/skybox/bottom.jpg"),
+			CreatePtr<Image>("asserts/textures/skybox/back.jpg"),
+			CreatePtr<Image>("asserts/textures/skybox/front.jpg"),
+		});
 		m_model = Model::Create("asserts\\models\\vampire\\dancing_vampire.dae");
 		m_shader = Shader::Create("asserts\\shaders\\Default.glsl");
 		m_shader->Bind();
-
 		int32_t samplers[32];
 		for (uint32_t i = 0; i < 32; i++)
 		{
@@ -31,6 +39,7 @@ namespace Engine
 		m_cameraUniformBuffer = UniformBuffer::Create(0, {
 				BufferLayoutType::Std140,
 				{
+					{ ShaderDataType::Mat4 },
 					{ ShaderDataType::Mat4 },
 					{ ShaderDataType::Float3 },
 				}
@@ -57,7 +66,6 @@ namespace Engine
 
 	void ExampleLayer::OnDetach()
 	{
-
 	}
 
 	void ExampleLayer::OnUpdate(Engine::TimeStep timeStep)
@@ -66,13 +74,12 @@ namespace Engine
 		m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
 		m_model->OnUpdate(timeStep);
 
-		Renderer2D::ResetStates();
 		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RendererCommand::Clear();
 
 		// view/projection transformations
 		m_shader->Bind();
-		m_cameraUniformBuffer->SetData({ &m_editorCamera.GetViewProjection(), &m_editorCamera.GetPosition() });
+		m_cameraUniformBuffer->SetData({ &m_editorCamera.GetViewMatrix(), &m_editorCamera.GetProjection(), &m_editorCamera.GetPosition()});
 		glm::mat4 transform = glm::mat4(1.0f);
 		m_shader->SetMat4("uModel", transform);
 		m_shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
@@ -84,6 +91,9 @@ namespace Engine
 
 		// render the loaded model
 		m_model->Draw();
+		
+		// render skybox
+		m_skybox->Draw();
 	}
 
 	void ExampleLayer::OnImGuiRender()
