@@ -27,25 +27,8 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		GLenum internalFormat = 0, dataFormat = 0;
-		if (image->GetChannels() == 1)
-		{
-			internalFormat = GL_RED;
-			dataFormat = GL_RED;
-		}
-		else if (image->GetChannels() == 3)
-		{
-			internalFormat = GL_RGB8;
-			dataFormat = GL_RGB;
-		}
-		else if (image->GetChannels() == 4)
-		{
-			internalFormat = GL_RGBA8;
-			dataFormat = GL_RGBA;
-		}
-
-		m_internalFormat = internalFormat;
-		m_dataFormat = dataFormat;
+		m_internalFormat = image->GetInternalFormat();
+		m_dataFormat = image->GetDataFormat();
 
 		ENGINE_CORE_ASSERT(m_internalFormat & m_dataFormat, "Format not supported!");
 

@@ -17,7 +17,7 @@ namespace Engine
 		struct MaterialTexture
 		{
 			Ptr<Image> image = nullptr;
-			Ptr<Texture> texture = nullptr; // If already exists
+			Ptr<Texture2D> texture = nullptr; // If already exists
 		};
 
 		Ptr<MaterialTexture> diffuse = nullptr;

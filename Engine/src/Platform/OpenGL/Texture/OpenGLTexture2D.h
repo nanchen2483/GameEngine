@@ -12,10 +12,10 @@ namespace Engine
 		OpenGLTexture2D(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = true);
 		~OpenGLTexture2D();
 
+		inline virtual std::string GetFilePath() const override { return m_filePath; }
 		inline virtual uint32_t GetWidth() const override { return m_width; };
 		inline virtual uint32_t GetHeight() const override { return m_height; };
 		inline virtual uint32_t GetRendererId() const override { return m_rendererId; }
-		inline virtual std::string GetFilePath() const override { return m_filePath; }
 		inline virtual TextureType GetType() const override { return m_type; }
 		
 		virtual void SetData(void* data, uint32_t size) override;

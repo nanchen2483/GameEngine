@@ -160,11 +160,11 @@ namespace Engine
 			aiString filename;
 			material->GetTexture(type, 0, &filename);
 			std::string path = (this->m_directory / +filename.C_Str()).string();
-			Ptr<Texture> texture = (*m_textureMap)[path];
+			Ptr<Texture2D> texture = (*m_textureMap)[path];
 			Ptr<Material::MaterialTexture> materialTexture = CreatePtr<Material::MaterialTexture>();
 			if (texture == nullptr)
 			{
-				materialTexture->image = CreatePtr<Image>(path, false);
+				materialTexture->image = CreatePtr<Image>(path);
 			}
 			else
 			{
