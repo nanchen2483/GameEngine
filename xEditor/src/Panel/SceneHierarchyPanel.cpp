@@ -236,6 +236,33 @@ namespace Engine
 		ImGui::PopID();
 	}
 
+	namespace Enum
+	{
+		static const char* ToString(TextureOrientationType o)
+		{
+			switch (o)
+			{
+			case TextureOrientationType::None:
+				return nullptr;
+			case TextureOrientationType::Right:
+				return "Right";
+			case TextureOrientationType::Left:
+				return "Left";
+			case TextureOrientationType::Top:
+				return "Top";
+			case TextureOrientationType::Bottom:
+				return "Bottom";
+			case TextureOrientationType::Back:
+				return "Back";
+			case TextureOrientationType::Front:
+				return "Front";
+			default:
+				ENGINE_CORE_ERROR("Unsupported Orientation type");
+				break;
+			}
+		}
+	}
+
 	void SceneHierarchyPanel::DrawComponents(Entity entity)
 	{
 		if (entity.HasComponent<TagComponent>())

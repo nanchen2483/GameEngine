@@ -118,7 +118,6 @@ namespace Engine
 		Ptr<Skybox> skybox = nullptr;
 		std::vector<Ptr<Image>> images = std::vector<Ptr<Image>>(6);
 
-
 		SkyboxComponent() = default;
 		SkyboxComponent(const SkyboxComponent& skyboxComponent) = default;
 		

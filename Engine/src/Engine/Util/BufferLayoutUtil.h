@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#include "Engine/Renderer/Buffer/BufferElement.h"
+#include "Engine/Renderer/Vertex/Buffer/BufferElement.h"
 
 namespace Engine
 {

@@ -4,11 +4,30 @@
 #include <map>
 
 #include "Image.h"
-#include "Engine/Core/Enum/TextureType.h"
-#include "Engine/Core/Enum/TextureOrientationType.h"
 
 namespace Engine
 {
+	enum class TextureType
+	{
+		None = 0,
+		Diffuse,
+		Specular,
+		Normal,
+		Height,
+		Skybox
+	};
+
+	enum class TextureOrientationType
+	{
+		None = -1,
+		Right,
+		Left,
+		Top,
+		Bottom,
+		Back,
+		Front,
+	};
+
 	class Texture
 	{
 	public:

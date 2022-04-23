@@ -112,6 +112,8 @@ namespace Engine
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ptr<IndexBuffer>& indexBuffer)
 	{
+		ENGINE_CORE_ASSERT(m_vertexBuffers.size() > 0, "Vertex Buffer is empty!");
+
 		glBindVertexArray(m_rendererId);
 		indexBuffer->Bind();
 

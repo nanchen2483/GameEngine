@@ -16,7 +16,7 @@
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/Renderer3D.h"
 
-#include "Engine/Renderer/Buffer/Framebuffer.h"
+#include "Engine/Renderer/Vertex/Buffer/Framebuffer.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Camera/OrthographicCamera.h"
 #include "Engine/Renderer/Camera/OrthographicCameraController.h"
