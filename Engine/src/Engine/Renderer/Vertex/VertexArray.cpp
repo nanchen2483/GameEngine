@@ -2,7 +2,7 @@
 #include "VertexArray.h"
 
 #include "Engine/Renderer/Renderer.h"
-#include "Platform/OpenGL/OpenGLVertexArray.h"
+#include "Platform/OpenGL/Vertex/OpenGLVertexArray.h"
 
 namespace Engine
 {
