@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLVertexBuffer.h"
+#include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <glad/glad.h>
 
@@ -12,6 +13,8 @@ namespace Engine
 		glCreateBuffers(1, &m_rendererId);
 		glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t numOfVertices)
@@ -21,6 +24,8 @@ namespace Engine
 		glCreateBuffers(1, &m_rendererId);
 		glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numOfVertices, vertices, GL_STATIC_DRAW);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(Vertex* vertices, uint32_t numOfVertices)
@@ -31,6 +36,8 @@ namespace Engine
 		glCreateBuffers(1, &m_rendererId);
 		glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * numOfVertices, vertices, GL_STATIC_DRAW);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -58,5 +65,7 @@ namespace Engine
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 }

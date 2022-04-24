@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLTexture3D.h"
+#include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <stb_image.h>
 #include <glad/glad.h>
@@ -31,8 +32,9 @@ namespace Engine
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	}
 
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
+	}
 
 	OpenGLTexture3D::~OpenGLTexture3D()
 	{

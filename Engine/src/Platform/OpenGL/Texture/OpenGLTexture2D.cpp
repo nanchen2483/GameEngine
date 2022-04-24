@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLTexture2D.h"
+#include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <stb_image.h>
 #include <glad/glad.h>
@@ -20,6 +21,8 @@ namespace Engine
 
 		glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const Ptr<Image> image, const TextureType type)
@@ -42,6 +45,8 @@ namespace Engine
 		glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		glTextureSubImage2D(m_rendererId, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, image->GetData());
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& filePath, const TextureType type, const bool flipVertically)
@@ -91,6 +96,8 @@ namespace Engine
 		glTextureSubImage2D(m_rendererId, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
@@ -103,6 +110,8 @@ namespace Engine
 		uint32_t bpp = m_dataFormat == GL_RGBA ? 4 : 3;
 		ENGINE_CORE_ASSERT(size == m_width * m_height * bpp, "Data must be entire texture!");
 		glTextureSubImage2D(m_rendererId, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	void Engine::OpenGLTexture2D::Bind(uint32_t slot) const

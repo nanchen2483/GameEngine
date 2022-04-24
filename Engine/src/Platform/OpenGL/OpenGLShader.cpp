@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLShader.h"
+#include "Debug/OpenGLDebug.h"
 
 #include <fstream>
 #include <glad/glad.h>
@@ -108,8 +109,8 @@ namespace Engine
 		// Get a program object.
 		GLuint program = glCreateProgram();
 		ENGINE_CORE_ASSERT(shaderSources.size() <= 5, "Only supprt max 5 shaders!");
-		std::array<GLuint, 5> shaders;
-		int shaderIndex = 0;
+		std::vector<GLuint> shaders;
+		shaders.reserve(shaderSources.size());
 		for (std::pair<const GLenum, std::string> &kv : shaderSources)
 		{
 			GLenum shaderType = kv.first;
@@ -150,7 +151,7 @@ namespace Engine
 			
 			// Attach our shaders to our program
 			glAttachShader(program, shader);
-			shaders[shaderIndex++] = shader;
+			shaders.push_back(shader);
 		}
 
 		// Link our program
@@ -191,6 +192,8 @@ namespace Engine
 		}
 
 		m_rendererId = program;
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	void OpenGLShader::Bind() const

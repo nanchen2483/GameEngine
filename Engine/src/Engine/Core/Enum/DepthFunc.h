@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace Engine
 {
 	enum class DepthFunc

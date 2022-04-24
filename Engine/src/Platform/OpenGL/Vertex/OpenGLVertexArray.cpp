@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLVertexArray.h"
+#include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <glad/glad.h>
 
@@ -108,6 +109,8 @@ namespace Engine
 		}
 
 		m_vertexBuffers.push_back(vertexBuffer);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ptr<IndexBuffer>& indexBuffer)

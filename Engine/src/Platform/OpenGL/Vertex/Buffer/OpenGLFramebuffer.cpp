@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLFramebuffer.h"
+#include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <glad/glad.h>
 
@@ -44,6 +45,8 @@ namespace Engine
 			}
 
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, textureTarget, id, 0);
+
+			ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 		}
 
 		static void AttachDepthTexture(uint32_t id, int samples, GLenum format, GLenum attachmentType, uint32_t width, uint32_t height)
@@ -67,6 +70,7 @@ namespace Engine
 			
 			glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, textureTarget, id, 0);
 
+			ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 		}
 
 		static bool IsDepthFormat(FramebufferTextureFormat format)
@@ -202,6 +206,8 @@ namespace Engine
 		ENGINE_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	void OpenGLFramebuffer::Bind()
@@ -222,7 +228,6 @@ namespace Engine
 		FramebufferTextureSpecification& spec = m_colorAttachmentSpecifications[attachmentIndex];
 
 		glClearTexImage(m_colorAttachments[attachmentIndex], 0, Utils::GetGLTextureFormat(spec.textureFormat), GL_INT, &value);
-
 	}
 
 	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)

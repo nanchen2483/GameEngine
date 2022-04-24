@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLUniformBuffer.h"
+#include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <glad/glad.h>
 
@@ -16,6 +17,8 @@ namespace Engine
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		glBindBufferRange(GL_UNIFORM_BUFFER, index, m_rendererId, 0, m_layout.GetStride());
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
 	OpenGLUniformBuffer::~OpenGLUniformBuffer()
@@ -44,11 +47,14 @@ namespace Engine
 		ENGINE_PROFILE_FUNCTION();
 
 		ENGINE_CORE_ASSERT(m_layout.GetNumOfElements() == data.size(), "Incorrect number of data");
+		
+		glBindBuffer(GL_UNIFORM_BUFFER, m_rendererId);
 		for (uint32_t i = 0; i < m_layout.GetNumOfElements(); i++)
 		{
 			const BufferElement& element = m_layout[i];
-			glBindBuffer(GL_UNIFORM_BUFFER, m_rendererId);
 			glBufferSubData(GL_UNIFORM_BUFFER, element.offset, element.size, data[i]);
 		}
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 }
