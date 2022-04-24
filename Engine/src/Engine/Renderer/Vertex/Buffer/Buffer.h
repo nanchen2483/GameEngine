@@ -29,6 +29,8 @@ namespace Engine
 		virtual void Unbind() const = 0;
 		virtual uint32_t GetNumOfIndices() const = 0;
 
+		static Ptr<IndexBuffer> Create(uint8_t* indices, uint32_t numOfIndices);
+		static Ptr<IndexBuffer> Create(uint16_t* indices, uint32_t numOfIndices);
 		static Ptr<IndexBuffer> Create(uint32_t* indices, uint32_t numOfIndices);
 	};
 

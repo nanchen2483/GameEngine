@@ -28,7 +28,7 @@ namespace Engine
 
 		m_material->Bind();
 		m_vertexArray->Bind();
-		RendererCommand::DrawIndexed(m_vertexArray->GetNumOfIndices());
+		RendererCommand::DrawUint32Indexed(m_vertexArray->GetNumOfIndices());
 	}
 }
 

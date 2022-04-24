@@ -21,7 +21,7 @@ namespace Engine
 			{ Engine::ShaderDataType::Float3 },
 		});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
-		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint32_t*>(SkyboxData::indices), SkyboxData::numOfIndices));
+		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(SkyboxData::indices), SkyboxData::numOfIndices));
 
 		m_shader = Shader::Create("asserts\\shaders\\Skybox.glsl");
 	}
@@ -32,7 +32,7 @@ namespace Engine
 		m_shader->Bind();
 		m_vertexArray->Bind();
 		m_texture->Bind();
-		RendererCommand::DrawIndexed(SkyboxData::numOfIndices);
+		RendererCommand::DrawUint8Indexed(SkyboxData::numOfIndices);
 		RendererCommand::SetDepthFunc(DepthFunc::LESS); // Set to default
 	}
 }

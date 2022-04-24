@@ -220,7 +220,7 @@ namespace Engine
 			s_data.textureSlots[i]->Bind(i);
 		}
 
-		RendererCommand::DrawIndexed(s_data.indexCount);
+		RendererCommand::DrawUint32Indexed(s_data.indexCount);
 
 		s_data.states.drawCalls++;
 		ResetRendererData();

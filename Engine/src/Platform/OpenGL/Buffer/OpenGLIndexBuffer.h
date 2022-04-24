@@ -7,6 +7,8 @@ namespace Engine
 	class OpenGLIndexBuffer : public IndexBuffer
 	{
 	public:
+		OpenGLIndexBuffer(uint8_t* indices, uint32_t numOfIndices);
+		OpenGLIndexBuffer(uint16_t* indices, uint32_t numOfIndices);
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t numOfIndices);
 		~OpenGLIndexBuffer();
 		virtual void Bind() const override;

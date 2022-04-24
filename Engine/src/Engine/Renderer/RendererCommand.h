@@ -33,14 +33,24 @@ namespace Engine
 			s_rendererAPI->Clear();
 		}
 
-		inline static void DrawIndexed(const Ptr<VertexArray>& vertexArray)
+		inline static void DrawUint8Indexed(uint32_t count)
 		{
-			s_rendererAPI->DrawIndexed(vertexArray);
+			s_rendererAPI->DrawUint8Indexed(count);
 		}
 
-		inline static void DrawIndexed(uint32_t count)
+		inline static void DrawUint16Indexed(uint32_t count)
 		{
-			s_rendererAPI->DrawIndexed(count);
+			s_rendererAPI->DrawUint16Indexed(count);
+		}
+
+		inline static void DrawUint32Indexed(const Ptr<VertexArray>& vertexArray)
+		{
+			s_rendererAPI->DrawUint32Indexed(vertexArray);
+		}
+
+		inline static void DrawUint32Indexed(uint32_t count)
+		{
+			s_rendererAPI->DrawUint32Indexed(count);
 		}
 	private:
 		static RendererAPI* s_rendererAPI;

@@ -21,7 +21,7 @@ namespace Engine
 			-1.0,  1.0, -1.0
 		};
 
-		static constexpr uint32_t indices[numOfIndices]
+		static constexpr uint8_t indices[numOfIndices]
 		{
 			// front
 			0, 1, 2,

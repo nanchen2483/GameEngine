@@ -44,6 +44,30 @@ namespace Engine
 		return nullptr;
 	}
 
+	Ptr<IndexBuffer> IndexBuffer::Create(uint8_t* indices, uint32_t numOfIndices)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLIndexBuffer>(indices, numOfIndices);
+		}
+
+		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		return nullptr;
+	}
+
+	Ptr<IndexBuffer> IndexBuffer::Create(uint16_t* indices, uint32_t numOfIndices)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLIndexBuffer>(indices, numOfIndices);
+		}
+
+		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		return nullptr;
+	}
+
 	Ptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t numOfIndices)
 	{
 		switch (Renderer::GetAPI())

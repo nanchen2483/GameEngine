@@ -36,12 +36,22 @@ namespace Engine
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLRendererAPI::DrawIndexed(const Ptr<VertexArray>& vertexArray)
+	void OpenGLRendererAPI::DrawUint8Indexed(uint32_t count)
+	{
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_BYTE, nullptr);
+	}
+
+	void OpenGLRendererAPI::DrawUint16Indexed(uint32_t count)
+	{
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, nullptr);
+	}
+
+	void OpenGLRendererAPI::DrawUint32Indexed(const Ptr<VertexArray>& vertexArray)
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 	}
 
-	void OpenGLRendererAPI::DrawIndexed(uint32_t count)
+	void OpenGLRendererAPI::DrawUint32Indexed(uint32_t count)
 	{
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}

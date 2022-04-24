@@ -37,6 +37,6 @@ namespace Engine
 		shader->SetMat4("uViewProjection", m_sceneData->viewProjectionMatrix);
 
 		vertexArray->Bind();
-		RendererCommand::DrawIndexed(vertexArray);
+		RendererCommand::DrawUint32Indexed(vertexArray);
 	}
 }

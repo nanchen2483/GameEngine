@@ -5,6 +5,26 @@
 
 namespace Engine
 {
+	OpenGLIndexBuffer::OpenGLIndexBuffer(uint8_t* indices, uint32_t numOfIndices)
+		: m_numOfIndices(numOfIndices)
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		glCreateBuffers(1, &m_rendererId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numOfIndices * sizeof(uint8_t), indices, GL_STATIC_DRAW);
+	}
+
+	OpenGLIndexBuffer::OpenGLIndexBuffer(uint16_t* indices, uint32_t numOfIndices)
+		: m_numOfIndices(numOfIndices)
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		glCreateBuffers(1, &m_rendererId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numOfIndices * sizeof(uint16_t), indices, GL_STATIC_DRAW);
+	}
+
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t numOfIndices)
 		: m_numOfIndices(numOfIndices)
 	{
