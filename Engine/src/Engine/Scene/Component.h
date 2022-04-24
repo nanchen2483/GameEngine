@@ -124,7 +124,7 @@ namespace Engine
 		bool ReadyToLoad() { return std::find(images.begin(), images.end(), nullptr) == images.end(); }
 		void SetFace(TextureOrientationType type, std::string filePath)
 		{
-			images[(uint32_t)type] = CreatePtr<Image>(filePath);
+			images[(uint32_t)type] = CreatePtr<Image>(filePath, false);
 			textures[(uint32_t)type] = Texture2D::Create(images[(uint32_t)type]);
 			if (ReadyToLoad())
 			{

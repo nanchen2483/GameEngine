@@ -31,6 +31,8 @@ namespace Engine
 			m_dataFormat = GL_RGBA;
 			break;
 		default:
+			m_internalFormat = GL_NONE;
+			m_dataFormat = GL_NONE;
 			ENGINE_CORE_ERROR("Unsupported channel");
 			break;
 		}

@@ -164,7 +164,7 @@ namespace Engine
 			Ptr<Material::MaterialTexture> materialTexture = CreatePtr<Material::MaterialTexture>();
 			if (texture == nullptr)
 			{
-				materialTexture->image = CreatePtr<Image>(path);
+				materialTexture->image = CreatePtr<Image>(path, false);
 			}
 			else
 			{
