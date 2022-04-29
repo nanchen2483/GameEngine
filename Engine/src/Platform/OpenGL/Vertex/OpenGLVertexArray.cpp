@@ -35,6 +35,7 @@ namespace Engine
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
 		glDeleteVertexArrays(1, &m_rendererId);
+		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::Bind() const

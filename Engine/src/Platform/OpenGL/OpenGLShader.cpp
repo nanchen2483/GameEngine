@@ -6,6 +6,8 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#define GL_UNIFORM_ERROR -1
+
 namespace Engine
 {
 	static GLenum ShaderTypeFromString(const std::string& type)
@@ -48,6 +50,7 @@ namespace Engine
 	OpenGLShader::~OpenGLShader()
 	{
 		glDeleteProgram(m_rendererId);
+		glUseProgram(0);
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& path)
@@ -209,61 +212,79 @@ namespace Engine
 	void OpenGLShader::SetBool(const std::string& name, const bool value)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		CheckUniformError(location, name);
 		glUniform1i(location, value);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, const int value)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		CheckUniformError(location, name);
 		glUniform1i(location, value);
 	}
 
 	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		CheckUniformError(location, name);
 		glUniform1iv(location, count, values);
 	}
 
 	void OpenGLShader::SetFloat(const std::string& name, float value)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		CheckUniformError(location, name);
 		glUniform1f(location, value);
 	}
 
 	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& values)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		CheckUniformError(location, name);
 		glUniform2f(location, values.x, values.y);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		CheckUniformError(location, name);
 		glUniform3f(location, value.x, value.y, value.z);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		CheckUniformError(location, name);
 		glUniform4f(location, value.x, value.y, value.z, value.w);
 	}
 
 	void OpenGLShader::SetMat3(const std::string& name, const glm::mat3& value)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		CheckUniformError(location, name);
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
 		GLint location = glGetUniformLocation(m_rendererId, name.c_str());
+		CheckUniformError(location, name);
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 	}
 
 	void OpenGLShader::SetBlockBinding(const std::string& name, const int value)
 	{
 		GLuint blockIndex = glGetUniformBlockIndex(m_rendererId, name.c_str());
+		CheckUniformError(blockIndex, name);
 		glUniformBlockBinding(m_rendererId, blockIndex, value);
+	}
+
+	void OpenGLShader::CheckUniformError(int32_t uniformId, const std::string& name)
+	{
+		if (uniformId == GL_UNIFORM_ERROR)
+		{
+			ENGINE_CORE_ERROR("Could not get uniform ({0}) for shader: {1}", name, m_shaderName);
+		}
 	}
 }
 

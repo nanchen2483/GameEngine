@@ -26,6 +26,7 @@ namespace Engine
 		ENGINE_PROFILE_FUNCTION();
 
 		glDeleteBuffers(1, &m_rendererId);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
 	void OpenGLUniformBuffer::Bind() const

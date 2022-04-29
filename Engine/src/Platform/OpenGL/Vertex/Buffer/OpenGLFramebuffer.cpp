@@ -119,6 +119,8 @@ namespace Engine
 		glDeleteFramebuffers(1, &m_rendererId);
 		glDeleteTextures(m_colorAttachments.size(), m_colorAttachments.data());
 		glDeleteTextures(1, &m_depthAttachment);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	void OpenGLFramebuffer::Setup()

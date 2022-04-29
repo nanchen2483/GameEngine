@@ -343,8 +343,6 @@ namespace Engine {
 					deserializedSkybox.SetFace(TextureOrientationType::Bottom, skyboxComponent["BottomFilePath"].as<std::string>());
 					deserializedSkybox.SetFace(TextureOrientationType::Back, skyboxComponent["BackFilePath"].as<std::string>());
 					deserializedSkybox.SetFace(TextureOrientationType::Front, skyboxComponent["FrontFilePath"].as<std::string>());
-
-					deserializedSkybox.skybox = CreatePtr<Skybox>(deserializedSkybox.images);
 				}
 			}
 		}

@@ -19,7 +19,7 @@ const int MAX_BONE_INFLUENCE = 4;
 
 layout (std140, binding = 0) uniform CameraBlock
 {
-    mat4 view;
+	mat4 view;
 	mat4 projection;
 	vec3 viewPosition;
 } uCamera;
@@ -119,7 +119,7 @@ layout(location = 1) out int aEntityId;
 
 layout (std140, binding = 0) uniform CameraBlock
 {
-    mat4 view;
+	mat4 view;
 	mat4 projection;
 	vec3 viewPosition;
 } uCamera;
@@ -134,15 +134,15 @@ layout (std140, binding = 1) uniform DirLightBlock
 
 layout (std140, binding = 2) uniform PointLightBlock
 {
-    vec3 position;
+	vec3 position;
 
-    float constant;
-    float linear;
-    float quadratic;
+	float constant;
+	float linear;
+	float quadratic;
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
 } uPointLight;
 
 uniform sampler2D uTextures[32];
@@ -235,18 +235,18 @@ vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir)
 
 vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir)
 {
-    // Attenuation
-    float distance = length(uPointLight.position - vertex.fragPos);
-    float attenuation = 1.0 / (uPointLight.constant + uPointLight.linear * distance + uPointLight.quadratic * (distance * distance));    
+	// Attenuation
+	float distance = length(uPointLight.position - vertex.fragPos);
+	float attenuation = 1.0 / (uPointLight.constant + uPointLight.linear * distance + uPointLight.quadratic * (distance * distance));    
 
 	// Ambient
-    vec3 ambient = uPointLight.ambient * material.diffuse * attenuation;
+	vec3 ambient = uPointLight.ambient * material.diffuse * attenuation;
 
-    // Diffuse
-    vec3 lightDir = normalize(uPointLight.position - vertex.fragPos);
-    float diff = max(dot(normal, lightDir), 0.0);
-    vec3 diffuse = uPointLight.diffuse * diff * material.diffuse * attenuation;
-    
+	// Diffuse
+	vec3 lightDir = normalize(uPointLight.position - vertex.fragPos);
+	float diff = max(dot(normal, lightDir), 0.0);
+	vec3 diffuse = uPointLight.diffuse * diff * material.diffuse * attenuation;
+	
 	// Specular
 	if (vertex.material.y != -1)
 	{

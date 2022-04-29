@@ -47,6 +47,7 @@ namespace Engine
 		ENGINE_PROFILE_FUNCTION();
 
 		glDeleteBuffers(1, &m_rendererId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
 	void OpenGLIndexBuffer::Bind() const

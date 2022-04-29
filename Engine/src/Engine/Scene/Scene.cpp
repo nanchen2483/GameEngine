@@ -33,34 +33,37 @@ namespace Engine
 
 	void Scene::OnUpdateEditor(TimeStep time, EditorCamera& camera)
 	{
-		auto lightView = m_registry.view<TransformComponent, LightComponent>();
-		Renderer3D::BeginScene(camera, lightView.size_hint());
+		if (!m_registry.empty())
+		{
+			auto lightView = m_registry.view<TransformComponent, LightComponent>();
+			Renderer3D::BeginScene(camera, lightView.size_hint());
 
-		m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
-			.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& sprite)
-				{
-					Renderer3D::Draw(transform.GetTransform(), sprite, (int)entity);
-				});
+			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
+				.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& sprite)
+					{
+						Renderer3D::Draw(transform.GetTransform(), sprite, (int)entity);
+					});
 
-		lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
-				{
-					Renderer3D::Draw(transform, light, (int)entity);
-				});
+			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
+					{
+						Renderer3D::Draw(transform, light, (int)entity);
+					});
 
-		Renderer3D::EndScene();
+			Renderer3D::EndScene();
 
-		m_registry.view<TransformComponent, ModelComponent>()
-			.each([=](TransformComponent& transform, ModelComponent& modelComponent)
-				{
-					modelComponent.OnUpdate(time);
-					Renderer3D::Draw(transform.GetTransform(), modelComponent);
-				});
+			m_registry.view<TransformComponent, ModelComponent>()
+				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
+					{
+						modelComponent.OnUpdate(time);
+						Renderer3D::Draw(transform.GetTransform(), modelComponent);
+					});
 
-		m_registry.view<SkyboxComponent>()
-			.each([=](SkyboxComponent& skyboxComponent)
-				{
-					Renderer3D::Draw(skyboxComponent);
-				});
+			m_registry.view<SkyboxComponent>()
+				.each([](SkyboxComponent& skyboxComponent)
+					{
+						Renderer3D::Draw(skyboxComponent);
+					});
+		}
 	}
 
 	void Scene::OnUpdateRuntime(TimeStep time)

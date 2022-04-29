@@ -667,7 +667,7 @@ namespace Engine
 
 			if (removeComponent)
 			{
-				m_selectionContext.RemoveComponent<LightComponent>();
+				m_selectionContext.RemoveComponent<SkyboxComponent>();
 			}
 		}
 	}

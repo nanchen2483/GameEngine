@@ -34,6 +34,7 @@ namespace Engine
 		std::string ReadFile(const std::string& path);
 		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
 		void Compile(std::unordered_map<GLenum, std::string> shaderSources);
+		void CheckUniformError(int32_t uniformId, const std::string& name);
 	private:
 		uint32_t m_rendererId;
 		std::string m_shaderName;
