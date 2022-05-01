@@ -2,6 +2,7 @@
 
 #include "RendererAPI.h"
 #include "Engine/Core/Enum/DepthFunc.h"
+#include "Engine/Core/Enum/FaceCulling.h"
 
 namespace Engine
 {
@@ -16,6 +17,11 @@ namespace Engine
 		inline static void  SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 		{
 			s_rendererAPI->SetViewport(x, y, width, height);
+		}
+
+		inline static void CullFace(FaceCulling face)
+		{
+			s_rendererAPI->CullFace(face);
 		}
 
 		inline static void SetDepthFunc(DepthFunc func)

@@ -12,6 +12,7 @@ namespace Engine
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
+		virtual void BindDepthTexture(uint32_t slot) override;
 
 		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
 		virtual void Resize(uint32_t width, uint32_t height) override;

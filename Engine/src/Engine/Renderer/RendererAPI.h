@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include "Vertex/VertexArray.h"
 #include "Engine/Core/Enum/DepthFunc.h"
+#include "Engine/Core/Enum/FaceCulling.h"
 
 namespace Engine
 {
@@ -19,6 +20,7 @@ namespace Engine
 
 		virtual void Init() = 0;
 
+		virtual void CullFace(FaceCulling face) = 0;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 		virtual void SetDepthFunc(DepthFunc func) = 0;
 		virtual void SetClearColor(const glm::vec4& color) = 0;

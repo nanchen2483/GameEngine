@@ -4,6 +4,7 @@
 #include "Engine/Core/TimeStep.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Shadow/ShadowBox.h"
 
 namespace Engine
 {
@@ -33,6 +34,7 @@ namespace Engine
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
 		Ptr<TextureMap> m_textureMap = nullptr;
 
+		Ptr<ShadowBox> m_shadowBox = nullptr;
 		friend class Entity;
 		friend class SceneSerializer;
 		friend class SceneHierarchyPanel;

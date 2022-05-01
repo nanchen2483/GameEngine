@@ -27,7 +27,7 @@ namespace Engine
 	void SceneCamera::SetPerspective(uint32_t FOV, float nearClip, float farClip)
 	{
 		m_projectionType = ProjectionType::Perspective;
-		m_perspectiveFOV = FOV;
+		m_FOV = FOV;
 		m_perspectiveNear = nearClip;
 		m_perspectiveFar = farClip;
 
@@ -46,7 +46,7 @@ namespace Engine
 	{
 		if (m_projectionType == ProjectionType::Perspective)
 		{
-			m_projection = glm::perspective(m_perspectiveFOV, m_aspectRatio, m_perspectiveNear, m_perspectiveFar);
+			m_projection = glm::perspective(glm::radians(m_FOV), m_aspectRatio, m_perspectiveNear, m_perspectiveFar);
 		}
 		else
 		{

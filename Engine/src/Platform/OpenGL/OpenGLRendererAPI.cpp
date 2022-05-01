@@ -1,7 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLRendererAPI.h"
 
-#include "Engine/Core/Enum/DepthFunc.h"
 #include "Platform/Util/OpenGLUtil.h"
 
 #include <glad/glad.h>
@@ -12,7 +11,7 @@ namespace Engine
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+		
 		glEnable(GL_DEPTH_TEST);
 	}
 
@@ -24,6 +23,11 @@ namespace Engine
 	void OpenGLRendererAPI::SetDepthFunc(DepthFunc func)
 	{
 		glDepthFunc(OpenGLUtil::ToGL(func));
+	}
+
+	void OpenGLRendererAPI::CullFace(FaceCulling face)
+	{
+		glCullFace(OpenGLUtil::ToGL(face));
 	}
 
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)

@@ -1,8 +1,9 @@
 #pragma once
 #include <glad/glad.h>
 
-#include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Base.h"
+#include "Engine/Core/Enum/DepthFunc.h"
+#include "Engine/Core/Enum/FaceCulling.h"
 
 namespace Engine
 {
@@ -32,6 +33,23 @@ namespace Engine
 			case DepthFunc::UNKNOWN:
 			default:
 				ENGINE_CORE_ASSERT(false, "Invalid depth-comparison function {0}", func);
+				break;
+			}
+
+			return -1;
+		}
+
+		static inline int ToGL(FaceCulling face)
+		{
+			switch (face)
+			{
+			case FaceCulling::FRONT:
+				return GL_FRONT;
+			case FaceCulling::BACK:
+				return GL_BACK;
+			case FaceCulling::UNKNOWN:
+			default:
+				ENGINE_CORE_ASSERT(false, "Invalid depth-comparison function {0}", face);
 				break;
 			}
 

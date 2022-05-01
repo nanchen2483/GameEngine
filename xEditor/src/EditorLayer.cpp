@@ -123,8 +123,9 @@ namespace Engine
 		m_framebuffer->ClearAttachment(ENTITY_ID_ATTACHMENT_INDEX, -1);
 
 		m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
-		UpdateHoveredEntity();
 
+		m_framebuffer->Bind();
+		UpdateHoveredEntity();
 		m_framebuffer->Unbind();
 	}
 

@@ -35,6 +35,8 @@ namespace Engine
 		glm::vec2 textureCoords[NUM_OF_VERTICES] = {};
 
 		Renderer3D::Statistics states;
+
+		ShadowBoxInfo shadowInfo;
 	};
 
 	static Renderer3DData s_data;
@@ -114,6 +116,13 @@ namespace Engine
 		s_data.shader->Bind();
 		s_data.textureSlots[0] = s_data.whiteTexture;
 		s_data.shader->SetIntArray("uTextures", samplers, Renderer3DData::MAX_TEXTURE_SLOTS);
+		s_data.shader->SetInt("uShadowMap", s_data.shadowInfo.depthTextureSlot);
+		
+		s_data.shader->SetInt("uCascadeCount", s_data.shadowInfo.levels.size());
+		for (size_t i = 0; i < s_data.shadowInfo.levels.size(); ++i)
+		{
+			s_data.shader->SetFloat("uCascadePlaneDistances[" + std::to_string(i) + "]", s_data.shadowInfo.levels[i]);
+		}
 		
 		s_data.vertexPosition[0] = { -0.5, -0.5f,  0.5f, 1.0f };
 		s_data.vertexPosition[1] = {  0.5, -0.5f,  0.5f, 1.0f };
@@ -181,26 +190,14 @@ namespace Engine
 	{
 	}
 	
-	void Renderer3D::BeginScene(const EditorCamera& camera, uint32_t numOfPointLights)
+	void Renderer3D::BeginScene(glm::mat4 cameraViewMatrix, glm::mat4 cameraProjection, glm::vec3 cameraPosition, uint32_t numOfPointLights)
 	{
 		ENGINE_PROFILE_FUNCTION();
 		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
 
 		s_data.shader->Bind();
 		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
-		s_data.cameraUniformBuffer->SetData({ &camera.GetViewMatrix(), &camera.GetProjection(), &camera.GetPosition()});
-		s_data.vertexArray->Bind();
-		ResetRendererData();
-	}
-	
-	void Renderer3D::BeginScene(const Camera& camera, const TransformComponent& transform, uint32_t numOfPointLights)
-	{
-		ENGINE_PROFILE_FUNCTION();
-		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
-
-		s_data.shader->Bind();
-		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
-		s_data.cameraUniformBuffer->SetData({ &camera.GetProjection(), &glm::inverse(transform.GetTransform()), &transform.translation });
+		s_data.cameraUniformBuffer->SetData({ &cameraViewMatrix, &cameraProjection, &cameraPosition });
 		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}

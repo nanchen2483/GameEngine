@@ -11,6 +11,7 @@ namespace Engine
 	Scene::Scene()
 	{
 		m_textureMap = CreatePtr<TextureMap>();
+		m_shadowBox = CreatePtr<ShadowBox>();
 	}
 
 	Scene::~Scene()
@@ -36,7 +37,8 @@ namespace Engine
 		if (!m_registry.empty())
 		{
 			auto lightView = m_registry.view<TransformComponent, LightComponent>();
-			Renderer3D::BeginScene(camera, lightView.size_hint());
+			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), lightView.size_hint());
+			m_shadowBox->BindTexture();
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& sprite)
@@ -63,6 +65,28 @@ namespace Engine
 					{
 						Renderer3D::Draw(skyboxComponent);
 					});
+
+			m_shadowBox->Update(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio());
+			m_shadowBox->Bind();
+			auto shader = m_shadowBox->GetShader();
+			m_registry.view<TransformComponent, ModelComponent>()
+				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
+					{
+						if (modelComponent.model != nullptr)
+						{
+							shader->SetMat4("uModel", transform.GetTransform());
+							if (modelComponent.model->HasAnimations())
+							{
+								std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();
+								for (uint32_t i = 0; i < transforms.size(); i++)
+								{
+									shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
+								}
+							}
+							modelComponent.model->Draw();
+						}
+					});
+			m_shadowBox->Ubind();
 		}
 	}
 
@@ -103,7 +127,8 @@ namespace Engine
 		if (mainCamera != nullptr)
 		{
 			auto lightView = m_registry.view<TransformComponent, LightComponent>();
-			Renderer3D::BeginScene(*mainCamera, *mainTransform, lightView.size_hint());
+			Renderer3D::BeginScene(mainTransform->GetTransform(), mainCamera->GetProjection(), mainTransform->translation, lightView.size_hint());
+			m_shadowBox->BindTexture();
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](TransformComponent& transform, SpriteRendererComponent& sprite)
@@ -124,6 +149,34 @@ namespace Engine
 						modelComponent.OnUpdate(time);
 						Renderer3D::Draw(transform.GetTransform(), modelComponent);
 					});
+
+			m_registry.view<SkyboxComponent>()
+				.each([](SkyboxComponent& skyboxComponent)
+					{
+						Renderer3D::Draw(skyboxComponent);
+					});
+
+			m_shadowBox->Update(mainTransform->GetTransform(), mainCamera->GetFOV(), mainCamera->GetAspectRatio());
+			m_shadowBox->Bind();
+			auto shader = m_shadowBox->GetShader();
+			m_registry.view<TransformComponent, ModelComponent>()
+				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
+					{
+						if (modelComponent.model != nullptr)
+						{
+							shader->SetMat4("uModel", transform.GetTransform());
+							if (modelComponent.model->HasAnimations())
+							{
+								std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();
+								for (uint32_t i = 0; i < transforms.size(); i++)
+								{
+									shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
+								}
+							}
+							modelComponent.model->Draw();
+						}
+					});
+			m_shadowBox->Ubind();
 		}
 
 	}

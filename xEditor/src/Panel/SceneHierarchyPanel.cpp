@@ -353,10 +353,10 @@ namespace Engine
 				
 				if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
 				{
-					float FOV = glm::degrees(camera.GetPerspectiveFOV());
+					float FOV = camera.GetPerspectiveFOV();
 					if (ImGui::DragFloat("FOV", &FOV))
 					{
-						camera.SetPerspectiveFOV(glm::radians(FOV));
+						camera.SetPerspectiveFOV(FOV);
 					}
 
 					float perspectNear = camera.GetPerspectiveNearClip();

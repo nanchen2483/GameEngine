@@ -16,9 +16,15 @@ namespace Engine
 		{
 			return GL_VERTEX_SHADER;
 		}
+
 		if (type == "fragment")
 		{
 			return GL_FRAGMENT_SHADER;
+		}
+
+		if (type == "geometry")
+		{
+			return GL_GEOMETRY_SHADER;
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow shader type!");
@@ -44,6 +50,15 @@ namespace Engine
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
+		Compile(sources);
+	}
+
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& geometrySrc)
+	{
+		std::unordered_map<GLenum, std::string> sources;
+		sources[GL_VERTEX_SHADER] = vertexSrc;
+		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
+		sources[GL_GEOMETRY_SHADER] = geometrySrc;
 		Compile(sources);
 	}
 

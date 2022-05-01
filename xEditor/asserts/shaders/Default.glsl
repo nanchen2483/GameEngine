@@ -1,18 +1,18 @@
 #type vertex
 #version 450 core
 
-layout(location = 0) in vec3 aPosition;
-layout(location = 1) in vec3 aNormal;
-layout(location = 2) in vec4 aColor;
-layout(location = 3) in vec2 aTexCoord;
-layout(location = 4) in vec3 aMaterial;
-layout(location = 5) in vec3 aTangent;
-layout(location = 6) in vec3 aBitangent;
-layout(location = 7) in ivec4 aBoneIds;
-layout(location = 8) in vec4 aWeights;
-layout(location = 9) in int aIsWorldPos;
-layout(location = 10) in int aHasAnimations;
-layout(location = 11) in int aEntityId;
+layout (location = 0) in vec3 aPosition;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec4 aColor;
+layout (location = 3) in vec2 aTexCoord;
+layout (location = 4) in vec3 aMaterial;
+layout (location = 5) in vec3 aTangent;
+layout (location = 6) in vec3 aBitangent;
+layout (location = 7) in ivec4 aBoneIds;
+layout (location = 8) in vec4 aWeights;
+layout (location = 9) in int aIsWorldPos;
+layout (location = 10) in int aHasAnimations;
+layout (location = 11) in int aEntityId;
 
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
@@ -114,8 +114,11 @@ vec3 CalcWorldNormal()
 #type fragment
 #version 450 core
 
-layout(location = 0) out vec4 aFragColor;
-layout(location = 1) out int aEntityId;
+layout (location = 0) out vec4 aFragColor;
+layout (location = 1) out int aEntityId;
+
+const int MAX_TEXTURES = 32;
+const int MAX_SHADOW_CASCADES = 16;
 
 layout (std140, binding = 0) uniform CameraBlock
 {
@@ -145,8 +148,18 @@ layout (std140, binding = 2) uniform PointLightBlock
 	vec3 specular;
 } uPointLight;
 
-uniform sampler2D uTextures[32];
+layout (std140, binding = 3) uniform LightSpaceBlock
+{
+    mat4 lightSpaceMatrices[MAX_SHADOW_CASCADES];
+} uLightSpace;
+
+uniform sampler2DArray uShadowMap;
+uniform sampler2D uTextures[MAX_TEXTURES];
 uniform bool uHasPointLight;
+
+// Shadow
+uniform float uCascadePlaneDistances[MAX_SHADOW_CASCADES];
+uniform int uCascadeCount;
 
 struct Material
 {
@@ -154,6 +167,7 @@ struct Material
 	vec3 specular;
 	float shininess;
 	vec4 color;
+	float shadow;
 };
 
 in Vertex
@@ -169,6 +183,7 @@ in Vertex
 Material SetupMaterial();
 vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir);
+float CalcShadow();
 
 void main()
 {
@@ -207,6 +222,8 @@ Material SetupMaterial()
 		material.shininess = vertex.material.z;
 	}
 
+	material.shadow = CalcShadow();
+
 	return material;
 }
 
@@ -227,10 +244,10 @@ vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir)
 		float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
 		vec3 specular = uDirLight.specular * spec * material.specular;
 
-		return ambient + diffuse + specular;
+		return ambient + (1.0 - material.shadow) * (diffuse + specular);
 	}
 
-	return ambient + diffuse;
+	return ambient + (1.0 - material.shadow) * diffuse;
 }
 
 vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir)
@@ -254,8 +271,64 @@ vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir)
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 		vec3 specular = uPointLight.specular * spec * material.specular * attenuation;
 		
-		return ambient + diffuse + specular;
+		return ambient + (1.0 - material.shadow) * (diffuse + specular);
 	}
 
-	return ambient + diffuse;
+	return ambient + (1.0 - material.shadow) * diffuse;
+}
+
+float CalcShadow()
+{
+    // Select cascade layer
+    vec4 fragPosViewSpace = uCamera.view * vec4(vertex.fragPos, 1.0);
+    float depthValue = abs(fragPosViewSpace.z);
+
+    int layer = uCascadeCount - 1; // Last layer as default
+    for (int i = 0; i < uCascadeCount; i++)
+    {
+        if (depthValue < uCascadePlaneDistances[i])
+        {
+            layer = i;
+            break;
+        }
+    }
+
+    vec4 fragPosLightSpace = uLightSpace.lightSpaceMatrices[layer] * vec4(vertex.fragPos, 1.0);
+    
+	// Perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+	
+	// Transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    
+	// Get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+
+    // Keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
+    if (currentDepth > 1.0)
+    {
+        return 0.0;
+    }
+
+    // Calculate bias (based on depth map resolution and slope)
+    vec3 normal = normalize(vertex.normal);
+    float bias = max(0.05 * (1.0 - dot(normal, normalize(-uDirLight.direction))), 0.005);
+    const float biasModifier = 0.5f;
+	bias *= 1 / (uCascadePlaneDistances[layer] * biasModifier);
+
+    // PCF
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / vec2(textureSize(uShadowMap, 0));
+    for(int x = -1; x <= 1; x++)
+    {
+        for(int y = -1; y <= 1; y++)
+        {
+            float pcfDepth = texture(uShadowMap, vec3(projCoords.xy + vec2(x, y) * texelSize, layer)).r;
+            shadow += (currentDepth - bias) > pcfDepth ? 1.0 : 0.0;        
+        }    
+    }
+
+    shadow /= 9.0;
+
+    return shadow;
 }

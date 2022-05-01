@@ -23,8 +23,9 @@ namespace Engine
 
 		void SetViewportSize(uint32_t width, uint32_t height);
 
-		float GetPerspectiveFOV() const { return m_perspectiveFOV; }
-		void SetPerspectiveFOV(float FOV) { m_perspectiveFOV = FOV; RecalculateProjection(); }
+		float GetAspectRatio() const { return m_aspectRatio; }
+		float GetPerspectiveFOV() const { return m_FOV; }
+		void SetPerspectiveFOV(float FOV) { m_FOV = FOV; RecalculateProjection(); }
 		float GetPerspectiveNearClip() const { return m_perspectiveNear; }
 		void SetPerspectiveNearClip(float nearClip) { m_perspectiveNear = nearClip; RecalculateProjection(); }
 		float GetPerspectiveFarClip() const { return m_perspectiveFar; }
@@ -43,16 +44,12 @@ namespace Engine
 		void SetProjectionType(ProjectionType type) { m_projectionType = type; RecalculateProjection(); }
 	private:
 		void RecalculateProjection();
-	private:
 		ProjectionType m_projectionType = ProjectionType::Perspective;
 
-		float m_perspectiveFOV = glm::radians(45.0f);
 		float m_perspectiveNear = 0.01f, m_perspectiveFar = 1000.0f;
 
 		float m_orthographicSize = 10.0f;
 		float m_orthographicNear = -1.0f, m_orthographicFar = 1.0f;
-
-		float m_aspectRatio = 0.0f;
 
 		std::map<ProjectionType, std::string> m_projectionTypeMap =
 		{

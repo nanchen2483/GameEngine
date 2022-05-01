@@ -12,6 +12,7 @@ namespace Engine
 	public:
 		OpenGLShader(const std::string& filePath);
 		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& geometrySrc);
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;

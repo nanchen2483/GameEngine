@@ -10,25 +10,33 @@ namespace Engine
 
 	namespace Utils {
 
-		static GLenum TextureTarget(bool multisampled)
+		static GLenum TextureTarget(bool multisampled, bool isTextureArray)
 		{
-			return multisampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+			if (multisampled)
+			{
+				return isTextureArray ? GL_TEXTURE_2D_MULTISAMPLE_ARRAY : GL_TEXTURE_2D_MULTISAMPLE;
+			}
+			else
+			{
+				return isTextureArray ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
+			}
 		}
 
-		static void CreateTextures(bool multisampled, uint32_t* outId, uint32_t count)
+		static void CreateTextures(bool multisampled, bool isTextureArray, uint32_t* outId, uint32_t count)
 		{
-			glCreateTextures(TextureTarget(multisampled), count, outId);
+			glCreateTextures(TextureTarget(multisampled, isTextureArray), count, outId);
 		}
 
-		static void BindTexture(bool multisampled, uint32_t id)
+		static void BindTexture(bool multisampled, bool isTextureArray, uint32_t id)
 		{
-			glBindTexture(TextureTarget(multisampled), id);
+			glBindTexture(TextureTarget(multisampled, isTextureArray), id);
 		}
 
-		static void AttachColorTexture(uint32_t id, int samples, GLenum internalFormat, GLenum format, uint32_t width, uint32_t height, int index)
+		static void AttachColorTexture(uint32_t id, int samples, int arraysize, GLenum internalFormat, GLenum format, uint32_t width, uint32_t height, int index)
 		{
 			bool multisampled = samples > 1;
-			GLenum textureTarget = TextureTarget(multisampled);
+			bool isTextureArray = arraysize > 1;
+			GLenum textureTarget = TextureTarget(multisampled, isTextureArray);
 			if (multisampled)
 			{
 				glTexImage2DMultisample(textureTarget, samples, internalFormat, width, height, GL_FALSE);
@@ -49,10 +57,11 @@ namespace Engine
 			ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 		}
 
-		static void AttachDepthTexture(uint32_t id, int samples, GLenum format, GLenum attachmentType, uint32_t width, uint32_t height)
+		static void AttachDepthTexture(uint32_t id, int samples, int arraysize, GLenum format, GLenum attachmentType, uint32_t width, uint32_t height)
 		{
 			bool multisampled = samples > 1;
-			GLenum textureTarget = TextureTarget(multisampled);
+			bool isTextureArray = arraysize > 1;
+			GLenum textureTarget = TextureTarget(multisampled, isTextureArray);
 			if (multisampled)
 			{
 				glTexImage2DMultisample(textureTarget, samples, format, width, height, GL_FALSE);
@@ -73,11 +82,40 @@ namespace Engine
 			ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 		}
 
+		static void AttachDepthTextureArray(uint32_t id, int samples, int arraysize, GLenum internalFormat, GLenum format, GLenum attachmentType, uint32_t width, uint32_t height)
+		{
+			bool multisampled = samples > 1;
+			bool isTextureArray = arraysize > 1;
+			GLenum textureTarget = TextureTarget(multisampled, isTextureArray);
+			if (multisampled)
+			{
+				glTexImage3DMultisample(textureTarget, samples, internalFormat, width, height, arraysize, GL_FALSE);
+			}
+			else
+			{
+				glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, internalFormat, width, height, arraysize, 0, format, GL_FLOAT, nullptr);
+
+				glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(textureTarget, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+				glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			}
+
+			glFramebufferTexture(GL_FRAMEBUFFER, attachmentType, id, 0);
+			glDrawBuffer(GL_NONE);
+			glReadBuffer(GL_NONE);
+
+			ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
+		}
+
 		static bool IsDepthFormat(FramebufferTextureFormat format)
 		{
 			switch (format)
 			{
-			case Engine::FramebufferTextureFormat::DEPTH24STENCIL8: return true;
+			case FramebufferTextureFormat::DEPTH24STENCIL8:
+			case FramebufferTextureFormat::DEPTH24STENCIL8Array:
+				return true;
 			}
 
 			return false;
@@ -138,16 +176,17 @@ namespace Engine
 		glCreateFramebuffers(1, &m_rendererId);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_rendererId);
 
-		bool multisample = m_specification.samples > 1;
+		bool multisampled = m_specification.samples > 1;
+		bool isTextureArray = m_specification.arraySize > 1;
 
 		// Attachments
 		if (m_colorAttachmentSpecifications.size())
 		{
 			m_colorAttachments.resize(m_colorAttachmentSpecifications.size());
-			Utils::CreateTextures(multisample, m_colorAttachments.data(), m_colorAttachments.size());
+			Utils::CreateTextures(multisampled, isTextureArray, m_colorAttachments.data(), m_colorAttachments.size());
 			for (int i = 0; i < m_colorAttachments.size(); i++)
 			{
-				Utils::BindTexture(multisample, m_colorAttachments[i]);
+				Utils::BindTexture(multisampled, isTextureArray, m_colorAttachments[i]);
 
 				switch (m_colorAttachmentSpecifications[i].textureFormat)
 				{
@@ -155,6 +194,7 @@ namespace Engine
 					Utils::AttachColorTexture(
 						m_colorAttachments[i],
 						m_specification.samples,
+						m_specification.arraySize,
 						GL_RGBA8,
 						GL_RGBA,
 						m_specification.width,
@@ -165,6 +205,7 @@ namespace Engine
 					Utils::AttachColorTexture(
 						m_colorAttachments[i],
 						m_specification.samples,
+						m_specification.arraySize,
 						GL_R32I,
 						GL_RGB_INTEGER,
 						m_specification.width,
@@ -177,16 +218,28 @@ namespace Engine
 
 		if (m_depthAttachmentSpecification.textureFormat != FramebufferTextureFormat::None)
 		{
-			Utils::CreateTextures(multisample, &m_depthAttachment, 1);
-			Utils::BindTexture(multisample, m_depthAttachment);
+			Utils::CreateTextures(multisampled, isTextureArray, &m_depthAttachment, 1);
+			Utils::BindTexture(multisampled, isTextureArray, m_depthAttachment);
 			switch (m_depthAttachmentSpecification.textureFormat)
 			{
 			case FramebufferTextureFormat::DEPTH24STENCIL8:
 				Utils::AttachDepthTexture(
 					m_depthAttachment,
 					m_specification.samples,
+					m_specification.arraySize,
 					GL_DEPTH24_STENCIL8,
 					GL_DEPTH_STENCIL_ATTACHMENT,
+					m_specification.width,
+					m_specification.height);
+				break;
+			case FramebufferTextureFormat::DEPTH24STENCIL8Array:
+				Utils::AttachDepthTextureArray(
+					m_depthAttachment,
+					m_specification.samples,
+					m_specification.arraySize,
+					GL_DEPTH_COMPONENT32F,
+					GL_DEPTH_COMPONENT,
+					GL_DEPTH_ATTACHMENT,
 					m_specification.width,
 					m_specification.height);
 				break;
@@ -221,6 +274,11 @@ namespace Engine
 	void OpenGLFramebuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGLFramebuffer::BindDepthTexture(uint32_t slot)
+	{
+		glBindTextureUnit(slot, m_depthAttachment);
 	}
 
 	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)

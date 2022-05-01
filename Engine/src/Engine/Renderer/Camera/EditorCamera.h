@@ -36,7 +36,6 @@ namespace Engine {
 	private:
 		void UpdateProjection();
 		void UpdateView();
-
 		bool OnMouseScroll(MouseScrolledEvent& e);
 
 		void MousePan(const glm::vec2& data);
@@ -44,15 +43,11 @@ namespace Engine {
 		void MouseZoom(float delta);
 
 		glm::vec3 CalculatePosition() const;
-
 		std::pair<float, float> PanSpeed() const;
 		float RotationSpeed() const;
 		float ZoomSpeed() const;
-	private:
-		float m_FOV = 45.0f;
-		float m_aspectRatio = 1.778f;
+		
 		float m_nearClip = 0.1f, m_farClip = 1000.0f;
-
 		float m_distance = 10.0f;
 		float m_pitch = 0.0f, m_yaw = 0.0f;
 		
