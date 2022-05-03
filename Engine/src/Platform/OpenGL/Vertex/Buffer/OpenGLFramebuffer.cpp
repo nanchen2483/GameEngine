@@ -114,7 +114,7 @@ namespace Engine
 			switch (format)
 			{
 			case FramebufferTextureFormat::DEPTH24STENCIL8:
-			case FramebufferTextureFormat::DEPTH24STENCIL8Array:
+			case FramebufferTextureFormat::DEPTH_ARRAY:
 				return true;
 			}
 
@@ -232,7 +232,7 @@ namespace Engine
 					m_specification.width,
 					m_specification.height);
 				break;
-			case FramebufferTextureFormat::DEPTH24STENCIL8Array:
+			case FramebufferTextureFormat::DEPTH_ARRAY:
 				Utils::AttachDepthTextureArray(
 					m_depthAttachment,
 					m_specification.samples,

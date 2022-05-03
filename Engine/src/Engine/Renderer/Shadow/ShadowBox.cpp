@@ -18,7 +18,7 @@ namespace Engine
 		m_shader = Shader::Create("asserts/shaders/Shadow.glsl");
 		
 		FramebufferSpecification fbSpec;
-		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::DEPTH24STENCIL8Array });
+		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::DEPTH_ARRAY });
 		fbSpec.width = m_depthMapResolution;
 		fbSpec.height = m_depthMapResolution;
 		fbSpec.arraySize = m_shadowInfo.levels.size();
