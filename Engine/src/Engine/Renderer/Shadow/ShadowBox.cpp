@@ -41,12 +41,11 @@ namespace Engine
 		m_shader->Bind();
 		m_framebuffer->Bind();
 		RendererCommand::Clear();
-		RendererCommand::CullFace(FaceCulling::FRONT);
+		RendererCommand::CullFace(FaceCulling::BACK);
 	}
 
 	void ShadowBox::Ubind()
 	{
-		RendererCommand::CullFace(FaceCulling::BACK);
 		m_framebuffer->Unbind();
 		m_shader->Unbind();
 	}
