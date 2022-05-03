@@ -44,7 +44,7 @@ Entities:
     CameraComponent:
       Camera:
         ProjectionType: 2
-        PerspectiveFOV: 45.0
+        PerspectiveFOV: 45
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
         OrthographicSize: 10
@@ -62,7 +62,7 @@ Entities:
     CameraComponent:
       Camera:
         ProjectionType: 1
-        PerspectiveFOV: 45.0
+        PerspectiveFOV: 45
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
         OrthographicSize: 10
@@ -112,3 +112,33 @@ Entities:
       BottomFilePath: asserts\textures\skybox\bottom.jpg
       BackFilePath: asserts\textures\skybox\back.jpg
       FrontFilePath: asserts\textures\skybox\front.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Cube-model 1
+    TransformComponent:
+      Translation: [-8.80000019, 9.80000019, -12.1000004]
+      Rotation: [0, 0, 0]
+      Scale: [5, 5, 5]
+    ModelComponent:
+      Path: asserts\models\cube\cube.dae
+      EnableAnimation: false
+  - Entity: 123
+    TagComponent:
+      Tag: Cube-model 2
+    TransformComponent:
+      Translation: [-12.3999996, 3.79999995, -16.6000004]
+      Rotation: [0, 0, 0]
+      Scale: [5, 5, 5]
+    ModelComponent:
+      Path: asserts\models\cube\cube.dae
+      EnableAnimation: false
+  - Entity: 123
+    TagComponent:
+      Tag: Cube-model 3
+    TransformComponent:
+      Translation: [-19, 11.6000004, -16.2999992]
+      Rotation: [0, 0, 0]
+      Scale: [5, 5, 5]
+    ModelComponent:
+      Path: asserts\models\cube\cube.dae
+      EnableAnimation: false
