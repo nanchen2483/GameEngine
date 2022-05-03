@@ -17,6 +17,10 @@ namespace Engine {
 		void OnUpdate(TimeStep ts);
 		void OnEvent(Event& e);
 
+		virtual const glm::mat4& GetProjection() const { return m_projection; };
+		virtual const float GetFOV() const override { return m_FOV; };
+		virtual const float GetAspectRatio() const override { return m_aspectRatio; }
+
 		inline float GetDistance() const { return m_distance; }
 		inline float SetDistance(float distance) { m_distance = distance; }
 

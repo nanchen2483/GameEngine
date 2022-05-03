@@ -7,13 +7,11 @@ namespace Engine
 	class Camera
 	{
 	public:
-		Camera() = default;
-		Camera(const glm::mat4& projectionMatrix)
-			: m_projection(projectionMatrix) {}
-
-		const glm::mat4& GetProjection() const { return m_projection; }
-		const float GetFOV() const { return m_FOV; }
-		const float GetAspectRatio() const { return m_aspectRatio; }
+		virtual ~Camera() = default;
+		
+		virtual const glm::mat4& GetProjection() const = 0;
+		virtual const float GetFOV() const = 0;
+		virtual const float GetAspectRatio() const = 0;
 	protected:
 		glm::mat4 m_projection = glm::mat4(1.0f);
 		float m_FOV = 45.0f;

@@ -18,12 +18,15 @@ namespace Engine
 		SceneCamera();
 		virtual ~SceneCamera();
 
+		virtual const glm::mat4& GetProjection() const { return m_projection; };
+		virtual const float GetFOV() const override { return m_FOV; };
+		virtual const float GetAspectRatio() const override { return m_aspectRatio; }
+
 		void SetOrthographic(uint32_t size, float nearClip, float farClip);
 		void SetPerspective(uint32_t FOV, float nearClip, float farClip);
 
 		void SetViewportSize(uint32_t width, uint32_t height);
 
-		float GetAspectRatio() const { return m_aspectRatio; }
 		float GetPerspectiveFOV() const { return m_FOV; }
 		void SetPerspectiveFOV(float FOV) { m_FOV = FOV; RecalculateProjection(); }
 		float GetPerspectiveNearClip() const { return m_perspectiveNear; }
@@ -47,7 +50,6 @@ namespace Engine
 		ProjectionType m_projectionType = ProjectionType::Perspective;
 
 		float m_perspectiveNear = 0.01f, m_perspectiveFar = 1000.0f;
-
 		float m_orthographicSize = 10.0f;
 		float m_orthographicNear = -1.0f, m_orthographicFar = 1.0f;
 
