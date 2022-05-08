@@ -96,7 +96,7 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		glm::mat4& viewProjection = camera.GetViewProjection();
+		const glm::mat4& viewProjection = camera.GetViewProjection();
 
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);

@@ -7,7 +7,8 @@
 
 #include <glm/glm.hpp>
 
-namespace Engine {
+namespace Engine
+{
 	class EditorCamera : public Camera
 	{
 	public:
@@ -20,23 +21,24 @@ namespace Engine {
 		virtual const glm::mat4& GetProjection() const { return m_projection; };
 		virtual const float GetFOV() const override { return m_FOV; };
 		virtual const float GetAspectRatio() const override { return m_aspectRatio; }
+		virtual Frustum GetFrustum(const Transform& transform = {}) const override;
+		virtual void SetViewportSize(uint32_t width, uint32_t height) override;
 
 		inline float GetDistance() const { return m_distance; }
 		inline float SetDistance(float distance) { m_distance = distance; }
 
-		inline void SetViewportSize(float width, float height) { m_viewportWidth = width; m_viewportHeight = height; }
+		inline const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
+		inline const glm::mat4& GetViewProjection() const { return m_projection * m_viewMatrix; }
 
-		const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
-		glm::mat4 GetViewProjection() const { return m_projection * m_viewMatrix; }
+		inline const glm::vec3& GetPosition() const { return m_position; }
+		inline const glm::vec3& GetRotation() const { return glm::vec3(-m_pitch, -m_yaw, 0.0f); }
+		inline const glm::quat& GetOrientation() const { return glm::quat(GetRotation()); }
+		inline const glm::vec3& GetUpDirection() const { return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f)); }
+		inline const glm::vec3& GetRightDirection() const { return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f)); }
+		inline const glm::vec3& GetForwardDirection() const { return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f)); }
 
-		glm::vec3 GetUpDirection() const;
-		glm::vec3 GetRightDirection() const;
-		glm::vec3 GetForwardDirection() const;
-		const glm::vec3& GetPosition() const { return m_position; }
-		glm::quat GetOrientation() const;
-
-		float GetPitch() const { return m_pitch; }
-		float GetYaw() const { return m_yaw; }
+		inline float GetPitch() const { return m_pitch; }
+		inline float GetYaw() const { return m_yaw; }
 	private:
 		void UpdateProjection();
 		void UpdateView();

@@ -43,6 +43,8 @@ namespace Engine
 
 		LoadMeshes(scene);
 		LoadAnimations(scene);
+
+		m_boundingVolume = BoundingVolume::Create(BoundingVolumeType::AABB, m_minAABB, m_maxAABB);
 	}
 
 	void AssimpModel::LoadMeshes(const aiScene* scene)
@@ -82,6 +84,8 @@ namespace Engine
 				vertex.hasAnimations = m_hasAnimations;
 				vertex.entityId = m_entityId;
 				vertices.push_back(vertex);
+
+				UpdateBoundingValues(vertex.position);
 			}
 
 			std::vector<uint32_t> indices;
@@ -177,6 +181,17 @@ namespace Engine
 		return nullptr;
 	}
 
+	void AssimpModel::UpdateBoundingValues(glm::vec3 position)
+	{
+		m_minAABB.x = std::min(m_minAABB.x, position.x);
+		m_minAABB.y = std::min(m_minAABB.y, position.y);
+		m_minAABB.z = std::min(m_minAABB.z, position.z);
+
+		m_maxAABB.x = std::max(m_maxAABB.x, position.x);
+		m_maxAABB.y = std::max(m_maxAABB.y, position.y);
+		m_maxAABB.z = std::max(m_maxAABB.z, position.z);
+	}
+
 	void AssimpModel::IncreaseProgression()
 	{
 		if (m_progression != nullptr)
@@ -184,6 +199,11 @@ namespace Engine
 			m_currentProgression++;
 			(*m_progression) = (m_currentProgression / m_totalProgression);
 		}
+	}
+
+	bool AssimpModel::IsOnFrustum(const Frustum& frustum, const Transform& transform) const
+	{
+		return m_boundingVolume->IsOnFrustum(frustum, transform);
 	}
 
 	void AssimpModel::OnUpdate(float deltaTime)

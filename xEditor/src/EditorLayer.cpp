@@ -33,7 +33,7 @@ namespace Engine
 		// Entity
 		m_activeScene = CreatePtr<Scene>();
 
-		m_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+		m_editorCamera = EditorCamera(45.0f, 1.778f, 0.1f, 1000.0f);
 
 #if 0
 		m_squareEntity = m_activeScene->CreateEntity("Lightblue square");
@@ -103,7 +103,7 @@ namespace Engine
 			(spec.width != m_viewportSize.x || spec.height != m_viewportSize.y))
 		{
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-			m_editorCamera.SetViewportSize(m_viewportSize.x, m_viewportSize.y);
+			m_editorCamera.SetViewportSize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		}
 
@@ -112,7 +112,6 @@ namespace Engine
 			ENGINE_PROFILE_SCOPE("Camera OnUpdate");
 			m_editorCamera.OnUpdate(timeStep);
 		}
-
 
 		Renderer3D::ResetStates();
 		m_framebuffer->Bind();
@@ -323,8 +322,8 @@ namespace Engine
 					glm::mat4 cameraView = m_editorCamera.GetViewMatrix();
 
 					// Entity transform
-					auto& tc = selectedEntity.GetComponent<TransformComponent>();
-					glm::mat4 transform = tc.GetTransform();
+					Transform& transform = selectedEntity.GetComponent<TransformComponent>();
+					glm::mat4 transformMatrix = transform;
 
 					// Snapping
 					bool snap = Input::IsKeyPressed(KeyCode::LEFT_CONTROL);
@@ -341,7 +340,7 @@ namespace Engine
 						glm::value_ptr(cameraProjection),
 						(ImGuizmo::OPERATION)m_gizmoType,
 						ImGuizmo::LOCAL,
-						glm::value_ptr(transform),
+						glm::value_ptr(transformMatrix),
 						nullptr,
 						snap ? snapValues : nullptr
 					);
@@ -349,12 +348,12 @@ namespace Engine
 					if (ImGuizmo::IsUsing())
 					{
 						glm::vec3 translation, rotation, scale;
-						Math::DecomposeTransform(transform, translation, rotation, scale);
+						Math::DecomposeTransform(transformMatrix, translation, rotation, scale);
 
-						glm::vec3 deltaRotation = rotation - tc.rotation;
-						tc.translation = translation;
-						tc.rotation += deltaRotation;
-						tc.scale = scale;
+						glm::vec3 deltaRotation = rotation - transform.rotation;
+						transform.translation = translation;
+						transform.rotation += deltaRotation;
+						transform.scale = scale;
 					}
 				}
 

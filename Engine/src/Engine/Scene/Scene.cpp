@@ -36,6 +36,7 @@ namespace Engine
 	{
 		if (!m_registry.empty())
 		{
+			Frustum frustum = camera.GetFrustum();
 			auto lightView = m_registry.view<TransformComponent, LightComponent>();
 			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), lightView.size_hint());
 			m_shadowBox->BindTexture();
@@ -43,7 +44,7 @@ namespace Engine
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& sprite)
 					{
-						Renderer3D::Draw(transform.GetTransform(), sprite, (int)entity);
+						Renderer3D::Draw(transform, sprite, (int)entity);
 					});
 
 			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
@@ -56,8 +57,11 @@ namespace Engine
 			m_registry.view<TransformComponent, ModelComponent>()
 				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 					{
-						modelComponent.OnUpdate(time);
-						Renderer3D::Draw(transform.GetTransform(), modelComponent);
+						modelComponent.OnUpdate(time, frustum, transform);
+						if (modelComponent.isOnViewFrustum)
+						{
+							Renderer3D::Draw(transform, modelComponent);
+						}
 					});
 
 			m_registry.view<SkyboxComponent>()
@@ -68,13 +72,13 @@ namespace Engine
 
 			m_shadowBox->Update(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio());
 			m_shadowBox->Bind();
-			auto shader = m_shadowBox->GetShader();
+			Ptr<Shader> shader = m_shadowBox->GetShader();
 			m_registry.view<TransformComponent, ModelComponent>()
 				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 					{
-						if (modelComponent.model != nullptr)
+						if (modelComponent.isOnViewFrustum)
 						{
-							shader->SetMat4("uModel", transform.GetTransform());
+							shader->SetMat4("uModel", transform);
 							if (modelComponent.model->HasAnimations())
 							{
 								std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();
@@ -126,14 +130,15 @@ namespace Engine
 
 		if (mainCamera != nullptr)
 		{
+			Frustum frustum = mainCamera->GetFrustum(*mainTransform);
 			auto lightView = m_registry.view<TransformComponent, LightComponent>();
-			Renderer3D::BeginScene(mainTransform->GetTransform(), mainCamera->GetProjection(), mainTransform->translation, lightView.size_hint());
+			Renderer3D::BeginScene(mainTransform->GetViewMatrix(), mainCamera->GetProjection(), mainTransform->GetTranslation(), lightView.size_hint());
 			m_shadowBox->BindTexture();
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](TransformComponent& transform, SpriteRendererComponent& sprite)
 					{
-						Renderer3D::Draw(transform.GetTransform(), sprite);
+						Renderer3D::Draw(transform, sprite);
 					});
 
 			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
@@ -146,8 +151,11 @@ namespace Engine
 			m_registry.view<TransformComponent, ModelComponent>()
 				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 					{
-						modelComponent.OnUpdate(time);
-						Renderer3D::Draw(transform.GetTransform(), modelComponent);
+						modelComponent.OnUpdate(time, frustum, transform);
+						if (modelComponent.isOnViewFrustum)
+						{
+							Renderer3D::Draw(transform, modelComponent);
+						}
 					});
 
 			m_registry.view<SkyboxComponent>()
@@ -156,15 +164,15 @@ namespace Engine
 						Renderer3D::Draw(skyboxComponent);
 					});
 
-			m_shadowBox->Update(mainTransform->GetTransform(), mainCamera->GetFOV(), mainCamera->GetAspectRatio());
+			m_shadowBox->Update(mainTransform->GetViewMatrix(), mainCamera->GetFOV(), mainCamera->GetAspectRatio());
 			m_shadowBox->Bind();
-			auto shader = m_shadowBox->GetShader();
+			Ptr<Shader> shader = m_shadowBox->GetShader();
 			m_registry.view<TransformComponent, ModelComponent>()
 				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 					{
-						if (modelComponent.model != nullptr)
+						if (modelComponent.isOnViewFrustum)
 						{
-							shader->SetMat4("uModel", transform.GetTransform());
+							shader->SetMat4("uModel", transform);
 							if (modelComponent.model->HasAnimations())
 							{
 								std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();

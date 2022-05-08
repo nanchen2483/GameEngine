@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Engine/Renderer/Model/Model.h"
+#include "Engine/Renderer/BoundingVolume/BoundingVolume.h"
+
 #include "AssimpAnimation.h"
 #include "AssimpMesh.h"
 #include "Helper/AssimpHelper.h"
@@ -21,6 +23,7 @@ namespace Engine
 		
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
 		virtual bool HasAnimations() override { return m_hasAnimations; }
+		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const override;
 		virtual void OnUpdate(float deltaTime) override;
 		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
 		
@@ -35,6 +38,7 @@ namespace Engine
 		void LoadAnimations(const aiScene* scene);
 		void LoadBones(std::vector<Vertex>& vertices, const aiMesh* mesh);
 		const Ptr<Material::MaterialTexture> LoadTexture(const aiMaterial* material, const aiTextureType type, const TextureType textureType);
+		void UpdateBoundingValues(glm::vec3 position);
 
 		const std::filesystem::path m_filePath;
 		const std::filesystem::path m_directory = m_filePath.parent_path();
@@ -42,6 +46,11 @@ namespace Engine
 
 		Ptr<TextureMap> m_textureMap;
 		std::vector<AssimpMesh> m_meshes;
+
+		// Bounding volume
+		Uniq<BoundingVolume> m_boundingVolume;
+		glm::vec3 m_minAABB = glm::vec3(std::numeric_limits<float>::max());
+		glm::vec3 m_maxAABB = glm::vec3(std::numeric_limits<float>::min());
 
 		// Animations
 		bool m_hasAnimations = false;

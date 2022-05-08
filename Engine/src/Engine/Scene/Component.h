@@ -2,15 +2,10 @@
 
 #include "ScriptableEntity.h"
 #include "Engine/Scene/SceneCamera.h"
-#include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Renderer/Model/Model.h"
 #include "Engine/Renderer/Skybox/Skybox.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
+#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Transform/Transform.h"
 
 namespace Engine
 {
@@ -26,21 +21,21 @@ namespace Engine
 
 	struct TransformComponent
 	{
-		glm::vec3 translation = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+		Transform transform;
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent& transform) = default;
-		TransformComponent(const glm::vec4& translation)
-			: translation(translation) {}
+		TransformComponent(const Transform& transform)
+			: transform(transform) {}
 
-		glm::mat4 GetTransform() const
-		{
-			return glm::translate(glm::mat4(1.0f), translation)
-				* glm::toMat4(glm::quat(rotation))
-				* glm::scale(glm::mat4(1.0f), scale);
-		}
+		glm::vec3 GetTranslation() const { return transform.translation; }
+		glm::vec3 GetRotation() const { return transform.rotation; }
+		glm::vec3 GetScale() const { return transform.scale; }
+		glm::mat4 GetViewMatrix() const { return glm::inverse((glm::mat4)transform); }
+		
+		operator glm::mat4() const { return transform; }
+		operator Transform&() { return transform; }
+
 	};
 
 	struct CameraComponent
@@ -95,6 +90,7 @@ namespace Engine
 	{
 		bool loading = false;
 		Ptr<float> progression = CreatePtr<float>(0.0f);
+		bool isOnViewFrustum = false;
 		
 		bool enableAnimation = false;
 		Ptr<Model> model = nullptr;
@@ -104,12 +100,24 @@ namespace Engine
 		ModelComponent(const Ptr<Model>& model)
 			: model(model) {}
 
-		void OnUpdate(float deltaTime)
+		void OnUpdate(float deltaTime, const Frustum& frustum, const Transform& transform)
 		{
-			if (enableAnimation && model != nullptr)
+			bool isOnViewFrustum = IsOnViewFrustum(frustum, transform);
+			if (isOnViewFrustum && enableAnimation && model != nullptr)
 			{
 				model->OnUpdate(deltaTime);
 			}
+		}
+	private:
+		bool IsOnViewFrustum(const Frustum& frustum, const Transform& transform)
+		{
+			isOnViewFrustum = false;
+			if (model != nullptr)
+			{
+				isOnViewFrustum = model->IsOnFrustum(frustum, transform);
+			}
+
+			return isOnViewFrustum;
 		}
 	};
 

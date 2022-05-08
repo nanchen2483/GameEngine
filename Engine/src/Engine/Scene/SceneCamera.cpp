@@ -14,6 +14,11 @@ namespace Engine
 	{
 	}
 
+	Frustum SceneCamera::GetFrustum(const Transform& transform) const
+	{
+		return Frustum(transform.translation, transform.rotation, m_FOV, m_perspectiveNear, m_perspectiveFar, m_aspectRatio);
+	}
+
 	void SceneCamera::SetOrthographic(uint32_t size, float nearClip, float farClip)
 	{
 		m_projectionType = ProjectionType::Orthographic;

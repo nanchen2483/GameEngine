@@ -9,9 +9,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-
-namespace Engine {
-
+namespace Engine
+{
 	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)
 		: m_nearClip(nearClip), m_farClip(farClip)
 	{
@@ -52,25 +51,19 @@ namespace Engine {
 		EventDispatcher dispacther(e);
 		dispacther.Dispatch<MouseScrolledEvent>(ENGINE_BIND_EVENT_FN(EditorCamera::OnMouseScroll));
 	}
-	
-	glm::vec3 EditorCamera::GetUpDirection() const
+
+	Frustum EditorCamera::GetFrustum(const Transform& transform) const
 	{
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
+		return Frustum(m_position, GetRotation(), m_FOV, m_nearClip, m_farClip, m_aspectRatio);
 	}
-	
-	glm::vec3 EditorCamera::GetRightDirection() const
+
+	void EditorCamera::SetViewportSize(uint32_t width, uint32_t height)
 	{
-		return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
-	}
-	
-	glm::vec3 EditorCamera::GetForwardDirection() const
-	{
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
-	}
-	
-	glm::quat EditorCamera::GetOrientation() const
-	{
-		return glm::quat(glm::vec3(-m_pitch, -m_yaw, 0.0f));
+		ENGINE_CORE_ASSERT(height > 0, "Viewport height cannot be less or equal to 0");
+
+		m_viewportWidth = width;
+		m_viewportHeight = height;
+		UpdateProjection();
 	}
 	
 	void EditorCamera::UpdateProjection()

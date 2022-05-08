@@ -105,9 +105,9 @@ namespace Engine {
 
 			TransformComponent& transformComponent = entity.GetComponent<TransformComponent>();
 			
-			out << YAML::Key << "Translation" << YAML::Value << transformComponent.translation;
-			out << YAML::Key << "Rotation" << YAML::Value << transformComponent.rotation;
-			out << YAML::Key << "Scale" << YAML::Value << transformComponent.scale;
+			out << YAML::Key << "Translation" << YAML::Value << transformComponent.GetTranslation();
+			out << YAML::Key << "Rotation" << YAML::Value << transformComponent.GetRotation();
+			out << YAML::Key << "Scale" << YAML::Value << transformComponent.GetScale();
 
 			out << YAML::EndMap;
 		}
@@ -270,9 +270,9 @@ namespace Engine {
 				{
 					// Entities always have transforms
 					TransformComponent& deserializedTC = deserializedEntity.GetComponent<TransformComponent>();
-					deserializedTC.translation = transformComponent["Translation"].as<glm::vec3>();
-					deserializedTC.rotation = transformComponent["Rotation"].as<glm::vec3>();
-					deserializedTC.scale = transformComponent["Scale"].as<glm::vec3>();
+					deserializedTC.transform.translation = transformComponent["Translation"].as<glm::vec3>();
+					deserializedTC.transform.rotation = transformComponent["Rotation"].as<glm::vec3>();
+					deserializedTC.transform.scale = transformComponent["Scale"].as<glm::vec3>();
 				}
 
 				YAML::Node cameraComponent = entity["CameraComponent"];

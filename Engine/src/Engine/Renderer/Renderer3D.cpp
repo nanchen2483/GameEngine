@@ -237,9 +237,9 @@ namespace Engine
 
 	void Renderer3D::Draw(const TransformComponent& transform, LightComponent& light, int entityId)
 	{
-		light.position = transform.translation;
+		light.position = transform.GetTranslation();
 		s_data.pointLightUniformBuffer->SetData(light.GetData());
-		Draw(transform.GetTransform(), nullptr, glm::vec4(1.0f), entityId);
+		Draw(transform, nullptr, glm::vec4(1.0f), entityId);
 	}
 	
 	void Renderer3D::Draw(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color, int entityId)

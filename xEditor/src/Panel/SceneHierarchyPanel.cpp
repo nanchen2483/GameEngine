@@ -303,12 +303,12 @@ namespace Engine
 
 			if (open)
 			{
-				TransformComponent& transformComponent = entity.GetComponent<TransformComponent>();
-				DrawVec3Control("Translation", transformComponent.translation);
-				glm::vec3& rotation = glm::degrees(transformComponent.rotation);
+				Transform& transform = entity.GetComponent<TransformComponent>();
+				DrawVec3Control("Translation", transform.translation);
+				glm::vec3& rotation = glm::degrees(transform.rotation);
 				DrawVec3Control("Rotation", rotation);
-				transformComponent.rotation = glm::radians(rotation);
-				DrawVec3Control("Scale", transformComponent.scale, 1.0f);
+				transform.rotation = glm::radians(rotation);
+				DrawVec3Control("Scale", transform.scale, 1.0f);
 
 				ImGui::TreePop();
 			}
