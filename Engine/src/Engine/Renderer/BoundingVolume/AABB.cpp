@@ -14,7 +14,7 @@ namespace Engine
 	{
 	}
 
-	bool AABB::IsOnFrustum(const Frustum& cameraFrustum, const Transform& transform) const
+	bool AABB::IsOnFrustum(const Frustum& frustum, const Transform& transform) const
 	{
 		// Convert center to world space
 		const glm::vec3 worldCenter = (glm::mat4)transform * glm::vec4(m_center, 1.f);
@@ -43,12 +43,12 @@ namespace Engine
 
 		const AABB worldAABB(worldCenter, newIi, newIj, newIk);
 
-		return (worldAABB.IsOnForwardPlan(cameraFrustum.leftFace) &&
-				worldAABB.IsOnForwardPlan(cameraFrustum.rightFace) &&
-				worldAABB.IsOnForwardPlan(cameraFrustum.topFace) &&
-				worldAABB.IsOnForwardPlan(cameraFrustum.bottomFace) &&
-				worldAABB.IsOnForwardPlan(cameraFrustum.nearFace) &&
-				worldAABB.IsOnForwardPlan(cameraFrustum.farFace));
+		return (worldAABB.IsOnForwardPlan(frustum.leftFace) &&
+				worldAABB.IsOnForwardPlan(frustum.rightFace) &&
+				worldAABB.IsOnForwardPlan(frustum.topFace) &&
+				worldAABB.IsOnForwardPlan(frustum.bottomFace) &&
+				worldAABB.IsOnForwardPlan(frustum.nearFace) &&
+				worldAABB.IsOnForwardPlan(frustum.farFace));
 	}
 
 	bool AABB::IsOnForwardPlan(const Plan& plan) const

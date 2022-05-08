@@ -101,6 +101,9 @@ namespace Engine
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 		m_yaw += yawSign * delta.x * RotationSpeed();
 		m_pitch += delta.y * RotationSpeed();
+		
+		m_rotation = glm::vec3(-m_pitch, -m_yaw, 0.0f);
+		m_orientation = glm::quat(m_rotation);
 	}
 	
 	void EditorCamera::MouseZoom(float delta)

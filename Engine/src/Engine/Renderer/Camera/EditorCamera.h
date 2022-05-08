@@ -31,11 +31,11 @@ namespace Engine
 		inline const glm::mat4& GetViewProjection() const { return m_projection * m_viewMatrix; }
 
 		inline const glm::vec3& GetPosition() const { return m_position; }
-		inline const glm::vec3& GetRotation() const { return glm::vec3(-m_pitch, -m_yaw, 0.0f); }
-		inline const glm::quat& GetOrientation() const { return glm::quat(GetRotation()); }
-		inline const glm::vec3& GetUpDirection() const { return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f)); }
-		inline const glm::vec3& GetRightDirection() const { return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f)); }
-		inline const glm::vec3& GetForwardDirection() const { return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f)); }
+		inline const glm::vec3& GetRotation() const { return m_rotation; }
+		inline const glm::quat& GetOrientation() const { return m_orientation; }
+		inline const glm::vec3& GetUpDirection() const { return glm::rotate(m_orientation, glm::vec3(0.0f, 1.0f, 0.0f)); }
+		inline const glm::vec3& GetRightDirection() const { return glm::rotate(m_orientation, glm::vec3(1.0f, 0.0f, 0.0f)); }
+		inline const glm::vec3& GetForwardDirection() const { return glm::rotate(m_orientation, glm::vec3(0.0f, 0.0f, -1.0f)); }
 
 		inline float GetPitch() const { return m_pitch; }
 		inline float GetYaw() const { return m_yaw; }
@@ -56,6 +56,8 @@ namespace Engine
 		float m_nearClip = 0.1f, m_farClip = 1000.0f;
 		float m_distance = 10.0f;
 		float m_pitch = 0.0f, m_yaw = 0.0f;
+		glm::vec3 m_rotation;
+		glm::quat m_orientation;
 		
 		float m_viewportWidth = 1280, m_viewportHeight = 720;
 
