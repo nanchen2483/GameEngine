@@ -56,8 +56,8 @@ namespace Engine
 		float m_nearClip = 0.1f, m_farClip = 1000.0f;
 		float m_distance = 10.0f;
 		float m_pitch = 0.0f, m_yaw = 0.0f;
-		glm::vec3 m_rotation;
-		glm::quat m_orientation;
+		glm::vec3 m_rotation = glm::vec3(0.0f);
+		glm::quat m_orientation = glm::quat();
 		
 		float m_viewportWidth = 1280, m_viewportHeight = 720;
 

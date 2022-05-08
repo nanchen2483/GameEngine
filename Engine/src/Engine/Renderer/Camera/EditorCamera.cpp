@@ -76,8 +76,7 @@ namespace Engine
 	{
 		m_position = CalculatePosition();
 		 
-		glm::quat oritation = GetOrientation();
-		m_viewMatrix = glm::translate(glm::mat4(1.0f), m_position) * glm::toMat4(oritation);
+		m_viewMatrix = glm::translate(glm::mat4(1.0f), m_position) * glm::toMat4(m_orientation);
 		m_viewMatrix = glm::inverse(m_viewMatrix);
 	}
 	
