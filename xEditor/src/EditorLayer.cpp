@@ -126,6 +126,8 @@ namespace Engine
 		m_framebuffer->Bind();
 		UpdateHoveredEntity();
 		m_framebuffer->Unbind();
+
+		m_shadowDebug.Draw();
 	}
 
 	void EditorLayer::UpdateHoveredEntity()
@@ -254,6 +256,30 @@ namespace Engine
 
 			m_sceneHierachyPanel.OnImGuiRender();
 			m_contentBrowserPanel.OnImGuiRender();
+
+			static bool showShadowMap = false;
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::BeginMenu("Debug"))
+				{
+					ImGui::MenuItem("ShadowMap", NULL, &showShadowMap);
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenuBar();
+			}
+
+			if (showShadowMap)
+			{
+				ImGui::Begin("Debug", &showShadowMap);
+				{
+					static int m_shadowLevel = -1;
+					ImGui::InputInt("Shadow level", &m_shadowLevel);
+					ImVec2 windowSize = ImGui::GetWindowSize();
+					uint32_t textureId = m_shadowDebug.GetShadowLayer(m_shadowLevel);
+					ImGui::Image((void*)textureId, ImVec2(windowSize.x - 15, windowSize.y - 60), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+				}
+				ImGui::End();
+			}
 
 			if (ImGui::Begin("Settings"))
 			{

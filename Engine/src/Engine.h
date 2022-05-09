@@ -11,6 +11,7 @@
 
 // Debug
 #include "Engine/Debug/FPSCalculator.h"
+#include "Engine/Renderer/Shadow/Debug/ShadowDebug.h"
 
 // Renderer
 #include "Engine/Renderer/Renderer2D.h"
