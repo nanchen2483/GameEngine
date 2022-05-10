@@ -23,7 +23,31 @@ namespace Engine
 			m_width.push_back(face->GetWidth());
 			m_height.push_back(face->GetHeight());
 
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, face->GetInternalFormat(), m_width[i], m_height[i], 0, face->GetDataFormat(), GL_UNSIGNED_BYTE, face->GetData());
+			uint32_t internalFormat, dataFormat;
+			switch (face->GetChannels())
+			{
+			case 1:
+				internalFormat = GL_RED;
+				dataFormat = GL_RED;
+				break;
+			case 3:
+				internalFormat = GL_RGB8;
+				dataFormat = GL_RGB;
+				break;
+			case 4:
+				internalFormat = GL_RGBA8;
+				dataFormat = GL_RGBA;
+				break;
+			default:
+				internalFormat = GL_NONE;
+				dataFormat = GL_NONE;
+				ENGINE_CORE_ERROR("Unsupported channel");
+				break;
+			}
+
+			ENGINE_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
+
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, m_width[i], m_height[i], 0, dataFormat, GL_UNSIGNED_BYTE, face->GetData());
 		}
 
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

@@ -49,8 +49,8 @@ namespace Engine
 		virtual uint32_t GetHeight() const = 0;
 
 		static Ptr<Texture2D> Create(uint32_t width, uint32_t height);
-		static Ptr<Texture2D> Create(const Ptr<Image> image, const TextureType type = TextureType::None);
 		static Ptr<Texture2D> Create(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = true);
+		static Ptr<Texture2D> Create(const Ptr<Image> image, const TextureType type = TextureType::None);
 	};
 
 	class Texture3D : public Texture

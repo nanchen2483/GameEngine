@@ -8,8 +8,8 @@ namespace Engine
 	{
 	public:
 		OpenGLTexture2D(uint32_t width, uint32_t height);
+		OpenGLTexture2D(const std::string& filePath, const TextureType type, bool flipVertically = true);
 		OpenGLTexture2D(const Ptr<Image> image, const TextureType type);
-		OpenGLTexture2D(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = true);
 		~OpenGLTexture2D();
 
 		inline virtual std::string GetFilePath() const override { return m_filePath; }
@@ -25,7 +25,6 @@ namespace Engine
 		{
 			return m_rendererId == ((OpenGLTexture2D&)other).m_rendererId;
 		}
-
 	private:
 		std::string m_filePath;
 		uint32_t m_width, m_height;
