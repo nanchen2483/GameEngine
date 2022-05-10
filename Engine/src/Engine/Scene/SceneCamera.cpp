@@ -16,7 +16,7 @@ namespace Engine
 
 	Frustum SceneCamera::GetFrustum(const Transform& transform) const
 	{
-		return Frustum(transform.translation, transform.rotation, m_FOV, m_perspectiveNear, m_perspectiveFar, m_aspectRatio);
+		return Frustum(transform.translation, transform.rotation, m_FOV, m_nearClip, m_farClip, m_aspectRatio);
 	}
 
 	void SceneCamera::SetOrthographic(uint32_t size, float nearClip, float farClip)
@@ -33,8 +33,8 @@ namespace Engine
 	{
 		m_projectionType = ProjectionType::Perspective;
 		m_FOV = FOV;
-		m_perspectiveNear = nearClip;
-		m_perspectiveFar = farClip;
+		m_nearClip = nearClip;
+		m_farClip = farClip;
 
 		RecalculateProjection();
 	}
@@ -51,7 +51,7 @@ namespace Engine
 	{
 		if (m_projectionType == ProjectionType::Perspective)
 		{
-			m_projection = glm::perspective(glm::radians(m_FOV), m_aspectRatio, m_perspectiveNear, m_perspectiveFar);
+			m_projection = glm::perspective(glm::radians(m_FOV), m_aspectRatio, m_nearClip, m_farClip);
 		}
 		else
 		{

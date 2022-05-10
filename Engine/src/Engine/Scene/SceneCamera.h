@@ -29,10 +29,10 @@ namespace Engine
 
 		float GetPerspectiveFOV() const { return m_FOV; }
 		void SetPerspectiveFOV(float FOV) { m_FOV = FOV; RecalculateProjection(); }
-		float GetPerspectiveNearClip() const { return m_perspectiveNear; }
-		void SetPerspectiveNearClip(float nearClip) { m_perspectiveNear = nearClip; RecalculateProjection(); }
-		float GetPerspectiveFarClip() const { return m_perspectiveFar; }
-		void SetPerspectiveFarClip(float farClip) { m_perspectiveFar = farClip; RecalculateProjection(); }
+		float GetPerspectiveNearClip() const { return m_nearClip; }
+		void SetPerspectiveNearClip(float nearClip) { m_nearClip = nearClip; RecalculateProjection(); }
+		float GetPerspectiveFarClip() const { return m_farClip; }
+		void SetPerspectiveFarClip(float farClip) { m_farClip = farClip; RecalculateProjection(); }
 
 		float GetOrthographicSize() const { return m_orthographicSize; }
 		void SetOrthographicSize(float size) { m_orthographicSize = size; RecalculateProjection(); }
@@ -49,7 +49,6 @@ namespace Engine
 		void RecalculateProjection();
 		ProjectionType m_projectionType = ProjectionType::Perspective;
 
-		float m_perspectiveNear = 0.01f, m_perspectiveFar = 1000.0f;
 		float m_orthographicSize = 10.0f;
 		float m_orthographicNear = -1.0f, m_orthographicFar = 1.0f;
 

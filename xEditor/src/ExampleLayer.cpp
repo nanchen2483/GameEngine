@@ -14,7 +14,7 @@ namespace Engine
 	void ExampleLayer::OnAttach()
 	{
 		m_activeScene = CreatePtr<Scene>();
-		m_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+		m_editorCamera = EditorCamera(30.0f, 1280.0f, 720.0f, 0.1f, 1000.0f);
 
 		m_skybox = CreatePtr<Skybox>(std::vector<Ptr<Image>>
 		{

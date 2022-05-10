@@ -11,13 +11,15 @@
 
 namespace Engine
 {
-	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)
-		: m_nearClip(nearClip), m_farClip(farClip)
+	EditorCamera::EditorCamera(float fov, float viewportWidth, float viewportHeight, float nearClip, float farClip)
 	{
 		m_FOV = fov;
-		m_aspectRatio = aspectRatio;
-		m_projection = glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip);
-
+		m_nearClip = nearClip;
+		m_farClip = farClip;
+		m_viewportWidth = viewportWidth;
+		m_viewportHeight = viewportHeight;
+		
+		UpdateProjection();
 		UpdateView();
 	}
 

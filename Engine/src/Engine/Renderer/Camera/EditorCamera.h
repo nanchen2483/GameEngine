@@ -13,7 +13,7 @@ namespace Engine
 	{
 	public:
 		EditorCamera() = default;
-		EditorCamera(float fov, float aspectRatio, float nearClip, float farClip);
+		EditorCamera(float fov, float viewportWidth, float viewportHeight, float nearClip, float farClip);
 
 		void OnUpdate(TimeStep ts);
 		void OnEvent(Event& e);
@@ -53,7 +53,6 @@ namespace Engine
 		float RotationSpeed() const;
 		float ZoomSpeed() const;
 		
-		float m_nearClip = 0.1f, m_farClip = 1000.0f;
 		float m_distance = 10.0f;
 		float m_pitch = 0.0f, m_yaw = 0.0f;
 		glm::vec3 m_rotation = glm::vec3(0.0f);

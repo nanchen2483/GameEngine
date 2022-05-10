@@ -26,7 +26,7 @@ namespace Engine
 		void SaveSceneAs();
 	private:
 		Ptr<Framebuffer> m_framebuffer;
-		glm::vec2 m_viewportSize = glm::vec2(0.0f);
+		glm::vec2 m_viewportSize = glm::vec2(1280.0f, 720.0f);
 		bool m_viewportFocused = false, m_viewportHovered = false;
 		Ptr<Scene> m_activeScene;
 		EditorCamera m_editorCamera;

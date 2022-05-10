@@ -21,5 +21,6 @@ namespace Engine
 		glm::mat4 m_projection = glm::mat4(1.0f);
 		float m_FOV = 45.0f;
 		float m_aspectRatio = 1.778f;
+		float m_nearClip = 0.1f, m_farClip = 1000.0f;
 	};
 }
