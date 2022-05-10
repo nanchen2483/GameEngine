@@ -162,7 +162,7 @@ namespace Engine
 			});
 
 		s_data.dirLightUniformBuffer->SetData({
-			glm::value_ptr(glm::vec3(-0.2f, -1.0f, -0.3f)),
+			glm::value_ptr(glm::normalize(glm::vec3(0.2f, 1.0f, 0.3f))),
 			glm::value_ptr(glm::vec3(0.05f)),
 			glm::value_ptr(glm::vec3(0.4f)),
 			glm::value_ptr(glm::vec3(0.5f)),

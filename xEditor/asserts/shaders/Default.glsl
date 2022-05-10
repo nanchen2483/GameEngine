@@ -233,7 +233,7 @@ vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir)
 	vec3 ambient = uDirLight.ambient * material.diffuse;
 	
 	// Diffuse
-	vec3 lightDir = normalize(-uDirLight.direction);
+	vec3 lightDir = uDirLight.direction;
 	float diff = max(dot(normal, lightDir), 0.0);
 	vec3 diffuse = uDirLight.diffuse * diff * material.diffuse;  
 
@@ -283,7 +283,7 @@ float CalcShadow()
     vec4 fragPosViewSpace = uCamera.view * vec4(vertex.fragPos, 1.0);
     float depthValue = abs(fragPosViewSpace.z);
 
-    int layer = uCascadeCount - 1; // Last layer as default
+    int layer = -1;
     for (int i = 0; i < uCascadeCount; i++)
     {
         if (depthValue < uCascadePlaneDistances[i])
@@ -292,6 +292,11 @@ float CalcShadow()
             break;
         }
     }
+
+	if (layer == -1)
+	{
+		return 0.0;
+	}
 
     vec4 fragPosLightSpace = uLightSpace.lightSpaceMatrices[layer] * vec4(vertex.fragPos, 1.0);
     
@@ -312,9 +317,9 @@ float CalcShadow()
 
     // Calculate bias (based on depth map resolution and slope)
     vec3 normal = normalize(vertex.normal);
-    float bias = max(0.05 * (1.0 - dot(normal, normalize(-uDirLight.direction))), 0.005);
+    float bias = max(0.1 * (1.0 - dot(normal, uDirLight.direction)), 0.01);
     const float biasModifier = 0.5f;
-	bias *= 1 / (uCascadePlaneDistances[layer] * biasModifier);
+	bias *= 1.0 / (uCascadePlaneDistances[layer] * biasModifier);
 
     // PCF
     float shadow = 0.0;
