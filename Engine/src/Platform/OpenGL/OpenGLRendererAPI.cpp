@@ -63,4 +63,9 @@ namespace Engine
 	{
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
+
+	void OpenGLRendererAPI::DrawPatch(uint32_t count)
+	{
+		glDrawArrays(GL_PATCHES, 0, count);
+	}
 }

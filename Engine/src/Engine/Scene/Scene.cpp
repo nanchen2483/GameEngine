@@ -42,32 +42,35 @@ namespace Engine
 			m_shadowBox->BindTexture();
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
-				.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& sprite)
+				.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& component)
 					{
-						Renderer3D::Draw(transform, sprite, (int)entity);
+						Renderer3D::Draw(transform, component, (int)entity);
 					});
 
-			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
+			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
 					{
-						Renderer3D::Draw(transform, light, (int)entity);
+						Renderer3D::Draw(transform, component, (int)entity);
 					});
 
 			Renderer3D::EndScene();
 
 			m_registry.view<TransformComponent, ModelComponent>()
-				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
+				.each([=](TransformComponent& transform, ModelComponent& component)
 					{
-						modelComponent.OnUpdate(time, frustum, transform);
-						if (modelComponent.isOnViewFrustum)
-						{
-							Renderer3D::Draw(transform, modelComponent);
-						}
+						component.OnUpdate(time, frustum, transform);
+						Renderer3D::Draw(transform, component);
+					});
+
+			m_registry.view<TransformComponent, TerrainComponent>()
+				.each([](TransformComponent& transform, TerrainComponent& component)
+					{
+						Renderer3D::Draw(transform, component);
 					});
 
 			m_registry.view<SkyboxComponent>()
-				.each([](SkyboxComponent& skyboxComponent)
+				.each([](SkyboxComponent& component)
 					{
-						Renderer3D::Draw(skyboxComponent);
+						Renderer3D::Draw(component);
 					});
 
 			m_shadowBox->Update(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio());
@@ -136,32 +139,35 @@ namespace Engine
 			m_shadowBox->BindTexture();
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
-				.each([](TransformComponent& transform, SpriteRendererComponent& sprite)
+				.each([](TransformComponent& transform, SpriteRendererComponent& component)
 					{
-						Renderer3D::Draw(transform, sprite);
+						Renderer3D::Draw(transform, component);
 					});
 
-			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& light)
+			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
 					{
-						Renderer3D::Draw(transform, light, (int)entity);
+						Renderer3D::Draw(transform, component, (int)entity);
 					});
 
 			Renderer3D::EndScene();
 
 			m_registry.view<TransformComponent, ModelComponent>()
-				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
+				.each([=](TransformComponent& transform, ModelComponent& component)
 					{
-						modelComponent.OnUpdate(time, frustum, transform);
-						if (modelComponent.isOnViewFrustum)
-						{
-							Renderer3D::Draw(transform, modelComponent);
-						}
+						component.OnUpdate(time, frustum, transform);
+						Renderer3D::Draw(transform, component);
+					});
+
+			m_registry.view<TransformComponent, TerrainComponent>()
+				.each([](TransformComponent& transform, TerrainComponent& component)
+					{
+						Renderer3D::Draw(transform, component);
 					});
 
 			m_registry.view<SkyboxComponent>()
-				.each([](SkyboxComponent& skyboxComponent)
+				.each([](SkyboxComponent& component)
 					{
-						Renderer3D::Draw(skyboxComponent);
+						Renderer3D::Draw(component);
 					});
 
 			m_shadowBox->Update(mainTransform->GetViewMatrix(), mainCamera->GetFOV(), mainCamera->GetAspectRatio());
@@ -262,6 +268,11 @@ namespace Engine
 
 	template<>
 	void Scene::OnComponentAdded<SkyboxComponent>(Entity entity, SkyboxComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<TerrainComponent>(Entity entity, TerrainComponent& component)
 	{
 	}
 

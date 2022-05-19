@@ -4,6 +4,7 @@
 #include "Engine/Scene/SceneCamera.h"
 #include "Engine/Renderer/Model/Model.h"
 #include "Engine/Renderer/Skybox/Skybox.h"
+#include "Engine/Renderer/Terrian/Terrian.h"
 #include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Renderer/Transform/Transform.h"
 
@@ -14,7 +15,7 @@ namespace Engine
 		std::string tag;
 
 		TagComponent() = default;
-		TagComponent(const TagComponent& transform) = default;
+		TagComponent(const TagComponent& component) = default;
 		TagComponent(const std::string& tag)
 			: tag(tag) {}
 	};
@@ -24,7 +25,7 @@ namespace Engine
 		Transform transform;
 
 		TransformComponent() = default;
-		TransformComponent(const TransformComponent& transform) = default;
+		TransformComponent(const TransformComponent& component) = default;
 		TransformComponent(const Transform& transform)
 			: transform(transform) {}
 
@@ -51,7 +52,7 @@ namespace Engine
 
 		CameraComponent(bool isPrimary = true)
 			: primary(isPrimary) {}
-		CameraComponent(const CameraComponent& transform) = default;
+		CameraComponent(const CameraComponent& component) = default;
 	};
 
 	struct LightComponent
@@ -66,7 +67,7 @@ namespace Engine
 		glm::vec3 specular = glm::vec3(1.0f);
 
 		LightComponent() = default;
-		LightComponent(const LightComponent& renderer) = default;
+		LightComponent(const LightComponent& component) = default;
 		LightComponent(const float constant, const float linear, const float quadratic,
 					   const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
 			: constant(constant), linear(linear), quadratic(quadratic),
@@ -84,7 +85,7 @@ namespace Engine
 		Ptr<Texture2D> texture = nullptr;
 
 		SpriteRendererComponent() = default;
-		SpriteRendererComponent(const SpriteRendererComponent& renderer) = default;
+		SpriteRendererComponent(const SpriteRendererComponent& component) = default;
 		SpriteRendererComponent(const glm::vec4& color)
 			: color(color) {}
 		SpriteRendererComponent(Ptr<Texture2D> texture)
@@ -101,7 +102,7 @@ namespace Engine
 		Ptr<Model> model = nullptr;
 
 		ModelComponent() = default;
-		ModelComponent(const ModelComponent& modelComponent) = default;
+		ModelComponent(const ModelComponent& component) = default;
 		ModelComponent(const Ptr<Model>& model)
 			: model(model) {}
 
@@ -132,7 +133,7 @@ namespace Engine
 		std::vector<Ptr<Image>> images = std::vector<Ptr<Image>>(6);
 
 		SkyboxComponent() = default;
-		SkyboxComponent(const SkyboxComponent& skyboxComponent) = default;
+		SkyboxComponent(const SkyboxComponent& component) = default;
 		
 		bool ReadyToLoad() { return std::find(images.begin(), images.end(), nullptr) == images.end(); }
 		void SetFace(TextureOrientationType type, std::string filePath)
@@ -168,6 +169,15 @@ namespace Engine
 	private:
 		// Editor-only
 		std::vector<Ptr<Texture2D>> textures = std::vector<Ptr<Texture2D>>(6);
+	};
+
+	struct TerrainComponent
+	{
+		Ptr<Terrian> terrian = nullptr;
+		Ptr<Texture2D> texture = nullptr;
+
+		TerrainComponent() = default;
+		TerrainComponent(const TerrainComponent& component) = default;
 	};
 
 	struct NativeScriptComponent

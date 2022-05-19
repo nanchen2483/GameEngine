@@ -92,6 +92,12 @@ namespace Engine
 					ImGui::CloseCurrentPopup();
 				}
 
+				if (!m_selectionContext.HasComponent<TerrainComponent>() && ImGui::MenuItem("Terrian"))
+				{
+					m_selectionContext.AddComponent<TerrainComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
 				ImGui::EndPopup();
 			}
 		}
@@ -668,6 +674,58 @@ namespace Engine
 			if (removeComponent)
 			{
 				m_selectionContext.RemoveComponent<SkyboxComponent>();
+			}
+		}
+
+		if (entity.HasComponent<TerrainComponent>())
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
+			bool open = ImGui::TreeNodeEx((void*)typeid(TerrainComponent).hash_code(), treeNodeFlags, "Terrian");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 35.0f);
+			if (ImGui::Button("+", ImVec2(20, 20)))
+			{
+				ImGui::OpenPopup("ComponentSettings");
+			}
+			ImGui::PopStyleVar();
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove component"))
+				{
+					removeComponent = true;
+				}
+
+				ImGui::EndPopup();
+			}
+
+			if (open)
+			{
+				TerrainComponent& component = entity.GetComponent<TerrainComponent>();
+				uint32_t textureId = 0;
+				if (component.texture != nullptr)
+				{
+					textureId = component.texture->GetRendererId();
+				}
+
+				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* filepath = (const wchar_t*)payload->Data;
+						const std::filesystem::path path = filepath;
+						component.texture = Texture2D::Create(path.string(), TextureType::Height, false);
+						component.terrian = CreatePtr<Terrian>(component.texture, entity);
+					}
+				}
+				
+				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+			{
+				m_selectionContext.RemoveComponent<TerrainComponent>();
 			}
 		}
 	}

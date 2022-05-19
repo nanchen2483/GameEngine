@@ -44,6 +44,18 @@ namespace Engine
 		return nullptr;
 	}
 
+	Ptr<VertexBuffer> VertexBuffer::Create(const void* vertices, uint32_t size)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(vertices, size);
+		}
+
+		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		return nullptr;
+	}
+
 	Ptr<IndexBuffer> IndexBuffer::Create(uint8_t* indices, uint32_t numOfIndices)
 	{
 		switch (Renderer::GetAPI())

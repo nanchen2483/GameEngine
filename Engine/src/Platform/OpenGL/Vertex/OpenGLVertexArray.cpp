@@ -124,6 +124,13 @@ namespace Engine
 		m_indexBuffer = indexBuffer;
 	}
 
+	void OpenGLVertexArray::SetNumOfPatchVertices(uint32_t numOfVertices)
+	{
+		glPatchParameteri(GL_PATCH_VERTICES, numOfVertices);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
+	}
+
 	const uint32_t OpenGLVertexArray::GetNumOfIndices() const
 	{
 		if (m_indexBuffer == nullptr)

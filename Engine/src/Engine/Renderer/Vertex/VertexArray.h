@@ -15,6 +15,7 @@ namespace Engine
 
 		virtual void AddVertexBuffer(const Ptr<VertexBuffer>& vertexBuffer) = 0;
 		virtual void SetIndexBuffer(const Ptr<IndexBuffer>& indexBuffer) = 0;
+		virtual void SetNumOfPatchVertices(uint32_t numOfVertices) = 0;
 
 		virtual const std::vector<Ptr<VertexBuffer>>& GetVertexBuffer() const = 0;
 		virtual const Ptr<IndexBuffer>& GetIndexBuffer() const = 0;

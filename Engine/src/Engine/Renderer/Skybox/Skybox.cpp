@@ -18,7 +18,7 @@ namespace Engine
 		m_vertexArray = Engine::VertexArray::Create();
 		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(const_cast<float*>(SkyboxData::vertices), SkyboxData::numOfVertices);
 		vertexBuffer->SetLayout({
-			{ Engine::ShaderDataType::Float3 },
+			{ ShaderDataType::Float3 },
 		});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(SkyboxData::indices), SkyboxData::numOfIndices));

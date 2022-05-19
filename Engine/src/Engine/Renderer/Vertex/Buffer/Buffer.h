@@ -18,6 +18,7 @@ namespace Engine
 		static Ptr<VertexBuffer> Create(uint32_t size);
 		static Ptr<VertexBuffer> Create(float* vertices, uint32_t numOfVertices);
 		static Ptr<VertexBuffer> Create(Vertex* vertices, uint32_t numOfVertices);
+		static Ptr<VertexBuffer> Create(const void* vertices, uint32_t size);
 	};
 
 	class IndexBuffer

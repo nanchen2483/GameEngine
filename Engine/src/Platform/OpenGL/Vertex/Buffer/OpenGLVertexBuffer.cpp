@@ -40,6 +40,17 @@ namespace Engine
 		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
+	OpenGLVertexBuffer::OpenGLVertexBuffer(const void* vertices, uint32_t size)
+	{
+		ENGINE_PROFILE_FUNCTION();
+
+		glCreateBuffers(1, &m_rendererId);
+		glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+
+		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
+	}
+
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	{
 		ENGINE_PROFILE_FUNCTION();

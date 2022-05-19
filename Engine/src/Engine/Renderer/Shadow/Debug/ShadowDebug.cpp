@@ -17,11 +17,11 @@ namespace Engine
 		fbSpec.height = 720;
 		m_framebuffer = Framebuffer::Create(fbSpec);
 
-		m_vertexArray = Engine::VertexArray::Create();
+		m_vertexArray = VertexArray::Create();
 		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(const_cast<float*>(ShadowDebugData::vertices), ShadowDebugData::numOfVertices);
 		vertexBuffer->SetLayout({
-			{ Engine::ShaderDataType::Float3 },
-			{ Engine::ShaderDataType::Float2 },
+			{ ShaderDataType::Float3 },
+			{ ShaderDataType::Float2 },
 		});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(ShadowDebugData::indices), ShadowDebugData::numOfIndices));

@@ -29,6 +29,7 @@ namespace Engine
 		virtual void DrawUint16Indexed(uint32_t count) = 0;
 		virtual void DrawUint32Indexed(uint32_t count) = 0;
 		virtual void DrawUint32Indexed(const Ptr<VertexArray>& vertexArray) = 0;
+		virtual void DrawPatch(uint32_t count) = 0;
 
 		inline static API GetAPI() { return s_API; }
 	private:

@@ -17,14 +17,24 @@ namespace Engine
 			return GL_VERTEX_SHADER;
 		}
 
-		if (type == "fragment")
+		if (type == "control")
 		{
-			return GL_FRAGMENT_SHADER;
+			return GL_TESS_CONTROL_SHADER;
+		}
+
+		if (type == "evaluation")
+		{
+			return GL_TESS_EVALUATION_SHADER;
 		}
 
 		if (type == "geometry")
 		{
 			return GL_GEOMETRY_SHADER;
+		}
+
+		if (type == "fragment")
+		{
+			return GL_FRAGMENT_SHADER;
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknow shader type!");

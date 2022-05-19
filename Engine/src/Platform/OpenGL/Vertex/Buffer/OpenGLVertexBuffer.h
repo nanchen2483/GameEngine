@@ -10,6 +10,7 @@ namespace Engine
 		OpenGLVertexBuffer(uint32_t size);
 		OpenGLVertexBuffer(float* vertices, uint32_t numOfVertices);
 		OpenGLVertexBuffer(Vertex* vertices, uint32_t numOfVertices);
+		OpenGLVertexBuffer(const void* vertices, uint32_t size);
 		~OpenGLVertexBuffer();
 
 		virtual void Bind() const override;

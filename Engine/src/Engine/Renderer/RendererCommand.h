@@ -58,6 +58,11 @@ namespace Engine
 		{
 			s_rendererAPI->DrawUint32Indexed(count);
 		}
+
+		inline static void DrawPatch(uint32_t count)
+		{
+			s_rendererAPI->DrawPatch(count);
+		}
 	private:
 		static RendererAPI* s_rendererAPI;
 	};

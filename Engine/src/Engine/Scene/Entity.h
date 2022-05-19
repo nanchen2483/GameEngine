@@ -45,6 +45,7 @@ namespace Engine
 		}
 
 		operator entt::entity() const { return m_entityHandle; }
+		operator int32_t() const { return (int32_t)m_entityHandle; }
 		operator uint32_t() const { return (uint32_t)m_entityHandle; }
 		operator bool() const
 		{

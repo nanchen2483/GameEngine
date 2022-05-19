@@ -271,7 +271,7 @@ namespace Engine
 
 	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component)
 	{
-		if (component.model != nullptr)
+		if (component.isOnViewFrustum)
 		{
 			s_data.shader->SetMat4("uModel", transform);
 			s_data.shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
@@ -287,6 +287,14 @@ namespace Engine
 			component.model->Draw();
 
 			s_data.states.drawModels++;
+		}
+	}
+
+	void Renderer3D::Draw(const glm::mat4& transform, TerrainComponent& component)
+	{
+		if (component.terrian != nullptr)
+		{
+			component.terrian->Draw(transform);
 		}
 	}
 
