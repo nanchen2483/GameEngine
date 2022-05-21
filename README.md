@@ -11,7 +11,6 @@ git clone --recurse-submodules -j8 https://github.com/nanchen2483/GameEngine.git
 ```
 For already cloned repos, use:
 ```
-git clone https://github.com/nanchen2483/GameEngine.git
 cd GameEngine
 git submodule update --init --recursive
 ```
