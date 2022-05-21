@@ -8,10 +8,13 @@
 
 namespace Engine
 {
-	Scene::Scene()
+	Scene::Scene(bool enableShadow)
 	{
 		m_textureMap = CreatePtr<TextureMap>();
-		m_shadowBox = CreatePtr<ShadowBox>();
+		if (enableShadow)
+		{
+			m_shadowBox = CreatePtr<ShadowBox>();
+		}
 	}
 
 	Scene::~Scene()
@@ -39,7 +42,6 @@ namespace Engine
 			Frustum frustum = camera.GetFrustum();
 			auto lightView = m_registry.view<TransformComponent, LightComponent>();
 			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), lightView.size_hint());
-			m_shadowBox->BindTexture();
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& component)
@@ -73,27 +75,31 @@ namespace Engine
 						Renderer3D::Draw(component);
 					});
 
-			m_shadowBox->Update(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio());
-			m_shadowBox->Bind();
-			Ptr<Shader> shader = m_shadowBox->GetShader();
-			m_registry.view<TransformComponent, ModelComponent>()
-				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
-					{
-						if (modelComponent.isOnViewFrustum)
+			if (m_shadowBox != nullptr)
+			{
+				m_shadowBox->Update(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio());
+				m_shadowBox->Bind();
+				Ptr<Shader> shader = m_shadowBox->GetShader();
+				m_registry.view<TransformComponent, ModelComponent>()
+					.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 						{
-							shader->SetMat4("uModel", transform);
-							if (modelComponent.model->HasAnimations())
+							if (modelComponent.isOnViewFrustum)
 							{
-								std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();
-								for (uint32_t i = 0; i < transforms.size(); i++)
+								shader->SetMat4("uModel", transform);
+								if (modelComponent.model->HasAnimations())
 								{
-									shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
+									std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();
+									for (uint32_t i = 0; i < transforms.size(); i++)
+									{
+										shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
+									}
 								}
+								modelComponent.model->Draw();
 							}
-							modelComponent.model->Draw();
-						}
-					});
-			m_shadowBox->Ubind();
+						});
+				m_shadowBox->Ubind();
+				m_shadowBox->BindTexture();
+			}
 		}
 	}
 
@@ -136,7 +142,6 @@ namespace Engine
 			Frustum frustum = mainCamera->GetFrustum(*mainTransform);
 			auto lightView = m_registry.view<TransformComponent, LightComponent>();
 			Renderer3D::BeginScene(mainTransform->GetViewMatrix(), mainCamera->GetProjection(), mainTransform->GetTranslation(), lightView.size_hint());
-			m_shadowBox->BindTexture();
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](TransformComponent& transform, SpriteRendererComponent& component)
@@ -170,29 +175,32 @@ namespace Engine
 						Renderer3D::Draw(component);
 					});
 
-			m_shadowBox->Update(mainTransform->GetViewMatrix(), mainCamera->GetFOV(), mainCamera->GetAspectRatio());
-			m_shadowBox->Bind();
-			Ptr<Shader> shader = m_shadowBox->GetShader();
-			m_registry.view<TransformComponent, ModelComponent>()
-				.each([=](TransformComponent& transform, ModelComponent& modelComponent)
-					{
-						if (modelComponent.isOnViewFrustum)
+			if (m_shadowBox != nullptr)
+			{
+				m_shadowBox->Update(mainTransform->GetViewMatrix(), mainCamera->GetFOV(), mainCamera->GetAspectRatio());
+				m_shadowBox->Bind();
+				Ptr<Shader> shader = m_shadowBox->GetShader();
+				m_registry.view<TransformComponent, ModelComponent>()
+					.each([=](TransformComponent& transform, ModelComponent& modelComponent)
 						{
-							shader->SetMat4("uModel", transform);
-							if (modelComponent.model->HasAnimations())
+							if (modelComponent.isOnViewFrustum)
 							{
-								std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();
-								for (uint32_t i = 0; i < transforms.size(); i++)
+								shader->SetMat4("uModel", transform);
+								if (modelComponent.model->HasAnimations())
 								{
-									shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
+									std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();
+									for (uint32_t i = 0; i < transforms.size(); i++)
+									{
+										shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
+									}
 								}
+								modelComponent.model->Draw();
 							}
-							modelComponent.model->Draw();
-						}
-					});
-			m_shadowBox->Ubind();
+						});
+				m_shadowBox->Ubind();
+				m_shadowBox->BindTexture();
+			}
 		}
-
 	}
 	
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

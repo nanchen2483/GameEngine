@@ -15,26 +15,33 @@ namespace EngineTest
 
 		glm::mat4 CalculatePerspectiveProjection(float fov, float aspectRatio, float orthoNear, float orthoFar)
 		{
-			return glm::perspective(fov, aspectRatio, orthoNear, orthoFar);
+			return glm::perspective(glm::radians(fov), aspectRatio, orthoNear, orthoFar);
 		}
 	};
 
 	TEST_F(SceneCameraTest, CreateSuccessfully)
 	{
 		// Arrange
+		const float orthographicNearClip = -1.0f;
+		const float orthographicFarClip = 1.0f;
+		const float orthographicSize = 10.0f;
+		const float perspectiveNearClip = 0.1f;
+		const float perspectiveFarClip = 1000.0f;
+		const float perspectiveFOV = 45.0f;
+		const float aspectRatio = 1.778f;
 
 		// Act
 		Engine::SceneCamera camera;
 
 		// Assert
-		EXPECT_EQ(-1.0f, camera.GetOrthographicNearClip());
-		EXPECT_EQ(1.0f, camera.GetOrthographicFarClip());
-		EXPECT_EQ(10.0f, camera.GetOrthographicSize());
-		EXPECT_EQ(0.01f, camera.GetPerspectiveNearClip());
-		EXPECT_EQ(1000.0f, camera.GetPerspectiveFarClip());
-		EXPECT_EQ(glm::radians(45.0f), camera.GetPerspectiveFOV());
+		EXPECT_EQ(orthographicNearClip, camera.GetOrthographicNearClip());
+		EXPECT_EQ(orthographicFarClip, camera.GetOrthographicFarClip());
+		EXPECT_EQ(orthographicSize, camera.GetOrthographicSize());
+		EXPECT_EQ(perspectiveNearClip, camera.GetPerspectiveNearClip());
+		EXPECT_EQ(perspectiveFarClip, camera.GetPerspectiveFarClip());
+		EXPECT_EQ(perspectiveFOV, camera.GetPerspectiveFOV());
 		EXPECT_EQ(Engine::SceneCamera::ProjectionType::Perspective, camera.GetProjectionType());
-		glm::mat4& perspective = glm::perspective(glm::radians(45.0f), 0.0f, 0.01f, 1000.0f);
+		glm::mat4& perspective = glm::perspective(glm::radians(perspectiveFOV), aspectRatio, perspectiveNearClip, perspectiveFarClip);
 		EXPECT_EQ(perspective, camera.GetProjection());
 	}
 

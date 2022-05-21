@@ -12,7 +12,7 @@ namespace Engine
 	class EditorCamera : public Camera
 	{
 	public:
-		EditorCamera() = default;
+		EditorCamera();
 		EditorCamera(float fov, float viewportWidth, float viewportHeight, float nearClip, float farClip);
 
 		void OnUpdate(TimeStep ts);
@@ -33,13 +33,14 @@ namespace Engine
 		inline const glm::vec3& GetPosition() const { return m_position; }
 		inline const glm::vec3& GetRotation() const { return m_rotation; }
 		inline const glm::quat& GetOrientation() const { return m_orientation; }
-		inline const glm::vec3& GetUpDirection() const { return glm::rotate(m_orientation, glm::vec3(0.0f, 1.0f, 0.0f)); }
-		inline const glm::vec3& GetRightDirection() const { return glm::rotate(m_orientation, glm::vec3(1.0f, 0.0f, 0.0f)); }
-		inline const glm::vec3& GetForwardDirection() const { return glm::rotate(m_orientation, glm::vec3(0.0f, 0.0f, -1.0f)); }
+		inline const glm::vec3& GetUpDirection() const { return m_upDirection; }
+		inline const glm::vec3& GetRightDirection() const { return m_rightDirection; }
+		inline const glm::vec3& GetForwardDirection() const { return m_forwardDirection; }
 
 		inline float GetPitch() const { return m_pitch; }
 		inline float GetYaw() const { return m_yaw; }
 	private:
+		void UpdateRotation();
 		void UpdateProjection();
 		void UpdateView();
 		bool OnMouseScroll(MouseScrolledEvent& e);
@@ -59,6 +60,10 @@ namespace Engine
 		glm::quat m_orientation = glm::quat();
 		
 		float m_viewportWidth = 1280, m_viewportHeight = 720;
+
+		glm::vec3 m_upDirection;
+		glm::vec3 m_rightDirection;
+		glm::vec3 m_forwardDirection;
 
 		glm::vec2 m_initialMousePosition = glm::vec2(0.0f);
 		glm::vec3 m_position = glm::vec3(0.0f);

@@ -11,16 +11,21 @@
 
 namespace Engine
 {
+	EditorCamera::EditorCamera()
+	{
+		UpdateRotation();
+		UpdateProjection();
+		UpdateView();
+	}
+
 	EditorCamera::EditorCamera(float fov, float viewportWidth, float viewportHeight, float nearClip, float farClip)
+		: EditorCamera()
 	{
 		m_FOV = fov;
 		m_nearClip = nearClip;
 		m_farClip = farClip;
 		m_viewportWidth = viewportWidth;
 		m_viewportHeight = viewportHeight;
-		
-		UpdateProjection();
-		UpdateView();
 	}
 
 	void EditorCamera::OnUpdate(TimeStep ts)
@@ -68,6 +73,16 @@ namespace Engine
 		UpdateProjection();
 	}
 	
+	void EditorCamera::UpdateRotation()
+	{
+		m_rotation = glm::vec3(-m_pitch, -m_yaw, 0.0f);
+		m_orientation = glm::quat(m_rotation);
+
+		m_upDirection = glm::rotate(m_orientation, glm::vec3(0.0f, 1.0f, 0.0f));
+		m_rightDirection = glm::rotate(m_orientation, glm::vec3(1.0f, 0.0f, 0.0f));
+		m_forwardDirection = glm::rotate(m_orientation, glm::vec3(0.0f, 0.0f, -1.0f));
+	}
+
 	void EditorCamera::UpdateProjection()
 	{
 		m_aspectRatio = m_viewportWidth / m_viewportHeight;
@@ -102,9 +117,8 @@ namespace Engine
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 		m_yaw += yawSign * delta.x * RotationSpeed();
 		m_pitch += delta.y * RotationSpeed();
-		
-		m_rotation = glm::vec3(-m_pitch, -m_yaw, 0.0f);
-		m_orientation = glm::quat(m_rotation);
+
+		UpdateRotation();
 	}
 	
 	void EditorCamera::MouseZoom(float delta)

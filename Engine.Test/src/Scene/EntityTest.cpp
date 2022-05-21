@@ -10,7 +10,7 @@ namespace EngineTest
 
 		EntityTest()
 		{
-			scene = Engine::CreatePtr<Engine::Scene>();
+			scene = Engine::CreatePtr<Engine::Scene>(false);
 			scene->OnViewportResize(viewportSize.x, viewportSize.y);
 			entity = scene->CreateEntity();
 		}
@@ -32,24 +32,35 @@ namespace EngineTest
 	TEST_F(EntityTest, AddCameraComponentSuccessfully)
 	{
 		// Arrange
+		float expectedOrthographicNearClip = -1.0f;
+		float expectedOrthographicFarClip = 1.0f;
+		float expectedOrthographicSize = 10.0f;
+		float expectedPerspectiveNearClip = 0.1f;
+		float expectedPerspectiveFarClip = 1000.0f;
+		float expectedFOV = 45.0f;
+		Engine::SceneCamera::ProjectionType expectedProjectionType = Engine::SceneCamera::ProjectionType::Perspective;
+		glm::mat4& expectedPerspective = glm::perspective(
+			glm::radians(expectedFOV),
+			viewportSize.x / viewportSize.y, 
+			expectedPerspectiveNearClip, 
+			expectedPerspectiveFarClip);
 
 		// Act
 		entity.AddComponent<Engine::CameraComponent>();
+		Engine::CameraComponent& actualCameraComponent = entity.GetComponent<Engine::CameraComponent>();
 
 		// Assert
 		EXPECT_TRUE(entity.HasComponent<Engine::CameraComponent>());
-		Engine::CameraComponent& expectedCameraComponent = entity.GetComponent<Engine::CameraComponent>();
-		EXPECT_TRUE(expectedCameraComponent.primary);
-		EXPECT_FALSE(expectedCameraComponent.fixedAspectRatio);
-		EXPECT_EQ(-1.0f, expectedCameraComponent.camera.GetOrthographicNearClip());
-		EXPECT_EQ(1.0f, expectedCameraComponent.camera.GetOrthographicFarClip());
-		EXPECT_EQ(10.0f, expectedCameraComponent.camera.GetOrthographicSize());
-		EXPECT_EQ(0.01f, expectedCameraComponent.camera.GetPerspectiveNearClip());
-		EXPECT_EQ(1000.0f, expectedCameraComponent.camera.GetPerspectiveFarClip());
-		EXPECT_EQ(glm::radians(45.0f), expectedCameraComponent.camera.GetPerspectiveFOV());
-		EXPECT_EQ(Engine::SceneCamera::ProjectionType::Perspective, expectedCameraComponent.camera.GetProjectionType());
-		glm::mat4& perspective = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 1000.0f);
-		EXPECT_EQ(perspective, expectedCameraComponent.camera.GetProjection());
+		EXPECT_TRUE(actualCameraComponent.primary);
+		EXPECT_FALSE(actualCameraComponent.fixedAspectRatio);
+		EXPECT_EQ(expectedOrthographicNearClip, actualCameraComponent.camera.GetOrthographicNearClip());
+		EXPECT_EQ(expectedOrthographicFarClip, actualCameraComponent.camera.GetOrthographicFarClip());
+		EXPECT_EQ(expectedOrthographicSize, actualCameraComponent.camera.GetOrthographicSize());
+		EXPECT_EQ(expectedPerspectiveNearClip, actualCameraComponent.camera.GetPerspectiveNearClip());
+		EXPECT_EQ(expectedPerspectiveFarClip, actualCameraComponent.camera.GetPerspectiveFarClip());
+		EXPECT_EQ(expectedFOV, actualCameraComponent.camera.GetPerspectiveFOV());
+		EXPECT_EQ(expectedProjectionType, actualCameraComponent.camera.GetProjectionType());
+		EXPECT_EQ(expectedPerspective, actualCameraComponent.camera.GetProjection());
 	}
 
 	TEST_F(EntityTest, RemoveComponentSuccessfully)
@@ -97,10 +108,12 @@ namespace EngineTest
 		// Arrange
 
 		// Act
-		uint32_t entityId = entity;
+		int32_t entityId = entity;
+		uint32_t entityUid = entity;
 
 		// Assert
 		EXPECT_TRUE(entityId >= 0);
+		EXPECT_TRUE(entityUid >= 0);
 	}
 
 	TEST_F(EntityTest, CompareOperator)
@@ -108,7 +121,7 @@ namespace EngineTest
 		// Arrange
 		Engine::Entity uninitializedEntity;
 		Engine::Entity entityWithInvalidEntityId((entt::entity)123, scene.get());
-		Engine::Entity entityWithIncorrectScene(entity, new Engine::Scene());
+		Engine::Entity entityWithIncorrectScene(entity, new Engine::Scene(false));
 		Engine::Entity copyEntity(entity, scene.get());
 
 		// Act

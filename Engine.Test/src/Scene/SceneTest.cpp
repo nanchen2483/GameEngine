@@ -8,7 +8,7 @@ namespace EngineTest
 
 		SceneTest()
 		{
-			scene = Engine::CreatePtr<Engine::Scene>();
+			scene = Engine::CreatePtr<Engine::Scene>(false);
 		}
 
 		glm::mat4 GetTransform(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale)
@@ -20,32 +20,46 @@ namespace EngineTest
 				* rotationMatrix
 				* glm::scale(glm::mat4(1.0f), scale);
 		}
+
+		glm::mat4 GetViewMatrix(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale)
+		{
+			return glm::translate(glm::mat4(1.0f), -translation) *
+				glm::toMat4(glm::quat(rotation)) *
+				glm::scale(glm::mat4(1.0f), scale);
+		}
 	};
 
 	TEST_F(SceneTest, CreateEntitySuccessfully)
 	{
 		// Arrange
+		std::string expectedTagName = "New entity";
+		glm::vec3 expectedTranslation = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 expectedRotation = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 expectedScale = glm::vec3(1.0f, 1.0f, 1.0f);
+		glm::mat4 expectedTransform = GetTransform(expectedTranslation, expectedRotation, expectedScale);
+		glm::mat4 expectedViewMatrix = GetViewMatrix(expectedTranslation, expectedRotation, expectedScale);
 
 		// Act
-		Engine::Entity defaultEntity = scene->CreateEntity();
-		std::string tagName = "New entity";
-		Engine::Entity entityWithGivenTag = scene->CreateEntity(tagName);
+		Engine::Entity actualDefaultEntity = scene->CreateEntity();
+		Engine::Entity actualEntityWithGivenTag = scene->CreateEntity(expectedTagName);
+		Engine::TransformComponent& actualTransformComponent = actualDefaultEntity.GetComponent<Engine::TransformComponent>();
 
 		// Assert
-		EXPECT_TRUE(entityWithGivenTag);
-		EXPECT_TRUE(entityWithGivenTag.HasComponent<Engine::TagComponent>());
-		EXPECT_EQ(tagName, entityWithGivenTag.GetComponent<Engine::TagComponent>().tag);
+		EXPECT_TRUE(actualDefaultEntity);
+		EXPECT_TRUE(actualDefaultEntity.HasComponent<Engine::TagComponent>());
+		EXPECT_EQ("Entity", actualDefaultEntity.GetComponent<Engine::TagComponent>().tag);
+		EXPECT_TRUE(actualDefaultEntity.HasComponent<Engine::TransformComponent>());
 
-		EXPECT_TRUE(entityWithGivenTag);
-		EXPECT_TRUE(defaultEntity.HasComponent<Engine::TagComponent>());
-		EXPECT_EQ("Entity", defaultEntity.GetComponent<Engine::TagComponent>().tag);
-		EXPECT_TRUE(defaultEntity.HasComponent<Engine::TransformComponent>());
-		Engine::TransformComponent& transformComponent = defaultEntity.GetComponent<Engine::TransformComponent>();
-		EXPECT_EQ(glm::vec3(0.0f, 0.0f, 0.0f), transformComponent.rotation);
-		EXPECT_EQ(glm::vec3(1.0f, 1.0f, 1.0f), transformComponent.scale);
-		EXPECT_EQ(glm::vec3(0.0f, 0.0f, 0.0f), transformComponent.translation);
-		glm::mat4& transform = GetTransform(transformComponent.translation, transformComponent.rotation, transformComponent.scale);
-		EXPECT_EQ(transform, transformComponent.GetTransform());
+		EXPECT_TRUE(actualEntityWithGivenTag);
+		EXPECT_TRUE(actualEntityWithGivenTag.HasComponent<Engine::TagComponent>());
+		EXPECT_EQ(expectedTagName, actualEntityWithGivenTag.GetComponent<Engine::TagComponent>().tag);
+		EXPECT_TRUE(actualEntityWithGivenTag.HasComponent<Engine::TransformComponent>());
+
+		EXPECT_EQ(expectedTranslation, actualTransformComponent.GetTranslation());
+		EXPECT_EQ(expectedRotation, actualTransformComponent.GetRotation());
+		EXPECT_EQ(expectedScale, actualTransformComponent.GetScale());
+		EXPECT_EQ(expectedTransform, (glm::mat4)actualTransformComponent);
+		EXPECT_EQ(expectedViewMatrix, actualTransformComponent.GetViewMatrix());
 	}
 
 	TEST_F(SceneTest, GetPrimaryCameraSuccessfully)
