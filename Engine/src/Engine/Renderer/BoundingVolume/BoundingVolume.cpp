@@ -13,7 +13,7 @@ namespace Engine
 		case Engine::BoundingVolumeType::Unknown:
 		default:
 			ENGINE_CORE_ASSERT(false, "Unknow Bouding Volume type: {0}", type);
-			break;
+			return nullptr;
 		}
 	}
 }

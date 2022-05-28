@@ -22,14 +22,14 @@ namespace Engine
 	void SceneCamera::SetOrthographic(uint32_t size, float nearClip, float farClip)
 	{
 		m_projectionType = ProjectionType::Orthographic;
-		m_orthographicSize = size;
+		m_orthographicSize = (float)size;
 		m_orthographicNear = nearClip;
 		m_orthographicFar = farClip;
 
 		RecalculateProjection();
 	}
 
-	void SceneCamera::SetPerspective(uint32_t FOV, float nearClip, float farClip)
+	void SceneCamera::SetPerspective(float FOV, float nearClip, float farClip)
 	{
 		m_projectionType = ProjectionType::Perspective;
 		m_FOV = FOV;

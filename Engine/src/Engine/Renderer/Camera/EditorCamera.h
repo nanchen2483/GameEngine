@@ -28,7 +28,7 @@ namespace Engine
 		inline float SetDistance(float distance) { m_distance = distance; }
 
 		inline const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
-		inline const glm::mat4& GetViewProjection() const { return m_projection * m_viewMatrix; }
+		inline const glm::mat4& GetViewProjection() const { return m_viewProjection; }
 
 		inline const glm::vec3& GetPosition() const { return m_position; }
 		inline const glm::vec3& GetRotation() const { return m_rotation; }
@@ -43,6 +43,7 @@ namespace Engine
 		void UpdateRotation();
 		void UpdateProjection();
 		void UpdateView();
+		void UpdateViewProjection();
 		bool OnMouseScroll(MouseScrolledEvent& e);
 
 		void MousePan(const glm::vec2& data);
@@ -69,5 +70,6 @@ namespace Engine
 		glm::vec3 m_position = glm::vec3(0.0f);
 		glm::vec3 m_focusPoint = glm::vec3(0.0f);
 		glm::mat4 m_viewMatrix = glm::mat4(1.0f);
+		glm::mat4 m_viewProjection = glm::mat4(1.0f);
 	};
 }

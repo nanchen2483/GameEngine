@@ -68,8 +68,8 @@ namespace Engine
 	{
 		ENGINE_CORE_ASSERT(height > 0, "Viewport height cannot be less or equal to 0");
 
-		m_viewportWidth = width;
-		m_viewportHeight = height;
+		m_viewportWidth = (float)width;
+		m_viewportHeight = (float)height;
 		UpdateProjection();
 	}
 	
@@ -87,6 +87,7 @@ namespace Engine
 	{
 		m_aspectRatio = m_viewportWidth / m_viewportHeight;
 		m_projection = glm::perspective(glm::radians(m_FOV), m_aspectRatio, m_nearClip, m_farClip);
+		UpdateViewProjection();
 	}
 
 	void EditorCamera::UpdateView()
@@ -95,6 +96,12 @@ namespace Engine
 		 
 		m_viewMatrix = glm::translate(glm::mat4(1.0f), m_position) * glm::toMat4(m_orientation);
 		m_viewMatrix = glm::inverse(m_viewMatrix);
+		UpdateViewProjection();
+	}
+
+	void EditorCamera::UpdateViewProjection()
+	{
+ 		m_viewProjection = m_projection * m_viewMatrix;
 	}
 	
 	bool EditorCamera::OnMouseScroll(MouseScrolledEvent& e)

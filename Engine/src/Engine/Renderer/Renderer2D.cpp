@@ -177,14 +177,14 @@ namespace Engine
 			FlushAndReset();
 		}
 
-		float textureIndex = 0.0f;
+		uint32_t textureIndex = 0;
 		if (texture != nullptr)
 		{
 			for (uint32_t i = 1; i < s_data.textureSlotIndex; i++)
 			{
 				if (*s_data.textureSlots[i].get() == *texture.get())
 				{
-					textureIndex = (float)i;
+					textureIndex = i;
 					break;
 				}
 			}

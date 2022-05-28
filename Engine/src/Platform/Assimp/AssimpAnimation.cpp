@@ -6,8 +6,8 @@ namespace Engine
 	AssimpAnimation::AssimpAnimation(const aiAnimation* animation, const AssimpNode rootNode)
 		:	m_name(animation->mName.data),
 			m_animationTime(CreatePtr<float>(0.0f)),
-			m_duration(animation->mDuration),
-			m_ticksPerSecond(animation->mTicksPerSecond),
+			m_duration((float)animation->mDuration),
+			m_ticksPerSecond((float)animation->mTicksPerSecond),
 			m_rootNode(rootNode)
 	{
 		m_boneTransforms.reserve(100);

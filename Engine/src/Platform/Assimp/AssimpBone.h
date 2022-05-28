@@ -22,7 +22,7 @@ namespace Engine
 		KeyPosition(aiVectorKey positionKey)
 		{
 			position = AssimpUtil::ToGlm(positionKey.mValue);
-			timeStamp = positionKey.mTime;
+			timeStamp = (float)positionKey.mTime;
 		}
 	};
 
@@ -34,7 +34,7 @@ namespace Engine
 		KeyRotation(aiQuatKey rotationKey)
 		{
 			orientation = AssimpUtil::ToGlm(rotationKey.mValue);
-			timeStamp = rotationKey.mTime;
+			timeStamp = (float)rotationKey.mTime;
 		}
 	};
 
@@ -46,7 +46,7 @@ namespace Engine
 		KeyScale(aiVectorKey scaleKey)
 		{
 			scale = AssimpUtil::ToGlm(scaleKey.mValue);
-			timeStamp = scaleKey.mTime;
+			timeStamp = (float)scaleKey.mTime;
 		}
 	};
 

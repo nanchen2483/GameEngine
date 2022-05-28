@@ -39,7 +39,7 @@ namespace Engine
 			return;
 		}
 
-		m_totalProgression = (scene->mNumMaterials + scene->mNumMeshes + scene->mNumAnimations);
+		m_totalProgression = (float)(scene->mNumMaterials + scene->mNumMeshes + scene->mNumAnimations);
 
 		LoadMeshes(scene);
 		LoadAnimations(scene);

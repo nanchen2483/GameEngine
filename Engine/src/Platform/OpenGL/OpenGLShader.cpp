@@ -85,7 +85,7 @@ namespace Engine
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
-			size_t size = in.tellg();
+			size_t size = (size_t)in.tellg();
 			if (size != -1)
 			{
 				result.resize(size);

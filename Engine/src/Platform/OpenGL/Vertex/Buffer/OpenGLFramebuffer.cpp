@@ -131,6 +131,7 @@ namespace Engine
 			}
 			
 			ENGINE_CORE_ASSERT(false, "Invalid framebuffer texture format {0}", format);
+			return -1;
 		}
 	}
 
@@ -184,7 +185,7 @@ namespace Engine
 		{
 			m_colorAttachments.resize(m_colorAttachmentSpecifications.size());
 			Utils::CreateTextures(multisampled, isTextureArray, m_colorAttachments.data(), m_colorAttachments.size());
-			for (int i = 0; i < m_colorAttachments.size(); i++)
+			for (uint32_t i = 0; i < m_colorAttachments.size(); i++)
 			{
 				Utils::BindTexture(multisampled, isTextureArray, m_colorAttachments[i]);
 

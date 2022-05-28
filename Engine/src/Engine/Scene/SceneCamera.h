@@ -25,7 +25,7 @@ namespace Engine
 		virtual void SetViewportSize(uint32_t width, uint32_t height) override;
 
 		void SetOrthographic(uint32_t size, float nearClip, float farClip);
-		void SetPerspective(uint32_t FOV, float nearClip, float farClip);
+		void SetPerspective(float FOV, float nearClip, float farClip);
 
 		float GetPerspectiveFOV() const { return m_FOV; }
 		void SetPerspectiveFOV(float FOV) { m_FOV = FOV; RecalculateProjection(); }

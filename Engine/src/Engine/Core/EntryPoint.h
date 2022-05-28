@@ -5,7 +5,7 @@
 
 extern Engine::Application* Engine::CreateApplication();
 
-void main(int argc, char** argv)
+int main(int argc, char** argv)
 {
 	Engine::Log::Init();
 
@@ -20,6 +20,8 @@ void main(int argc, char** argv)
 	ENGINE_PROFILE_BEGIN_SESSION("Startup", "Engine_Shutdown.json");
 	delete app;
 	ENGINE_PROFILE_END_SESSION();
+
+	return 0;
 }
 
 #endif // ENGINE_PLATFORM_WINDOWS

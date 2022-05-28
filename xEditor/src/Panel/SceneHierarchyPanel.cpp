@@ -264,7 +264,7 @@ namespace Engine
 				return "Front";
 			default:
 				ENGINE_CORE_ERROR("Unsupported Orientation type");
-				break;
+				return nullptr;
 			}
 		}
 	}
@@ -311,7 +311,7 @@ namespace Engine
 			{
 				Transform& transform = entity.GetComponent<TransformComponent>();
 				DrawVec3Control("Translation", transform.translation);
-				glm::vec3& rotation = glm::degrees(transform.rotation);
+				glm::vec3 rotation = glm::degrees(transform.rotation);
 				DrawVec3Control("Rotation", rotation);
 				transform.rotation = glm::radians(rotation);
 				DrawVec3Control("Scale", transform.scale, 1.0f);

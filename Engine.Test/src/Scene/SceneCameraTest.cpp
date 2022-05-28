@@ -84,7 +84,7 @@ namespace EngineTest
 	TEST_F(SceneCameraTest, UpdatePerspectiveSuccessfully)
 	{
 		// Arrange
-		uint32_t fov = 15;
+		float fov = 15;
 		float expectedNear = -1.5f;
 		float expectedFar = 1.5f;
 		Engine::SceneCamera camera;

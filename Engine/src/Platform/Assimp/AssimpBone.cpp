@@ -106,6 +106,7 @@ namespace Engine
 		}
 
 		ENGINE_CORE_ASSERT(false, "Poisition index not found! AnimationTime {0}, Duration: {1}", animationTime);
+		return 0;
 	}
 	
 	const uint32_t AssimpBone::GetLastRotationIndex(const float animationTime) const
@@ -119,6 +120,7 @@ namespace Engine
 		}
 
 		ENGINE_CORE_ASSERT(false, "Rotation index not found! AnimationTime {0}, Duration: {1}", animationTime);
+		return 0;
 	}
 	
 	const uint32_t AssimpBone::GetLastScaleIndex(const float animationTime) const
@@ -131,6 +133,7 @@ namespace Engine
 			}
 		}
 
-		ENGINE_CORE_ASSERT(0, "Scale index not found! AnimationTime {0}, Duration: {1}", animationTime);
+		ENGINE_CORE_ASSERT(false, "Scale index not found! AnimationTime {0}, Duration: {1}", animationTime);
+		return 0;
 	}
 }

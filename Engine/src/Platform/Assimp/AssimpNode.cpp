@@ -29,10 +29,9 @@ namespace Engine
 		{
 			return m_bone.GetId();
 		}
-		else
-		{
-			ENGINE_CORE_ASSERT(false, "This node contains no bones");
-		}
+		
+		ENGINE_CORE_ASSERT(false, "This node contains no bones");
+		return 0;
 	}
 
 	const glm::mat4 AssimpNode::GetBoneOffset() const
@@ -41,10 +40,9 @@ namespace Engine
 		{
 			return m_bone.GetOffset();
 		}
-		else
-		{
-			ENGINE_CORE_ASSERT(false, "This node contains no bones");
-		}
+		
+		ENGINE_CORE_ASSERT(false, "This node contains no bones");
+		return {};
 	}
 	
 	const AssimpNode& AssimpNode::GetChildNode(const uint32_t index) const
