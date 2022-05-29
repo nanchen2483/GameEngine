@@ -1,6 +1,7 @@
 .vs/
 bin/
 out/
+build/
 Sandbox/*.json
 *Editor/*json
 packages/

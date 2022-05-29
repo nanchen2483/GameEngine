@@ -1,6 +1,0 @@
-@echo off
-call cleanup.bat nopause
-pushd ..\
-call vendor\bin\premake\premake5.exe vs2022
-popd
-pause
