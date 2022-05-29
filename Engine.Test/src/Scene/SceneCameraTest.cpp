@@ -1,4 +1,5 @@
-#include "enginetestpch.h"
+#include <gtest/gtest.h>
+#include "Engine.h"
 
 namespace EngineTest
 {
