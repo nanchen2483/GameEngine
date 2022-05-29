@@ -1,67 +1,68 @@
-set(CMAKE_CXX_STANDARD 17)
+# CMakeList.txt : CMake project for CMakeProject1, include source and define
+# project specific logic here.
+#
+cmake_minimum_required (VERSION 3.22)
 
-file(GLOB_RECURSE engine_source_files "src/Engine/*.cpp")
-file(GLOB_RECURSE engine_header_files "src/Engine/*.h")
+set (CMAKE_CXX_STANDARD 17)
 
-set(CROSS_PLATFORM_FILES
+find_package (assimp CONFIG REQUIRED)
+find_package (EnTT CONFIG REQUIRED)
+find_package (glad CONFIG REQUIRED)
+find_package (glfw3 CONFIG REQUIRED)
+find_package (glm CONFIG REQUIRED)
+find_package (imgui CONFIG REQUIRED)
+find_package (imguizmo CONFIG REQUIRED)
+find_package (spdlog CONFIG REQUIRED)
+find_package (yaml-cpp CONFIG REQUIRED)
+
+find_path (STB_INCLUDE_DIRS "stb_image.h")
+
+file (GLOB_RECURSE ENGINE_FILES "src/Engine/*.h" "src/Engine/*.cpp")
+file (GLOB_RECURSE PLATFORM_FILES "src/Platform/*.h" "src/Platform/*.cpp")
+
+set (CROSS_PLATFORM_FILES
 	"src/Engine.h"
 	"src/enginepch.cpp"
 	"src/enginepch.h"
 
-	${engine_source_files}
-	${engine_header_files}
-
-    "vendor/stb_image/stb_image.h"
-	"vendor/stb_image/stb_image.cpp"
-
-    "vendor/ImGuizmo/ImGuizmo.h"
-    "vendor/ImGuizmo/ImGuizmo.cpp"
-)
-
-file(GLOB_RECURSE platform_source_files "src/Platform/*.cpp")
-file(GLOB_RECURSE platform_header_files "src/Platform/*.h")
-
-set(PLATFORM_FILES ${platform_source_files} ${platform_header_files})
-
-add_library(Engine STATIC
-	${CROSS_PLATFORM_FILES}
+	${ENGINE_FILES}
 	${PLATFORM_FILES}
+	
+	"external/stb/stb_image.cpp"
 )
 
-target_precompile_headers(Engine PUBLIC "src/enginepch.h")
+add_library (Engine STATIC ${CROSS_PLATFORM_FILES})
 
-target_include_directories(Engine PRIVATE
-	"vendor/glfw/include"
-	"vendor/glad/include"
-)
+target_precompile_headers (Engine PRIVATE "src/enginepch.h")
 
-set(ASSIMP_INCLUDE_DIRS "vendor/assimp/include" "${CMAKE_SOURCE_DIR}/Engine/vendor/assimp/include")
+target_include_directories (Engine PUBLIC "src")
 
-target_include_directories(Engine PUBLIC
-	"src"
-	${ASSIMP_INCLUDE_DIRS}
-	"vendor/entt/include"
-	"vendor/glm"
-	"vendor/imgui"
-    "vendor/ImGuizmo"
-	"vendor/spdlog/include"
-	"vendor/stb_image"
-	"vendor/yaml-cpp/include"
-)
-
-target_compile_definitions(Engine
+target_compile_definitions (Engine
 	PRIVATE
-	"_CRT_SECURE_NO_WARNINGS"
-    "ENGINE_PLATFORM_WINDOWS"
-	"GLFW_INCLUDE_NONE"
+		"_CRT_SECURE_NO_WARNINGS"
+		"ENGINE_PLATFORM_WINDOWS"
+		"GLFW_INCLUDE_NONE"
 
 	PUBLIC
-	$<$<CONFIG:Debug>:ENGINE_DEBUG>
-	$<$<CONFIG:Release>:ENGINE_RELEASE>
+		$<$<CONFIG:Debug>:ENGINE_DEBUG>
+		$<$<CONFIG:Release>:ENGINE_RELEASE>
 
-	$<$<CONFIG:RelWithDebInfo>:ENGINE_DEBUG>
-	$<$<CONFIG:MinSizeRel>:ENGINE_RELEASE>
+		$<$<CONFIG:RelWithDebInfo>:ENGINE_DEBUG>
+		$<$<CONFIG:MinSizeRel>:ENGINE_RELEASE>
 )
 
-target_link_libraries(Engine PRIVATE glfw glad)
-target_link_libraries(Engine PUBLIC imgui assimp yaml-cpp)
+target_link_libraries (Engine
+	PRIVATE
+		assimp::assimp
+		EnTT::EnTT
+		glad::glad
+		glfw
+		yaml-cpp
+
+	PUBLIC
+		glm::glm
+		imgui::imgui
+		imguizmo::imguizmo
+		spdlog::spdlog
+		spdlog::spdlog_header_only
+)

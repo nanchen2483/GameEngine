@@ -130,7 +130,7 @@ namespace Engine
 			case Engine::FramebufferTextureFormat::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
 			}
 			
-			ENGINE_CORE_ASSERT(false, "Invalid framebuffer texture format {0}", format);
+			ENGINE_CORE_ASSERT(false, "Invalid framebuffer texture format");
 			return -1;
 		}
 	}

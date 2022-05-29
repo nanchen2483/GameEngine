@@ -32,11 +32,9 @@ namespace Engine
 				return GL_ALWAYS;
 			case DepthFunc::UNKNOWN:
 			default:
-				ENGINE_CORE_ASSERT(false, "Invalid depth-comparison function {0}", func);
-				break;
+				ENGINE_CORE_ASSERT(false, "Invalid depth-comparison function");
+				return -1;
 			}
-
-			return -1;
 		}
 
 		static inline int ToGL(FaceCulling face)
@@ -49,11 +47,9 @@ namespace Engine
 				return GL_BACK;
 			case FaceCulling::UNKNOWN:
 			default:
-				ENGINE_CORE_ASSERT(false, "Invalid depth-comparison function {0}", face);
-				break;
+				ENGINE_CORE_ASSERT(false, "Invalid depth-comparison function");
+				return -1;
 			}
-
-			return -1;
 		}
 	};
 }

@@ -1,13 +1,10 @@
 .vs/
 bin/
-imd/
-build/
 out/
 Sandbox/*.json
 *Editor/*json
 packages/
 packages.config
-!vendor/bin
 
 *.user
 *.vcxproj

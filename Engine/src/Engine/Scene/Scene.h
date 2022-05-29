@@ -1,6 +1,6 @@
 #pragma once
 
-#include <entt.hpp>
+#include <entt/entt.hpp>
 #include "Engine/Core/TimeStep.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Texture/Texture.h"
