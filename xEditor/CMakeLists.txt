@@ -22,8 +22,8 @@ target_compile_definitions (xEditor
 
 add_custom_target (xEditorAssets ALL
 					COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    ${CMAKE_CURRENT_SOURCE_DIR}/asserts
-					${CMAKE_CURRENT_BINARY_DIR}/asserts
+                    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+					${CMAKE_CURRENT_BINARY_DIR}/assets
 					COMMENT "Copying assets into binary directory")
 
 add_custom_target (xEditorResources ALL

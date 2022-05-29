@@ -15,7 +15,7 @@ void Sandbox2D::OnAttach()
 {
 	ENGINE_PROFILE_FUNCTION();
 
-	m_texture2D = Engine::Texture2D::Create("asserts/textures/blocks.png");
+	m_texture2D = Engine::Texture2D::Create("assets/textures/blocks.png");
 }
 
 void Sandbox2D::OnDetach()

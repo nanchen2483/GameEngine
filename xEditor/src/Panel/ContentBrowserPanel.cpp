@@ -5,10 +5,10 @@
 
 namespace Engine
 {
-	static const std::filesystem::path s_assertPath = "asserts";
+	static const std::filesystem::path s_assetPath = "assets";
 
 	ContentBrowserPanel::ContentBrowserPanel()
-		: m_currentDirectory(s_assertPath)
+		: m_currentDirectory(s_assetPath)
 	{
 		m_folderIcon = Texture2D::Create("resources/Icons/folder_icon.png");
 		m_fileIcon = Texture2D::Create("resources/Icons/file_icon.png");
@@ -20,7 +20,7 @@ namespace Engine
 		if (ImGui::Begin("Content Browser"))
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-			bool onRootDir = m_currentDirectory == std::filesystem::path(s_assertPath);
+			bool onRootDir = m_currentDirectory == std::filesystem::path(s_assetPath);
 			if (!onRootDir)
 			{
 				ImGui::ImageButton((ImTextureID)m_backIcon->GetRendererId(), { 15, 15 }, { 0, 1 }, { 1, 0 });
@@ -53,7 +53,7 @@ namespace Engine
 			for (const std::filesystem::directory_entry& directoryEntry : std::filesystem::directory_iterator(m_currentDirectory))
 			{
 				const std::filesystem::path& path = directoryEntry.path();
-				std::filesystem::path relativePath = std::filesystem::relative(path, s_assertPath);
+				std::filesystem::path relativePath = std::filesystem::relative(path, s_assetPath);
 				std::string filenameString = relativePath.filename().string();
 
 				ImGui::PushID(filenameString.c_str());

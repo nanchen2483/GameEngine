@@ -14,7 +14,7 @@ namespace Engine
 	void ExampleLayer::OnAttach()
 	{
 		m_editorCamera = EditorCamera(30.0f, 1280.0f, 720.0f, 0.1f, 1000.0f);
-		m_terrian = CreatePtr<Terrian>("asserts/textures/heights/iceland_heightmap.png");
+		m_terrian = CreatePtr<Terrian>("assets/textures/heights/iceland_heightmap.png");
 
 		m_cameraUniformBuffer = UniformBuffer::Create(0, {
 			BufferLayoutType::Std140,

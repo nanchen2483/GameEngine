@@ -8,7 +8,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [10, 0.5, 10]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false
   - Entity: 123
     TagComponent:
@@ -18,7 +18,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false
   - Entity: 123
     TagComponent:
@@ -28,7 +28,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false
   - Entity: 123
     TagComponent:
@@ -38,7 +38,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.79999995, 3.29999995, 1.89999998]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false
   - Entity: 123
     TagComponent:
@@ -48,7 +48,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 2.9000001, 1]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false
   - Entity: 123
     TagComponent:
@@ -58,7 +58,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false
   - Entity: 123
     TagComponent:
@@ -68,5 +68,5 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false

@@ -8,4 +8,4 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     TerrainComponent:
-      Path: asserts\textures\heights\iceland_heightmap.png
+      Path: assets\textures\heights\iceland_heightmap.png

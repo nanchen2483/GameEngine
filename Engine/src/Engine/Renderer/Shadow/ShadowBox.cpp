@@ -15,7 +15,7 @@ namespace Engine
 {
 	ShadowBox::ShadowBox()
 	{
-		m_shader = Shader::Create("asserts/shaders/Shadow.glsl");
+		m_shader = Shader::Create("assets/shaders/Shadow.glsl");
 		
 		FramebufferSpecification fbSpec;
 		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::DEPTH_ARRAY });

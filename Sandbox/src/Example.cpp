@@ -76,8 +76,8 @@ void ExampleLayer::OnAttach()
 	reatangleshader->Bind();
 	reatangleshader->SetInt("uTexture", 0);
 
-	Engine::Ptr<Engine::Shader> textureShader = m_shaderLibrary.Load("Texture", "asserts/shaders/Texture.glsl");
-	m_texture2D = Engine::Texture2D::Create("asserts/textures/blocks.png");
+	Engine::Ptr<Engine::Shader> textureShader = m_shaderLibrary.Load("Texture", "assets/shaders/Texture.glsl");
+	m_texture2D = Engine::Texture2D::Create("assets/textures/blocks.png");
 	textureShader->Bind();
 	textureShader->SetInt("uTexture", 0);
 }

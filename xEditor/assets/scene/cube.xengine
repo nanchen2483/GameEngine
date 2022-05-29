@@ -9,7 +9,7 @@ Entities:
       Scale: [500, 1, 500]
     SpriteRendererComponent:
       Color: [0.813725471, 0.813717306, 0.813717306, 1]
-      TextureFilePath: asserts\textures\blocks.png
+      TextureFilePath: assets\textures\blocks.png
   - Entity: 123
     TagComponent:
       Tag: Second camera entity

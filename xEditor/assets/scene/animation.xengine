@@ -22,7 +22,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [4.36239958, 4.36239958, 4.36239958]
     ModelComponent:
-      Path: asserts\models\vampire\dancing_vampire.dae
+      Path: assets\models\vampire\dancing_vampire.dae
       EnableAnimation: true
   - Entity: 123
     TagComponent:
@@ -33,7 +33,7 @@ Entities:
       Scale: [500, 1, 500]
     SpriteRendererComponent:
       Color: [0.813725471, 0.813717306, 0.813717306, 1]
-      TextureFilePath: asserts\textures\blocks.png
+      TextureFilePath: assets\textures\blocks.png
   - Entity: 123
     TagComponent:
       Tag: Second camera entity
@@ -96,7 +96,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelComponent:
-      Path: asserts\models\backpack\backpack.obj
+      Path: assets\models\backpack\backpack.obj
       EnableAnimation: false
   - Entity: 123
     TagComponent:
@@ -106,12 +106,12 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SkyboxComponent:
-      RightFilePath: asserts\textures\skybox\right.jpg
-      LeftFilePath: asserts\textures\skybox\left.jpg
-      TopFilePath: asserts\textures\skybox\top.jpg
-      BottomFilePath: asserts\textures\skybox\bottom.jpg
-      BackFilePath: asserts\textures\skybox\back.jpg
-      FrontFilePath: asserts\textures\skybox\front.jpg
+      RightFilePath: assets\textures\skybox\right.jpg
+      LeftFilePath: assets\textures\skybox\left.jpg
+      TopFilePath: assets\textures\skybox\top.jpg
+      BottomFilePath: assets\textures\skybox\bottom.jpg
+      BackFilePath: assets\textures\skybox\back.jpg
+      FrontFilePath: assets\textures\skybox\front.jpg
   - Entity: 123
     TagComponent:
       Tag: Cube-model 1
@@ -120,7 +120,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [5, 5, 5]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false
   - Entity: 123
     TagComponent:
@@ -130,7 +130,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [5, 5, 5]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false
   - Entity: 123
     TagComponent:
@@ -140,5 +140,5 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [5, 5, 5]
     ModelComponent:
-      Path: asserts\models\cube\cube.dae
+      Path: assets\models\cube\cube.dae
       EnableAnimation: false

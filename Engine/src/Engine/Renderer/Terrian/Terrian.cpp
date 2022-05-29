@@ -23,7 +23,7 @@ namespace Engine
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetNumOfPatchVertices(m_numOfVerticesPerPatch);
 
-		m_shader = Shader::Create("asserts/shaders/Terrian.glsl");
+		m_shader = Shader::Create("assets/shaders/Terrian.glsl");
 		m_shader->Bind();
 		m_shader->SetInt("uHeightMap", 0);
 	}

@@ -8,12 +8,12 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SkyboxComponent:
-      RightFilePath: asserts\textures\skybox\right.jpg
-      LeftFilePath: asserts\textures\skybox\left.jpg
-      TopFilePath: asserts\textures\skybox\top.jpg
-      BottomFilePath: asserts\textures\skybox\bottom.jpg
-      BackFilePath: asserts\textures\skybox\back.jpg
-      FrontFilePath: asserts\textures\skybox\front.jpg
+      RightFilePath: assets\textures\skybox\right.jpg
+      LeftFilePath: assets\textures\skybox\left.jpg
+      TopFilePath: assets\textures\skybox\top.jpg
+      BottomFilePath: assets\textures\skybox\bottom.jpg
+      BackFilePath: assets\textures\skybox\back.jpg
+      FrontFilePath: assets\textures\skybox\front.jpg
   - Entity: 123
     TagComponent:
       Tag: Red cube
@@ -77,4 +77,4 @@ Entities:
       Scale: [500, 1, 500]
     SpriteRendererComponent:
       Color: [0.813725471, 0.813717306, 0.813717306, 1]
-      TextureFilePath: asserts\textures\blocks.png
+      TextureFilePath: assets\textures\blocks.png
