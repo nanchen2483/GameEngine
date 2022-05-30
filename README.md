@@ -14,9 +14,12 @@ For already cloned repos, use:
 cd GameEngine
 git submodule update --init --recursive
 ```
-
-### Setup
+### Prerequist
+- Visual Studio 2022
+    - Desktop development with C++
+    - C++ CMake tools for Windows
+### How to build
 ```
-cd scripts
-setup.bat
+cd Scripts
+build.bat
 ```
