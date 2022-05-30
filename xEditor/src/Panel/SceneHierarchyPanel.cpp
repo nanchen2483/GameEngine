@@ -114,7 +114,7 @@ namespace Engine
 	{
 		std::string& tag = entity.GetComponent<TagComponent>().tag;
 		ImGuiTreeNodeFlags flags = ((m_selectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
-		bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, tag.c_str());
+		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)entity, flags, tag.c_str());
 		if (ImGui::IsItemClicked())
 		{
 			m_selectionContext = entity;
@@ -474,7 +474,7 @@ namespace Engine
 				SpriteRendererComponent& component = entity.GetComponent<SpriteRendererComponent>();
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 				ImGui::Text("Texture");
-				uint32_t textureId = 0;
+				uint64_t textureId = 0;
 				if (component.texture != nullptr)
 				{
 					textureId = component.texture->GetRendererId();
@@ -525,7 +525,7 @@ namespace Engine
 			if (open)
 			{
 				ModelComponent* component = &entity.GetComponent<ModelComponent>();
-				uint32_t modelId = 0;
+				uint64_t modelId = 0;
 				if (component->loading)
 				{
 					ImGui::ProgressBar(*component->progression, ImVec2(0.0f, 0.0f));
@@ -644,7 +644,7 @@ namespace Engine
 					else
 					{
 						SkyboxComponent& component = entity.GetComponent<SkyboxComponent>();
-						uint32_t textureId = component.GetTextureId(type, 0);
+						uint64_t textureId = component.GetTextureId(type, 0);
 						if (textureId == 0)
 						{
 							ImGui::Button(buttonName, ImVec2(72, 70));
@@ -702,7 +702,7 @@ namespace Engine
 			if (open)
 			{
 				TerrainComponent& component = entity.GetComponent<TerrainComponent>();
-				uint32_t textureId = 0;
+				uint64_t textureId = 0;
 				if (component.texture != nullptr)
 				{
 					textureId = component.texture->GetRendererId();

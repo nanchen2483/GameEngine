@@ -10,8 +10,6 @@ file (GLOB_RECURSE SANDBOX_FILES "src/*.h" "src/*.cpp")
 # Add source to this project's executable.
 add_executable (Sandbox ${SANDBOX_FILES})
 
-target_include_directories (Sandbox PRIVATE "src")
-
 target_link_libraries (Sandbox PRIVATE Engine)
 
 target_compile_definitions (Sandbox
@@ -26,13 +24,7 @@ add_custom_target (SandboxAssets ALL
 					${CMAKE_CURRENT_BINARY_DIR}/asserts
 					COMMENT "Copying assets into binary directory")
 
-add_custom_target (SandboxResources ALL
-					COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    ${CMAKE_CURRENT_SOURCE_DIR}/resources
-					${CMAKE_CURRENT_BINARY_DIR}/resources
-					COMMENT "Copying resources into binary directory")
-
-add_dependencies (Sandbox SandboxAssets SandboxResources)
+add_dependencies (Sandbox SandboxAssets)
 
 configure_file (imgui.ini imgui.ini COPYONLY)
 

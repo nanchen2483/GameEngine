@@ -23,7 +23,7 @@ namespace Engine
 			bool onRootDir = m_currentDirectory == std::filesystem::path(s_assetPath);
 			if (!onRootDir)
 			{
-				ImGui::ImageButton((ImTextureID)m_backIcon->GetRendererId(), { 15, 15 }, { 0, 1 }, { 1, 0 });
+				ImGui::ImageButton((ImTextureID)(uint64_t)m_backIcon->GetRendererId(), { 15, 15 }, { 0, 1 }, { 1, 0 });
 				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 				{
 					m_currentDirectory = m_currentDirectory.parent_path();
@@ -32,7 +32,7 @@ namespace Engine
 			else
 			{
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				ImGui::ImageButton((ImTextureID)m_backIcon->GetRendererId(), { 15, 15 }, { 0, 1 }, { 1, 0 });
+				ImGui::ImageButton((ImTextureID)(uint64_t)m_backIcon->GetRendererId(), { 15, 15 }, { 0, 1 }, { 1, 0 });
 				ImGui::PopItemFlag();
 			}
 			ImGui::PopStyleColor();
@@ -59,7 +59,7 @@ namespace Engine
 				ImGui::PushID(filenameString.c_str());
 				Ptr<Texture2D> icon = directoryEntry.is_directory() ? m_folderIcon : m_fileIcon;
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-				ImGui::ImageButton((ImTextureID)icon->GetRendererId(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererId(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 			
 				if (ImGui::BeginDragDropSource())
 				{

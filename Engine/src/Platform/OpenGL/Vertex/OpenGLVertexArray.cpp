@@ -72,7 +72,7 @@ namespace Engine
 					ShaderDataTypeToOpenGLBaseType(element.type),
 					element.normalized ? GL_TRUE : GL_FALSE,
 					layout.GetStride(),
-					(const void*)element.offset);
+					(const void*)(uint64_t)element.offset);
 				index++;
 				break;
 			case Engine::ShaderDataType::Int:
@@ -86,7 +86,7 @@ namespace Engine
 					element.GetComponentCount(),
 					ShaderDataTypeToOpenGLBaseType(element.type),
 					layout.GetStride(),
-					(const void*)element.offset);
+					(const void*)(uint64_t)element.offset);
 				index++;
 				break;
 			case Engine::ShaderDataType::Mat3:

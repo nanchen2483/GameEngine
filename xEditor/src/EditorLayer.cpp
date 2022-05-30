@@ -275,7 +275,7 @@ namespace Engine
 					static int m_shadowLevel = -1;
 					ImGui::InputInt("Shadow level", &m_shadowLevel);
 					ImVec2 windowSize = ImGui::GetWindowSize();
-					uint32_t textureId = m_shadowDebug.GetShadowLayer(m_shadowLevel);
+					uint64_t textureId = m_shadowDebug.GetShadowLayer(m_shadowLevel);
 					ImGui::Image((void*)textureId, ImVec2(windowSize.x - 15, windowSize.y - 60), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 				}
 				ImGui::End();
@@ -296,7 +296,7 @@ namespace Engine
 				ImGui::NewLine();
 				ImGui::Separator();
 				ImGui::InputInt("Texture id", &m_textureId);
-				ImGui::ImageButton((void*)m_textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+				ImGui::ImageButton((void*)(int64_t)m_textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 
 				ImGui::End();
 			}
@@ -317,7 +317,7 @@ namespace Engine
 				ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 				m_viewportSize = glm::vec2(viewportSize.x, viewportSize.y);
 
-				uint32_t textureId = m_framebuffer->GetColorAttachmentRendererId(0);
+				uint64_t textureId = m_framebuffer->GetColorAttachmentRendererId(0);
 				ImGui::Image((void*)textureId, ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 
 				if (ImGui::BeginDragDropTarget())

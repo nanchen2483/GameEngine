@@ -10,8 +10,6 @@ file (GLOB_RECURSE XEDITOR_FILES "src/*.h" "src/*.cpp")
 # Add source to this project's executable.
 add_executable(xEditor ${XEDITOR_FILES})
 
-target_include_directories (xEditor PRIVATE "src")
-
 target_link_libraries (xEditor PRIVATE Engine)
 
 target_compile_definitions (xEditor

@@ -47,6 +47,7 @@ namespace Engine
 		operator entt::entity() const { return m_entityHandle; }
 		operator int32_t() const { return (int32_t)m_entityHandle; }
 		operator uint32_t() const { return (uint32_t)m_entityHandle; }
+		operator uint64_t() const { return (uint64_t)m_entityHandle; }
 		operator bool() const
 		{
 			return m_entityHandle != entt::null && m_scene != nullptr && m_scene->EntityExists(m_entityHandle);

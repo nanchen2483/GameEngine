@@ -18,4 +18,4 @@ target_compile_definitions (EngineTest PRIVATE "ENGINE_PLATFORM_WINDOWS")
 
 target_link_libraries (EngineTest PRIVATE Engine GTest::gtest_main)
 
-add_test (NAME EntityTest COMMAND EntityTest)
+add_test (NAME EngineTest COMMAND EngineTest)
