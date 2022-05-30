@@ -1,7 +1,7 @@
 @echo off
 where ninja
 if %ERRORLEVEL% neq 0 (
-    echo 'Ninja' not found 
+	echo 'Ninja' not found 
 ) else (
-    cmake -S %~dp0..\ --preset=x64-debug
+	cmake -S %~dp0..\ --preset=x64-debug
 )
