@@ -1,13 +1,14 @@
 @echo off
 
+rem Check if Visual Studio is installed
 pushd %~dp0
 call findvs.bat
 if %ERRORLEVEL% GEQ 1 (
 	exist 1
 )
-popd
 
-pushd %~dp0..\Dependencies
+rem Update submodule and setup
+pushd .\..\Dependencies
 if not exist "vcpkg\bootstrap-vcpkg.bat" (
 	call git submodule update --init --recursive
 )
@@ -15,3 +16,5 @@ if not exist "vcpkg\vcpkg.exe" (
 	call .\vcpkg\bootstrap-vcpkg.bat
 )
 popd
+popd
+
