@@ -1,0 +1,26 @@
+name: Engine Test
+
+on:
+  push:
+    branches:
+      - develop
+      - release-candidate
+      - master
+  pull_request:
+    branches:
+      - develop
+      - release-candidate
+      - master
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Build
+        shell: bash
+        run: ./Scripts/build.bat
+      - name: Test
+        shell: bash
+        run: ./Scripts/run-test.bat
