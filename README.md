@@ -1,5 +1,5 @@
 # GameEngine
-A game engine with C++ and OpenGL
+A game engine written in C++ with OpenGL
 
 ## Development
 

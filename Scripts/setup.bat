@@ -14,6 +14,7 @@ if not exist "vcpkg\bootstrap-vcpkg.bat" (
 )
 if not exist "vcpkg\vcpkg.exe" (
 	call .\vcpkg\bootstrap-vcpkg.bat
+	call .\vcpkg\vcpkg integrate install
 )
 popd
 popd
