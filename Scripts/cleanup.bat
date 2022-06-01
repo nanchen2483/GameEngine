@@ -1,7 +1,7 @@
 @echo off
 
 rem Clean all untracked file except .vs
-pushd %~dp0..\
+pushd %~dp0..
 call git clean -dfx -e .vs
 popd
 

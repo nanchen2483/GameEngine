@@ -3,7 +3,7 @@
 rem Set the necessary environment variables to use the Visual Studio tools
 pushd %~dp0
 call setup.bat
-call vsenv.bat
+call vsenv.bat 64
 
 rem Check if 'Ninja' is installed
 where ninja
@@ -14,5 +14,5 @@ where cl.exe
 if %ERRORLEVEL% neq 0 (echo 'cl.exe' not found exit 1)
 
 rem Build with CMake
-call cmake -S .\..\ --preset=x64-debug
+call cmake -S .. --preset=x64-debug
 popd

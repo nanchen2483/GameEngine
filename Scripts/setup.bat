@@ -8,14 +8,17 @@ if %ERRORLEVEL% GEQ 1 (
 )
 
 rem Update submodule and setup
-pushd .\..\Dependencies
+pushd ..\Dependencies
 if not exist "vcpkg\bootstrap-vcpkg.bat" (
 	call git submodule update --init --recursive
 )
-if not exist "vcpkg\vcpkg.exe" (
-	call .\vcpkg\bootstrap-vcpkg.bat
-	call .\vcpkg\vcpkg integrate install
+
+pushd vcpkg
+if not exist "vcpkg.exe" (
+	call bootstrap-vcpkg.bat
+	call vcpkg integrate install
 )
+popd
 popd
 popd
 
