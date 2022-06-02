@@ -19,6 +19,11 @@ namespace Engine
 		glEnable(GL_DEPTH_TEST);
 	}
 
+	void OpenGLRendererAPI::CullFace(FaceCulling face)
+	{
+		glCullFace(OpenGLUtil::ToGL(face));
+	}
+
 	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
 		glViewport(x, y, width, height);
@@ -29,9 +34,9 @@ namespace Engine
 		glDepthFunc(OpenGLUtil::ToGL(func));
 	}
 
-	void OpenGLRendererAPI::CullFace(FaceCulling face)
+	void OpenGLRendererAPI::SetPolygonMode(PolygonMode mode)
 	{
-		glCullFace(OpenGLUtil::ToGL(face));
+		glPolygonMode(GL_FRONT_AND_BACK, OpenGLUtil::ToGL(mode));
 	}
 
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)

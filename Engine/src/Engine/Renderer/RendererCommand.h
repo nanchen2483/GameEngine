@@ -14,19 +14,24 @@ namespace Engine
 			s_rendererAPI->Init();
 		}
 
-		inline static void  SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
-		{
-			s_rendererAPI->SetViewport(x, y, width, height);
-		}
-
 		inline static void CullFace(FaceCulling face)
 		{
 			s_rendererAPI->CullFace(face);
 		}
 
+		inline static void  SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+		{
+			s_rendererAPI->SetViewport(x, y, width, height);
+		}
+
 		inline static void SetDepthFunc(DepthFunc func)
 		{
 			s_rendererAPI->SetDepthFunc(func);
+		}
+
+		inline static void SetPolygonMode(PolygonMode mode)
+		{
+			s_rendererAPI->SetPolygonMode(mode);
 		}
 
 		inline static void SetClearColor(const glm::vec4& color)

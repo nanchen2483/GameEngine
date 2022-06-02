@@ -4,6 +4,7 @@
 #include "Engine/Core/Base.h"
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
+#include "Engine/Core/Enum/PolygonMode.h"
 
 namespace Engine
 {
@@ -47,7 +48,24 @@ namespace Engine
 				return GL_BACK;
 			case FaceCulling::UNKNOWN:
 			default:
-				ENGINE_CORE_ASSERT(false, "Invalid depth-comparison function");
+				ENGINE_CORE_ASSERT(false, "Invalid faceCulling type");
+				return -1;
+			}
+		}
+
+		static inline int ToGL(PolygonMode mode)
+		{
+			switch (mode)
+			{
+			case PolygonMode::POINT:
+				return GL_POINT;
+			case PolygonMode::LINE:
+				return GL_LINE;
+			case PolygonMode::FILL:
+				return GL_FILL;
+			case PolygonMode::UNKNOWN:
+			default:
+				ENGINE_CORE_ASSERT(false, "Invalid polygonMode type");
 				return -1;
 			}
 		}

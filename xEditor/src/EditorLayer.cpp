@@ -85,6 +85,7 @@ namespace Engine
 #endif // 0
 
 		m_sceneHierachyPanel.SetContext(m_activeScene);
+		RendererCommand::SetPolygonMode(m_polygonMode);
 	}
 
 	void EditorLayer::OnDetach()
@@ -263,6 +264,22 @@ namespace Engine
 				if (ImGui::BeginMenu("Debug"))
 				{
 					ImGui::MenuItem("ShadowMap", NULL, &showShadowMap);
+					if (ImGui::BeginMenu("PolygonMode"))
+					{
+						static std::array<std::string, 3> s_polygonModes = { "Point", "Line", "Fill" };
+						for (int i = 0; i < s_polygonModes.size(); i++)
+						{
+							ImGui::TableNextColumn();
+							ImGui::PushID(i);
+							static int32_t selectedPolygonMode = (uint32_t)m_polygonMode - 1;
+							if (ImGui::RadioButton(s_polygonModes[i].c_str(), &selectedPolygonMode, i))
+							{
+								RendererCommand::SetPolygonMode((PolygonMode)(selectedPolygonMode + 1));
+							}
+							ImGui::PopID();
+						}
+						ImGui::EndMenu();
+					}
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenuBar();

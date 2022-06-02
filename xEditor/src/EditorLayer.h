@@ -39,6 +39,7 @@ namespace Engine
 
 		FPSCalculator m_FPSCalculator;
 		ShadowDebug m_shadowDebug;
-		int m_textureId = -1;
+		PolygonMode m_polygonMode = PolygonMode::FILL;
+		int32_t m_textureId = -1;
 	};
 }
