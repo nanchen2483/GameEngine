@@ -1,10 +1,10 @@
 #pragma once
-#include <glad/glad.h>
-
 #include "Engine/Core/Base.h"
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
 #include "Engine/Core/Enum/PolygonMode.h"
+
+#include <glad/glad.h>
 
 namespace Engine
 {

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Engine/Renderer/Camera/Camera.h"
 
 #include <map>

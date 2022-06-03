@@ -1,10 +1,10 @@
 #include "Example.h"
-#include "Platform/OpenGL/OpenGLShader.h"
+
 #include "Engine/Renderer/Renderer.h"
 
-#include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <imgui.h>
 
 ExampleLayer::ExampleLayer()
 	: Layer("Example"), m_cameraController(1280.0f / 720.0f, true), m_color(glm::vec3(1.0f, 0.0f, 0.0f))

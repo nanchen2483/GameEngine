@@ -1,10 +1,9 @@
 #pragma once
+#include "Engine/Core/Base.h"
+#include "Engine/Core/Layer/LayerStack.h"
+#include "Engine/Core/Window/Window.h"
 
-#include "Base.h"
-
-#include "Window.h"
 #include "Engine/ImGui/ImGuiLayer.h"
-#include "Engine/Core/LayerStack.h"
 #include "Engine/Renderer/Shader/Shader.h"
 #include "Engine/Renderer/Camera/OrthographicCamera.h"
 
@@ -12,7 +11,6 @@ class WindowCloseEvent;
 
 namespace Engine
 {
-
 	class ENGINE_API Application
 	{
 	public:

@@ -1,8 +1,8 @@
 #pragma once
+#include "Engine/Renderer/Camera/Frustum.h"
+#include "Engine/Scene/Component.h"
 
 #include <glm/glm.hpp>
-#include "Engine/Renderer/Camera/Frustum.h"
-#include <Engine/Scene/Component.h>
 
 namespace Engine
 {

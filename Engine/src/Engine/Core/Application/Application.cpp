@@ -1,11 +1,11 @@
 #include "enginepch.h"
-
 #include "Application.h"
 
-#include "Engine/Events/ApplicationEvent.h"
-#include "Engine/Core/Input.h"
-#include "Engine/Renderer/Renderer.h"
 #include "Engine/Core/TimeStep.h"
+#include "Engine/Core/Window/Input.h"
+
+#include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Renderer/Renderer.h"
 
 #include <GLFW/glfw3.h>
 

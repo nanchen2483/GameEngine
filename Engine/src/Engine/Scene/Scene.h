@@ -1,10 +1,10 @@
 #pragma once
-
-#include <entt/entt.hpp>
 #include "Engine/Core/TimeStep.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
-#include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Renderer/Shadow/ShadowBox.h"
+#include "Engine/Renderer/Texture/Texture.h"
+
+#include <entt/entt.hpp>
 
 namespace Engine
 {

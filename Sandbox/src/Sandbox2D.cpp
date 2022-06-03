@@ -1,10 +1,10 @@
-
 #include "Sandbox2D.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
-#include <imgui.h>
-#include <glm/gtc/type_ptr.hpp>
+#include "Engine/Debug/Instrumentor.h"
+
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <imgui.h>
 
 Sandbox2D::Sandbox2D()
 	: Layer("Sanbox2D"), m_cameraController(1280.0f / 720.0f), m_color(0.2, 0.2, 1.0f, 1.0f)
@@ -15,6 +15,7 @@ void Sandbox2D::OnAttach()
 {
 	ENGINE_PROFILE_FUNCTION();
 
+	Engine::Renderer2D::Init();
 	m_texture2D = Engine::Texture2D::Create("assets/textures/blocks.png");
 }
 

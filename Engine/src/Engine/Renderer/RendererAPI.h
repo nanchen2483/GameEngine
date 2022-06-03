@@ -1,10 +1,10 @@
 #pragma once
-
-#include <glm/glm.hpp>
-#include "Vertex/VertexArray.h"
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
 #include "Engine/Core/Enum/PolygonMode.h"
+#include "Vertex/VertexArray.h"
+
+#include <glm/glm.hpp>
 
 namespace Engine
 {

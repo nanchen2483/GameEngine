@@ -1,8 +1,9 @@
 #include "enginepch.h"
 #include "EditorCamera.h"
-#include "Engine/Core/Input.h"
+
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
+#include "Engine/Core/Window/Input.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 

@@ -1,5 +1,4 @@
 #include "enginepch.h"
-
 #include "WindowsWindow.h"
 
 #include "Engine/Events/ApplicationEvent.h"

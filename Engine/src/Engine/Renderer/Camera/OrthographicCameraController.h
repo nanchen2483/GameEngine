@@ -1,10 +1,8 @@
 #pragma once
-
-#include "OrthographicCamera.h"
 #include "Engine/Core/TimeStep.h"
-
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Events/MouseEvent.h"
+#include "OrthographicCamera.h"
 
 namespace Engine
 {

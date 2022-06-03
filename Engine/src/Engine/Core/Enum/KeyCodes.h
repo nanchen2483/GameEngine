@@ -1,6 +1,7 @@
 #pragma once
 
-namespace Engine {
+namespace Engine
+{
 	// From glfw3.h
 	enum KeyCode
 	{

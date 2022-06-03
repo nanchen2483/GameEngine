@@ -1,5 +1,4 @@
 #pragma once
-
 #include "BoundingVolume.h"
 
 namespace Engine

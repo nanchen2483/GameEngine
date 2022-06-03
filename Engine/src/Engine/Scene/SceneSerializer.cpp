@@ -1,8 +1,9 @@
 #include "enginepch.h"
 #include "SceneSerializer.h"
 
+#include "Component.h"
+
 #include <yaml-cpp/yaml.h>
-#include <Engine.h>
 
 namespace YAML {
 	template<>

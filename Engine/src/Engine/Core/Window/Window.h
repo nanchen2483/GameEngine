@@ -1,6 +1,4 @@
 #pragma once
-
-#include "enginepch.h"
 #include "Engine/Core/Base.h"
 #include "Engine/Events/Event.h"
 
@@ -21,16 +19,14 @@ namespace Engine
 	class ENGINE_API Window
 	{
 	public:
-		using EventCallbackFn = std::function<void(Event&)>;
-
 		virtual ~Window() {}
-
+		
 		virtual void OnUpdate() = 0;
-
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
 
 		// Window attributes
+		using EventCallbackFn = std::function<void(Event&)>;
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;

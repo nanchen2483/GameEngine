@@ -1,7 +1,7 @@
 #pragma once
+#include "Buffer/BufferLayout.h"
 
 #include <glm/glm.hpp>
-#include "Buffer/BufferLayout.h"
 
 #define MAX_BONE_WEIGHTS 4
 #define UNINITIALIZED_BONE_ID -1

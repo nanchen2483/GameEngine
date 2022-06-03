@@ -1,8 +1,8 @@
 #pragma once
-
 #include <string>
 
-namespace Engine {
+namespace Engine
+{
 	class FileDialogs
 	{
 	public:

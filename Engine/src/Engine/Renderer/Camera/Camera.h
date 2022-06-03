@@ -1,8 +1,8 @@
 #pragma once
+#include "Engine/Math/Transform.h"
+#include "Frustum.h"
 
 #include <glm/glm.hpp>
-#include "Frustum.h"
-#include "Engine/Math/Transform.h"
 
 namespace Engine
 {

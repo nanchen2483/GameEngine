@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLTexture2D.h"
+
 #include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <stb_image.h>

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Engine/Renderer/Vertex/Vertex.h"
 
 namespace Engine

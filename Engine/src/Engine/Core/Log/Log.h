@@ -1,8 +1,8 @@
 #pragma once
+#include "Engine/Core/Base.h"
 
-#include "Base.h"
-#include "spdlog/spdlog.h"
-#include "spdlog/fmt/ostr.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
 
 namespace Engine
 {

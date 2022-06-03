@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Engine.h"
 #include "Panel/SceneHierarchyPanel.h"
 #include "Panel/ContentBrowserPanel.h"

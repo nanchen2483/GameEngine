@@ -1,7 +1,6 @@
 #pragma once
-
-#include "BufferElement.h"
 #include "Engine/Util/BufferLayoutUtil.h"
+#include "BufferElement.h"
 
 namespace Engine
 {

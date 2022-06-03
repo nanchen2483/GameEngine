@@ -1,10 +1,8 @@
 #pragma once
-
-#include "Engine/Renderer/Model/Model.h"
-#include "Engine/Renderer/BoundingVolume/BoundingVolume.h"
-
 #include "AssimpAnimation.h"
 #include "AssimpMesh.h"
+#include "Engine/Renderer/Model/Model.h"
+#include "Engine/Renderer/BoundingVolume/BoundingVolume.h"
 #include "Helper/AssimpHelper.h"
 
 #include <assimp/Importer.hpp>

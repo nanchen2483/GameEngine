@@ -1,6 +1,8 @@
 #pragma once
-
 #include "Engine/core/Base.h"
+
+#include <functional>
+#include <string>
 
 namespace Engine
 {

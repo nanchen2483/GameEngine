@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Engine/Renderer/Texture/Texture.h"
 
 namespace Engine

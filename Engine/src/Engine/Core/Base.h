@@ -1,5 +1,4 @@
 #pragma once
-
 #include <memory>
 
 #ifdef ENGINE_PLATFORM_WINDOWS

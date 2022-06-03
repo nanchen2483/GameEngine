@@ -1,8 +1,8 @@
 #pragma once
-#include "TerrainVertex.h"
 #include "Engine/Renderer/Shader/Shader.h"
-#include "Engine/Renderer/Vertex/VertexArray.h"
 #include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Vertex/VertexArray.h"
+#include "TerrainVertex.h"
 
 namespace Engine
 {

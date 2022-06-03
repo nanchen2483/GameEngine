@@ -1,15 +1,16 @@
 #include "enginepch.h"
 #include "Engine/Util/PlatformUtil.h"
 
+#include "Engine/Core/Application/Application.h"
+
 #include <commdlg.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
-#include "Engine/Core/Application.h"
 
-namespace Engine {
-
+namespace Engine
+{
 	std::string FileDialogs::OpenFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;

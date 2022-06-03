@@ -1,4 +1,5 @@
 #pragma once
+#include "Platform/Util/AssimpUtil.h"
 
 #include <assimp/scene.h>
 #include <glm/glm.hpp>
@@ -7,8 +8,6 @@
 
 #include <string>
 #include <vector>
-
-#include "Platform/Util/AssimpUtil.h"
 
 #define UNINITIALIZED_BONE_ID -1
 

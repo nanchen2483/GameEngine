@@ -1,15 +1,14 @@
 #pragma once
+#include "Engine/Core/Log/Log.h"
 
 #include <algorithm>
 #include <chrono>
 #include <fstream>
 #include <iomanip>
-#include <string>
-#include <thread>
 #include <mutex>
 #include <sstream>
-
-#include "Engine/Core/Log.h"
+#include <string>
+#include <thread>
 
 namespace Engine
 {

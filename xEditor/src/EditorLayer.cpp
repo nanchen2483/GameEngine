@@ -1,10 +1,12 @@
 #include "EditorLayer.h"
 
+#include "Engine/Debug/Instrumentor.h"
+
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 #include <ImGuizmo.h>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
 
 #define ENTITY_ID_ATTACHMENT_INDEX 1
 

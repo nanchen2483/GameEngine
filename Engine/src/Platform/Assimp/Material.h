@@ -1,8 +1,7 @@
 #pragma once
+#include "Engine/Renderer/Texture/Texture.h"
 
 #include <glm/glm.hpp>
-
-#include "Engine/Renderer/Texture/Texture.h"
 
 #define DIFFUSE_TEXTURE_SLOT 0
 #define SPECULAR_TEXTURE_SLOT 1

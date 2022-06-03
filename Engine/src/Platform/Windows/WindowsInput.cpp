@@ -1,8 +1,8 @@
 #include "enginepch.h"
-#include "Engine/Core/Input.h"
+#include "Engine/Core/Application/Application.h"
+#include "Engine/Core/Window/Input.h"
 
-#include "Engine/Core/Application.h"
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 namespace Engine
 {
