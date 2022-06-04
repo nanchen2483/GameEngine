@@ -1,9 +1,9 @@
 #include "enginepch.h"
 #include "WindowsWindow.h"
 
-#include "Engine/Events/ApplicationEvent.h"
-#include "Engine/Events/KeyEvent.h"
-#include "Engine/Events/MouseEvent.h"
+#include "Engine/Core/Events/ApplicationEvent.h"
+#include "Engine/Core/Events/KeyEvent.h"
+#include "Engine/Core/Events/MouseEvent.h"
 #include "Platform/OpenGL/OpenGLContext.h"
 
 #include <GLFW/glfw3.h>

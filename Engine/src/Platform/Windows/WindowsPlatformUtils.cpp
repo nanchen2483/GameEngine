@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "Engine/Util/PlatformUtil.h"
 
-#include "Engine/Core/Application/Application.h"
+#include "Engine/Core/Application.h"
 
 #include <commdlg.h>
 #include <GLFW/glfw3.h>

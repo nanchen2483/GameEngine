@@ -1,7 +1,7 @@
 #pragma once
 
 // Core
-#include "Engine/Core/Application/Application.h"
+#include "Engine/Core/Application.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Layer/Layer.h"
