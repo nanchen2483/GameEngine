@@ -5,20 +5,28 @@
 
 namespace Engine
 {
+	template<EventType T>
 	class ENGINE_API KeyEvent : public Event
 	{
 	public:
-		inline int GetKeyCode() const { return m_keyCode; }
+		inline int32_t GetKeyCode() const { return m_keyCode; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
+		static EventType GetStaticType() { return T; }
+		virtual EventType GetEventType() const override { return GetStaticType(); }
+		virtual const char* GetName() const override { return EventUtil::ToString(T); }
+
+		virtual int32_t GetCategoryFlags() const override
+		{
+			return (int32_t)EventCategory::EventCategoryKeyboard | (int32_t)EventCategory::EventCategoryInput;
+		}
 	protected:
 		KeyEvent(int keyCode)
 			: m_keyCode(keyCode) {}
 
-		int m_keyCode;
+		int32_t m_keyCode;
 	};
 
-	class ENGINE_API KeyPressedEvent : public KeyEvent
+	class ENGINE_API KeyPressedEvent : public KeyEvent<EventType::KeyPressed>
 	{
 	public:
 		KeyPressedEvent(int keyCode, int repeatCount)
@@ -32,13 +40,11 @@ namespace Engine
 			ss << "KeyPressedEvent: " << m_keyCode << " (" << m_repeatCount << " repeats)";
 			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(KeyPressed)
 	private:
 		int m_repeatCount;
 	};
 
-	class ENGINE_API KeyReleasedEvent : public KeyEvent
+	class ENGINE_API KeyReleasedEvent : public KeyEvent<EventType::KeyReleased>
 	{
 	public:
 		KeyReleasedEvent(int keyCode)
@@ -50,10 +56,8 @@ namespace Engine
 			ss << "KeyReleasedEvent: " << m_keyCode;
 			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(KeyReleased)
 	};
-	class ENGINE_API KeyTypedEvent : public KeyEvent
+	class ENGINE_API KeyTypedEvent : public KeyEvent<EventType::KeyTyped>
 	{
 	public:
 		KeyTypedEvent(int keyCode)
@@ -65,8 +69,5 @@ namespace Engine
 			ss << "KeyTypedEvent: " << m_keyCode;
 			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(KeyTyped)
 	};
-
 }

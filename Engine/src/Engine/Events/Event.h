@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/core/Base.h"
+#include "Engine/core/Log/Log.h"
 
 #include <functional>
 #include <string>
@@ -10,12 +10,12 @@ namespace Engine
 	{
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
-		AppTick, AppUpdate, AppRender,
+		ApplicationTick, ApplicationUpdate, ApplicationRender,
 		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 
-	enum EventCategory
+	enum class EventCategory
 	{
 		None = 0,
 		EventCategoryApplication	= BIT(0),
@@ -25,12 +25,6 @@ namespace Engine
 		EventCategoryMouseButton	= BIT(4),
 	};
 
-#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\
-								virtual EventType GetEventType() const override { return GetStaticType(); }\
-								virtual const char* GetName() const override { return #type; }
-
-#define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
-
 	class ENGINE_API Event
 	{
 	public:
@@ -39,24 +33,24 @@ namespace Engine
 
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
-		virtual int GetCategoryFlags() const = 0;
+		virtual int32_t GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
 		bool IsIncategory(EventCategory category)
 		{
-			return GetCategoryFlags() && category;
+			return GetCategoryFlags() && category != EventCategory::None;
 		}
 	};
 
 	class EventDispatcher
 	{
-		template<typename T>
+		template<typename T, typename std::enable_if<std::is_base_of<Event, T>::value>::type* = nullptr>
 		using EventFn = std::function<bool(T&)>;
 	public:
 		EventDispatcher(Event& event)
 			: m_event(event) {}
 
-		template<typename T>
+		template<typename T, typename std::enable_if<std::is_base_of<Event, T>::value>::type* = nullptr>
 		bool Dispatch(EventFn<T> func)
 		{
 			if (m_event.GetEventType() == T::GetStaticType())
@@ -64,6 +58,7 @@ namespace Engine
 				m_event.handled |= func(*(T*)&m_event);
 				return true;
 			}
+
 			return false;
 		}
 	private:
@@ -73,5 +68,34 @@ namespace Engine
 	inline std::ostream& operator<<(std::ostream& os, const Event& e)
 	{
 		return os << e.ToString();
+	}
+
+	namespace EventUtil
+	{
+		static char* ToString(EventType eventType)
+		{
+			switch (eventType)
+			{
+			case Engine::EventType::None:					return "None";
+			case Engine::EventType::WindowClose:			return "WindowClose";
+			case Engine::EventType::WindowResize:			return "WindowResize";
+			case Engine::EventType::WindowFocus:			return "WindowFocus";
+			case Engine::EventType::WindowLostFocus:		return "WindowLostFocus";
+			case Engine::EventType::WindowMoved:			return "WindowMoved";
+			case Engine::EventType::ApplicationTick:		return "ApplicationTick";
+			case Engine::EventType::ApplicationUpdate:		return "ApplicationUpdate";
+			case Engine::EventType::ApplicationRender:		return "ApplicationRender";
+			case Engine::EventType::KeyPressed:				return "KeyPressed";
+			case Engine::EventType::KeyReleased:			return "KeyReleased";
+			case Engine::EventType::KeyTyped:				return "KeyTyped";
+			case Engine::EventType::MouseButtonPressed:		return "MouseButtonPressed";
+			case Engine::EventType::MouseButtonReleased:	return "MouseButtonReleased";
+			case Engine::EventType::MouseMoved:				return "MouseMoved";
+			case Engine::EventType::MouseScrolled:			return "MouseScrolled";
+			default:
+				ENGINE_CORE_ASSERT(false, "Unsupported EventType")
+				return "Unknown EventType";
+			}
+		}
 	}
 }

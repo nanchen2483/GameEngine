@@ -5,7 +5,21 @@
 
 namespace Engine
 {
-	class ENGINE_API WindowResizeEvent : public Event
+	template<EventType T>
+	class ENGINE_API ApplicationEvent : public Event
+	{
+	public:
+		static EventType GetStaticType() { return T; }
+		virtual EventType GetEventType() const override { return GetStaticType(); }
+		virtual const char* GetName() const override { return EventUtil::ToString(T); }
+
+		virtual int32_t GetCategoryFlags() const override
+		{
+			return (int32_t)EventCategory::EventCategoryApplication;
+		}
+	};
+
+	class ENGINE_API WindowResizeEvent : public ApplicationEvent<EventType::WindowResize>
 	{
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
@@ -20,46 +34,31 @@ namespace Engine
 			ss << "WindowResizeEvent: " << m_width << ", " << m_height;
 			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(WindowResize)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	private:
 		unsigned int m_width, m_height;
 	};
 
-	class ENGINE_API WindowCloseEvent : public Event
+	class ENGINE_API WindowCloseEvent : public ApplicationEvent<EventType::WindowClose>
 	{
 	public:
 		WindowCloseEvent() = default;
-
-		EVENT_CLASS_TYPE(WindowClose)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class ENGINE_API AppTickEvent : public Event
+	class ENGINE_API ApplicationTickEvent : public ApplicationEvent<EventType::ApplicationTick>
 	{
 	public:
-		AppTickEvent() = default;
-
-		EVENT_CLASS_TYPE(AppTick)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		ApplicationTickEvent() = default;
 	};
 
-	class ENGINE_API AppUpdateEvent : public Event
+	class ENGINE_API ApplicationUpdateEvent : public ApplicationEvent<EventType::ApplicationUpdate>
 	{
 	public:
-		AppUpdateEvent() = default;
-
-		EVENT_CLASS_TYPE(AppUpdate)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		ApplicationUpdateEvent() = default;
 	};
 
-	class ENGINE_API AppRenderEvent : public Event
+	class ENGINE_API ApplicationRenderEvent : public ApplicationEvent<EventType::ApplicationRender>
 	{
 	public:
-		AppRenderEvent() = default;
-
-		EVENT_CLASS_TYPE(AppRender)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		ApplicationRenderEvent() = default;
 	};
 }

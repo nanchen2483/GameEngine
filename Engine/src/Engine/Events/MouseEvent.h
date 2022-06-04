@@ -5,7 +5,21 @@
 
 namespace Engine
 {
-	class ENGINE_API MouseMovedEvent : public Event
+	template<EventType T>
+	class ENGINE_API MouseEvent : public Event
+	{
+	public:
+		static EventType GetStaticType() { return T; }
+		virtual EventType GetEventType() const override { return GetStaticType(); }
+		virtual const char* GetName() const override { return EventUtil::ToString(T); }
+
+		virtual int32_t GetCategoryFlags() const override
+		{
+			return (int32_t)EventCategory::EventCategoryMouse | (int32_t)EventCategory::EventCategoryInput;
+		}
+	};
+
+	class ENGINE_API MouseMovedEvent : public MouseEvent<EventType::MouseMoved>
 	{
 	public:
 		MouseMovedEvent(float x, float y)
@@ -20,14 +34,11 @@ namespace Engine
 			ss << "MouseMovedEvent: " << m_mouseX << ", " << m_mouseY;
 			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(MouseMoved)
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
 		float m_mouseX, m_mouseY;
 	};
 
-	class ENGINE_API MouseScrolledEvent : public Event
+	class ENGINE_API MouseScrolledEvent : public MouseEvent<EventType::MouseScrolled>
 	{
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset)
@@ -35,19 +46,16 @@ namespace Engine
 
 		float GetXOffset() const { return m_xOffset; }
 		float GetYOffset() const { return m_yOffset; }
-
-		EVENT_CLASS_TYPE(MouseScrolled)
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
 		float m_xOffset, m_yOffset;
 	};
 
-	class ENGINE_API MouseButtonEvent : public Event
+	template<EventType T>
+	class ENGINE_API MouseButtonEvent : public MouseEvent<T>
 	{
 	public:
 		int GetMouseButton() const { return m_button; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	protected:
 		MouseButtonEvent(int button)
 			: m_button(button) {}
@@ -55,7 +63,7 @@ namespace Engine
 		int m_button;
 	};
 
-	class ENGINE_API MouseButtonPressedEvent : public MouseButtonEvent
+	class ENGINE_API MouseButtonPressedEvent : public MouseButtonEvent<EventType::MouseButtonPressed>
 	{
 	public:
 		MouseButtonPressedEvent(int button)
@@ -67,11 +75,9 @@ namespace Engine
 			ss << "MouseButtonPressedEvent: " << m_button;
 			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class ENGINE_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class ENGINE_API MouseButtonReleasedEvent : public MouseButtonEvent<EventType::MouseButtonReleased>
 	{
 	public:
 		MouseButtonReleasedEvent(int button)
@@ -83,7 +89,5 @@ namespace Engine
 			ss << "MouseButtonReleasedEvent: " << m_button;
 			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(MouseButtonReleased)
 	};
 }

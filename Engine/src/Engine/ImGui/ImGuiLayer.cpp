@@ -69,8 +69,8 @@ namespace Engine
 		if (m_blockEvents)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			e.handled |= e.IsIncategory(EventCategoryMouse) && io.WantCaptureMouse;
-			e.handled |= e.IsIncategory(EventCategoryKeyboard) && io.WantCaptureKeyboard;
+			e.handled |= e.IsIncategory(EventCategory::EventCategoryMouse) && io.WantCaptureMouse;
+			e.handled |= e.IsIncategory(EventCategory::EventCategoryKeyboard) && io.WantCaptureKeyboard;
 		}
 	}
 
