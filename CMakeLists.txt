@@ -9,6 +9,6 @@ set (CMAKE_CXX_STANDARD 17)
 
 # Include sub-projects.
 add_subdirectory (Engine)
-add_subdirectory (xEditor)
+add_subdirectory (Editor)
 add_subdirectory (Sandbox)
-add_subdirectory (Engine.Test)
+add_subdirectory (Test)

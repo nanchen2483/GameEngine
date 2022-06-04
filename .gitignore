@@ -4,7 +4,7 @@ bin/
 out/
 build/
 Sandbox/*.json
-*Editor/*json
+Editor/*json
 packages/
 packages.config
 

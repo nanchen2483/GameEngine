@@ -6,10 +6,10 @@ call vsenv.bat 64
 
 rem Run editor
 pushd ..\out\build\x64-debug
-call ninja -j7 xEditor
+call ninja -j7 Editor
 
-pushd xEditor
-call .\xEditor
+pushd Editor
+call .\Editor
 popd
 popd
 popd

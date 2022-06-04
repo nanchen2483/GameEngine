@@ -12,10 +12,10 @@ find_package (GTest CONFIG REQUIRED)
 file (GLOB_RECURSE TEST_FILES "src/*.h" "src/*.cpp")
 
 # Add source to this project's executable.
-add_executable (EngineTest ${TEST_FILES})
+add_executable (Test ${TEST_FILES})
 
-target_compile_definitions (EngineTest PRIVATE "ENGINE_PLATFORM_WINDOWS")
+target_compile_definitions (Test PRIVATE "ENGINE_PLATFORM_WINDOWS")
 
-target_link_libraries (EngineTest PRIVATE Engine GTest::gtest_main)
+target_link_libraries (Test PRIVATE Engine GTest::gtest_main)
 
-add_test (NAME EngineTest COMMAND EngineTest)
+add_test (NAME Test COMMAND Test)

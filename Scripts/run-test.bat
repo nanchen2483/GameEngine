@@ -6,10 +6,10 @@ call vsenv.bat 64
 
 rem Run tests
 pushd ..\out\build\x64-debug
-call ninja -j7 EngineTest
+call ninja -j7 Test
 
-pushd Engine.Test
-call .\EngineTest
+pushd Test
+call .\Test
 popd
 popd
 popd
