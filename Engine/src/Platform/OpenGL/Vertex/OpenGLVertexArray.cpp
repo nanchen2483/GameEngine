@@ -24,7 +24,7 @@ namespace Engine
 		case Engine::ShaderDataType::Bool:		return GL_BOOL;
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow ShaderDataType!");
+		ENGINE_CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 

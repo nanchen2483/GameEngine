@@ -15,7 +15,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture2D>(width, height);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -27,7 +27,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture2D>(image, type);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -39,7 +39,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture2D>(filePath, type, flipVertically);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -51,7 +51,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture3D>(faces);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 }

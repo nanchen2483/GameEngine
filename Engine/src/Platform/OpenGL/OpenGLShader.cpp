@@ -38,7 +38,7 @@ namespace Engine
 			return GL_FRAGMENT_SHADER;
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow shader type!");
+		ENGINE_CORE_ASSERT(false, "Unknown shader type!");
 		return 0;
 	}
 

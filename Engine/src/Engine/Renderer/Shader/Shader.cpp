@@ -14,7 +14,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLShader>(filePath);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 	
@@ -26,7 +26,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 }

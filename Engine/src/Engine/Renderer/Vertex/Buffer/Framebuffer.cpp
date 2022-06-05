@@ -14,7 +14,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLFramebuffer>(spec);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 }

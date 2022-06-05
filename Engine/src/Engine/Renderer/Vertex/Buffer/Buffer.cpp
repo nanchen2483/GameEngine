@@ -16,7 +16,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(size);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -28,7 +28,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(vertices, numOfVertices);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -40,7 +40,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(vertices, numOfVertices);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -52,7 +52,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexBuffer>(vertices, size);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -64,7 +64,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLIndexBuffer>(indices, numOfIndices);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -76,7 +76,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLIndexBuffer>(indices, numOfIndices);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -88,7 +88,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLIndexBuffer>(indices, numOfIndices);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 	
@@ -100,7 +100,7 @@ namespace Engine
 		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLUniformBuffer>(index, layout);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 }
