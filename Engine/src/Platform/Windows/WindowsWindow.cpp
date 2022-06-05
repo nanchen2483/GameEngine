@@ -17,9 +17,9 @@ namespace Engine
 		ENGINE_CORE_ERROR("GLFW Error {0}: {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props)
+	Uniq<Window> Window::Create(const WindowProps& props)
 	{
-		return new WindowsWindow(props);
+		return CreateUniq<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -49,7 +49,7 @@ namespace Engine
 		}
 
 		m_window = glfwCreateWindow((int)props.width, (int)props.height, m_data.title.c_str(), nullptr, nullptr);
-		m_context = new OpenGLContext(m_window);
+		m_context = CreateUniq<OpenGLContext>(m_window);
 		m_context->Init();
 
 		glfwSetWindowUserPointer(m_window, &m_data);

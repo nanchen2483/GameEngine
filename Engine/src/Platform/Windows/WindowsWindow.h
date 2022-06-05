@@ -29,7 +29,7 @@ namespace Engine
 		virtual void ShutDown();
 
 		GLFWwindow* m_window;
-		GraphicsContext* m_context;
+		Uniq<GraphicsContext> m_context;
 
 		struct WindowData
 		{

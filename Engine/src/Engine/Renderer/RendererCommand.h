@@ -68,6 +68,6 @@ namespace Engine
 			s_rendererAPI->DrawPatch(count);
 		}
 	private:
-		static RendererAPI* s_rendererAPI;
+		static Uniq<RendererAPI> s_rendererAPI;
 	};
 }
