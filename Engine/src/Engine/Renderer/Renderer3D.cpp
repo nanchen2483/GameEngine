@@ -1,6 +1,8 @@
 #include "enginepch.h"
 #include "Renderer3D.h"
 
+#include "RendererCommand.h"
+
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Engine

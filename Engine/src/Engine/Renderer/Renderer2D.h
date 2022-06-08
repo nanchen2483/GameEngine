@@ -1,13 +1,7 @@
 #pragma once
-#include "Engine/Core/Base.h"
 #include "Engine/Scene/Component.h"
-#include "Camera/Camera.h"
-#include "Camera/EditorCamera.h"
 #include "Camera/OrthographicCamera.h"
 #include "RendererAPI.h"
-#include "RendererCommand.h"
-#include "Shader/Shader.h"
-#include "Texture/Texture.h"
 
 namespace Engine
 {

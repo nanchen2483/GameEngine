@@ -19,6 +19,7 @@
 #include "Engine/Renderer/Model/Model.h"
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/Renderer3D.h"
+#include "Engine/Renderer/RendererCommand.h"
 #include "Engine/Renderer/Shader/Shader.h"
 #include "Engine/Renderer/Shader/ShaderLibrary.h"
 #include "Engine/Renderer/Skybox/Skybox.h"

@@ -1,5 +1,7 @@
 #pragma once
-#include "Engine.h"
+#include "Engine/Scene/Component.h"
+#include "Engine/Renderer/Camera/OrthographicCamera.h"
+#include "RendererAPI.h"
 
 namespace Engine
 {

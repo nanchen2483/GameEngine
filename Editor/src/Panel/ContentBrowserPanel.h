@@ -1,6 +1,5 @@
 #pragma once
-#include "Engine/Core/Base.h"
-#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine.h"
 
 #include <filesystem>
 
