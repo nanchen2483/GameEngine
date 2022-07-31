@@ -20,7 +20,7 @@ target_compile_definitions (Sandbox
 
 add_custom_target (SandboxAssets ALL
 					COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+					${CMAKE_CURRENT_SOURCE_DIR}/assets
 					${CMAKE_CURRENT_BINARY_DIR}/assets
 					COMMENT "Copying assets into binary directory")
 

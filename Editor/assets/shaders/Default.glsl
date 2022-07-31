@@ -150,7 +150,7 @@ layout (std140, binding = 2) uniform PointLightBlock
 
 layout (std140, binding = 3) uniform LightSpaceBlock
 {
-    mat4 lightSpaceMatrices[MAX_SHADOW_CASCADES];
+	mat4 lightSpaceMatrices[MAX_SHADOW_CASCADES];
 } uLightSpace;
 
 uniform sampler2DArray uShadowMap;
@@ -279,61 +279,61 @@ vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir)
 
 float CalcShadow()
 {
-    // Select cascade layer
-    vec4 fragPosViewSpace = uCamera.view * vec4(vertex.fragPos, 1.0);
-    float depthValue = abs(fragPosViewSpace.z);
+	// Select cascade layer
+	vec4 fragPosViewSpace = uCamera.view * vec4(vertex.fragPos, 1.0);
+	float depthValue = abs(fragPosViewSpace.z);
 
-    int layer = -1;
-    for (int i = 0; i < uCascadeCount; i++)
-    {
-        if (depthValue < uCascadePlaneDistances[i])
-        {
-            layer = i;
-            break;
-        }
-    }
+	int layer = -1;
+	for (int i = 0; i < uCascadeCount; i++)
+	{
+		if (depthValue < uCascadePlaneDistances[i])
+		{
+			layer = i;
+			break;
+		}
+	}
 
 	if (layer == -1)
 	{
 		return 0.0;
 	}
 
-    vec4 fragPosLightSpace = uLightSpace.lightSpaceMatrices[layer] * vec4(vertex.fragPos, 1.0);
-    
+	vec4 fragPosLightSpace = uLightSpace.lightSpaceMatrices[layer] * vec4(vertex.fragPos, 1.0);
+	
 	// Perform perspective divide
-    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
 	
 	// Transform to [0,1] range
-    projCoords = projCoords * 0.5 + 0.5;
-    
+	projCoords = projCoords * 0.5 + 0.5;
+	
 	// Get depth of current fragment from light's perspective
-    float currentDepth = projCoords.z;
+	float currentDepth = projCoords.z;
 
-    // Keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
-    if (currentDepth > 1.0)
-    {
-        return 0.0;
-    }
+	// Keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
+	if (currentDepth > 1.0)
+	{
+		return 0.0;
+	}
 
-    // Calculate bias (based on depth map resolution and slope)
-    vec3 normal = normalize(vertex.normal);
-    float bias = max(0.1 * (1.0 - dot(normal, uDirLight.direction)), 0.01);
-    const float biasModifier = 0.5f;
+	// Calculate bias (based on depth map resolution and slope)
+	vec3 normal = normalize(vertex.normal);
+	float bias = max(0.1 * (1.0 - dot(normal, uDirLight.direction)), 0.01);
+	const float biasModifier = 0.5f;
 	bias *= 1.0 / (uCascadePlaneDistances[layer] * biasModifier);
 
-    // PCF
-    float shadow = 0.0;
-    vec2 texelSize = 1.0 / vec2(textureSize(uShadowMap, 0));
-    for(int x = -1; x <= 1; x++)
-    {
-        for(int y = -1; y <= 1; y++)
-        {
-            float pcfDepth = texture(uShadowMap, vec3(projCoords.xy + vec2(x, y) * texelSize, layer)).r;
-            shadow += (currentDepth - bias) > pcfDepth ? 1.0 : 0.0;        
-        }    
-    }
+	// PCF
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / vec2(textureSize(uShadowMap, 0));
+	for(int x = -1; x <= 1; x++)
+	{
+		for(int y = -1; y <= 1; y++)
+		{
+			float pcfDepth = texture(uShadowMap, vec3(projCoords.xy + vec2(x, y) * texelSize, layer)).r;
+			shadow += (currentDepth - bias) > pcfDepth ? 1.0 : 0.0;        
+		}    
+	}
 
-    shadow /= 9.0;
+	shadow /= 9.0;
 
-    return shadow;
+	return shadow;
 }

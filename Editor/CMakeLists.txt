@@ -20,13 +20,13 @@ target_compile_definitions (Editor
 
 add_custom_target (EditorAssets ALL
 					COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+					${CMAKE_CURRENT_SOURCE_DIR}/assets
 					${CMAKE_CURRENT_BINARY_DIR}/assets
 					COMMENT "Copying assets into binary directory")
 
 add_custom_target (EditorResources ALL
 					COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    ${CMAKE_CURRENT_SOURCE_DIR}/resources
+					${CMAKE_CURRENT_SOURCE_DIR}/resources
 					${CMAKE_CURRENT_BINARY_DIR}/resources
 					COMMENT "Copying resources into binary directory")
 

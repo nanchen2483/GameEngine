@@ -7,8 +7,8 @@ out vec2 vTexCoord;
 
 void main()
 {
-    vTexCoord = aTexCoord;
-    gl_Position = vec4(aPosition, 1.0);
+	vTexCoord = aTexCoord;
+	gl_Position = vec4(aPosition, 1.0);
 }
 
 #type fragment
@@ -22,6 +22,6 @@ uniform int uLayer;
 
 void main()
 {
-    float depthValue = texture(uDepthMap, vec3(vTexCoord, uLayer)).r;
-    aFragColor = vec4(vec3(depthValue), 1.0); // orthographic
+	float depthValue = texture(uDepthMap, vec3(vTexCoord, uLayer)).r;
+	aFragColor = vec4(vec3(depthValue), 1.0); // orthographic
 }
