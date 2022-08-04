@@ -73,4 +73,9 @@ namespace Engine
 	{
 		glDrawArrays(GL_PATCHES, 0, count);
 	}
+	
+	void OpenGLRendererAPI::Compute(uint32_t numOfX, uint32_t numOfY, uint32_t numOfZ)
+	{
+		glDispatchCompute(numOfX, numOfY, numOfZ);
+	}
 }

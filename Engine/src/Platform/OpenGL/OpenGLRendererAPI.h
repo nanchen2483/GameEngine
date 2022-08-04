@@ -18,5 +18,6 @@ namespace Engine
 		virtual void DrawUint32Indexed(uint32_t count) override;
 		virtual void DrawUint32Indexed(const Ptr<VertexArray>& vertexArray) override;
 		virtual void DrawPatch(uint32_t count) override;
+		virtual void Compute(uint32_t numOfX, uint32_t numOfY, uint32_t numOfZ) override;
 	};
 }

@@ -13,6 +13,11 @@ namespace Engine
 {
 	static GLenum ShaderTypeFromString(const std::string& type)
 	{
+		if (type == "compute")
+		{
+			return GL_COMPUTE_SHADER;
+		}
+
 		if (type == "vertex")
 		{
 			return GL_VERTEX_SHADER;

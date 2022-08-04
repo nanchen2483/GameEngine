@@ -67,6 +67,11 @@ namespace Engine
 		{
 			s_rendererAPI->DrawPatch(count);
 		}
+
+		inline static void Compute(uint32_t numOfX, uint32_t numOfY, uint32_t numOfZ)
+		{
+			s_rendererAPI->Compute(numOfX, numOfY, numOfZ);
+		}
 	private:
 		static Uniq<RendererAPI> s_rendererAPI;
 	};
