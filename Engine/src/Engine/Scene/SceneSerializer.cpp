@@ -208,7 +208,7 @@ namespace Engine {
 
 			TerrainComponent& terrainComponent = entity.GetComponent<TerrainComponent>();
 
-			out << YAML::Key << "Path" << YAML::Value << terrainComponent.terrian->GetFilePath();
+			out << YAML::Key << "Path" << YAML::Value << terrainComponent.terrain->GetFilePath();
 			out << YAML::EndMap;
 		}
 
@@ -362,7 +362,7 @@ namespace Engine {
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
 					deserializedSkybox.texture = Texture2D::Create(terrainComponent["Path"].as<std::string>(), TextureType::Height, false);
-					deserializedSkybox.terrian = CreatePtr<Terrian>(deserializedSkybox.texture, deserializedEntity);
+					deserializedSkybox.terrain = CreatePtr<Terrain>(deserializedSkybox.texture, deserializedEntity);
 				}
 			}
 		}

@@ -717,7 +717,7 @@ namespace Engine
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
 						component.texture = Texture2D::Create(path.string(), TextureType::Height, false);
-						component.terrian = CreatePtr<Terrian>(component.texture, entity);
+						component.terrain = CreatePtr<Terrain>(component.texture, entity);
 					}
 				}
 				

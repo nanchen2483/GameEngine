@@ -1,16 +1,16 @@
 #include "enginepch.h"
-#include "Terrian.h"
+#include "Terrain.h"
 
 #include "Engine/Renderer/RendererCommand.h"
 
 namespace Engine
 {
-	Terrian::Terrian(std::string filePath, int32_t entityId)
-		: Terrian(Texture2D::Create(filePath, TextureType::Height, false), entityId)
+	Terrain::Terrain(std::string filePath, int32_t entityId)
+		: Terrain(Texture2D::Create(filePath, TextureType::Height, false), entityId)
 	{
 	}
 
-	Terrian::Terrian(Ptr<Texture2D> texture, int32_t entityId)
+	Terrain::Terrain(Ptr<Texture2D> texture, int32_t entityId)
 		: m_texture(texture), m_entityId(entityId)
 	{
 		m_vertexArray = VertexArray::Create();
@@ -29,7 +29,7 @@ namespace Engine
 		m_shader->SetInt("uHeightMap", 0);
 	}
 	
-	std::vector<TerrainVertex> Terrian::SetVertices(uint32_t numOfPoints, int32_t width, int32_t height)
+	std::vector<TerrainVertex> Terrain::SetVertices(uint32_t numOfPoints, int32_t width, int32_t height)
 	{
 		std::vector<TerrainVertex> vertices;
 		vertices.reserve(numOfPoints * numOfPoints * 4);
@@ -63,7 +63,7 @@ namespace Engine
 		return vertices;
 	}
 
-	void Terrian::Draw(glm::mat4 model)
+	void Terrain::Draw(glm::mat4 model)
 	{
 		m_shader->Bind();
 		m_shader->SetMat4("uModel", model);

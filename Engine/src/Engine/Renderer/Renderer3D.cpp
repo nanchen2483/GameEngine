@@ -294,9 +294,9 @@ namespace Engine
 
 	void Renderer3D::Draw(const glm::mat4& transform, TerrainComponent& component)
 	{
-		if (component.terrian != nullptr)
+		if (component.terrain != nullptr)
 		{
-			component.terrian->Draw(transform);
+			component.terrain->Draw(transform);
 		}
 	}
 

@@ -6,11 +6,11 @@
 
 namespace Engine
 {
-	class Terrian
+	class Terrain
 	{
 	public:
-		Terrian(std::string filePath, int32_t entityId = -1);
-		Terrian(Ptr<Texture2D> texture, int32_t entityId = -1);
+		Terrain(std::string filePath, int32_t entityId = -1);
+		Terrain(Ptr<Texture2D> texture, int32_t entityId = -1);
 
 		std::string GetFilePath() const { return m_texture->GetFilePath(); }
 		void Draw(glm::mat4 model);
