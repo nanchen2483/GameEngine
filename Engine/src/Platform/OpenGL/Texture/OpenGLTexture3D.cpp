@@ -2,6 +2,7 @@
 #include "OpenGLTexture3D.h"
 
 #include "Platform/OpenGL/Debug/OpenGLDebug.h"
+#include "Platform/Util/OpenGLUtil.h"
 
 #include <stb_image.h>
 #include <glad/glad.h>
@@ -24,31 +25,30 @@ namespace Engine
 			m_width.push_back(face->GetWidth());
 			m_height.push_back(face->GetHeight());
 
-			uint32_t internalFormat, dataFormat;
 			switch (face->GetChannels())
 			{
 			case 1:
-				internalFormat = GL_RED;
-				dataFormat = GL_RED;
+				m_format.internalFormat = GL_RED;
+				m_format.dataFormat = GL_RED;
 				break;
 			case 3:
-				internalFormat = GL_RGB8;
-				dataFormat = GL_RGB;
+				m_format.internalFormat = GL_RGB8;
+				m_format.dataFormat = GL_RGB;
 				break;
 			case 4:
-				internalFormat = GL_RGBA8;
-				dataFormat = GL_RGBA;
+				m_format.internalFormat = GL_RGBA8;
+				m_format.dataFormat = GL_RGBA;
 				break;
 			default:
-				internalFormat = GL_NONE;
-				dataFormat = GL_NONE;
+				m_format.internalFormat = GL_NONE;
+				m_format.dataFormat = GL_NONE;
 				ENGINE_CORE_ERROR("Unsupported channel");
 				break;
 			}
 
-			ENGINE_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
+			ENGINE_CORE_ASSERT(m_format.internalFormat & m_format.dataFormat, "Format not supported!");
 
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, m_width[i], m_height[i], 0, dataFormat, GL_UNSIGNED_BYTE, face->GetData());
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, m_format.internalFormat, m_width[i], m_height[i], 0, m_format.dataFormat, GL_UNSIGNED_BYTE, face->GetData());
 		}
 
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -64,6 +64,11 @@ namespace Engine
 	OpenGLTexture3D::~OpenGLTexture3D()
 	{
 		glDeleteTextures(1, &m_rendererId);
+	}
+
+	void OpenGLTexture3D::BindImage(uint32_t slot, TextureAccessType access) const
+	{
+		glBindImageTexture(slot, m_rendererId, 0, false, 0, OpenGLUtil::ToGL(access), m_format.internalFormat);
 	}
 
 	void OpenGLTexture3D::Bind(uint32_t slot) const

@@ -18,19 +18,20 @@ namespace Engine
 		inline virtual TextureType GetType() const override { return m_type; }
 		
 		virtual void SetData(void* data, uint32_t size) override { ENGINE_CORE_ERROR("Not implemented"); };
-		virtual void Bind(uint32_t slot = 0) const override;
+		virtual void BindImage(uint32_t slot, TextureAccessType access) const override;
+		virtual void Bind(uint32_t slot) const override;
 
 		virtual bool operator==(const Texture& other) const override
 		{
 			return m_rendererId == ((OpenGLTexture3D&)other).m_rendererId;
 		}
 	private:
-
 		uint32_t m_rendererId;
 		const TextureType m_type = TextureType::Skybox;
 		std::filesystem::path m_filePath;
 		std::filesystem::path m_directory = m_filePath.parent_path();
 		std::vector<std::string> m_faces;
 		std::vector<uint32_t> m_width, m_height;
+		TextureFormat m_format;
 	};
 }

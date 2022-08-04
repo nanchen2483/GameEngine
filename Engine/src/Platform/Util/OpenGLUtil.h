@@ -3,6 +3,7 @@
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
 #include "Engine/Core/Enum/PolygonMode.h"
+#include "Engine/Renderer/Texture/Texture.h"
 
 #include <glad/glad.h>
 
@@ -68,6 +69,84 @@ namespace Engine
 				ENGINE_CORE_ASSERT(false, "Invalid polygonMode type");
 				return -1;
 			}
+		}
+
+		static inline int ToGL(TextureAccessType access)
+		{
+			switch (access)
+			{
+			case TextureAccessType::ReadOnly:
+				return GL_READ_ONLY;
+			case TextureAccessType::WriteOnly:
+				return GL_WRITE_ONLY;
+			case TextureAccessType::ReadWrite:
+				return GL_READ_WRITE;
+			case TextureAccessType::Unknown:
+			default:
+				ENGINE_CORE_ASSERT(false, "Invalid TextureAccess type");
+				return -1;
+			}
+		}
+
+		static inline TextureFormat ToGL(TextureFormatType type)
+		{
+			TextureFormat format;
+			switch (type)
+			{
+			case Engine::TextureFormatType::RED:
+				format.internalFormat = GL_RED;
+				format.dataFormat = GL_RED;
+				break;
+			case Engine::TextureFormatType::R16:
+				format.internalFormat = GL_R16F;
+				format.dataFormat = GL_RED;
+				break;
+			case Engine::TextureFormatType::R32:
+				format.internalFormat = GL_R32F;
+				format.dataFormat = GL_RED;
+				break;
+			case Engine::TextureFormatType::RG8:
+				format.internalFormat = GL_RG8;
+				format.dataFormat = GL_RG;
+				break;
+			case Engine::TextureFormatType::RG16:
+				format.internalFormat = GL_RG16F;
+				format.dataFormat = GL_RG;
+				break;
+			case Engine::TextureFormatType::RG32:
+				format.internalFormat = GL_RG32F;
+				format.dataFormat = GL_RG;
+				break;
+			case Engine::TextureFormatType::RGB8:
+				format.internalFormat = GL_RGB8;
+				format.dataFormat = GL_RGB;
+				break;
+			case Engine::TextureFormatType::RGB16:
+				format.internalFormat = GL_RGB16F;
+				format.dataFormat = GL_RGB;
+				break;
+			case Engine::TextureFormatType::RGB32:
+				format.internalFormat = GL_RGB32F;
+				format.dataFormat = GL_RGB;
+				break;
+			case Engine::TextureFormatType::RGBA8:
+				format.internalFormat = GL_RGBA8;
+				format.dataFormat = GL_RGBA;
+				break;
+			case Engine::TextureFormatType::RGBA16:
+				format.internalFormat = GL_RGBA16F;
+				format.dataFormat = GL_RGBA;
+				break;
+			case Engine::TextureFormatType::RGBA32:
+				format.internalFormat = GL_RGBA32F;
+				format.dataFormat = GL_RGBA;
+				break;
+			case Engine::TextureFormatType::Unknown:
+			default:
+				ENGINE_CORE_ASSERT(false, "Invalid internal format type");
+			}
+
+			return format;
 		}
 	};
 }

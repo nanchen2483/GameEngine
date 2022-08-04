@@ -7,12 +7,12 @@
 
 namespace Engine
 {
-	Ptr<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+	Ptr<Texture2D> Texture2D::Create(uint32_t width, uint32_t height, uint32_t levels, TextureFormatType format)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture2D>(width, height);
+		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLTexture2D>(width, height, levels, format);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
