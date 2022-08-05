@@ -11,7 +11,6 @@ const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
 
 uniform mat4 uModel;
-
 uniform mat4 uBoneTransforms[MAX_BONES];
 
 vec4 CalcWorldPosition();
@@ -38,7 +37,7 @@ vec4 CalcWorldPosition()
 	{
 		position = uModel * position;
 	}
-	
+
 	return position;
 }
 
@@ -76,13 +75,14 @@ layout (std140, binding = 3) uniform LightSpaceBlock
 } uLightSpace;
 
 void main()
-{          
+{
 	for (int i = 0; i < 3; ++i)
 	{
 		gl_Position = uLightSpace.lightSpaceMatrices[gl_InvocationID] * gl_in[i].gl_Position;
 		gl_Layer = gl_InvocationID;
 		EmitVertex();
 	}
+
 	EndPrimitive();
 }
 

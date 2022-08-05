@@ -1,6 +1,6 @@
 #type vertex
 #version 450 core
-			
+
 layout (location = 0) in vec3 aPosition;
 
 layout (std140, binding = 0) uniform CameraBlock
@@ -15,20 +15,20 @@ out vec3 vTexCoords;
 void main()
 {
 	vTexCoords = aPosition;
-	vec4 pos = uCamera.projection * mat4(mat3(uCamera.view))  * vec4(aPosition, 1.0);
-	gl_Position = pos.xyww;
+	vec4 position = uCamera.projection * mat4(mat3(uCamera.view))  * vec4(aPosition, 1.0);
+	gl_Position = position.xyww;
 }
 
 #type fragment
 #version 450 core
 
-layout (location = 0) out vec4 FragColor;
+layout (location = 0) out vec4 aFragColor;
 
 in vec3 vTexCoords;
 
 uniform samplerCube uSkybox;
-			
+
 void main()
 {
-	FragColor = texture(uSkybox, vTexCoords);
+	aFragColor = texture(uSkybox, vTexCoords);
 }
