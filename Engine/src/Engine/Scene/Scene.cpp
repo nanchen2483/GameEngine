@@ -69,6 +69,13 @@ namespace Engine
 						Renderer3D::Draw(transform, component);
 					});
 
+			m_registry.view<TransformComponent, QuadtreeTerrainComponent>()
+				.each([=](TransformComponent& transform, QuadtreeTerrainComponent& component)
+					{
+						component.OnUpdate(camera.GetPosition());
+						Renderer3D::Draw(component);
+					});
+
 			m_registry.view<SkyboxComponent>()
 				.each([](SkyboxComponent& component)
 					{
@@ -281,6 +288,11 @@ namespace Engine
 
 	template<>
 	void Scene::OnComponentAdded<TerrainComponent>(Entity entity, TerrainComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<QuadtreeTerrainComponent>(Entity entity, QuadtreeTerrainComponent& component)
 	{
 	}
 

@@ -3,6 +3,7 @@
 #include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Renderer/Vertex/VertexArray.h"
 #include "TerrainVertex.h"
+#include "Quadtree/QuadtreeTerrain.h"
 
 namespace Engine
 {

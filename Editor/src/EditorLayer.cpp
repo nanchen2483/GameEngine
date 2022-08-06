@@ -35,7 +35,7 @@ namespace Engine
 		// Entity
 		m_activeScene = CreatePtr<Scene>();
 
-		m_editorCamera = EditorCamera(45.0f, m_viewportSize.x, m_viewportSize.y, 0.1f, 1000.0f);
+		m_editorCamera = EditorCamera(45.0f, m_viewportSize.x, m_viewportSize.y, 0.1f, 10000.0f);
 
 #if 0
 		m_squareEntity = m_activeScene->CreateEntity("Lightblue square");

@@ -300,6 +300,14 @@ namespace Engine
 		}
 	}
 
+	void Renderer3D::Draw(QuadtreeTerrainComponent& component)
+	{
+		if (component.terrain != nullptr)
+		{
+			component.terrain->Draw();
+		}
+	}
+
 	void Renderer3D::Draw(SkyboxComponent& component)
 	{
 		if (component.skybox != nullptr)

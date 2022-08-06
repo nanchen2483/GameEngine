@@ -179,6 +179,24 @@ namespace Engine
 		TerrainComponent(const TerrainComponent& component) = default;
 	};
 
+	struct QuadtreeTerrainComponent
+	{
+		Ptr<QuadtreeTerrain> terrain = nullptr;
+
+		QuadtreeTerrainComponent() = default;
+		QuadtreeTerrainComponent(const QuadtreeTerrainComponent& component) = default;
+		QuadtreeTerrainComponent(const Ptr<QuadtreeTerrain>& terrain)
+			: terrain(terrain) {}
+
+		void OnUpdate(glm::vec3 cameraPosition)
+		{
+			if (terrain != nullptr)
+			{
+				terrain->OnUpdate(cameraPosition);
+			}
+		}
+	};
+
 	struct NativeScriptComponent
 	{
 		ScriptableEntity* instance = nullptr;
