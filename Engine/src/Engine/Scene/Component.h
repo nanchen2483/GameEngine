@@ -33,9 +33,10 @@ namespace Engine
 		glm::vec3 GetScale() const { return transform.scale; }
 		glm::mat4 GetViewMatrix() const
 		{
-			return glm::translate(glm::mat4(1.0f), -GetTranslation()) *
-				   glm::toMat4(glm::quat(GetRotation())) *
-				   glm::scale(glm::mat4(1.0f), GetScale());
+			glm::mat4 viewMatrix =	glm::translate(glm::mat4(1.0f), GetTranslation()) *
+									glm::toMat4(glm::quat(GetRotation())) *
+									glm::scale(glm::mat4(1.0f), GetScale());
+			return glm::inverse(viewMatrix);
 		}
 		
 		operator glm::mat4() const { return transform; }

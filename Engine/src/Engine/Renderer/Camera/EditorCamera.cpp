@@ -62,7 +62,7 @@ namespace Engine
 
 	Frustum EditorCamera::GetFrustum(const Transform& transform) const
 	{
-		return Frustum(m_position, GetRotation(), m_FOV, m_nearClip, m_farClip, m_aspectRatio);
+		return Frustum(m_position, m_rotation, m_FOV, m_nearClip, m_farClip, m_aspectRatio);
 	}
 
 	void EditorCamera::SetViewportSize(uint32_t width, uint32_t height)
