@@ -15,7 +15,7 @@ namespace Engine
 	private:
 		bool Solve();
 		glm::dvec3 SupportCenter();
-		Vertex3D CreateNewSupportPoint();
+		Vertex3D CreateNewSupportPoint(glm::dvec3 direction);
 		glm::dvec3 CalcPointA(const Uniq<GJK3DTriangle>& triangle, glm::dvec3 baryCentric);
 		glm::dvec3 CalcPointB(const Uniq<GJK3DTriangle>& triangle, glm::dvec3 baryCentric);
 		glm::dvec3 GetSupportPointOnA(glm::dvec3 direction);

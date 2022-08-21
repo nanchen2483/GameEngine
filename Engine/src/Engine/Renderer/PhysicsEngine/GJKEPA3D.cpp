@@ -40,7 +40,8 @@ namespace Engine
 		uint32_t iteration = 0;
 		while (++iteration < MAX_ITERATION)
 		{
-			const Vertex3D mewSupportPoint = CreateNewSupportPoint();
+			glm::dvec3 direction = m_deltahedron->GetSearchDirection();
+			const Vertex3D mewSupportPoint = CreateNewSupportPoint(direction);
 			bool isValidPoint = m_deltahedron->IsValidSupportPoint(mewSupportPoint);
 			int32_t removeTriangleIndex = m_deltahedron->GetTriangleShouldBeReplaced(mewSupportPoint);
 
@@ -53,6 +54,17 @@ namespace Engine
 				glm::dvec3 closestPointOnA = CalcPointA(closestTriangle, barycentric);
 				glm::dvec3 closestPointOnB = CalcPointB(closestTriangle, barycentric);
 				m_directionFromAToB = glm::vec3(closestPointOnB - closestPointOnA);
+				if (m_directionFromAToB == glm::vec3(0.0f))
+				{
+					// Shapes completely overlap
+					glm::vec3 result;
+					result.x = Math::Sign(direction.x);
+					result.y = Math::Sign(direction.y);
+					result.z = Math::Sign(direction.z);
+					
+					m_distanceBetweenAToB = -0.1f;
+					m_directionFromAToB = result * m_distanceBetweenAToB;
+				}
 
 				return true;
 			}
@@ -72,10 +84,8 @@ namespace Engine
 		return m_positionA - m_positionB;
 	}
 	
-	Vertex3D GJKEPA3D::CreateNewSupportPoint()
+	Vertex3D GJKEPA3D::CreateNewSupportPoint(glm::dvec3 direction)
 	{
-		glm::dvec3 direction = m_deltahedron->GetSearchDirection();
-
 		glm::dvec3 vertexA = GetSupportPointOnA(-direction);
 		glm::dvec3 vertexB = GetSupportPointOnB(direction);
 		Vertex3D supportPoint = m_deltahedron->AddSupportPoint(vertexA - vertexB);

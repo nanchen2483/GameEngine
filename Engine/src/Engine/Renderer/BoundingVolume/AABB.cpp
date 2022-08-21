@@ -15,7 +15,7 @@ namespace Engine
 		};
 		m_boundingValue.SupportMapping = [=](glm::vec3 direction)
 		{
-			glm::dvec3 result;
+			glm::vec3 result;
 			result.x = Math::Sign(direction.x);
 			result.y = Math::Sign(direction.y);
 			result.z = Math::Sign(direction.z);
