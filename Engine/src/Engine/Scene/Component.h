@@ -126,6 +126,7 @@ namespace Engine
 		}
 
 		operator BoundingValue() { return GetBoundingValue(); }
+		operator bool() { return model != nullptr; }
 	private:
 		bool IsOnViewFrustum(const Frustum& frustum, const Transform& transform)
 		{

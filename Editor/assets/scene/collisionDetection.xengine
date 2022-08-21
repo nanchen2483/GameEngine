@@ -1,0 +1,52 @@
+Scene: Untitled
+Entities:
+  - Entity: 123
+    TagComponent:
+      Tag: Cube D
+    TransformComponent:
+      Translation: [-5.63945468e-06, 3.20000005, 8.75022852e-06]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      Path: assets\models\cube\cube.dae
+      EnableAnimation: false
+  - Entity: 123
+    TagComponent:
+      Tag: Cube C
+    TransformComponent:
+      Translation: [3.80329329e-05, 2.20000005, -2.65747385e-05]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      Path: assets\models\cube\cube.dae
+      EnableAnimation: false
+  - Entity: 123
+    TagComponent:
+      Tag: Cube B
+    TransformComponent:
+      Translation: [1.5, 1.20000005, 1.31017757e-07]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      Path: assets\models\cube\cube.dae
+      EnableAnimation: false
+  - Entity: 123
+    TagComponent:
+      Tag: Cube A
+    TransformComponent:
+      Translation: [-2.98023224e-08, 1.20000005, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      Path: assets\models\cube\cube.dae
+      EnableAnimation: false
+  - Entity: 123
+    TagComponent:
+      Tag: Plane
+    TransformComponent:
+      Translation: [0.899999976, -0.100000001, 0]
+      Rotation: [0, 0, 0]
+      Scale: [9.60000038, 1.60000002, 6.19999981]
+    ModelComponent:
+      Path: assets\models\cube\cube.dae
+      EnableAnimation: false

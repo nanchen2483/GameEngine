@@ -11,9 +11,10 @@ namespace Engine
 	Scene::Scene(bool enableShadow)
 	{
 		m_textureMap = CreatePtr<TextureMap>();
+		m_collision = CollisionDetection::Create(CollisionDetectionType::GJK_EPA_3D);
 		if (enableShadow)
 		{
-			m_shadowBox = CreatePtr<ShadowBox>();
+			m_shadowBox = CreateUniq<ShadowBox>();
 		}
 	}
 
@@ -56,11 +57,26 @@ namespace Engine
 
 			Renderer3D::EndScene();
 
-			m_registry.view<TransformComponent, ModelComponent>()
-				.each([=](TransformComponent& transform, ModelComponent& component)
+			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
+			modelView.each([=](entt::entity thisEntity, TransformComponent& thisTransform, ModelComponent& thisComponent)
 					{
-						component.OnUpdate(time, frustum, transform);
-						Renderer3D::Draw(transform, component);
+						bool isComparable = false;
+						modelView.each([&](entt::entity thatEntity, TransformComponent& thatTransform, ModelComponent& thatComponent)
+							{
+								if (isComparable)
+								{
+									m_collision->Detect(thisTransform, thatTransform, thisComponent, thatComponent);
+									if (m_collision->GetDistance() < 0)
+									{
+										thisTransform.transform.translation += m_collision->GetDirectionFromAToB();
+									}
+								}
+
+								if (thisEntity == thatEntity && thisComponent && thatComponent) { isComparable = true; }
+							});
+						
+						thisComponent.OnUpdate(time, frustum, thisTransform);
+						Renderer3D::Draw(thisTransform, thisComponent);
 					});
 
 			m_registry.view<TransformComponent, TerrainComponent>()
