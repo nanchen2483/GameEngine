@@ -106,6 +106,16 @@ namespace Engine
 		ModelComponent(const Ptr<Model>& model)
 			: model(model) {}
 
+		BoundingValue GetBoundingValue()
+		{
+			if (model != nullptr)
+			{
+				return model->GetBoundingValue();
+			}
+
+			return {};
+		}
+
 		void OnUpdate(float deltaTime, const Frustum& frustum, const Transform& transform)
 		{
 			bool isOnViewFrustum = IsOnViewFrustum(frustum, transform);
@@ -114,6 +124,8 @@ namespace Engine
 				model->OnUpdate(deltaTime);
 			}
 		}
+
+		operator BoundingValue() { return GetBoundingValue(); }
 	private:
 		bool IsOnViewFrustum(const Frustum& frustum, const Transform& transform)
 		{

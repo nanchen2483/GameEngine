@@ -201,6 +201,21 @@ namespace Engine
 		}
 	}
 
+	std::vector<glm::mat4> AssimpModel::GetBoneTransforms() const
+	{
+		if (m_hasAnimations)
+		{
+			return m_animations[m_selectedAnimationInfo.id].GetBoneTransforms();
+		}
+
+		return std::vector<glm::mat4>();
+	}
+
+	BoundingValue AssimpModel::GetBoundingValue() const
+	{
+		return m_boundingVolume->GetBoundingValue();
+	}
+
 	bool AssimpModel::IsOnFrustum(const Frustum& frustum, const Transform& transform) const
 	{
 		return m_boundingVolume->IsOnFrustum(frustum, transform);
@@ -212,16 +227,6 @@ namespace Engine
 		{
 			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms(deltaTime);
 		}
-	}
-
-	std::vector<glm::mat4> AssimpModel::GetBoneTransforms() const
-	{
-		if (m_hasAnimations)
-		{
-			return m_animations[m_selectedAnimationInfo.id].GetBoneTransforms();
-		}
-
-		return std::vector<glm::mat4>();
 	}
 
 	void AssimpModel::Draw()

@@ -2,7 +2,6 @@
 #include "AssimpAnimation.h"
 #include "AssimpMesh.h"
 #include "Engine/Renderer/Model/Model.h"
-#include "Engine/Renderer/BoundingVolume/BoundingVolume.h"
 #include "Helper/AssimpHelper.h"
 
 #include <assimp/Importer.hpp>
@@ -21,10 +20,11 @@ namespace Engine
 		
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
 		virtual bool HasAnimations() override { return m_hasAnimations; }
+		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
+		virtual BoundingValue GetBoundingValue() const override;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const override;
 		virtual void OnUpdate(float deltaTime) override;
-		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
-		
+
 		virtual const std::vector<AnimationInfo> GetAnimations() const override { return m_animationInfo; };
 		virtual const AnimationInfo GetSelectedAnimation() const override { return m_selectedAnimationInfo; }
 		virtual void SetSelectedAnimation(const AnimationInfo animation) override { m_selectedAnimationInfo = animation; }

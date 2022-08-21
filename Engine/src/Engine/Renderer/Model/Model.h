@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Math/Transform.h"
+#include "Engine/Renderer/BoundingVolume/BoundingVolume.h"
 #include "Engine/Renderer/Camera/Frustum.h"
 #include "Engine/Renderer/Texture/Texture.h"
 
@@ -23,9 +24,10 @@ namespace Engine
 	public:
 		virtual std::filesystem::path GetFilePath() = 0;
 		virtual bool HasAnimations() = 0;
+		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
+		virtual BoundingValue GetBoundingValue() const = 0;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const = 0;
 		virtual void OnUpdate(float deltaTime) = 0;
-		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
 
 		virtual const std::vector<AnimationInfo> GetAnimations() const = 0;
 		virtual const AnimationInfo GetSelectedAnimation() const = 0;
