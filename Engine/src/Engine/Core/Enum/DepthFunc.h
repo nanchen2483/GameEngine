@@ -4,8 +4,7 @@ namespace Engine
 {
 	enum class DepthFunc
 	{
-		UNKNOWN = 0,
-		NEVER, // Never passes.
+		NEVER = 1, // Never passes.
 		LESS, // Passes if the incoming z value is less than the stored z value. This is the default value.
 		LEQUAL, // Passes if the incoming z value is less than or equal to the stored z value.
 		EQUAL, // Passes if the incoming z value is equal to the stored z value.

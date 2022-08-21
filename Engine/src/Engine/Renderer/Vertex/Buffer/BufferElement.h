@@ -5,8 +5,7 @@ namespace Engine
 {
 	enum class ShaderDataType
 	{
-		None = 0,
-		Float,
+		Float = 1,
 		Float2,
 		Float3,
 		Float4,

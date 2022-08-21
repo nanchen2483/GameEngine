@@ -4,8 +4,7 @@ namespace Engine
 {
 	enum class PolygonMode
 	{
-		UNKNOWN = 0,
-		POINT,
+		POINT = 1,
 		LINE,
 		FILL,
 	};

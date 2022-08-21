@@ -32,7 +32,6 @@ namespace Engine
 				return GL_GEQUAL;
 			case DepthFunc::ALWAYS:
 				return GL_ALWAYS;
-			case DepthFunc::UNKNOWN:
 			default:
 				ENGINE_CORE_ASSERT(false, "Invalid depth-comparison function");
 				return -1;
@@ -47,7 +46,6 @@ namespace Engine
 				return GL_FRONT;
 			case FaceCulling::BACK:
 				return GL_BACK;
-			case FaceCulling::UNKNOWN:
 			default:
 				ENGINE_CORE_ASSERT(false, "Invalid faceCulling type");
 				return -1;
@@ -64,7 +62,6 @@ namespace Engine
 				return GL_LINE;
 			case PolygonMode::FILL:
 				return GL_FILL;
-			case PolygonMode::UNKNOWN:
 			default:
 				ENGINE_CORE_ASSERT(false, "Invalid polygonMode type");
 				return -1;
@@ -81,7 +78,6 @@ namespace Engine
 				return GL_WRITE_ONLY;
 			case TextureAccessType::ReadWrite:
 				return GL_READ_WRITE;
-			case TextureAccessType::Unknown:
 			default:
 				ENGINE_CORE_ASSERT(false, "Invalid TextureAccess type");
 				return -1;
@@ -141,7 +137,6 @@ namespace Engine
 				format.internalFormat = GL_RGBA32F;
 				format.dataFormat = GL_RGBA;
 				break;
-			case Engine::TextureFormatType::Unknown:
 			default:
 				ENGINE_CORE_ASSERT(false, "Invalid internal format type");
 			}

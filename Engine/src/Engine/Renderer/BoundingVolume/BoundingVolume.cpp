@@ -11,7 +11,6 @@ namespace Engine
 		{
 		case Engine::BoundingVolumeType::AABB:
 			return CreateUniq<AABB>(min, max);
-		case Engine::BoundingVolumeType::Unknown:
 		default:
 			ENGINE_CORE_ASSERT(false, "Unknow Bouding Volume type");
 			return nullptr;

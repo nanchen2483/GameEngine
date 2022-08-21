@@ -25,16 +25,14 @@ namespace Engine
 
 	enum class TextureAccessType
 	{
-		Unknown = -1,
-		ReadOnly,
+		ReadOnly = 1,
 		WriteOnly,
 		ReadWrite,
 	};
 
 	enum class TextureFormatType
 	{
-		Unknown = -1,
-		RED,
+		RED = 1,
 		R16,
 		R32,
 		RG8,

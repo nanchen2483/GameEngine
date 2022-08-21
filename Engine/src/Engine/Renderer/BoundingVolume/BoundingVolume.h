@@ -1,6 +1,6 @@
 #pragma once
+#include "Engine/Math/Transform.h"
 #include "Engine/Renderer/Camera/Frustum.h"
-#include "Engine/Scene/Component.h"
 
 #include <glm/glm.hpp>
 
@@ -8,8 +8,7 @@ namespace Engine
 {
 	enum class BoundingVolumeType
 	{
-		Unknown = 0,
-		AABB,
+		AABB = 1,
 	};
 
 	class BoundingVolume
