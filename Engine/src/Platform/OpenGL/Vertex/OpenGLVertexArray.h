@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Vertex/VertexArray.h"
+#include "Engine/Renderer/Buffer/VertexArray.h"
 
 #include <glad/glad.h>
 

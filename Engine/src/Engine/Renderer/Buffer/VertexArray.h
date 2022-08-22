@@ -1,7 +1,5 @@
 #pragma once
-#include "Buffer/Buffer.h"
-
-#include <memory>
+#include "Buffer.h"
 
 namespace Engine
 {

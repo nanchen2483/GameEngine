@@ -13,6 +13,7 @@
 #include "Engine/Renderer/Shadow/Debug/ShadowDebug.h"
 
 // Renderer
+#include "Engine/Renderer/Buffer/Framebuffer.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Camera/OrthographicCamera.h"
 #include "Engine/Renderer/Camera/OrthographicCameraController.h"
@@ -25,7 +26,6 @@
 #include "Engine/Renderer/Skybox/Skybox.h"
 #include "Engine/Renderer/Terrain/Terrain.h"
 #include "Engine/Renderer/Texture/Texture.h"
-#include "Engine/Renderer/Vertex/Buffer/Framebuffer.h"
 
 // Scene
 #include "Engine/Scene/Component.h"

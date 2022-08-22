@@ -1,8 +1,6 @@
 #pragma once
 #include "TerrainBuffer.h"
 
-#include <glm/glm.hpp>
-
 namespace Engine
 {
 	class TerrainNode

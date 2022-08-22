@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "Renderer3D.h"
-
 #include "RendererCommand.h"
+#include "Model/Vertex.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

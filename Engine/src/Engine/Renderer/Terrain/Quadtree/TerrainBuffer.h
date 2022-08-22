@@ -1,10 +1,8 @@
 #pragma once
-
-#include <vector>
+#include "Engine/Math/Transform.h"
+#include "Engine/Renderer/Buffer/VertexArray.h"
 #include "Engine/Renderer/Shader/Shader.h"
 #include "Engine/Renderer/Texture/Texture.h"
-#include "Engine/Renderer/Vertex/VertexArray.h"
-#include "Engine/Math/Transform.h"
 
 namespace Engine
 {

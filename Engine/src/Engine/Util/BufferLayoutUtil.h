@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Vertex/Buffer/BufferElement.h"
+#include "Engine/Renderer/Buffer/BufferElement.h"
 
 #include <vector>
 

@@ -1,8 +1,8 @@
 #pragma once
+#include "Engine/Renderer/Buffer/Framebuffer.h"
+#include "Engine/Renderer/Buffer/VertexArray.h"
 #include "Engine/Renderer/Shader/Shader.h"
 #include "Engine/Renderer/Shadow/ShadowBox.h"
-#include "Engine/Renderer/Vertex/Buffer/Framebuffer.h"
-#include "Engine/Renderer/Vertex/VertexArray.h"
 
 namespace Engine
 {

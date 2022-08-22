@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "Renderer2D.h"
-
 #include "RendererCommand.h"
+#include "Model/Vertex.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
