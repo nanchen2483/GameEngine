@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/Math/Transform.h"
-#include "Engine/Renderer/BoundingVolume/BoundingVolume.h"
+#include "Engine/Physics/BoundingVolume/BoundingVolume.h"
 #include "Engine/Renderer/Camera/Frustum.h"
 #include "Engine/Renderer/Texture/Texture.h"
 
