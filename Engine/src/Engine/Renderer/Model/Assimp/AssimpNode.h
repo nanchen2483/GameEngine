@@ -1,5 +1,5 @@
 #pragma once
-#include "Platform/Assimp/AssimpBone.h"
+#include "AssimpBone.h"
 
 namespace Engine
 {

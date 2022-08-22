@@ -1,10 +1,5 @@
 #pragma once
-#include "Platform/Util/AssimpUtil.h"
-
-#include <assimp/scene.h>
-#include <glm/glm.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
+#include "Engine/Util/AssimpUtil.h"
 
 #include <string>
 #include <vector>

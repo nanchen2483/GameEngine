@@ -2,11 +2,7 @@
 #include "Engine/Renderer/Vertex/Vertex.h"
 #include "Engine/Renderer/Vertex/VertexArray.h"
 #include "Engine/Renderer/Texture/Texture.h"
-#include "Platform/Assimp/Material.h"
-
-#include <glm/glm.hpp>
-#include <string>
-#include <vector>
+#include "Material.h"
 
 namespace Engine
 {

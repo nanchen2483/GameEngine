@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/Util/Dictionary.h"
-#include "Platform/Assimp/AssimpNode.h"
+#include "../Assimp/AssimpNode.h"
 
 namespace Engine
 {
