@@ -11,7 +11,7 @@ namespace Engine
 	Scene::Scene(bool enableShadow)
 	{
 		m_textureMap = CreatePtr<TextureMap>();
-		m_collision = CollisionDetection::Create(CollisionDetectionType::GJK_EPA_3D);
+		m_collision = Collision::Create(CollisionType::GJK_EPA_3D);
 		if (enableShadow)
 		{
 			m_shadowBox = CreateUniq<ShadowBox>();

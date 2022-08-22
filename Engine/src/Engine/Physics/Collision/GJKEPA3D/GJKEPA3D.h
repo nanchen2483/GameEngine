@@ -1,10 +1,10 @@
 #pragma once
-#include "Engine/Renderer/PhysicsEngine/CollisionDetection.h"
+#include "Engine/Physics/Collision/Collision.h"
 #include "Polyhedron/GJK3DDeltahedron.h"
 
 namespace Engine
 {
-	class GJKEPA3D : public CollisionDetection
+	class GJKEPA3D : public Collision
 	{
 	public:
 		GJKEPA3D();

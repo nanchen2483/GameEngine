@@ -1,9 +1,9 @@
 #pragma once
 #include "Engine/Core/TimeStep.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
-#include "Engine/Renderer/PhysicsEngine/CollisionDetection.h"
 #include "Engine/Renderer/Shadow/ShadowBox.h"
 #include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Physics/Collision/Collision.h"
 
 #include <entt/entt.hpp>
 
@@ -35,7 +35,7 @@ namespace Engine
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
 		Ptr<TextureMap> m_textureMap = nullptr;
 		Uniq<ShadowBox> m_shadowBox = nullptr;
-		Uniq<CollisionDetection> m_collision = nullptr;
+		Uniq<Collision> m_collision = nullptr;
 
 		friend class Entity;
 		friend class SceneSerializer;
