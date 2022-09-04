@@ -1,74 +1,35 @@
 #include "enginepch.h"
 #include "Terrain.h"
-
-#include "Engine/Renderer/RendererCommand.h"
+#include "Tessellation/TessellationTerrain.h"
+#include "Quadtree/QuadtreeTerrain.h"
 
 namespace Engine
 {
-	Terrain::Terrain(std::string filePath, int32_t entityId)
-		: Terrain(Texture2D::Create(filePath, TextureType::Height, false), entityId)
+	Uniq<Terrain> Terrain::Create(TerrainType type, std::string filePath, int32_t entityId)
 	{
-	}
-
-	Terrain::Terrain(Ptr<Texture2D> texture, int32_t entityId)
-		: m_texture(texture), m_entityId(entityId)
-	{
-		m_vertexArray = VertexArray::Create();
-		std::vector<TerrainVertex> vertices = SetVertices(m_numOfPoints, m_texture->GetWidth(), m_texture->GetHeight());
-		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(&vertices[0], sizeof(TerrainVertex) * vertices.size());
-		vertexBuffer->SetLayout({
-			{ ShaderDataType::Float3 },
-			{ ShaderDataType::Float2 },
-			{ ShaderDataType::Int },
-		});
-		m_vertexArray->AddVertexBuffer(vertexBuffer);
-		m_vertexArray->SetNumOfPatchVertices(m_numOfVerticesPerPatch);
-
-		m_shader = Shader::Create("assets/shaders/Terrian.glsl");
-		m_shader->Bind();
-		m_shader->SetInt("uHeightMap", 0);
+		switch (type)
+		{
+		case TerrainType::Default:
+			return CreateUniq<TessellationTerrain>(filePath, entityId);
+		case TerrainType::Quadtree:
+			return CreateUniq<QuadtreeTerrain>(filePath, entityId);
+		default:
+			ENGINE_CORE_ASSERT(false, "Unknown Terrain");
+			return nullptr;
+		}
 	}
 	
-	std::vector<TerrainVertex> Terrain::SetVertices(uint32_t numOfPoints, int32_t width, int32_t height)
+	Uniq<Terrain> Terrain::Create(TerrainType type, Ptr<Texture2D> texture, int32_t entityId)
 	{
-		std::vector<TerrainVertex> vertices;
-		vertices.reserve(numOfPoints * numOfPoints * 4);
-		TerrainVertex vertex;
-		for (uint32_t i = 0; i < numOfPoints; i++)
+		switch (type)
 		{
-			for (uint32_t j = 0; j < numOfPoints; j++)
-			{
-				vertex.position = glm::vec3(-width / 2.0f + width * i / (float)numOfPoints, 0.0f, -height / 2.0f + height * j / (float)numOfPoints);
-				vertex.texCoord = glm::vec2(i / (float)numOfPoints, j / (float)numOfPoints);
-				vertex.entityId = m_entityId;
-				vertices.push_back(vertex);
-
-				vertex.position = glm::vec3(-width / 2.0f + width * (i + 1) / (float)numOfPoints, 0.0f, -height / 2.0f + height * j / (float)numOfPoints);
-				vertex.texCoord = glm::vec2((i + 1) / (float)numOfPoints, j / (float)numOfPoints);
-				vertex.entityId = m_entityId;
-				vertices.push_back(vertex);
-
-				vertex.position = glm::vec3(-width / 2.0f + width * i / (float)numOfPoints, 0.0f, -height / 2.0f + height * (j + 1) / (float)numOfPoints);
-				vertex.texCoord = glm::vec2(i / (float)numOfPoints, (j + 1) / (float)numOfPoints);
-				vertex.entityId = m_entityId;
-				vertices.push_back(vertex);
-
-				vertex.position = glm::vec3(-width / 2.0f + width * (i + 1) / (float)numOfPoints, 0.0f, -height / 2.0f + height * (j + 1) / (float)numOfPoints);
-				vertex.texCoord = glm::vec2((i + 1) / (float)numOfPoints, (j + 1) / (float)numOfPoints);
-				vertex.entityId = m_entityId;
-				vertices.push_back(vertex);
-			}
+		case TerrainType::Default:
+			return CreateUniq<TessellationTerrain>(texture, entityId);
+		case TerrainType::Quadtree:
+			return CreateUniq<QuadtreeTerrain>(texture, entityId);
+		default:
+			ENGINE_CORE_ASSERT(false, "Unknown Terrain");
+			return nullptr;
 		}
-
-		return vertices;
-	}
-
-	void Terrain::Draw(glm::mat4 model)
-	{
-		m_shader->Bind();
-		m_shader->SetMat4("uModel", model);
-		m_vertexArray->Bind();
-		m_texture->Bind();
-		RendererCommand::DrawPatch(m_numOfPatches);
 	}
 }

@@ -1,30 +1,26 @@
 #pragma once
-#include "Engine/Renderer/Buffer/VertexArray.h"
-#include "Engine/Renderer/Shader/Shader.h"
 #include "Engine/Renderer/Texture/Texture.h"
-#include "TerrainVertex.h"
-#include "Quadtree/QuadtreeTerrain.h"
+#include <glm/glm.hpp>
+#include <Engine/Renderer/Camera/Frustum.h>
 
 namespace Engine
 {
+	enum class TerrainType
+	{
+		Default = 1,
+		Quadtree = 2,
+	};
+
 	class Terrain
 	{
 	public:
-		Terrain(std::string filePath, int32_t entityId = -1);
-		Terrain(Ptr<Texture2D> texture, int32_t entityId = -1);
-
-		std::string GetFilePath() const { return m_texture->GetFilePath(); }
-		void Draw(glm::mat4 model);
-	private:
-		std::vector<TerrainVertex> SetVertices(uint32_t numOfPoints, int32_t width, int32_t height);
-
-		Ptr<Shader> m_shader;
-		Ptr<Texture2D> m_texture;
-		Ptr<VertexArray> m_vertexArray;
-
-		int32_t m_entityId = -1;
-		const uint32_t m_numOfVerticesPerPatch = 4;
-		const uint32_t m_numOfPoints = 20;
-		const uint32_t m_numOfPatches = m_numOfPoints * m_numOfPoints * m_numOfVerticesPerPatch;
+		virtual std::string GetFilePath() const = 0;
+		virtual float GetHeight(float x, float z) const  = 0;
+		virtual TerrainType GetType() const = 0;
+		virtual void OnUpdate(glm::vec3 position) = 0;
+		virtual void Draw(glm::mat4 model, const Frustum& frustum) = 0;
+	
+		static Uniq<Terrain> Create(TerrainType type, std::string filePath, int32_t entityId = -1);
+		static Uniq<Terrain> Create(TerrainType type, Ptr<Texture2D> texture, int32_t entityId = -1);
 	};
 }

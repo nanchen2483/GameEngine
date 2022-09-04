@@ -208,6 +208,7 @@ namespace Engine {
 
 			TerrainComponent& terrainComponent = entity.GetComponent<TerrainComponent>();
 
+			out << YAML::Key << "Type" << YAML::Value << std::to_string((uint32_t)terrainComponent.terrain->GetType());
 			out << YAML::Key << "Path" << YAML::Value << terrainComponent.terrain->GetFilePath();
 			out << YAML::EndMap;
 		}
@@ -344,7 +345,6 @@ namespace Engine {
 					deserializedModel.model = Model::Create(path, false, deserializedEntity, m_scene->GetLoadedTextureMap());
 				}
 
-
 				YAML::Node skyboxComponent = entity["SkyboxComponent"];
 				if (skyboxComponent)
 				{
@@ -362,7 +362,7 @@ namespace Engine {
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
 					deserializedSkybox.texture = Texture2D::Create(terrainComponent["Path"].as<std::string>(), TextureType::Height, false);
-					deserializedSkybox.terrain = CreatePtr<Terrain>(deserializedSkybox.texture, deserializedEntity);
+					deserializedSkybox.terrain = Terrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}
 		}

@@ -190,16 +190,16 @@ namespace Engine
 
 		TerrainComponent() = default;
 		TerrainComponent(const TerrainComponent& component) = default;
-	};
-
-	struct QuadtreeTerrainComponent
-	{
-		Ptr<QuadtreeTerrain> terrain = nullptr;
-
-		QuadtreeTerrainComponent() = default;
-		QuadtreeTerrainComponent(const QuadtreeTerrainComponent& component) = default;
-		QuadtreeTerrainComponent(const Ptr<QuadtreeTerrain>& terrain)
+		TerrainComponent(const Ptr<Terrain>& terrain)
 			: terrain(terrain) {}
+
+		void SetHeight(TransformComponent& translate)
+		{
+			if (terrain != nullptr)
+			{
+				translate.transform.translation.y = terrain->GetHeight(translate.GetTranslation().x, translate.GetTranslation().z);
+			}
+		}
 
 		void OnUpdate(glm::vec3 cameraPosition)
 		{

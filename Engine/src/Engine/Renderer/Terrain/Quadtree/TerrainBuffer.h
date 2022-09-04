@@ -6,18 +6,6 @@
 
 namespace Engine
 {
-	struct TerrainNodeData
-	{
-		glm::vec2 location;
-		uint32_t lod;
-		glm::vec2 index;
-		glm::vec3 worldPosition;
-		float gap;
-
-		Transform worldTransform;
-		Transform localTransform;
-	};
-
 	struct TerrainMaterial
 	{
 		Ptr<Texture2D> diffuseMap;
@@ -30,19 +18,20 @@ namespace Engine
 	class TerrainBuffer
 	{
 	public:
-		TerrainBuffer();
+		TerrainBuffer(Ptr<Texture2D> heightMapTexture, int32_t entityId);
 		Ptr<Shader> GetShader() const { return m_shader; };
 		float GetScaleY() const { return m_scaleY; }
 		float GetScaleXZ() const { return m_scaleXZ; }
+		std::string GetHeightMapPath() const { return m_heightMapTexture->GetFilePath(); }
 		int32_t GetLodMorphingArea(uint32_t lod) const { return m_loadMorphingArea[lod]; }
 		uint32_t GetLodRange(uint32_t lod) const { return m_loadRange[lod]; }
-		float GetTerrainHeight(float x, float z);
-		void Draw(TerrainNodeData data);
+		float GetTerrainHeightCache(float x, float z);
+		float GetTerrainHeight(float x, float z) const;
+		void Draw(glm::mat4 localTransform, glm::vec2 location, uint32_t lod, glm::vec2 index, float gap);
 	public:
 		const static uint32_t NUM_OF_ROOT_NODES = 8;
 	private:
 		void InitValue();
-		void SetHeightMap();
 		void SetNormalMap();
 		void SetSplatMap();
 		void SetMaterial();
@@ -53,8 +42,11 @@ namespace Engine
 		Ptr<Texture2D> m_heightMapTexture = nullptr;
 		Ptr<Texture2D> m_normalMapTexture = nullptr;
 		Ptr<Texture2D> m_splatMapTexture = nullptr;
-		float* m_heightMapDataBuffer;
+		std::vector<float> m_heightMapDataBuffer;
+		Ptr<UniformBuffer> m_wordTransform = nullptr;
+		std::unordered_map<uint32_t, std::unordered_map<uint32_t, float>> m_heightCache;
 
+		int32_t m_entityId;
 		float m_scaleY = 0.0f, m_scaleXZ = 0.0f;
 		uint32_t m_tessellationFactor = 0;
 		float m_tessellationSlope = 0.0f, m_tessellationShift = 0.0f;

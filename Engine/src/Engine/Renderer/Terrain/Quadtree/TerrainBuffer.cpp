@@ -5,8 +5,11 @@
 
 namespace Engine
 {
-	TerrainBuffer::TerrainBuffer()
+	TerrainBuffer::TerrainBuffer(Ptr<Texture2D> heightMapTexture, int32_t entityId)
+		: m_heightMapTexture(heightMapTexture), m_entityId(entityId)
 	{
+		m_heightMapDataBuffer = m_heightMapTexture->GetData();
+
 		m_loadRange.reserve(NUM_OF_ROOT_NODES);
 		m_loadMorphingArea.reserve(NUM_OF_ROOT_NODES);
 
@@ -24,7 +27,6 @@ namespace Engine
 		}
 
 		InitValue();
-		SetHeightMap();
 		SetNormalMap();
 		SetSplatMap();
 		SetMaterial();
@@ -47,6 +49,20 @@ namespace Engine
 		AddLodRange(50);
 		AddLodRange(0);
 		AddLodRange(0);
+
+		Transform transform;
+		transform.scale = glm::vec3(m_scaleXZ, m_scaleY, m_scaleXZ);
+		transform.translation = glm::vec3(-m_scaleXZ / 2.0f, 0.0f, -m_scaleXZ / 2.0f);
+		glm::mat4 worldMatrix = (glm::mat4)transform;
+
+		m_wordTransform = UniformBuffer::Create(4,
+			{
+				BufferLayoutType::Std140,
+				{
+					{ ShaderDataType::Mat4 },
+				}
+			});
+		m_wordTransform->SetData({ &worldMatrix });
 
 		std::vector<float> vertices = std::vector<float>
 		{
@@ -81,12 +97,6 @@ namespace Engine
 		m_vertexArray->SetNumOfPatchVertices(m_sizeOfPatch);
 	}
 
-	void TerrainBuffer::SetHeightMap()
-	{
-		m_heightMapTexture = Texture2D::Create("assets/textures/heights/hm0.bmp");
-		m_heightMapDataBuffer = m_heightMapTexture->GetImageData();
-	}
-
 	void TerrainBuffer::SetNormalMap()
 	{
 		uint32_t N = m_heightMapTexture->GetWidth();
@@ -99,7 +109,7 @@ namespace Engine
 		normalShader->SetFloat("uNormalStrength", 60.0f);
 		m_heightMapTexture->Bind();
 		m_normalMapTexture->BindImage();
-		RendererCommand::Compute(N / 16, N / 16, 1);
+		RendererCommand::Compute(N / m_sizeOfPatch, N / m_sizeOfPatch, 1);
 	}
 
 	void TerrainBuffer::SetSplatMap()
@@ -113,7 +123,7 @@ namespace Engine
 		splatShader->SetInt("uN", N);
 		m_normalMapTexture->Bind();
 		m_splatMapTexture->BindImage();
-		RendererCommand::Compute(N / 16, N / 16, 1);
+		RendererCommand::Compute(N / m_sizeOfPatch, N / m_sizeOfPatch, 1);
 	}
 
 	void TerrainBuffer::SetMaterial()
@@ -141,29 +151,47 @@ namespace Engine
 		return (uint32_t)(m_scaleXZ / (float)NUM_OF_ROOT_NODES) / std::pow(2, lod);
 	}
 
-	float TerrainBuffer::GetTerrainHeight(float x, float z)
+	float TerrainBuffer::GetTerrainHeightCache(float x, float z)
 	{
-		float height = 0.0f;
-		uint32_t width = m_heightMapTexture->GetWidth();
+		if (m_heightCache[x].find(z) == m_heightCache[x].cend())
+		{
+			m_heightCache[x][z] = GetTerrainHeight(x, z);
+		}
 
-		glm::vec2 position = glm::vec2(x, z) + m_scaleXZ / 2.0f;
+		return m_heightCache.at(x).at(z);
+	}
+
+	float TerrainBuffer::GetTerrainHeight(float x, float z) const
+	{
+		glm::vec3 terrianSize = glm::vec3(m_heightMapTexture->GetWidth(), 0, m_heightMapTexture->GetHeight());
+
+		glm::vec3 position = glm::vec3(x, 0, z) + m_scaleXZ / 2.0f;
 		position /= m_scaleXZ;
-		glm::vec2 floor = glm::vec2(std::floor(position.x), std::floor(position.y));
+		glm::vec3 floor(std::floor(position.x), 0, std::floor(position.z));
 		position -= floor;
-		position *= width;
+		position *= terrianSize - glm::vec3(1);
 
 		int32_t x0 = (int32_t)std::floor(position.x);
 		int32_t x1 = x0 + 1;
-		int32_t z0 = (int32_t)std::floor(position.y);
-		int32_t z1 = z0 + 1;
+		if (x1 >= terrianSize.x || position.x == x0)
+		{
+			x1 = x0;
+		}
 
-		float h0 = m_heightMapDataBuffer[width * z0 + x0];
-		float h1 = m_heightMapDataBuffer[width * z0 + x1];
-		float h2 = m_heightMapDataBuffer[width * z1 + x0];
-		float h3 = m_heightMapDataBuffer[width * z1 + x1];
+		int32_t z0 = (int32_t)std::floor(position.z);
+		int32_t z1 = z0 + 1;
+		if (z1 >= terrianSize.z || position.z == z0)
+		{
+			z1 = z0;
+		}
+
+		float h0 = m_heightMapDataBuffer[terrianSize.x * z0 + x0];
+		float h1 = m_heightMapDataBuffer[terrianSize.x * z0 + x1];
+		float h2 = m_heightMapDataBuffer[terrianSize.x * z1 + x0];
+		float h3 = m_heightMapDataBuffer[terrianSize.x * z1 + x1];
 
 		float percentU = position.x - x0;
-		float percentV = position.y - z0;
+		float percentV = position.z - z0;
 
 		float dU, dV;
 		if (percentU > percentV)
@@ -177,23 +205,22 @@ namespace Engine
 			dV = h2 - h0;
 		}
 
-		height = h0 + (dU * percentU) + (dV * percentV);
-		height *= m_scaleY;
+		float y = h0 + (dU * percentU) + (dV * percentV);
+		y *= m_scaleY;
 
-		return height;
+		return y;
 	}
 
-	void TerrainBuffer::Draw(TerrainNodeData data)
+	void TerrainBuffer::Draw(glm::mat4 localTransform, glm::vec2 location, uint32_t lod, glm::vec2 index, float gap)
 	{
 		m_shader->Bind();
-		m_shader->SetMat4("uLocalMatrix", data.localTransform);
-		m_shader->SetMat4("uWorldMatrix", data.worldTransform);
+		m_shader->SetMat4("uLocalMatrix", localTransform);
 
 		m_shader->SetFloat("uScaleY", m_scaleY);
-		m_shader->SetInt("uLod", data.lod);
-		m_shader->SetFloat2("uIndex", data.index);
-		m_shader->SetFloat("uGap", data.gap);
-		m_shader->SetFloat2("uLocation", data.location);
+		m_shader->SetInt("uLod", lod);
+		m_shader->SetFloat2("uIndex", index);
+		m_shader->SetFloat("uGap", gap);
+		m_shader->SetFloat2("uLocation", location);
 		m_shader->SetInt("uTessellationFactor", m_tessellationFactor);
 		m_shader->SetFloat("uTessellationSlope", m_tessellationSlope);
 		m_shader->SetFloat("uTessellationShift", m_tessellationShift);
