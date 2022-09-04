@@ -38,7 +38,7 @@ namespace Engine
 		{
 			for (uint32_t j = 0; j < numOfPoints; j++)
 			{
-				vertex.position = glm::vec3(- width / 2.0f + width * i / (float)numOfPoints, 0.0f, -height / 2.0f + height * j / (float)numOfPoints);
+				vertex.position = glm::vec3(-width / 2.0f + width * i / (float)numOfPoints, 0.0f, -height / 2.0f + height * j / (float)numOfPoints);
 				vertex.texCoord = glm::vec2(i / (float)numOfPoints, j / (float)numOfPoints);
 				vertex.entityId = m_entityId;
 				vertices.push_back(vertex);
