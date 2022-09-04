@@ -34,7 +34,7 @@ namespace Engine
 		virtual std::string GetFilePath() const = 0;
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
-		virtual float* GetImageData() = 0;
+		virtual const std::vector<float>& GetData() = 0;
 
 		static Ptr<Texture2D> Create(uint32_t width, uint32_t height, uint32_t levels = 1, TextureFormatType format = TextureFormatType::RGBA8);
 		static Ptr<Texture2D> Create(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = true);

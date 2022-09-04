@@ -41,7 +41,6 @@ namespace Engine
 		
 		operator glm::mat4() const { return transform; }
 		operator Transform&() { return transform; }
-
 	};
 
 	struct CameraComponent
@@ -100,7 +99,7 @@ namespace Engine
 		
 		bool enableAnimation = false;
 		Ptr<Model> model = nullptr;
-
+		
 		ModelComponent() = default;
 		ModelComponent(const ModelComponent& component) = default;
 		ModelComponent(const Ptr<Model>& model)

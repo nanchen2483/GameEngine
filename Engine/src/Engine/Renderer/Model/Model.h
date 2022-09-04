@@ -5,8 +5,6 @@
 #include "Engine/Renderer/Texture/Texture.h"
 
 #include <filesystem>
-#include <glm/glm.hpp>
-#include <vector>
 
 namespace Engine
 {
