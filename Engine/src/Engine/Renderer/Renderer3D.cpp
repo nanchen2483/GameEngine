@@ -292,19 +292,11 @@ namespace Engine
 		}
 	}
 
-	void Renderer3D::Draw(const glm::mat4& transform, TerrainComponent& component)
+	void Renderer3D::Draw(const glm::mat4& transform, TerrainComponent& component, const Frustum& frustum)
 	{
 		if (component.terrain != nullptr)
 		{
-			component.terrain->Draw(transform);
-		}
-	}
-
-	void Renderer3D::Draw(QuadtreeTerrainComponent& component)
-	{
-		if (component.terrain != nullptr)
-		{
-			component.terrain->Draw();
+			component.terrain->Draw(transform, frustum);
 		}
 	}
 

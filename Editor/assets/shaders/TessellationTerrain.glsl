@@ -10,8 +10,12 @@ layout (std140, binding = 0) uniform CameraBlock
 	vec3 viewPosition;
 } uCamera;
 
+layout (std140, binding = 4) uniform TransformBlock
+{
+	mat4 worldMatrix;
+} uTransform;
+
 uniform mat4 uLocalMatrix;
-uniform mat4 uWorldMatrix;
 uniform float uScaleY;
 uniform int uLod;
 uniform vec2 uIndex;
@@ -34,12 +38,11 @@ void main()
 	if (uLod > 0)
 	{
 		localPosition += Morph(localPosition, height, uLodMorphArea[uLod - 1]);
+		height = texture(uHeightMap, localPosition).r;
 	}
 
-	height = texture(uHeightMap, localPosition).r;
-
 	vTexCoord = localPosition;
-	gl_Position = uWorldMatrix * vec4(localPosition.x, height, localPosition.y, 1.0f);
+	gl_Position = uTransform.worldMatrix * vec4(localPosition.x, height, localPosition.y, 1.0f);
 }
 
 vec2 Morph(vec2 localPosition, float height, int morphArea)
@@ -69,8 +72,8 @@ vec2 Morph(vec2 localPosition, float height, int morphArea)
 		fixPointLongitude = uLocation + vec2(uGap, 0.0f);
 	}
 
-	float distLatitude = length(uCamera.viewPosition - (uWorldMatrix * vec4(fixPointLatitude.x, height, fixPointLatitude.y, 1.0f)).xyz);
-	float distLongitude = length(uCamera.viewPosition - (uWorldMatrix * vec4(fixPointLongitude.x, height, fixPointLongitude.y, 1.0f)).xyz);
+	float distLatitude = length(uCamera.viewPosition - (uTransform.worldMatrix * vec4(fixPointLatitude.x, height, fixPointLatitude.y, 1.0f)).xyz);
+	float distLongitude = length(uCamera.viewPosition - (uTransform.worldMatrix * vec4(fixPointLongitude.x, height, fixPointLongitude.y, 1.0f)).xyz);
 
 	if (distLatitude > morphArea)
 	{
@@ -383,7 +386,7 @@ layout (location = 0) out vec4 aFragColor;
 const vec3 LIGHT_DIRECTION = vec3(0.1f, -1.0f, 0.1f);
 const float INTENSITY = 0.8f;
 const float Z_FAR = 1000.0f;
-const float SIGHT_RANGE = 0.6f;
+const float SIGHT_RANGE = 1.6f;
 const vec3 FOG_COLOR = vec3(0.65f, 0.85f, 0.9f);
 
 layout (std140, binding = 0) uniform CameraBlock

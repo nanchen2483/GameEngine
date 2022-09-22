@@ -77,13 +77,18 @@ namespace Engine
 		glDeleteTextures(1, &m_rendererId);
 	}
 
-	float* OpenGLTexture2D::GetImageData()
+	const std::vector<float>& OpenGLTexture2D::GetData()
 	{
-		float *buffer = new float[m_width * m_height];
-		glGetTextureImage(m_rendererId, 0, GL_RED, GL_FLOAT, m_width * m_height * 4, buffer);
-		
+		const uint32_t TERRAIN_SIZE = m_width * m_height;
+
+		float *buffer = new float[TERRAIN_SIZE];
+		glGetTextureImage(m_rendererId, 0, GL_RED, GL_FLOAT, TERRAIN_SIZE * 4, buffer);
+		m_pixels = std::vector<float>(buffer, buffer + TERRAIN_SIZE);
+		delete[] buffer;
+
 		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
-		return buffer;
+
+		return m_pixels;
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)

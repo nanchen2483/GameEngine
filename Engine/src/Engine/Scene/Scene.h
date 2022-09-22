@@ -33,8 +33,8 @@ namespace Engine
 	private:
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
-		Ptr<TextureMap> m_textureMap = nullptr;
 		Uniq<ShadowBox> m_shadowBox = nullptr;
+		Ptr<TextureMap> m_textureMap = nullptr;
 		Uniq<Collision> m_collision = nullptr;
 
 		friend class Entity;

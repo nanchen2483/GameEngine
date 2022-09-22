@@ -17,7 +17,7 @@ namespace Engine
 		inline virtual uint32_t GetRendererId() const override { return m_rendererId; }
 		inline virtual TextureType GetType() const override { return m_type; }
 		
-		virtual float* GetImageData() override;
+		virtual const std::vector<float>& GetData() override;
 		virtual void SetData(void* data, uint32_t size) override;
 		virtual void BindImage(uint32_t slot, TextureAccessType access) const override;
 		virtual void Bind(uint32_t slot) const override;
@@ -32,5 +32,7 @@ namespace Engine
 		uint32_t m_width, m_height;
 		TextureType m_type;
 		TextureFormat m_format;
+
+		std::vector<float> m_pixels;
 	};
 }

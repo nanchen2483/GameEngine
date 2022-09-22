@@ -29,7 +29,7 @@ namespace Engine
 		bool m_viewportFocused = false, m_viewportHovered = false;
 		Ptr<Scene> m_activeScene;
 		EditorCamera m_editorCamera;
-		int m_gizmoType = -1;
+		int32_t m_gizmoType = -1;
 		SceneHierarchyPanel m_sceneHierachyPanel;
 		ContentBrowserPanel m_contentBrowserPanel;
 

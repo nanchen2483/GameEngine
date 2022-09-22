@@ -99,12 +99,6 @@ namespace Engine
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (!m_selectionContext.HasComponent<QuadtreeTerrainComponent>() && ImGui::MenuItem("Quadtree Terrian"))
-				{
-					m_selectionContext.AddComponent<QuadtreeTerrainComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-
 				ImGui::EndPopup();
 			}
 		}
@@ -723,49 +717,10 @@ namespace Engine
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
 						component.texture = Texture2D::Create(path.string(), TextureType::Height, false);
-						component.terrain = CreatePtr<Terrain>(component.texture, entity);
+						component.terrain = Terrain::Create(TerrainType::Default, component.texture, entity);
 					}
 				}
 				
-				ImGui::TreePop();
-			}
-
-			if (removeComponent)
-			{
-				m_selectionContext.RemoveComponent<TerrainComponent>();
-			}
-		}
-
-		if (entity.HasComponent<QuadtreeTerrainComponent>())
-		{
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-			bool open = ImGui::TreeNodeEx((void*)typeid(QuadtreeTerrainComponent).hash_code(), treeNodeFlags, " Quadtree Terrian");
-			ImGui::SameLine(ImGui::GetWindowWidth() - 35.0f);
-			if (ImGui::Button("+", ImVec2(20, 20)))
-			{
-				ImGui::OpenPopup("ComponentSettings");
-			}
-			ImGui::PopStyleVar();
-
-			bool removeComponent = false;
-			if (ImGui::BeginPopup("ComponentSettings"))
-			{
-				if (ImGui::MenuItem("Remove component"))
-				{
-					removeComponent = true;
-				}
-
-				ImGui::EndPopup();
-			}
-
-			if (open)
-			{
-				QuadtreeTerrainComponent& component = entity.GetComponent<QuadtreeTerrainComponent>();
-				if (component.terrain == nullptr)
-				{
-					component.terrain = CreatePtr<QuadtreeTerrain>();
-				}
-
 				ImGui::TreePop();
 			}
 

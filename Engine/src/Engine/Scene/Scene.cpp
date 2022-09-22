@@ -40,6 +40,7 @@ namespace Engine
 	{
 		if (!m_registry.empty())
 		{
+			static TerrainComponent terrainComponent;
 			Frustum frustum = camera.GetFrustum();
 			auto lightView = m_registry.view<TransformComponent, LightComponent>();
 			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), lightView.size_hint());
@@ -58,7 +59,7 @@ namespace Engine
 			Renderer3D::EndScene();
 
 			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
-			modelView.each([=](entt::entity thisEntity, TransformComponent& thisTransform, ModelComponent& thisComponent)
+			modelView.each([&](entt::entity thisEntity, TransformComponent& thisTransform, ModelComponent& thisComponent)
 					{
 						bool isComparable = false;
 						modelView.each([&](entt::entity thatEntity, TransformComponent& thatTransform, ModelComponent& thatComponent)
@@ -68,28 +69,26 @@ namespace Engine
 									m_collision->Detect(thisTransform, thatTransform, thisComponent, thatComponent);
 									if (m_collision->GetDistance() < 0)
 									{
-										thisTransform.transform.translation += m_collision->GetDirectionFromAToB();
+										glm::vec3 x = m_collision->GetDirectionFromAToB() / 2.0f;
+										thisTransform.transform.translation += x;
+										thatTransform.transform.translation -= x;
 									}
 								}
 
 								if (thisEntity == thatEntity && thisComponent && thatComponent) { isComparable = true; }
 							});
 						
+						terrainComponent.SetHeight(thisTransform);
 						thisComponent.OnUpdate(time, frustum, thisTransform);
 						Renderer3D::Draw(thisTransform, thisComponent);
 					});
 
 			m_registry.view<TransformComponent, TerrainComponent>()
-				.each([](TransformComponent& transform, TerrainComponent& component)
+				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						Renderer3D::Draw(transform, component);
-					});
-
-			m_registry.view<TransformComponent, QuadtreeTerrainComponent>()
-				.each([=](TransformComponent& transform, QuadtreeTerrainComponent& component)
-					{
+						terrainComponent = component;
 						component.OnUpdate(camera.GetPosition());
-						Renderer3D::Draw(component);
+						Renderer3D::Draw(transform, component, frustum);
 					});
 
 			m_registry.view<SkyboxComponent>()
@@ -187,9 +186,10 @@ namespace Engine
 					});
 
 			m_registry.view<TransformComponent, TerrainComponent>()
-				.each([](TransformComponent& transform, TerrainComponent& component)
+				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						Renderer3D::Draw(transform, component);
+						component.OnUpdate(mainTransform->GetTranslation());
+						Renderer3D::Draw(transform, component, frustum);
 					});
 
 			m_registry.view<SkyboxComponent>()
@@ -304,11 +304,6 @@ namespace Engine
 
 	template<>
 	void Scene::OnComponentAdded<TerrainComponent>(Entity entity, TerrainComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<QuadtreeTerrainComponent>(Entity entity, QuadtreeTerrainComponent& component)
 	{
 	}
 
