@@ -39,4 +39,22 @@ namespace Engine
 		auto [x, y] = GetMousePosition();
 		return y;
 	}
+	
+	bool Input::IsCursorVisible()
+	{
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		return glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL;
+	}
+
+	void Input::ShowCursor()
+	{
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	
+	void Input::HideCursor()
+	{
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
 }

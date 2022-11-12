@@ -23,8 +23,11 @@ namespace Engine
 		virtual Frustum GetFrustum(const Transform& transform = {}) const override;
 		virtual void SetViewportSize(uint32_t width, uint32_t height) override;
 
-		inline float GetDistance() const { return m_distance; }
-		inline float SetDistance(float distance) { m_distance = distance; }
+		inline const float GetDistance() const { return m_distance; }
+		inline void SetDistance(float distance) { m_distance = distance; }
+
+		inline float GetRotationSpeed() const { return m_rotationSpeed; }
+		inline float GetMoveSpeed() const { return m_moveSpeed; }
 
 		inline const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
 		inline const glm::mat4& GetViewProjection() const { return m_viewProjection; }
@@ -36,25 +39,36 @@ namespace Engine
 		inline const glm::vec3& GetRightDirection() const { return m_rightDirection; }
 		inline const glm::vec3& GetForwardDirection() const { return m_forwardDirection; }
 
-		inline float GetPitch() const { return m_pitch; }
-		inline float GetYaw() const { return m_yaw; }
+		inline const float GetPitch() const { return m_pitch; }
+		inline const float GetYaw() const { return m_yaw; }
+
+		bool IsCursorInsideViewport();
 	private:
+		void OnFixPointUpdate(const glm::vec2& delta);
+		void OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta);
+		bool OnMouseScroll(MouseScrolledEvent& e);
+		void OnMousePan(const glm::vec2& data);
+		void OnMouseRotate(const glm::vec2& delta);
+		void OnMouseZoom(float delta);
+		std::pair<float, float> GetPanSpeed() const;
+		float GetZoomSpeed() const;
+
 		void UpdateRotation();
+		void UpdatePosition();
 		void UpdateProjection();
 		void UpdateView();
 		void UpdateViewProjection();
-		bool OnMouseScroll(MouseScrolledEvent& e);
-
-		void MousePan(const glm::vec2& data);
-		void MouseRotate(const glm::vec2& delta);
-		void MouseZoom(float delta);
-
-		glm::vec3 CalculatePosition() const;
-		std::pair<float, float> PanSpeed() const;
-		float RotationSpeed() const;
-		float ZoomSpeed() const;
+	private:
+		enum class CameraType
+		{
+			Default = 1,
+			FixPoint = 1,
+			FreeLook = 2,
+		} m_type = CameraType::Default;
 		
 		float m_distance = 10.0f;
+		float m_rotationSpeed = 0.8f, m_moveSpeed = 20.0f;
+
 		float m_pitch = 0.0f, m_yaw = 0.0f;
 		glm::vec3 m_rotation = glm::vec3(0.0f);
 		glm::quat m_orientation = glm::quat();

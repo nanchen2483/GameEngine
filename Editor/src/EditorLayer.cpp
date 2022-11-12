@@ -329,8 +329,8 @@ namespace Engine
 				m_viewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
 				m_viewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
-				m_viewportFocused = ImGui::IsWindowFocused();
-				m_viewportHovered = ImGui::IsWindowHovered();
+				m_viewportFocused = ImGui::IsWindowFocused() || m_editorCamera.IsCursorInsideViewport();
+				m_viewportHovered = ImGui::IsWindowHovered() || m_editorCamera.IsCursorInsideViewport();
 				Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportFocused || !m_viewportHovered);
 
 				ImVec2 viewportSize = ImGui::GetContentRegionAvail();
