@@ -1,4 +1,6 @@
 # GameEngine
+[![Engine Test](https://github.com/nanchen2483/GameEngine/actions/workflows/engine-test.yml/badge.svg)](https://github.com/nanchen2483/GameEngine/actions/workflows/engine-test.yml)
+
 A game engine written in C++ with OpenGL
 
 ## Development
