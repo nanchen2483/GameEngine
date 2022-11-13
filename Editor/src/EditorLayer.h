@@ -1,7 +1,8 @@
 #pragma once
 #include "Engine.h"
-#include "Panel/SceneHierarchyPanel.h"
-#include "Panel/ContentBrowserPanel.h"
+#include "Layout/Panel/ContentBrowserPanel.h"
+#include "Layout/Panel/SceneHierarchyPanel.h"
+#include "Layout/Toolbar.h"
 
 namespace Engine
 {
@@ -30,8 +31,6 @@ namespace Engine
 		Ptr<Scene> m_activeScene;
 		EditorCamera m_editorCamera;
 		int32_t m_gizmoType = -1;
-		SceneHierarchyPanel m_sceneHierachyPanel;
-		ContentBrowserPanel m_contentBrowserPanel;
 
 		Entity m_hoveredEntity;
 		glm::vec2 m_viewportBounds[2] = { glm::vec2(0.0f), glm::vec2(0.0f) };
@@ -40,5 +39,10 @@ namespace Engine
 		ShadowDebug m_shadowDebug;
 		PolygonMode m_polygonMode = PolygonMode::FILL;
 		int32_t m_textureId = -1;
+		
+		// Layout
+		Toolbar m_toolbar;
+		SceneHierarchyPanel m_sceneHierachyPanel;
+		ContentBrowserPanel m_contentBrowserPanel;
 	};
 }

@@ -110,7 +110,7 @@ namespace Engine
 			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		}
 
-		if (m_viewportHovered)
+		if (m_viewportHovered && !m_toolbar.IsPlaying())
 		{
 			ENGINE_PROFILE_SCOPE("Camera OnUpdate");
 			m_editorCamera.OnUpdate(timeStep);
@@ -124,7 +124,14 @@ namespace Engine
 		// Clear entity id buffer attachment to -1
 		m_framebuffer->ClearAttachment(ENTITY_ID_ATTACHMENT_INDEX, -1);
 
-		m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
+		if (m_toolbar.IsPlaying())
+		{
+			m_activeScene->OnUpdateRuntime(timeStep);
+		}
+		else
+		{
+			m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
+		}
 
 		m_framebuffer->Bind();
 		UpdateHoveredEntity();
@@ -257,6 +264,7 @@ namespace Engine
 				ImGui::EndMenuBar();
 			}
 
+			m_toolbar.OnImGuiRender();
 			m_sceneHierachyPanel.OnImGuiRender();
 			m_contentBrowserPanel.OnImGuiRender();
 
@@ -355,12 +363,6 @@ namespace Engine
 					ImGuizmo::SetOrthographic(false);
 					ImGuizmo::SetDrawlist();
 					ImGuizmo::SetRect(m_viewportBounds[0].x, m_viewportBounds[0].y, m_viewportBounds[1].x - m_viewportBounds[0].x, m_viewportBounds[1].y - m_viewportBounds[0].y);
-			
-					// Camera
-					//auto cameraEntity = m_activeScene->GetPrimaryCameraEntity();
-					//const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
-					//const glm::mat4& cameraProjection = camera.GetProjection();
-					//glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 
 					// Editor camera
 					const glm::mat4& cameraProjection = m_editorCamera.GetProjection();
