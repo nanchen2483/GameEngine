@@ -44,6 +44,7 @@ namespace Engine
 
 		void UpdateFocusPoint(const Transform& transform);
 		bool IsCursorInsideViewport() const;
+		inline bool InUse() const { return m_type != CameraType::None; }
 	private:
 		void OnFixPointUpdate(const glm::vec2& delta);
 		void OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta);
@@ -55,17 +56,17 @@ namespace Engine
 		float GetZoomSpeed() const;
 
 		void UpdateRotation();
-		void UpdatePosition();
+		void UpdatePosition(bool forceUpdate = false);
 		void UpdateProjection();
 		void UpdateView();
 		void UpdateViewProjection();
 	private:
 		enum class CameraType
 		{
-			Default = 1,
-			FixPoint = 1,
-			FreeLook = 2,
-		} m_type = CameraType::Default;
+			None = 0,
+			FixPoint,
+			FreeLook,
+		} m_type = CameraType::None;
 		
 		float m_distance = 10.0f;
 		float m_rotationSpeed = 0.8f, m_moveSpeed = 20.0f;

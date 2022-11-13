@@ -15,7 +15,7 @@ namespace Engine
 	EditorCamera::EditorCamera()
 	{
 		UpdateRotation();
-		UpdatePosition();
+		UpdatePosition(true);
 		UpdateProjection();
 	}
 
@@ -40,16 +40,19 @@ namespace Engine
 			 Input::IsMouseButtonPressed(MouseButton::LEFT_BUTTON) ||
 			 Input::IsMouseButtonPressed(MouseButton::RIGHT_BUTTON)))
 		{
+			m_type = CameraType::FixPoint;
 			Input::HideCursor();
 			OnFixPointUpdate(delta);
 		}
 		else if (Input::IsMouseButtonPressed(MouseButton::RIGHT_BUTTON))
 		{
+			m_type = CameraType::FreeLook;
 			Input::HideCursor();
 			OnFreeLookUpdate(ts, delta);
 		}
 		else
 		{
+			m_type = CameraType::None;
 			Input::ShowCursor();
 			UpdatePosition();
 		}
@@ -57,8 +60,6 @@ namespace Engine
 
 	void EditorCamera::OnFixPointUpdate(const glm::vec2& delta)
 	{
-		m_type = CameraType::FixPoint;
-
 		if (Input::IsMouseButtonPressed(MouseButton::MIDDLE_BUTTON))
 		{
 			OnMousePan(delta);
@@ -75,8 +76,6 @@ namespace Engine
 
 	void EditorCamera::OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta)
 	{
-		m_type = CameraType::FreeLook;
-
 		float velocity = GetMoveSpeed() * deltaTime;
 		if (Input::IsKeyPressed(KeyCode::W))
 		{
@@ -219,9 +218,9 @@ namespace Engine
 		m_forwardDirection = glm::rotate(m_orientation, glm::vec3(0.0f, 0.0f, -1.0f));
 	}
 
-	void EditorCamera::UpdatePosition()
+	void EditorCamera::UpdatePosition(bool forceUpdate)
 	{
-		if (m_type == CameraType::FixPoint)
+		if (m_type == CameraType::FixPoint || forceUpdate)
 		{
 			m_position = m_focusPoint - GetForwardDirection() * m_distance;
 		}
