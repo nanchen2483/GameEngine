@@ -10,6 +10,8 @@ file (GLOB_RECURSE EDITOR_FILES "src/*.h" "src/*.cpp")
 # Add source to this project's executable.
 add_executable(Editor ${EDITOR_FILES})
 
+target_include_directories (Editor PUBLIC "src")
+
 target_link_libraries (Editor PRIVATE Engine)
 
 target_compile_definitions (Editor

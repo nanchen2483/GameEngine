@@ -1,15 +1,16 @@
 #pragma once
+#include "Layout/Widget.h"
 #include "Engine.h"
 
 #include <filesystem>
 
 namespace Engine
 {
-	class ContentBrowserPanel
+	class ContentBrowserPanel : public Widget
 	{
 	public:
 		ContentBrowserPanel();
-		void OnImGuiRender();
+		virtual void OnImGuiRender() override;
 	private:
 		std::filesystem::path m_currentDirectory;
 

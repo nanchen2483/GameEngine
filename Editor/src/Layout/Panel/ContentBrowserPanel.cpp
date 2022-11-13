@@ -10,9 +10,9 @@ namespace Engine
 	ContentBrowserPanel::ContentBrowserPanel()
 		: m_currentDirectory(s_assetPath)
 	{
-		m_folderIcon = Texture2D::Create("resources/Icons/folder_icon.png");
-		m_fileIcon = Texture2D::Create("resources/Icons/file_icon.png");
-		m_backIcon = Texture2D::Create("resources/Icons/left-arrow_icon.png");
+		m_folderIcon = Texture2D::Create("resources/Icons/folder.png");
+		m_fileIcon = Texture2D::Create("resources/Icons/file.png");
+		m_backIcon = Texture2D::Create("resources/Icons/left-arrow.png");
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()
@@ -37,8 +37,8 @@ namespace Engine
 			}
 			ImGui::PopStyleColor();
 
-			static float padding = 64.0f;
-			static float thumbnailSize = 32.0f;
+			static float padding = 32.0f;
+			static float thumbnailSize = 48.0f;
 			float cellSize = thumbnailSize + padding;
 
 			float panelWidth = ImGui::GetContentRegionAvail().x;
