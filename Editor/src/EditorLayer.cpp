@@ -432,7 +432,7 @@ namespace Engine
 	{
 		bool control = Input::IsKeyPressed(KeyCode::LEFT_CONTROL) || Input::IsKeyPressed(KeyCode::RIGHT_CONTROL);
 		bool shift = Input::IsKeyPressed(KeyCode::LEFT_SHIFT) || Input::IsKeyPressed(KeyCode::RIGHT_SHIFT);
-		bool alt = Input::IsKeyPressed(KeyCode::LEFT_ALT);
+		bool cameraInUse = m_editorCamera.InUse();
 
 		switch (event.GetKeyCode())
 		{
@@ -455,25 +455,25 @@ namespace Engine
 			}
 			break;
 		case KeyCode::Q:
-			if (!alt)
+			if (!cameraInUse)
 			{
 				m_gizmoType = -1;
 			}
 			break;
 		case KeyCode::W:
-			if (!alt)
+			if (!cameraInUse)
 			{
 				m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
 			}
 			break;
 		case KeyCode::E:
-			if (!alt)
+			if (!cameraInUse)
 			{
 				m_gizmoType = ImGuizmo::OPERATION::SCALE;
 			}
 			break;
 		case KeyCode::R:
-			if (!alt)
+			if (!cameraInUse)
 			{
 				m_gizmoType = ImGuizmo::OPERATION::ROTATE;
 			}
