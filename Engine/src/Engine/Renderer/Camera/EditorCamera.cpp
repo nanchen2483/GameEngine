@@ -195,7 +195,16 @@ namespace Engine
 		UpdateProjection();
 	}
 
-	bool EditorCamera::IsCursorInsideViewport()
+	void EditorCamera::UpdateFocusPoint(const Transform& transform)
+	{
+		m_type = CameraType::FixPoint;
+		m_focusPoint = transform.translation;
+		m_distance = 10.0f;
+
+		UpdatePosition();
+	}
+
+	bool EditorCamera::IsCursorInsideViewport() const
 	{
 		return !Input::IsCursorVisible();
 	}

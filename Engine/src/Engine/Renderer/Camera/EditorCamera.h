@@ -42,7 +42,8 @@ namespace Engine
 		inline const float GetPitch() const { return m_pitch; }
 		inline const float GetYaw() const { return m_yaw; }
 
-		bool IsCursorInsideViewport();
+		void UpdateFocusPoint(const Transform& transform);
+		bool IsCursorInsideViewport() const;
 	private:
 		void OnFixPointUpdate(const glm::vec2& delta);
 		void OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta);

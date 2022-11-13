@@ -43,7 +43,8 @@ namespace Engine
 	bool Input::IsCursorVisible()
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		return glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL;
+		int mode = glfwGetInputMode(window, GLFW_CURSOR);
+		return mode == GLFW_CURSOR_NORMAL;
 	}
 
 	void Input::ShowCursor()

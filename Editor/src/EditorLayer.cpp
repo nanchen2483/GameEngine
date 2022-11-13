@@ -432,6 +432,7 @@ namespace Engine
 	{
 		bool control = Input::IsKeyPressed(KeyCode::LEFT_CONTROL) || Input::IsKeyPressed(KeyCode::RIGHT_CONTROL);
 		bool shift = Input::IsKeyPressed(KeyCode::LEFT_SHIFT) || Input::IsKeyPressed(KeyCode::RIGHT_SHIFT);
+		bool alt = Input::IsKeyPressed(KeyCode::LEFT_ALT);
 
 		switch (event.GetKeyCode())
 		{
@@ -454,16 +455,35 @@ namespace Engine
 			}
 			break;
 		case KeyCode::Q:
-			m_gizmoType = -1;
+			if (!alt)
+			{
+				m_gizmoType = -1;
+			}
 			break;
 		case KeyCode::W:
-			m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+			if (!alt)
+			{
+				m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+			}
 			break;
 		case KeyCode::E:
-			m_gizmoType = ImGuizmo::OPERATION::SCALE;
+			if (!alt)
+			{
+				m_gizmoType = ImGuizmo::OPERATION::SCALE;
+			}
 			break;
 		case KeyCode::R:
-			m_gizmoType = ImGuizmo::OPERATION::ROTATE;
+			if (!alt)
+			{
+				m_gizmoType = ImGuizmo::OPERATION::ROTATE;
+			}
+			break;
+		case KeyCode::F:
+			if (m_hoveredEntity)
+			{
+				Transform& transform = m_hoveredEntity.GetComponent<TransformComponent>();
+				m_editorCamera.UpdateFocusPoint(transform);
+			}
 			break;
 		default:
 			break;
