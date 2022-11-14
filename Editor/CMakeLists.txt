@@ -20,21 +20,21 @@ target_compile_definitions (Editor
 		"ENGINE_PLATFORM_WINDOWS"
 )
 
-add_custom_target (EditorAssets ALL
-					COMMAND ${CMAKE_COMMAND} -E copy_directory
-					${CMAKE_CURRENT_SOURCE_DIR}/assets
-					${CMAKE_CURRENT_BINARY_DIR}/assets
-					COMMENT "Copying assets into binary directory")
+add_custom_target (assets ALL
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+			${CMAKE_CURRENT_SOURCE_DIR}/assets
+			${CMAKE_CURRENT_BINARY_DIR}/assets
+	COMMENT "Copying assets into binary directory")
 
-add_custom_target (EditorResources ALL
-					COMMAND ${CMAKE_COMMAND} -E copy_directory
-					${CMAKE_CURRENT_SOURCE_DIR}/resources
-					${CMAKE_CURRENT_BINARY_DIR}/resources
-					COMMENT "Copying resources into binary directory")
+add_custom_target (resources ALL
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+			${CMAKE_CURRENT_SOURCE_DIR}/resources
+			${CMAKE_CURRENT_BINARY_DIR}/resources
+	COMMENT "Copying resources into binary directory")
 
-add_dependencies (Editor EditorAssets EditorResources)
+add_dependencies (Editor assets resources)
 
-configure_file (imgui.ini imgui.ini COPYONLY)
+file (CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini ${CMAKE_CURRENT_BINARY_DIR}/imgui.ini)
 
 if (MSVC)
 	set_property (TARGET Editor PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Editor)
