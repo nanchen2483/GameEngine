@@ -176,7 +176,7 @@ namespace Engine
 	void EditorCamera::OnEvent(Event& e)
 	{
 		EventDispatcher dispacther(e);
-		dispacther.Dispatch<MouseScrolledEvent>(ENGINE_BIND_EVENT_FN(EditorCamera::OnMouseScroll));
+		dispacther.Dispatch<MouseScrolledEvent>(ENGINE_BIND_FN(EditorCamera::OnMouseScroll));
 	}
 
 	Frustum EditorCamera::GetFrustum(const Transform& transform) const

@@ -11,9 +11,7 @@ namespace Engine
 		SceneHierarchyPanel(const Ptr<Scene>& context);
 
 		void SetContext(const Ptr<Scene>& context);
-
 		virtual void OnImGuiRender() override;
-
 		Entity GetSelectedEntity() const { return m_selectionContext; };
 		void SetSelectedEntity(Entity& entity);
 	private:

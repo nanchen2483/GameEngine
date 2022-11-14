@@ -87,7 +87,11 @@ namespace Engine
 #endif // 0
 
 		m_sceneHierachyPanel.SetContext(m_activeScene);
-		RendererCommand::SetPolygonMode(m_polygonMode);
+
+		m_menubar.SetFunctions(
+			ENGINE_BIND_FN(EditorLayer::NewScene),
+			ENGINE_BIND_FN(EditorLayer::OpenScene),
+			ENGINE_BIND_FN(EditorLayer::SaveSceneAs));
 	}
 
 	void EditorLayer::OnDetach()
@@ -136,8 +140,6 @@ namespace Engine
 		m_framebuffer->Bind();
 		UpdateHoveredEntity();
 		m_framebuffer->Unbind();
-
-		m_shadowDebug.Draw();
 	}
 
 	void EditorLayer::UpdateHoveredEntity()
@@ -229,104 +231,14 @@ namespace Engine
 			ImGuiIO& io = ImGui::GetIO();
 			if (io.ConfigFlags && ImGuiConfigFlags_DockingEnable)
 			{
-				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+				ImGuiID dockspace_id = ImGui::GetID("EditorDockSpace");
 				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 			}
 
-			if (ImGui::BeginMenuBar())
-			{
-				if (ImGui::BeginMenu("File"))
-				{
-					if (ImGui::MenuItem("New", "Ctrl+N"))
-					{
-						NewScene();
-					}
-
-					if (ImGui::MenuItem("Open...", "Ctrl+O"))
-					{
-						OpenScene();
-					}
-
-					if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
-					{
-						SaveSceneAs();
-					}
-
-					if (ImGui::MenuItem("Exit"))
-					{
-						Application::Get().Close();
-					}
-
-					ImGui::Separator();
-					ImGui::EndMenu();
-				}
-
-				ImGui::EndMenuBar();
-			}
-
+			m_menubar.OnImGuiRender();
 			m_toolbar.OnImGuiRender();
 			m_sceneHierachyPanel.OnImGuiRender();
 			m_contentBrowserPanel.OnImGuiRender();
-
-			static bool showShadowMap = false;
-			if (ImGui::BeginMenuBar())
-			{
-				if (ImGui::BeginMenu("Debug"))
-				{
-					ImGui::MenuItem("ShadowMap", NULL, &showShadowMap);
-					if (ImGui::BeginMenu("PolygonMode"))
-					{
-						static std::array<std::string, 3> s_polygonModes = { "Point", "Line", "Fill" };
-						for (int i = 0; i < s_polygonModes.size(); i++)
-						{
-							ImGui::TableNextColumn();
-							ImGui::PushID(i);
-							static int32_t selectedPolygonMode = (uint32_t)m_polygonMode - 1;
-							if (ImGui::RadioButton(s_polygonModes[i].c_str(), &selectedPolygonMode, i))
-							{
-								RendererCommand::SetPolygonMode((PolygonMode)(selectedPolygonMode + 1));
-							}
-							ImGui::PopID();
-						}
-						ImGui::EndMenu();
-					}
-					ImGui::EndMenu();
-				}
-				ImGui::EndMenuBar();
-			}
-
-			if (showShadowMap)
-			{
-				ImGui::Begin("Debug", &showShadowMap);
-				{
-					static int m_shadowLevel = -1;
-					ImGui::InputInt("Shadow level", &m_shadowLevel);
-					ImVec2 windowSize = ImGui::GetWindowSize();
-					uint64_t textureId = m_shadowDebug.GetShadowLayer(m_shadowLevel);
-					ImGui::Image((void*)textureId, ImVec2(windowSize.x - 15, windowSize.y - 60), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
-				}
-				ImGui::End();
-			}
-
-			if (ImGui::Begin("Settings"))
-			{
-				auto stats = Renderer3D::GetState();
-				ImGui::Text("Renderer stats");
-				ImGui::Text("Draw Calls: %d", stats.drawCalls);
-				ImGui::Text("Num of models: %d", stats.drawModels);
-				ImGui::NewLine();
-				ImGui::Separator();
-				ImGui::Text("FPS: %f", m_FPSCalculator.GetFPS());
-				ImGui::NewLine();
-				ImGui::Separator();
-				ImGui::Text("Hovered entityId: %d", m_hoveredEntity ? (uint32_t)m_hoveredEntity : -1);
-				ImGui::NewLine();
-				ImGui::Separator();
-				ImGui::InputInt("Texture id", &m_textureId);
-				ImGui::ImageButton((void*)(int64_t)m_textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
-
-				ImGui::End();
-			}
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 			if (ImGui::Begin("Viewport"))
@@ -403,11 +315,28 @@ namespace Engine
 						transform.scale = scale;
 					}
 				}
-
-				ImGui::End();
 			}
-
+			ImGui::End();
 			ImGui::PopStyleVar();
+
+			if (ImGui::Begin("Info"))
+			{
+				auto stats = Renderer3D::GetState();
+				ImGui::Text("Renderer stats");
+				ImGui::Text("Draw Calls: %d", stats.drawCalls);
+				ImGui::Text("Num of models: %d", stats.drawModels);
+				ImGui::NewLine();
+				ImGui::Separator();
+				ImGui::Text("FPS: %f", m_FPSCalculator.GetFPS());
+				ImGui::NewLine();
+				ImGui::Separator();
+				ImGui::Text("Hovered entityId: %d", m_hoveredEntity ? (uint32_t)m_hoveredEntity : -1);
+				ImGui::NewLine();
+				ImGui::Separator();
+				ImGui::InputInt("Texture id", &m_textureId);
+				ImGui::ImageButton((void*)(int64_t)m_textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+			}
+			ImGui::End();
 
 			ImGui::End();
 		}
@@ -426,8 +355,8 @@ namespace Engine
 
 		m_editorCamera.OnEvent(event);
 		EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
-		dispatcher.Dispatch<MouseButtonPressedEvent>(ENGINE_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+		dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_FN(EditorLayer::OnKeyPressed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(ENGINE_BIND_FN(EditorLayer::OnMouseButtonPressed));
 	}
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& event)

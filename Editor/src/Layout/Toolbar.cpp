@@ -43,7 +43,7 @@ namespace Engine
 				}
 			}
 			ImGui::PopStyleColor();
-			ImGui::End();
 		}
+		ImGui::End();
 	}
 }

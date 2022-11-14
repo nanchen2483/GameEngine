@@ -8,14 +8,15 @@ namespace Engine
 	{
 	public:
 		Toolbar();
+
 		virtual void OnImGuiRender() override;
 		bool IsPlaying() const { return m_play; }
 	private:
+		bool m_play = false;
+		bool m_pause = false;
+
 		Ptr<Texture2D> m_playIcon;
 		Ptr<Texture2D> m_pauseIcon;
 		Ptr<Texture2D> m_stopIcon;
-
-		bool m_play = false;
-		bool m_pause = false;
 	};
 }
