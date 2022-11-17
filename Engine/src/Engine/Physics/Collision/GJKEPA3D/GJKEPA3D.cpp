@@ -121,7 +121,7 @@ namespace Engine
 	glm::dvec3 GJKEPA3D::GetSupportPointOnA(glm::dvec3 direction)
 	{
 		glm::dvec3 supportPointDirection = direction * glm::transpose(m_orientationA);
-		glm::dvec3 point = m_boundingValueA.SupportMapping(supportPointDirection);
+		glm::dvec3 point = m_boundingValueA.GetSupportPoint(supportPointDirection);
 		point = point * m_transformA;
 		point += m_positionA;
 		
@@ -131,7 +131,7 @@ namespace Engine
 	glm::dvec3 GJKEPA3D::GetSupportPointOnB(glm::dvec3 direction)
 	{
 		glm::dvec3 supportPointDirection = direction * glm::transpose(m_orientationB);
-		glm::dvec3 point = m_boundingValueB.SupportMapping(supportPointDirection);
+		glm::dvec3 point = m_boundingValueB.GetSupportPoint(supportPointDirection);
 		point = point * m_transformB;
 		point += m_positionB;
 

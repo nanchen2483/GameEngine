@@ -11,7 +11,7 @@ namespace Engine
 		glm::vec3 center;
 		glm::vec3 extents;
 
-		std::function<glm::vec3(glm::vec3)> SupportMapping;
+		std::function<glm::vec3(glm::vec3)> GetSupportPoint;
 	};
 
 	enum class BoundingVolumeType
@@ -27,6 +27,7 @@ namespace Engine
 		virtual BoundingValue GetBoundingValue() const = 0;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const = 0;
 		virtual bool IsOnForwardPlan(const Plan& plan) const = 0;
+		virtual glm::vec3 GetSupportPoint(glm::vec3 direction) const = 0;
 
 		static Uniq<BoundingVolume> Create(BoundingVolumeType type, const glm::vec3& min, const glm::vec3& max);
 	};

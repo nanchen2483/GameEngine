@@ -76,7 +76,6 @@ namespace Engine
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-		static bool show = true;
 	}
 
 	void ImGuiLayer::Begin()

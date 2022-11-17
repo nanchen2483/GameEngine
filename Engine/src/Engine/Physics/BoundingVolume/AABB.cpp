@@ -13,15 +13,7 @@ namespace Engine
 			max.y - m_boundingValue.center.y,
 			max.z - m_boundingValue.center.z
 		};
-		m_boundingValue.SupportMapping = [=](glm::vec3 direction)
-		{
-			glm::vec3 result;
-			result.x = Math::Sign(direction.x);
-			result.y = Math::Sign(direction.y);
-			result.z = Math::Sign(direction.z);
-
-			return result;
-		};
+		m_boundingValue.GetSupportPoint = ENGINE_BIND_FN(AABB::GetSupportPoint);
 	}
 
 	AABB::AABB(const glm::vec3& center, const float extentX, const float extentY, const float extentZ)
@@ -74,5 +66,15 @@ namespace Engine
 						m_boundingValue.extents.z * std::abs(plan.normal.z);
 
 		return -r <= plan.GetSignedDistanceToPlan(m_boundingValue.center);
+	}
+	
+	glm::vec3 AABB::GetSupportPoint(glm::vec3 direction) const
+	{
+		glm::vec3 result;
+		result.x = Math::Sign(direction.x);
+		result.y = Math::Sign(direction.y);
+		result.z = Math::Sign(direction.z);
+
+		return result;
 	}
 }
