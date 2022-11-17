@@ -13,36 +13,45 @@
 namespace Engine
 {
 	EditorCamera::EditorCamera()
+		: EditorCamera(45.0f, 1280.0f, 720.0f, 0.1f, 1000.0f)
 	{
+	}
+
+	EditorCamera::EditorCamera(float fov, float viewportWidth, float viewportHeight, float nearClip, float farClip)
+		: m_FOV(fov), m_nearClip(nearClip), m_farClip(farClip), m_viewportWidth(viewportWidth), m_viewportHeight(viewportHeight)
+	{
+		m_type = CameraType::None;
+		m_projectionType = ProjectionType::Perspective;
+
+		m_pitch = 0.0f;
+		m_yaw = 0.0f;
+		m_moveSpeed = 20.0f;
+		m_rotationSpeed = 0.8f;
+		m_distanceToFocusPoint = 10.0f;
+
+		m_mousePosition = glm::vec2(0.0f);
+		m_position = glm::vec3(0.0f);
+		m_focusPoint = glm::vec3(0.0f);
+
 		UpdateRotation();
 		UpdatePosition(true);
 		UpdateProjection();
 	}
 
-	EditorCamera::EditorCamera(float fov, float viewportWidth, float viewportHeight, float nearClip, float farClip)
-		: EditorCamera()
-	{
-		m_FOV = fov;
-		m_nearClip = nearClip;
-		m_farClip = farClip;
-		m_viewportWidth = viewportWidth;
-		m_viewportHeight = viewportHeight;
-	}
-
 	void EditorCamera::OnUpdate(TimeStep ts)
 	{
 		const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
-		glm::vec2 delta = (mouse - m_initialMousePosition) * 0.003f;
-		m_initialMousePosition = mouse;
+		glm::vec2 delta = (mouse - m_mousePosition) * 0.003f;
+		m_mousePosition = mouse;
 
 		if (Input::IsKeyPressed(KeyCode::LEFT_ALT) &&
 			(Input::IsMouseButtonPressed(MouseButton::MIDDLE_BUTTON) ||
 			 Input::IsMouseButtonPressed(MouseButton::LEFT_BUTTON) ||
 			 Input::IsMouseButtonPressed(MouseButton::RIGHT_BUTTON)))
 		{
-			m_type = CameraType::FixPoint;
+			m_type = CameraType::FocusPoint;
 			Input::HideCursor();
-			OnFixPointUpdate(delta);
+			OnFocusPointUpdate(delta);
 		}
 		else if (Input::IsMouseButtonPressed(MouseButton::RIGHT_BUTTON))
 		{
@@ -58,7 +67,7 @@ namespace Engine
 		}
 	}
 
-	void EditorCamera::OnFixPointUpdate(const glm::vec2& delta)
+	void EditorCamera::OnFocusPointUpdate(const glm::vec2& delta)
 	{
 		if (Input::IsMouseButtonPressed(MouseButton::MIDDLE_BUTTON))
 		{
@@ -107,7 +116,7 @@ namespace Engine
 			m_position -= m_upDirection * velocity;
 		}
 
-		m_focusPoint = m_position + GetForwardDirection() * m_distance;
+		m_focusPoint = m_position + GetForwardDirection() * m_distanceToFocusPoint;
 
 		OnMouseRotate(delta);
 	}
@@ -124,8 +133,8 @@ namespace Engine
 	void EditorCamera::OnMousePan(const glm::vec2& delta)
 	{
 		auto [xSpeed, ySpeed] = GetPanSpeed();
-		m_focusPoint -= GetRightDirection() * delta.x * xSpeed * m_distance;
-		m_focusPoint += GetUpDirection() * delta.y * ySpeed * m_distance;
+		m_focusPoint -= GetRightDirection() * delta.x * xSpeed * m_distanceToFocusPoint;
+		m_focusPoint += GetUpDirection() * delta.y * ySpeed * m_distanceToFocusPoint;
 
 		UpdatePosition();
 	}
@@ -142,11 +151,11 @@ namespace Engine
 
 	void EditorCamera::OnMouseZoom(float delta)
 	{
-		m_distance -= delta * GetZoomSpeed();
-		if (m_distance < 1.0f)
+		m_distanceToFocusPoint -= delta * GetZoomSpeed();
+		if (m_distanceToFocusPoint < 1.0f)
 		{
 			m_focusPoint += GetForwardDirection();
-			m_distance = 1.0f;
+			m_distanceToFocusPoint = 1.0f;
 		}
 
 		UpdatePosition();
@@ -165,7 +174,7 @@ namespace Engine
 
 	float EditorCamera::GetZoomSpeed() const
 	{
-		float distance = m_distance * 0.25f;
+		float distance = m_distanceToFocusPoint * 0.25f;
 		distance = std::max(distance, 0.0f);
 		float speed = distance * distance;
 		speed = std::min(speed, 100.0f);
@@ -196,9 +205,9 @@ namespace Engine
 
 	void EditorCamera::UpdateFocusPoint(const Transform& transform)
 	{
-		m_type = CameraType::FixPoint;
+		m_type = CameraType::FocusPoint;
 		m_focusPoint = transform.translation;
-		m_distance = 10.0f;
+		m_distanceToFocusPoint = 10.0f;
 
 		UpdatePosition();
 	}
@@ -220,9 +229,9 @@ namespace Engine
 
 	void EditorCamera::UpdatePosition(bool forceUpdate)
 	{
-		if (m_type == CameraType::FixPoint || forceUpdate)
+		if (m_type == CameraType::FocusPoint || forceUpdate)
 		{
-			m_position = m_focusPoint - GetForwardDirection() * m_distance;
+			m_position = m_focusPoint - GetForwardDirection() * m_distanceToFocusPoint;
 		}
 		
 		UpdateView();
