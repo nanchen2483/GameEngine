@@ -21,7 +21,7 @@ namespace Engine
 		: m_FOV(fov), m_nearClip(nearClip), m_farClip(farClip), m_viewportWidth(viewportWidth), m_viewportHeight(viewportHeight)
 	{
 		m_type = CameraType::None;
-		m_projectionType = ProjectionType::Perspective;
+		m_projectionType = CameraProjectionType::Perspective;
 
 		m_pitch = 0.0f;
 		m_yaw = 0.0f;

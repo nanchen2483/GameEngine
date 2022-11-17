@@ -88,8 +88,9 @@ namespace Engine
 				UpdateBoundingValues(vertex.position);
 			}
 
+			unsigned int numOfIndices = mesh->mNumFaces * 3;
 			std::vector<uint32_t> indices;
-			indices.reserve((mesh->mNumFaces * 3));
+			indices.reserve(numOfIndices);
 			for (uint32_t i = 0; i < mesh->mNumFaces; i++)
 			{
 				const aiFace face = mesh->mFaces[i];

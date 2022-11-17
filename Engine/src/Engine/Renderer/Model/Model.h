@@ -10,11 +10,11 @@ namespace Engine
 {
 	struct AnimationInfo
 	{
-		uint32_t id;
+		uint32_t id = -1;
 		std::string displayName;
-		Ptr<float> animationTime;
-		float duration;
-		float ticksPerSecond;
+		Ptr<float> animationTime = nullptr;
+		float duration = 0.0f;
+		float ticksPerSecond = 0.0f;
 	};
 
 	class Model

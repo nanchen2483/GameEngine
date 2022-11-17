@@ -6,20 +6,21 @@
 
 namespace Engine
 {
+	enum class CameraType
+	{
+		None = 0,
+		FocusPoint,
+		FreeLook,
+	};
+	
+	enum class CameraProjectionType
+	{
+		Perspective = 1,
+		Orthographic,
+	};
+
 	class Camera
 	{
-	public:
-		enum class CameraType
-		{
-			None = 0,
-			FocusPoint,
-			FreeLook,
-		};
-		enum class ProjectionType
-		{
-			Perspective = 1,
-			Orthographic,
-		};
 	public:
 		virtual ~Camera() = default;
 

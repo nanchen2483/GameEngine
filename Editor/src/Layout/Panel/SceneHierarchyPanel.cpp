@@ -333,17 +333,17 @@ namespace Engine
 
 				ImGui::Checkbox("Primary", &cameraComponent.primary);
 
-				std::map<SceneCamera::ProjectionType, std::string> projectionTypeMap =
+				std::map<CameraProjectionType, std::string> projectionTypeMap =
 				{
-					{ SceneCamera::ProjectionType::Perspective, "Perspective" },
-					{ SceneCamera::ProjectionType::Orthographic, "Orthographic" }
+					{ CameraProjectionType::Perspective, "Perspective" },
+					{ CameraProjectionType::Orthographic, "Orthographic" }
 				};
 				std::string selectedProjectionString = projectionTypeMap[camera.GetProjectionType()];
 				if (ImGui::BeginCombo("Projection", selectedProjectionString.c_str()))
 				{
 					for (auto& it : projectionTypeMap)
 					{
-						SceneCamera::ProjectionType currentProjectionType = it.first;
+						CameraProjectionType currentProjectionType = it.first;
 						std::string currentProjectionString = it.second;
 
 						bool isSelected = selectedProjectionString == currentProjectionString;
@@ -361,7 +361,7 @@ namespace Engine
 					ImGui::EndCombo();
 				}
 				
-				if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
+				if (camera.GetProjectionType() == CameraProjectionType::Perspective)
 				{
 					float FOV = camera.GetPerspectiveFOV();
 					if (ImGui::DragFloat("FOV", &FOV))
@@ -382,7 +382,7 @@ namespace Engine
 					}
 				}
 
-				if (camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
+				if (camera.GetProjectionType() == CameraProjectionType::Orthographic)
 				{
 					float orthoSize = camera.GetOrthographicSize();
 					if (ImGui::DragFloat("Size", &orthoSize))
