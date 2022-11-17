@@ -23,8 +23,8 @@ namespace Engine
 		virtual Frustum GetFrustum(const Transform& transform = {}) const override;
 		virtual void SetViewportSize(uint32_t width, uint32_t height) override;
 
-		inline const float GetDistance() const { return m_distance; }
-		inline void SetDistance(float distance) { m_distance = distance; }
+		inline const float GetDistance() const { return m_distanceToFocusPoint; }
+		inline void SetDistance(float distance) { m_distanceToFocusPoint = distance; }
 
 		inline float GetRotationSpeed() const { return m_rotationSpeed; }
 		inline float GetMoveSpeed() const { return m_moveSpeed; }
@@ -46,7 +46,7 @@ namespace Engine
 		bool IsCursorInsideViewport() const;
 		inline bool InUse() const { return m_type != CameraType::None; }
 	private:
-		void OnFixPointUpdate(const glm::vec2& delta);
+		void OnFocusPointUpdate(const glm::vec2& delta);
 		void OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta);
 		bool OnMouseScroll(MouseScrolledEvent& e);
 		void OnMousePan(const glm::vec2& data);
@@ -60,31 +60,35 @@ namespace Engine
 		void UpdateProjection();
 		void UpdateView();
 		void UpdateViewProjection();
-	private:
-		enum class CameraType
-		{
-			None = 0,
-			FixPoint,
-			FreeLook,
-		} m_type = CameraType::None;
-		
-		float m_distance = 10.0f;
-		float m_rotationSpeed = 0.8f, m_moveSpeed = 20.0f;
 
-		float m_pitch = 0.0f, m_yaw = 0.0f;
-		glm::vec3 m_rotation = glm::vec3(0.0f);
-		glm::quat m_orientation = glm::quat();
-		
-		float m_viewportWidth = 1280, m_viewportHeight = 720;
+		CameraType m_type;
+		ProjectionType m_projectionType;
+
+		float m_FOV;
+		float m_nearClip;
+		float m_farClip;
+		float m_aspectRatio;
+		float m_viewportWidth;
+		float m_viewportHeight;
+
+		float m_pitch;
+		float m_yaw;
+		float m_moveSpeed;
+		float m_rotationSpeed;
+		float m_distanceToFocusPoint;
+
+		glm::vec3 m_rotation;
+		glm::quat m_orientation;
 
 		glm::vec3 m_upDirection;
 		glm::vec3 m_rightDirection;
 		glm::vec3 m_forwardDirection;
 
-		glm::vec2 m_initialMousePosition = glm::vec2(0.0f);
-		glm::vec3 m_position = glm::vec3(0.0f);
-		glm::vec3 m_focusPoint = glm::vec3(0.0f);
-		glm::mat4 m_viewMatrix = glm::mat4(1.0f);
-		glm::mat4 m_viewProjection = glm::mat4(1.0f);
+		glm::vec2 m_mousePosition;
+		glm::vec3 m_position;
+		glm::vec3 m_focusPoint;
+		glm::mat4 m_viewMatrix;
+		glm::mat4 m_projection;
+		glm::mat4 m_viewProjection;
 	};
 }

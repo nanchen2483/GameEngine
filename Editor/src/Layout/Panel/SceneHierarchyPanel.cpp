@@ -333,10 +333,15 @@ namespace Engine
 
 				ImGui::Checkbox("Primary", &cameraComponent.primary);
 
-				std::string selectedProjectionString = camera.GetProjectionTypeString();
+				std::map<SceneCamera::ProjectionType, std::string> projectionTypeMap =
+				{
+					{ SceneCamera::ProjectionType::Perspective, "Perspective" },
+					{ SceneCamera::ProjectionType::Orthographic, "Orthographic" }
+				};
+				std::string selectedProjectionString = projectionTypeMap[camera.GetProjectionType()];
 				if (ImGui::BeginCombo("Projection", selectedProjectionString.c_str()))
 				{
-					for (auto& it : camera.GetProjectionTypeMap())
+					for (auto& it : projectionTypeMap)
 					{
 						SceneCamera::ProjectionType currentProjectionType = it.first;
 						std::string currentProjectionString = it.second;
