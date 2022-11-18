@@ -41,7 +41,7 @@ namespace EngineTest
 		EXPECT_EQ(perspectiveNearClip, camera.GetPerspectiveNearClip());
 		EXPECT_EQ(perspectiveFarClip, camera.GetPerspectiveFarClip());
 		EXPECT_EQ(perspectiveFOV, camera.GetPerspectiveFOV());
-		EXPECT_EQ(Engine::SceneCamera::ProjectionType::Perspective, camera.GetProjectionType());
+		EXPECT_EQ(Engine::CameraProjectionType::Perspective, camera.GetProjectionType());
 		glm::mat4& perspective = glm::perspective(glm::radians(perspectiveFOV), aspectRatio, perspectiveNearClip, perspectiveFarClip);
 		EXPECT_EQ(perspective, camera.GetProjection());
 	}
@@ -53,7 +53,7 @@ namespace EngineTest
 		float expectedNear = -1.5f;
 		float expectedFar = 1.5f;
 		Engine::SceneCamera camera;
-		camera.SetProjectionType(Engine::SceneCamera::ProjectionType::Orthographic);
+		camera.SetProjectionType(Engine::CameraProjectionType::Orthographic);
 		glm::vec2 viewportSize = { 1280.0f, 720.0f };
 		camera.SetViewportSize(viewportSize.x, viewportSize.y);
 

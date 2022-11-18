@@ -34,13 +34,13 @@ namespace Engine
 		float GetOrthographicFarClip() const { return m_orthographicFar; }
 		void SetOrthographicFarClip(float farClip);
 
-		ProjectionType GetProjectionType() const { return m_projectionType; }
-		void SetProjectionType(ProjectionType type);
+		CameraProjectionType GetProjectionType() const { return m_projectionType; }
+		void SetProjectionType(CameraProjectionType type);
 	private:
 		void RecalculateProjection();
 
 		CameraType m_type;
-		ProjectionType m_projectionType;
+		CameraProjectionType m_projectionType;
 
 		float m_FOV;
 		float m_aspectRatio;

@@ -16,9 +16,7 @@ namespace Engine
 			PushLayer(new EditorLayer());
 		}
 
-		~Editor()
-		{
-		}
+		virtual ~Editor() = default;
 	};
 
 	Application* CreateApplication()

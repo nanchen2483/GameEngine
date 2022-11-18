@@ -6,7 +6,7 @@
 namespace Engine
 {
 	SceneCamera::SceneCamera()
-		: m_type(CameraType::FreeLook), m_projectionType(ProjectionType::Perspective)
+		: m_type(CameraType::FreeLook), m_projectionType(CameraProjectionType::Perspective)
 	{
 		m_FOV = 45.0f;
 		m_aspectRatio = 1.778f;
@@ -39,7 +39,7 @@ namespace Engine
 
 	void SceneCamera::SetOrthographic(uint32_t size, float nearClip, float farClip)
 	{
-		m_projectionType = ProjectionType::Orthographic;
+		m_projectionType = CameraProjectionType::Orthographic;
 		m_orthographicSize = (float)size;
 		m_orthographicNear = nearClip;
 		m_orthographicFar = farClip;
@@ -49,7 +49,7 @@ namespace Engine
 
 	void SceneCamera::SetPerspective(float FOV, float nearClip, float farClip)
 	{
-		m_projectionType = ProjectionType::Perspective;
+		m_projectionType = CameraProjectionType::Perspective;
 		m_FOV = FOV;
 		m_perspectiveNearClip = nearClip;
 		m_perspectiveFarClip = farClip;
@@ -93,7 +93,7 @@ namespace Engine
 		RecalculateProjection();
 	}
 
-	void SceneCamera::SetProjectionType(ProjectionType type)
+	void SceneCamera::SetProjectionType(CameraProjectionType type)
 	{
 		m_projectionType = type;
 		RecalculateProjection();
@@ -101,7 +101,7 @@ namespace Engine
 
 	void SceneCamera::RecalculateProjection()
 	{
-		if (m_projectionType == ProjectionType::Perspective)
+		if (m_projectionType == CameraProjectionType::Perspective)
 		{
 			m_projection = glm::perspective(glm::radians(m_FOV), m_aspectRatio, m_perspectiveNearClip, m_perspectiveFarClip);
 		}

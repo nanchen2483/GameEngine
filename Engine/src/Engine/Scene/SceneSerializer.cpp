@@ -294,7 +294,7 @@ namespace Engine {
 					CameraComponent& deserializedCC = deserializedEntity.AddComponent<CameraComponent>();
 					
 					YAML::Node& cameraProps = cameraComponent["Camera"];
-					deserializedCC.camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
+					deserializedCC.camera.SetProjectionType((CameraProjectionType)cameraProps["ProjectionType"].as<int>());
 
 					deserializedCC.camera.SetPerspectiveFOV(cameraProps["PerspectiveFOV"].as<float>());
 					deserializedCC.camera.SetPerspectiveNearClip(cameraProps["PerspectiveNear"].as<float>());

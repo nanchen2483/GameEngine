@@ -96,7 +96,6 @@ namespace Engine
 
 	void EditorLayer::OnDetach()
 	{
-
 	}
 
 	void EditorLayer::OnUpdate(TimeStep timeStep)

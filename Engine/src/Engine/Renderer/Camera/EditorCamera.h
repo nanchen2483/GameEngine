@@ -62,7 +62,7 @@ namespace Engine
 		void UpdateViewProjection();
 
 		CameraType m_type;
-		ProjectionType m_projectionType;
+		CameraProjectionType m_projectionType;
 
 		float m_FOV;
 		float m_nearClip;
