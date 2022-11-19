@@ -1,9 +1,9 @@
 #pragma once
 #include "Engine.h"
-#include "Layout/Menubar.h"
-#include "Layout/Panel/ContentBrowserPanel.h"
-#include "Layout/Panel/SceneHierarchyPanel.h"
-#include "Layout/Toolbar.h"
+#include "Gui/Menubar.h"
+#include "Gui/Panel/ContentBrowserPanel.h"
+#include "Gui/Panel/SceneHierarchyPanel.h"
+#include "Gui/Toolbar.h"
 
 namespace Engine
 {
@@ -39,7 +39,7 @@ namespace Engine
 		FPSCalculator m_FPSCalculator;
 		int32_t m_textureId = -1;
 		
-		// Layout
+		// Gui
 		Menubar m_menubar;
 		Toolbar m_toolbar;
 		SceneHierarchyPanel m_sceneHierachyPanel;
