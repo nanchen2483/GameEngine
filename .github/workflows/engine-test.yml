@@ -1,11 +1,6 @@
 name: Engine Test
 
 on:
-  push:
-    branches:
-      - develop
-      - release-candidate
-      - master
   pull_request:
     branches:
       - develop
