@@ -47,7 +47,7 @@ namespace Engine
 				maxAABB.y = std::max(maxAABB.y, bottomRightEdgeHeight);
 				maxAABB.z = std::max(maxAABB.z, worldPosition.z + distanceFromCenterToSide);
 
-				m_boundingVolumes.push_back(BoundingVolume::Create(BoundingVolumeType::AABB, minAABB, maxAABB));
+				m_boundingBoxes.push_back(BoundingBox::Create(BoundingBoxType::AABB, minAABB, maxAABB));
 			}
 		}
 	}
@@ -64,7 +64,7 @@ namespace Engine
 	{
 		for (uint32_t i = 0; i < m_children.size(); ++i)
 		{
-			if (m_boundingVolumes[i]->IsOnFrustum(frustum, {}))
+			if (m_boundingBoxes[i]->IsOnFrustum(frustum, {}))
 			{
 				m_children[i].Draw(frustum);
 			}

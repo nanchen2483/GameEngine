@@ -42,8 +42,8 @@ namespace Engine
 		{
 			static TerrainComponent terrainComponent;
 			Frustum frustum = camera.GetFrustum();
-			auto lightView = m_registry.view<TransformComponent, LightComponent>();
-			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), lightView.size_hint());
+			uint32_t numOfLights = m_registry.view<LightComponent>().size();
+			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), numOfLights);
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& component)
@@ -51,7 +51,8 @@ namespace Engine
 						Renderer3D::Draw(transform, component, (int)entity);
 					});
 
-			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
+			m_registry.view<TransformComponent, LightComponent>()
+				.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
 					{
 						Renderer3D::Draw(transform, component, (int)entity);
 					});
@@ -162,8 +163,8 @@ namespace Engine
 		if (mainCamera != nullptr)
 		{
 			Frustum frustum = mainCamera->GetFrustum(*mainTransform);
-			auto lightView = m_registry.view<TransformComponent, LightComponent>();
-			Renderer3D::BeginScene(mainTransform->GetViewMatrix(), mainCamera->GetProjection(), mainTransform->GetTranslation(), lightView.size_hint());
+			uint32_t numOflights = m_registry.view<LightComponent>().size();
+			Renderer3D::BeginScene(mainTransform->GetViewMatrix(), mainCamera->GetProjection(), mainTransform->GetTranslation(), numOflights);
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](TransformComponent& transform, SpriteRendererComponent& component)
@@ -171,9 +172,10 @@ namespace Engine
 						Renderer3D::Draw(transform, component);
 					});
 
-			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
+			m_registry.view<TransformComponent, LightComponent>()
+				.each([](TransformComponent& transform, LightComponent& component)
 					{
-						Renderer3D::Draw(transform, component, (int)entity);
+						Renderer3D::Draw(transform, component);
 					});
 
 			Renderer3D::EndScene();
@@ -262,7 +264,8 @@ namespace Engine
 	}
 
 	template<typename T>
-	void Scene::OnComponentAdded(Entity entity, T& component) {
+	void Scene::OnComponentAdded(Entity entity, T& component)
+	{
 		static_assert(false);
 	}
 

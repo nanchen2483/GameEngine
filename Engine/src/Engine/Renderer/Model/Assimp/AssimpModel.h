@@ -46,7 +46,7 @@ namespace Engine
 		std::vector<AssimpMesh> m_meshes;
 
 		// Bounding volume
-		Uniq<BoundingVolume> m_boundingVolume;
+		Uniq<BoundingBox> m_boundingBox;
 		glm::vec3 m_minAABB = glm::vec3(std::numeric_limits<float>::max());
 		glm::vec3 m_maxAABB = glm::vec3(std::numeric_limits<float>::min());
 

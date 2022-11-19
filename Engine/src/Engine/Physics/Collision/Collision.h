@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Physics/BoundingVolume/BoundingVolume.h"
+#include "Engine/Physics/BoundingBox/BoundingBox.h"
 
 namespace Engine
 {
