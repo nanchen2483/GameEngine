@@ -44,7 +44,7 @@ namespace Engine
 		LoadMeshes(scene);
 		LoadAnimations(scene);
 
-		m_boundingVolume = BoundingVolume::Create(BoundingVolumeType::AABB, m_minAABB, m_maxAABB);
+		m_boundingBox = BoundingBox::Create(BoundingBoxType::AABB, m_minAABB, m_maxAABB);
 	}
 
 	void AssimpModel::LoadMeshes(const aiScene* scene)
@@ -88,7 +88,7 @@ namespace Engine
 				UpdateBoundingValues(vertex.position);
 			}
 
-			unsigned int numOfIndices = mesh->mNumFaces * 3;
+			uint32_t numOfIndices = mesh->mNumFaces * 3;
 			std::vector<uint32_t> indices;
 			indices.reserve(numOfIndices);
 			for (uint32_t i = 0; i < mesh->mNumFaces; i++)
@@ -214,12 +214,12 @@ namespace Engine
 
 	BoundingValue AssimpModel::GetBoundingValue() const
 	{
-		return m_boundingVolume->GetBoundingValue();
+		return m_boundingBox->GetBoundingValue();
 	}
 
 	bool AssimpModel::IsOnFrustum(const Frustum& frustum, const Transform& transform) const
 	{
-		return m_boundingVolume->IsOnFrustum(frustum, transform);
+		return m_boundingBox->IsOnFrustum(frustum, transform);
 	}
 
 	void AssimpModel::OnUpdate(float deltaTime)

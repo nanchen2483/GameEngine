@@ -1,6 +1,6 @@
 #pragma once
 #include "TerrainBuffer.h"
-#include "Engine/Physics/BoundingVolume/BoundingVolume.h"
+#include "Engine/Renderer/Camera/Frustum.h"
 
 namespace Engine
 {

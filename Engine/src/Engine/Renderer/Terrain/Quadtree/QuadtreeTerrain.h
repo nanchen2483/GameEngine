@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Renderer/Terrain/Terrain.h"
+#include "Engine/Physics/BoundingBox/BoundingBox.h"
 #include "TerrainNode.h"
 
 namespace Engine
@@ -19,6 +20,6 @@ namespace Engine
 	private:
 		Ptr<TerrainBuffer> m_buffer = nullptr;
 		std::vector<TerrainNode> m_children;
-		std::vector<Uniq<BoundingVolume>> m_boundingVolumes;
+		std::vector<Uniq<BoundingBox>> m_boundingBoxes;
 	};
 }

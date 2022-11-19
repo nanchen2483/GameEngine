@@ -14,21 +14,21 @@ namespace Engine
 		std::function<glm::vec3(glm::vec3)> GetSupportPoint;
 	};
 
-	enum class BoundingVolumeType
+	enum class BoundingBoxType
 	{
 		AABB = 1,
 	};
 
-	class BoundingVolume
+	class BoundingBox
 	{
 	public:
-		~BoundingVolume() = default;
+		~BoundingBox() = default;
 
 		virtual BoundingValue GetBoundingValue() const = 0;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const = 0;
 		virtual bool IsOnForwardPlan(const Plan& plan) const = 0;
 		virtual glm::vec3 GetSupportPoint(glm::vec3 direction) const = 0;
 
-		static Uniq<BoundingVolume> Create(BoundingVolumeType type, const glm::vec3& min, const glm::vec3& max);
+		static Uniq<BoundingBox> Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max);
 	};
 }
