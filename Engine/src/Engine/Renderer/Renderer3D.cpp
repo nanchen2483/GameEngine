@@ -1,5 +1,7 @@
 #include "enginepch.h"
 #include "Renderer3D.h"
+#include "RendererCommand.h"
+#include "Model/Vertex.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -112,7 +114,7 @@ namespace Engine
 			samplers[i] = i;
 		}
 
-		s_data.shader = Shader::Create("asserts/shaders/Default.glsl");
+		s_data.shader = Shader::Create("assets/shaders/Default.glsl");
 		s_data.shader->Bind();
 		s_data.textureSlots[0] = s_data.whiteTexture;
 		s_data.shader->SetIntArray("uTextures", samplers, Renderer3DData::MAX_TEXTURE_SLOTS);
@@ -290,11 +292,11 @@ namespace Engine
 		}
 	}
 
-	void Renderer3D::Draw(const glm::mat4& transform, TerrainComponent& component)
+	void Renderer3D::Draw(const glm::mat4& transform, TerrainComponent& component, const Frustum& frustum)
 	{
-		if (component.terrian != nullptr)
+		if (component.terrain != nullptr)
 		{
-			component.terrian->Draw(transform);
+			component.terrain->Draw(transform, frustum);
 		}
 	}
 

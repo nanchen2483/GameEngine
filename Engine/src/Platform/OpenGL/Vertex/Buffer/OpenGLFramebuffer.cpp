@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLFramebuffer.h"
+
 #include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <glad/glad.h>
@@ -130,7 +131,8 @@ namespace Engine
 			case Engine::FramebufferTextureFormat::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
 			}
 			
-			ENGINE_CORE_ASSERT(false, "Invalid framebuffer texture format {0}", format);
+			ENGINE_CORE_ASSERT(false, "Invalid framebuffer texture format");
+			return -1;
 		}
 	}
 
@@ -184,7 +186,7 @@ namespace Engine
 		{
 			m_colorAttachments.resize(m_colorAttachmentSpecifications.size());
 			Utils::CreateTextures(multisampled, isTextureArray, m_colorAttachments.data(), m_colorAttachments.size());
-			for (int i = 0; i < m_colorAttachments.size(); i++)
+			for (uint32_t i = 0; i < m_colorAttachments.size(); i++)
 			{
 				Utils::BindTexture(multisampled, isTextureArray, m_colorAttachments[i]);
 

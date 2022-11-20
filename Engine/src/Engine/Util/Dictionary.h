@@ -17,12 +17,12 @@ namespace Engine
 		const Value& Get(const K key) const
 		{
 			auto iter = m_map.find(key);
-			if (iter != m_map.end())
+			if (iter == m_map.end())
 			{
-				return iter->second;
+				ENGINE_CORE_ASSERT(false, "Dictionary key not found!");
 			}
 
-			ENGINE_CORE_ASSERT(false, "Dictionary key not found!");
+			return iter->second;
 		}
 
 		const Value& Add(const K key, const V value)

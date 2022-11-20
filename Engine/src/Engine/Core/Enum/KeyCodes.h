@@ -1,8 +1,10 @@
 #pragma once
 
-namespace Engine {
+namespace Engine
+{
 	// From glfw3.h
-	enum KeyCode {
+	enum KeyCode
+	{
 		/* The unknown key */
 		UNKNOWM = -1,
 		/* Printable keys */

@@ -1,9 +1,9 @@
 #include "enginepch.h"
 #include "Image.h"
 
-#include <stb_image.h>
-
 #include "Engine/Core/Base.h"
+
+#include <stb_image.h>
 
 namespace Engine
 {

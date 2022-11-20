@@ -1,6 +1,6 @@
 #pragma once
-#include <cstdint>
 #include <chrono>
+#include <cstdint>
 
 namespace Engine
 {
@@ -14,7 +14,7 @@ namespace Engine
 			std::chrono::duration<double> elapsedSeconds = m_currentTime - m_previousTime;
 			if (elapsedSeconds.count() >= 1.0f)
 			{
-				m_FPS = m_frameCount / elapsedSeconds.count();
+				m_FPS = (float)m_frameCount / (float)elapsedSeconds.count();
 				m_frameCount = 0;
 				m_previousTime = m_currentTime;
 			}

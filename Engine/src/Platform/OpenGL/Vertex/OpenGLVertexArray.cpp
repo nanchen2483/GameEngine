@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLVertexArray.h"
+
 #include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <glad/glad.h>
@@ -23,7 +24,7 @@ namespace Engine
 		case Engine::ShaderDataType::Bool:		return GL_BOOL;
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow ShaderDataType!");
+		ENGINE_CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -72,7 +73,7 @@ namespace Engine
 					ShaderDataTypeToOpenGLBaseType(element.type),
 					element.normalized ? GL_TRUE : GL_FALSE,
 					layout.GetStride(),
-					(const void*)element.offset);
+					(const void*)(uint64_t)element.offset);
 				index++;
 				break;
 			case Engine::ShaderDataType::Int:
@@ -86,7 +87,7 @@ namespace Engine
 					element.GetComponentCount(),
 					ShaderDataTypeToOpenGLBaseType(element.type),
 					layout.GetStride(),
-					(const void*)element.offset);
+					(const void*)(uint64_t)element.offset);
 				index++;
 				break;
 			case Engine::ShaderDataType::Mat3:

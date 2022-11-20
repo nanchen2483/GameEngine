@@ -4,8 +4,7 @@ namespace Engine
 {
 	enum class FaceCulling
 	{
-		UNKNOWN = 0,
-		FRONT,
+		FRONT = 1,
 		BACK,
 	};
 }

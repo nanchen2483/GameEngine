@@ -5,5 +5,5 @@
 
 namespace Engine
 {
-	RendererAPI* RendererCommand::s_rendererAPI = new OpenGLRendererAPI;
+	Uniq<RendererAPI> RendererCommand::s_rendererAPI = CreateUniq<OpenGLRendererAPI>();
 }

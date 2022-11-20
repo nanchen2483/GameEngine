@@ -1,12 +1,12 @@
 #include "enginepch.h"
-
 #include "ImGuiLayer.h"
+
 #include "Engine/Core/Application.h"
 
 #include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
 #include <ImGuizmo.h>
-#include <backends/imgui_impl_opengl3.h>
-#include <backends/imgui_impl_glfw.h>
 
 //TEMPORARY
 #include <GLFW/glfw3.h>
@@ -53,7 +53,7 @@ namespace Engine
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 410");
+		ImGui_ImplOpenGL3_Init("#version 450");
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -69,14 +69,13 @@ namespace Engine
 		if (m_blockEvents)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			e.handled |= e.IsIncategory(EventCategoryMouse) && io.WantCaptureMouse;
-			e.handled |= e.IsIncategory(EventCategoryKeyboard) && io.WantCaptureKeyboard;
+			e.handled |= e.IsIncategory(EventCategory::EventCategoryMouse) && io.WantCaptureMouse;
+			e.handled |= e.IsIncategory(EventCategory::EventCategoryKeyboard) && io.WantCaptureKeyboard;
 		}
 	}
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-		static bool show = true;
 	}
 
 	void ImGuiLayer::Begin()

@@ -1,10 +1,10 @@
 #pragma once
-#include <vector>
-#include <string>
-
+#include "Engine/Renderer/Buffer/VertexArray.h"
 #include "Engine/Renderer/Shader/Shader.h"
 #include "Engine/Renderer/Texture/Texture.h"
-#include "Engine/Renderer/Vertex/VertexArray.h"
+
+#include <string>
+#include <vector>
 
 namespace Engine
 {

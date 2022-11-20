@@ -1,8 +1,10 @@
 #pragma once
 
-namespace Engine {
+namespace Engine
+{
 	// From glfw3.h
-	enum MouseButton {
+	enum MouseButton
+	{
 		B1 = 0,
 		B2 = 1,
 		B3 = 2,

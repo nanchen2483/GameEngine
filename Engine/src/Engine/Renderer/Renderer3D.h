@@ -1,5 +1,7 @@
 #pragma once
-#include "Engine.h"
+#include "Engine/Scene/Component.h"
+#include "Engine/Renderer/Camera/OrthographicCamera.h"
+#include "RendererAPI.h"
 
 namespace Engine
 {
@@ -17,7 +19,7 @@ namespace Engine
 		static void Draw(const TransformComponent& transform, LightComponent& light, int entityId = -1);
 		static void Draw(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), int entityId = -1);
 		static void Draw(const glm::mat4& transform, ModelComponent& component);
-		static void Draw(const glm::mat4& transform, TerrainComponent& component);
+		static void Draw(const glm::mat4& transform, TerrainComponent& component, const Frustum& frustum);
 		static void Draw(SkyboxComponent& component);
 
 		static void EndScene();

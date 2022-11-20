@@ -130,7 +130,7 @@ namespace Engine
 		case BufferLayoutType::Packed:
 		case BufferLayoutType::Std430:
 		default:
-			ENGINE_CORE_ASSERT(false, "BufferLayoutType: {0} not supported!", type);
+			ENGINE_CORE_ASSERT(false, "Invalid BufferLayoutType!");
 			break;
 		}
 	}

@@ -1,6 +1,5 @@
 #pragma once
-
-#include "Engine/Core/Window.h"
+#include "Engine/Core/Window/Window.h"
 #include "Engine/Renderer/GraphicsContext.h"
 
 struct GLFWwindow;
@@ -28,9 +27,9 @@ namespace Engine
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void ShutDown();
-	private:
+
 		GLFWwindow* m_window;
-		GraphicsContext* m_context;
+		Uniq<GraphicsContext> m_context;
 
 		struct WindowData
 		{
@@ -39,9 +38,7 @@ namespace Engine
 			bool vSync = false;
 
 			EventCallbackFn EventCallback;
-		};
-
-		WindowData m_data;
+		} m_data;
 	};
 }
 

@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLShader.h"
+
 #include "Debug/OpenGLDebug.h"
 
 #include <fstream>
@@ -12,6 +13,11 @@ namespace Engine
 {
 	static GLenum ShaderTypeFromString(const std::string& type)
 	{
+		if (type == "compute")
+		{
+			return GL_COMPUTE_SHADER;
+		}
+
 		if (type == "vertex")
 		{
 			return GL_VERTEX_SHADER;
@@ -37,7 +43,7 @@ namespace Engine
 			return GL_FRAGMENT_SHADER;
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknow shader type!");
+		ENGINE_CORE_ASSERT(false, "Unknown shader type!");
 		return 0;
 	}
 
@@ -85,7 +91,7 @@ namespace Engine
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
-			size_t size = in.tellg();
+			size_t size = (size_t)in.tellg();
 			if (size != -1)
 			{
 				result.resize(size);

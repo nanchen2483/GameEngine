@@ -1,8 +1,8 @@
 #include "enginepch.h"
 #include "OrthographicCameraController.h"
 
-#include "Engine/Core/Input.h"
 #include "Engine/Core/Enum/KeyCodes.h"
+#include "Engine/Core/Window/Input.h"
 
 namespace Engine
 {
@@ -56,8 +56,8 @@ namespace Engine
 		ENGINE_PROFILE_FUNCTION();
 
 		EventDispatcher dispacher(e);
-		dispacher.Dispatch<MouseScrolledEvent>(ENGINE_BIND_EVENT_FN(OrthographicCameraController::OmMouseScrolled));
-		dispacher.Dispatch<WindowResizeEvent>(ENGINE_BIND_EVENT_FN(OrthographicCameraController::OmWindowResized));
+		dispacher.Dispatch<MouseScrolledEvent>(ENGINE_BIND_FN(OrthographicCameraController::OmMouseScrolled));
+		dispacher.Dispatch<WindowResizeEvent>(ENGINE_BIND_FN(OrthographicCameraController::OmWindowResized));
 	}
 
 	void OrthographicCameraController::OnResize(float width, float height)

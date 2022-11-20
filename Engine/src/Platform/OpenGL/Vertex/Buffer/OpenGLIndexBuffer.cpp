@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLIndexBuffer.h"
+
 #include "Platform/OpenGL/Debug/OpenGLDebug.h"
 
 #include <glad/glad.h>

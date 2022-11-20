@@ -1,6 +1,5 @@
 #pragma once
-
-#include "Engine/Renderer/Vertex/Buffer/Buffer.h"
+#include "Engine/Renderer/Buffer/Buffer.h"
 
 namespace Engine
 {

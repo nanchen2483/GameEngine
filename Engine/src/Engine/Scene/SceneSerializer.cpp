@@ -1,8 +1,9 @@
 #include "enginepch.h"
 #include "SceneSerializer.h"
 
+#include "Component.h"
+
 #include <yaml-cpp/yaml.h>
-#include <Engine.h>
 
 namespace YAML {
 	template<>
@@ -207,7 +208,8 @@ namespace Engine {
 
 			TerrainComponent& terrainComponent = entity.GetComponent<TerrainComponent>();
 
-			out << YAML::Key << "Path" << YAML::Value << terrainComponent.terrian->GetFilePath();
+			out << YAML::Key << "Type" << YAML::Value << std::to_string((uint32_t)terrainComponent.terrain->GetType());
+			out << YAML::Key << "Path" << YAML::Value << terrainComponent.terrain->GetFilePath();
 			out << YAML::EndMap;
 		}
 
@@ -292,7 +294,7 @@ namespace Engine {
 					CameraComponent& deserializedCC = deserializedEntity.AddComponent<CameraComponent>();
 					
 					YAML::Node& cameraProps = cameraComponent["Camera"];
-					deserializedCC.camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
+					deserializedCC.camera.SetProjectionType((CameraProjectionType)cameraProps["ProjectionType"].as<int>());
 
 					deserializedCC.camera.SetPerspectiveFOV(cameraProps["PerspectiveFOV"].as<float>());
 					deserializedCC.camera.SetPerspectiveNearClip(cameraProps["PerspectiveNear"].as<float>());
@@ -343,7 +345,6 @@ namespace Engine {
 					deserializedModel.model = Model::Create(path, false, deserializedEntity, m_scene->GetLoadedTextureMap());
 				}
 
-
 				YAML::Node skyboxComponent = entity["SkyboxComponent"];
 				if (skyboxComponent)
 				{
@@ -361,7 +362,7 @@ namespace Engine {
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
 					deserializedSkybox.texture = Texture2D::Create(terrainComponent["Path"].as<std::string>(), TextureType::Height, false);
-					deserializedSkybox.terrian = CreatePtr<Terrian>(deserializedSkybox.texture, deserializedEntity);
+					deserializedSkybox.terrain = Terrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}
 		}

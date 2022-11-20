@@ -1,0 +1,44 @@
+Scene: Untitled
+Entities:
+  - Entity: 123
+    TagComponent:
+      Tag: Skybox
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SkyboxComponent:
+      RightFilePath: assets\textures\skybox\right.jpg
+      LeftFilePath: assets\textures\skybox\left.jpg
+      TopFilePath: assets\textures\skybox\top.jpg
+      BottomFilePath: assets\textures\skybox\bottom.jpg
+      BackFilePath: assets\textures\skybox\back.jpg
+      FrontFilePath: assets\textures\skybox\front.jpg
+  - Entity: 123
+    TagComponent:
+      Tag: Terrain
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TerrainComponent:
+      Type: 2
+      Path: assets\textures\heights\hm0.bmp
+  - Entity: 123
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Translation: [139, 147.899994, -289]
+      Rotation: [-0.230383456, -3.34928679, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 45
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false

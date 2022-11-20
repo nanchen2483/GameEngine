@@ -1,7 +1,6 @@
 #pragma once
-
-#include <string>
 #include <glm/glm.hpp>
+#include <string>
 
 namespace Engine
 {

@@ -1,8 +1,7 @@
 #pragma once
-
 #include "Camera.h"
-#include "Engine/Events/Event.h"
-#include "Engine/Events/MouseEvent.h"
+#include "Engine/Core/Events/Event.h"
+#include "Engine/Core/Events/MouseEvent.h"
 #include "Engine/Core/TimeStep.h"
 
 #include <glm/glm.hpp>
@@ -24,11 +23,14 @@ namespace Engine
 		virtual Frustum GetFrustum(const Transform& transform = {}) const override;
 		virtual void SetViewportSize(uint32_t width, uint32_t height) override;
 
-		inline float GetDistance() const { return m_distance; }
-		inline float SetDistance(float distance) { m_distance = distance; }
+		inline const float GetDistance() const { return m_distanceToFocusPoint; }
+		inline void SetDistance(float distance) { m_distanceToFocusPoint = distance; }
+
+		inline float GetRotationSpeed() const { return m_rotationSpeed; }
+		inline float GetMoveSpeed() const { return m_moveSpeed; }
 
 		inline const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
-		inline const glm::mat4& GetViewProjection() const { return m_projection * m_viewMatrix; }
+		inline const glm::mat4& GetViewProjection() const { return m_viewProjection; }
 
 		inline const glm::vec3& GetPosition() const { return m_position; }
 		inline const glm::vec3& GetRotation() const { return m_rotation; }
@@ -37,37 +39,56 @@ namespace Engine
 		inline const glm::vec3& GetRightDirection() const { return m_rightDirection; }
 		inline const glm::vec3& GetForwardDirection() const { return m_forwardDirection; }
 
-		inline float GetPitch() const { return m_pitch; }
-		inline float GetYaw() const { return m_yaw; }
+		inline const float GetPitch() const { return m_pitch; }
+		inline const float GetYaw() const { return m_yaw; }
+
+		void UpdateFocusPoint(const Transform& transform);
+		bool IsCursorInsideViewport() const;
+		inline bool InUse() const { return m_type != CameraType::None; }
 	private:
+		void OnFocusPointUpdate(const glm::vec2& delta);
+		void OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta);
+		bool OnMouseScroll(MouseScrolledEvent& e);
+		void OnMousePan(const glm::vec2& data);
+		void OnMouseRotate(const glm::vec2& delta);
+		void OnMouseZoom(float delta);
+		std::pair<float, float> GetPanSpeed() const;
+		float GetZoomSpeed() const;
+
 		void UpdateRotation();
+		void UpdatePosition(bool forceUpdate = false);
 		void UpdateProjection();
 		void UpdateView();
-		bool OnMouseScroll(MouseScrolledEvent& e);
+		void UpdateViewProjection();
 
-		void MousePan(const glm::vec2& data);
-		void MouseRotate(const glm::vec2& delta);
-		void MouseZoom(float delta);
+		CameraType m_type;
+		CameraProjectionType m_projectionType;
 
-		glm::vec3 CalculatePosition() const;
-		std::pair<float, float> PanSpeed() const;
-		float RotationSpeed() const;
-		float ZoomSpeed() const;
-		
-		float m_distance = 10.0f;
-		float m_pitch = 0.0f, m_yaw = 0.0f;
-		glm::vec3 m_rotation = glm::vec3(0.0f);
-		glm::quat m_orientation = glm::quat();
-		
-		float m_viewportWidth = 1280, m_viewportHeight = 720;
+		float m_FOV;
+		float m_nearClip;
+		float m_farClip;
+		float m_aspectRatio;
+		float m_viewportWidth;
+		float m_viewportHeight;
+
+		float m_pitch;
+		float m_yaw;
+		float m_moveSpeed;
+		float m_rotationSpeed;
+		float m_distanceToFocusPoint;
+
+		glm::vec3 m_rotation;
+		glm::quat m_orientation;
 
 		glm::vec3 m_upDirection;
 		glm::vec3 m_rightDirection;
 		glm::vec3 m_forwardDirection;
 
-		glm::vec2 m_initialMousePosition = glm::vec2(0.0f);
-		glm::vec3 m_position = glm::vec3(0.0f);
-		glm::vec3 m_focusPoint = glm::vec3(0.0f);
-		glm::mat4 m_viewMatrix = glm::mat4(1.0f);
+		glm::vec2 m_mousePosition;
+		glm::vec3 m_position;
+		glm::vec3 m_focusPoint;
+		glm::mat4 m_viewMatrix;
+		glm::mat4 m_projection;
+		glm::mat4 m_viewProjection;
 	};
 }

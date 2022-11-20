@@ -1,21 +1,21 @@
 #include "enginepch.h"
 #include "ShadowBox.h"
+
 #include "Engine/Renderer/RendererCommand.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace Engine
 {
 	ShadowBox::ShadowBox()
 	{
-		m_shader = Shader::Create("asserts/shaders/Shadow.glsl");
+		m_shader = Shader::Create("assets/shaders/Shadow.glsl");
 		
 		FramebufferSpecification fbSpec;
 		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::DEPTH_ARRAY });

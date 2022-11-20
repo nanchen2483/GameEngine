@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "Model.h"
 
-#include "Platform/Assimp/AssimpModel.h"
+#include "Assimp/AssimpModel.h"
 
 namespace Engine
 {

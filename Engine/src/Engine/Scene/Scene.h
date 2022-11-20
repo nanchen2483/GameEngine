@@ -1,10 +1,11 @@
 #pragma once
-
-#include <entt.hpp>
 #include "Engine/Core/TimeStep.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
-#include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Renderer/Shadow/ShadowBox.h"
+#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Physics/Collision/Collision.h"
+
+#include <entt/entt.hpp>
 
 namespace Engine
 {
@@ -32,9 +33,10 @@ namespace Engine
 	private:
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
+		Uniq<ShadowBox> m_shadowBox = nullptr;
 		Ptr<TextureMap> m_textureMap = nullptr;
+		Uniq<Collision> m_collision = nullptr;
 
-		Ptr<ShadowBox> m_shadowBox = nullptr;
 		friend class Entity;
 		friend class SceneSerializer;
 		friend class SceneHierarchyPanel;

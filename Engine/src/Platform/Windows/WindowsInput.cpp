@@ -1,8 +1,8 @@
 #include "enginepch.h"
-#include "Engine/Core/Input.h"
-
 #include "Engine/Core/Application.h"
-#include "GLFW/glfw3.h"
+#include "Engine/Core/Window/Input.h"
+
+#include <GLFW/glfw3.h>
 
 namespace Engine
 {
@@ -38,5 +38,24 @@ namespace Engine
 	{
 		auto [x, y] = GetMousePosition();
 		return y;
+	}
+	
+	bool Input::IsCursorVisible()
+	{
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		int mode = glfwGetInputMode(window, GLFW_CURSOR);
+		return mode == GLFW_CURSOR_NORMAL;
+	}
+
+	void Input::ShowCursor()
+	{
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	
+	void Input::HideCursor()
+	{
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 }

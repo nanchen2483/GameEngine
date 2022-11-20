@@ -1,31 +1,17 @@
 #pragma once
-
-#include <string>
-#include <map>
-
 #include "Image.h"
+#include "Enum/TextureType.h"
+
+#include <map>
+#include <string>
+#include <vector>
 
 namespace Engine
 {
-	enum class TextureType
+	struct TextureFormat
 	{
-		None = 0,
-		Diffuse,
-		Specular,
-		Normal,
-		Height,
-		Skybox
-	};
-
-	enum class TextureOrientationType
-	{
-		None = -1,
-		Right,
-		Left,
-		Top,
-		Bottom,
-		Back,
-		Front,
+		uint32_t internalFormat;
+		uint32_t dataFormat;
 	};
 
 	class Texture
@@ -36,6 +22,7 @@ namespace Engine
 		virtual TextureType GetType() const = 0;
 
 		virtual void SetData(void* data, uint32_t size) = 0;
+		virtual void BindImage(uint32_t slot = 0, TextureAccessType access = TextureAccessType::ReadOnly) const = 0;
 		virtual void Bind(uint32_t slot = 0) const = 0;
 
 		virtual bool operator==(const Texture& other) const = 0;
@@ -47,8 +34,9 @@ namespace Engine
 		virtual std::string GetFilePath() const = 0;
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
+		virtual const std::vector<float>& GetData() = 0;
 
-		static Ptr<Texture2D> Create(uint32_t width, uint32_t height);
+		static Ptr<Texture2D> Create(uint32_t width, uint32_t height, uint32_t levels = 1, TextureFormatType format = TextureFormatType::RGBA8);
 		static Ptr<Texture2D> Create(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = true);
 		static Ptr<Texture2D> Create(const Ptr<Image> image, const TextureType type = TextureType::None);
 	};

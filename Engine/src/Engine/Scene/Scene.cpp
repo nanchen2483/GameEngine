@@ -11,9 +11,10 @@ namespace Engine
 	Scene::Scene(bool enableShadow)
 	{
 		m_textureMap = CreatePtr<TextureMap>();
+		m_collision = Collision::Create(CollisionType::GJK_EPA_3D);
 		if (enableShadow)
 		{
-			m_shadowBox = CreatePtr<ShadowBox>();
+			m_shadowBox = CreateUniq<ShadowBox>();
 		}
 	}
 
@@ -39,9 +40,10 @@ namespace Engine
 	{
 		if (!m_registry.empty())
 		{
+			static TerrainComponent terrainComponent;
 			Frustum frustum = camera.GetFrustum();
-			auto lightView = m_registry.view<TransformComponent, LightComponent>();
-			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), lightView.size_hint());
+			uint32_t numOfLights = m_registry.view<LightComponent>().size();
+			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), numOfLights);
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& component)
@@ -49,24 +51,45 @@ namespace Engine
 						Renderer3D::Draw(transform, component, (int)entity);
 					});
 
-			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
+			m_registry.view<TransformComponent, LightComponent>()
+				.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
 					{
 						Renderer3D::Draw(transform, component, (int)entity);
 					});
 
 			Renderer3D::EndScene();
 
-			m_registry.view<TransformComponent, ModelComponent>()
-				.each([=](TransformComponent& transform, ModelComponent& component)
+			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
+			modelView.each([&](entt::entity thisEntity, TransformComponent& thisTransform, ModelComponent& thisComponent)
 					{
-						component.OnUpdate(time, frustum, transform);
-						Renderer3D::Draw(transform, component);
+						bool isComparable = false;
+						modelView.each([&](entt::entity thatEntity, TransformComponent& thatTransform, ModelComponent& thatComponent)
+							{
+								if (isComparable)
+								{
+									m_collision->Detect(thisTransform, thatTransform, thisComponent, thatComponent);
+									if (m_collision->GetDistance() < 0)
+									{
+										glm::vec3 x = m_collision->GetDirectionFromAToB() / 2.0f;
+										thisTransform.transform.translation += x;
+										thatTransform.transform.translation -= x;
+									}
+								}
+
+								if (thisEntity == thatEntity && thisComponent && thatComponent) { isComparable = true; }
+							});
+						
+						terrainComponent.SetHeight(thisTransform);
+						thisComponent.OnUpdate(time, frustum, thisTransform);
+						Renderer3D::Draw(thisTransform, thisComponent);
 					});
 
 			m_registry.view<TransformComponent, TerrainComponent>()
-				.each([](TransformComponent& transform, TerrainComponent& component)
+				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						Renderer3D::Draw(transform, component);
+						terrainComponent = component;
+						component.OnUpdate(camera.GetPosition());
+						Renderer3D::Draw(transform, component, frustum);
 					});
 
 			m_registry.view<SkyboxComponent>()
@@ -140,8 +163,8 @@ namespace Engine
 		if (mainCamera != nullptr)
 		{
 			Frustum frustum = mainCamera->GetFrustum(*mainTransform);
-			auto lightView = m_registry.view<TransformComponent, LightComponent>();
-			Renderer3D::BeginScene(mainTransform->GetViewMatrix(), mainCamera->GetProjection(), mainTransform->GetTranslation(), lightView.size_hint());
+			uint32_t numOflights = m_registry.view<LightComponent>().size();
+			Renderer3D::BeginScene(mainTransform->GetViewMatrix(), mainCamera->GetProjection(), mainTransform->GetTranslation(), numOflights);
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](TransformComponent& transform, SpriteRendererComponent& component)
@@ -149,9 +172,10 @@ namespace Engine
 						Renderer3D::Draw(transform, component);
 					});
 
-			lightView.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
+			m_registry.view<TransformComponent, LightComponent>()
+				.each([](TransformComponent& transform, LightComponent& component)
 					{
-						Renderer3D::Draw(transform, component, (int)entity);
+						Renderer3D::Draw(transform, component);
 					});
 
 			Renderer3D::EndScene();
@@ -164,9 +188,10 @@ namespace Engine
 					});
 
 			m_registry.view<TransformComponent, TerrainComponent>()
-				.each([](TransformComponent& transform, TerrainComponent& component)
+				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						Renderer3D::Draw(transform, component);
+						component.OnUpdate(mainTransform->GetTranslation());
+						Renderer3D::Draw(transform, component, frustum);
 					});
 
 			m_registry.view<SkyboxComponent>()
@@ -239,7 +264,8 @@ namespace Engine
 	}
 
 	template<typename T>
-	void Scene::OnComponentAdded(Entity entity, T& component) {
+	void Scene::OnComponentAdded(Entity entity, T& component)
+	{
 		static_assert(false);
 	}
 

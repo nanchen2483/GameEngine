@@ -1,9 +1,8 @@
 #pragma once
+#include "Engine/Core/Base.h"
+#include "Shader.h"
 
 #include <unordered_map>
-
-#include "Shader.h"
-#include "Engine/Core/Base.h"
 
 namespace Engine
 {

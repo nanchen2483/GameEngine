@@ -1,8 +1,7 @@
 #include "enginepch.h"
 #include "Renderer2D.h"
-
-#include "Vertex/Vertex.h"
-#include "Platform/OpenGL/OpenGLShader.h"
+#include "RendererCommand.h"
+#include "Model/Vertex.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -73,7 +72,7 @@ namespace Engine
 			samplers[i] = i;
 		}
 
-		s_data.shader = Shader::Create("asserts/shaders/Default.glsl");
+		s_data.shader = Shader::Create("assets/shaders/Default.glsl");
 		s_data.shader->Bind();
 		s_data.shader->SetIntArray("uTextures", samplers, s_data.maxTextureSlots);
 		s_data.textureSlots[0] = s_data.whiteTexture;
@@ -177,14 +176,14 @@ namespace Engine
 			FlushAndReset();
 		}
 
-		float textureIndex = 0.0f;
+		uint32_t textureIndex = 0;
 		if (texture != nullptr)
 		{
 			for (uint32_t i = 1; i < s_data.textureSlotIndex; i++)
 			{
 				if (*s_data.textureSlots[i].get() == *texture.get())
 				{
-					textureIndex = (float)i;
+					textureIndex = i;
 					break;
 				}
 			}

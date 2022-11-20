@@ -1,12 +1,11 @@
 #pragma once
-
-#include "ScriptableEntity.h"
-#include "Engine/Scene/SceneCamera.h"
+#include "Engine/Math/Transform.h"
 #include "Engine/Renderer/Model/Model.h"
 #include "Engine/Renderer/Skybox/Skybox.h"
-#include "Engine/Renderer/Terrian/Terrian.h"
+#include "Engine/Renderer/Terrain/Terrain.h"
 #include "Engine/Renderer/Texture/Texture.h"
-#include "Engine/Renderer/Transform/Transform.h"
+#include "Engine/Scene/SceneCamera.h"
+#include "ScriptableEntity.h"
 
 namespace Engine
 {
@@ -32,16 +31,10 @@ namespace Engine
 		glm::vec3 GetTranslation() const { return transform.translation; }
 		glm::vec3 GetRotation() const { return transform.rotation; }
 		glm::vec3 GetScale() const { return transform.scale; }
-		glm::mat4 GetViewMatrix() const
-		{
-			return glm::translate(glm::mat4(1.0f), -GetTranslation()) *
-				   glm::toMat4(glm::quat(GetRotation())) *
-				   glm::scale(glm::mat4(1.0f), GetScale());
-		}
+		glm::mat4 GetViewMatrix() const { return glm::inverse((glm::mat4)transform); }
 		
 		operator glm::mat4() const { return transform; }
 		operator Transform&() { return transform; }
-
 	};
 
 	struct CameraComponent
@@ -100,11 +93,21 @@ namespace Engine
 		
 		bool enableAnimation = false;
 		Ptr<Model> model = nullptr;
-
+		
 		ModelComponent() = default;
 		ModelComponent(const ModelComponent& component) = default;
 		ModelComponent(const Ptr<Model>& model)
 			: model(model) {}
+
+		BoundingValue GetBoundingValue()
+		{
+			if (model != nullptr)
+			{
+				return model->GetBoundingValue();
+			}
+
+			return {};
+		}
 
 		void OnUpdate(float deltaTime, const Frustum& frustum, const Transform& transform)
 		{
@@ -114,6 +117,9 @@ namespace Engine
 				model->OnUpdate(deltaTime);
 			}
 		}
+
+		operator BoundingValue() { return GetBoundingValue(); }
+		operator bool() { return model != nullptr; }
 	private:
 		bool IsOnViewFrustum(const Frustum& frustum, const Transform& transform)
 		{
@@ -173,11 +179,29 @@ namespace Engine
 
 	struct TerrainComponent
 	{
-		Ptr<Terrian> terrian = nullptr;
+		Ptr<Terrain> terrain = nullptr;
 		Ptr<Texture2D> texture = nullptr;
 
 		TerrainComponent() = default;
 		TerrainComponent(const TerrainComponent& component) = default;
+		TerrainComponent(const Ptr<Terrain>& terrain)
+			: terrain(terrain) {}
+
+		void SetHeight(TransformComponent& translate)
+		{
+			if (terrain != nullptr)
+			{
+				translate.transform.translation.y = terrain->GetHeight(translate.GetTranslation().x, translate.GetTranslation().z);
+			}
+		}
+
+		void OnUpdate(glm::vec3 cameraPosition)
+		{
+			if (terrain != nullptr)
+			{
+				terrain->OnUpdate(cameraPosition);
+			}
+		}
 	};
 
 	struct NativeScriptComponent

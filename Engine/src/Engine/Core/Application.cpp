@@ -1,11 +1,11 @@
 #include "enginepch.h"
-
 #include "Application.h"
 
-#include "Engine/Events/ApplicationEvent.h"
-#include "Engine/Core/Input.h"
+#include "Events/ApplicationEvent.h"
+#include "TimeStep.h"
+#include "Window/Input.h"
+
 #include "Engine/Renderer/Renderer.h"
-#include "Engine/Core/TimeStep.h"
 
 #include <GLFW/glfw3.h>
 
@@ -20,7 +20,7 @@ namespace Engine
 		ENGINE_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		m_window = Uniq<Window>(Window::Create(WindowProps(name)));
+		m_window = Window::Create(WindowProps(name));
 		m_window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
