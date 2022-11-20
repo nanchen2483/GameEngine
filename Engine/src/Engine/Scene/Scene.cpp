@@ -10,7 +10,6 @@ namespace Engine
 {
 	Scene::Scene(bool enableShadow)
 	{
-		m_textureMap = CreatePtr<TextureMap>();
 		m_collision = Collision::Create(CollisionType::GJK_EPA_3D);
 		if (enableShadow)
 		{

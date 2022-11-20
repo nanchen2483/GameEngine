@@ -342,7 +342,7 @@ namespace Engine {
 
 					std::string path = modelComponent["Path"].as<std::string>();
 					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
-					deserializedModel.model = Model::Create(path, false, deserializedEntity, m_scene->GetLoadedTextureMap());
+					deserializedModel.model = Model::Create(path, false, deserializedEntity);
 				}
 
 				YAML::Node skyboxComponent = entity["SkyboxComponent"];

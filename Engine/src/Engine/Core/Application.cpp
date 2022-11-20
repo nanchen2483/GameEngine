@@ -63,11 +63,12 @@ namespace Engine
 
 	void Application::Run()
 	{
+		float lastFrameTime = 0.0f;
 		while (m_running)
 		{
 			float time = (float)glfwGetTime();
-			TimeStep timeStep = time - m_lastFrameTime;
-			m_lastFrameTime = time;
+			TimeStep timeStep = time - lastFrameTime;
+			lastFrameTime = time;
 
 			if (!m_minimized)
 			{

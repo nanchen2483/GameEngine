@@ -20,6 +20,7 @@ namespace Engine
 		virtual ~Texture() = default;
 		virtual uint32_t GetRendererId() const = 0;
 		virtual TextureType GetType() const = 0;
+		virtual const std::string& GetName() const = 0;
 
 		virtual void SetData(void* data, uint32_t size) = 0;
 		virtual void BindImage(uint32_t slot = 0, TextureAccessType access = TextureAccessType::ReadOnly) const = 0;

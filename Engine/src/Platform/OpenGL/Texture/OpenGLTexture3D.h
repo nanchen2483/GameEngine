@@ -16,7 +16,8 @@ namespace Engine
 		inline virtual uint32_t GetHeight(uint32_t index) const override { return m_height[index]; }
 		inline virtual uint32_t GetRendererId() const override { return m_rendererId; }
 		inline virtual TextureType GetType() const override { return m_type; }
-		
+		inline virtual const std::string& GetName() const { return m_textureName; }
+
 		virtual void SetData(void* data, uint32_t size) override { ENGINE_CORE_ERROR("Not implemented"); };
 		virtual void BindImage(uint32_t slot, TextureAccessType access) const override;
 		virtual void Bind(uint32_t slot) const override;
@@ -33,5 +34,6 @@ namespace Engine
 		std::vector<std::string> m_faces;
 		std::vector<uint32_t> m_width, m_height;
 		TextureFormat m_format;
+		std::string m_textureName;
 	};
 }

@@ -12,7 +12,7 @@ namespace Engine
 	void ShaderLibrary::Add(const Ptr<Shader>& shader)
 	{
 		std::string shaderName = shader->GetName();
-		ShaderLibrary::Add(shaderName, shader);
+		Add(shaderName, shader);
 	}
 
 	Ptr<Shader> ShaderLibrary::Load(const std::string& filePath)

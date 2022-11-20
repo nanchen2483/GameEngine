@@ -36,7 +36,6 @@ namespace Engine
 		bool m_running = true;
 		bool m_minimized = false;
 		LayerStack m_layerStack;
-		float m_lastFrameTime = 0.0f;
 	private:
 		static Application* s_instance;
 	};

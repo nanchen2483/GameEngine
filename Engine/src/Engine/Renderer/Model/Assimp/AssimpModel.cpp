@@ -1,22 +1,23 @@
 #include "enginepch.h"
 #include "AssimpModel.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 #include <stb_image.h>
 
 namespace Engine
 {
 	AssimpModel::AssimpModel(std::string const& path, bool gamma)
-		: AssimpModel(path, gamma, -1, CreatePtr<TextureMap>())
+		: AssimpModel(path, gamma, -1)
 	{
 	}
 
-	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<TextureMap> textureMap)
-		: AssimpModel(path, gamma, entityId, textureMap, nullptr)
+	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId)
+		: AssimpModel(path, gamma, entityId, nullptr)
 	{
 	}
 
-	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<TextureMap> textureMap, Ptr<float> progression)
-		: m_filePath(path), m_gammaCorrection(gamma), m_entityId(entityId), m_textureMap(textureMap), m_progression(progression)
+	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<float> progression)
+		: m_filePath(path), m_gammaCorrection(gamma), m_entityId(entityId), m_progression(progression)
 	{
 		Load(path);
 	}
@@ -51,25 +52,25 @@ namespace Engine
 	{
 		m_hasAnimations = scene->HasAnimations();
 
-		std::vector<Ptr<Material>> allMaterials;
-		allMaterials.reserve(scene->mNumMaterials);
+		std::vector<Material> materials;
+		materials.reserve(scene->mNumMaterials);
 		for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; materialIndex++)
 		{
 			const aiMaterial* material = scene->mMaterials[materialIndex];
-			Ptr<Material> currentMaterial = CreatePtr<Material>();
-			currentMaterial->diffuse	= LoadTexture(material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
-			currentMaterial->specular	= LoadTexture(material, aiTextureType::aiTextureType_SPECULAR, TextureType::Specular);
-			currentMaterial->normal		= LoadTexture(material, aiTextureType::aiTextureType_HEIGHT, TextureType::Normal);
-			currentMaterial->height		= LoadTexture(material, aiTextureType::aiTextureType_AMBIENT, TextureType::Height);
+			Material currentMaterial;
+			currentMaterial.diffusePath		= GetTexturePath(material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
+			currentMaterial.specularPath	= GetTexturePath(material, aiTextureType::aiTextureType_SPECULAR, TextureType::Specular);
+			currentMaterial.normalPath		= GetTexturePath(material, aiTextureType::aiTextureType_HEIGHT, TextureType::Normal);
+			currentMaterial.heightPath		= GetTexturePath(material, aiTextureType::aiTextureType_AMBIENT, TextureType::Height);
 			
-			allMaterials.push_back(currentMaterial);
+			materials.push_back(currentMaterial);
 			IncreaseProgression();
 		}
 
 		for (uint32_t i = 0; i < scene->mNumMeshes; i++)
 		{
 			const aiMesh* mesh = scene->mMeshes[i];
-			Ptr<Material> materials = allMaterials[mesh->mMaterialIndex];
+			Material material = materials[mesh->mMaterialIndex];
 			std::vector<Vertex> vertices;
 			vertices.reserve(mesh->mNumVertices);
 			for (uint32_t i = 0; i < mesh->mNumVertices; i++)
@@ -78,7 +79,7 @@ namespace Engine
 				vertex.position = AssimpUtil::ToGlm(mesh->mVertices[i]);
 				vertex.normal = AssimpUtil::ToGlm(mesh->mNormals[i]);
 				vertex.color = glm::vec4(1.0f);
-				vertex.material = materials->GetTextureSlotIndices();
+				vertex.material = material.GetTextureSlotIndices();
 				vertex.texCoord = mesh->HasTextureCoords(0) ? AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]) : glm::vec2(0.0f);
 				vertex.isWorldPos = false;
 				vertex.hasAnimations = m_hasAnimations;
@@ -103,7 +104,7 @@ namespace Engine
 
 			LoadBones(vertices, mesh);
 
-			m_meshes.push_back(AssimpMesh(vertices, indices, materials, m_textureMap));
+			m_meshes.push_back(AssimpMesh(vertices, indices, material));
 			IncreaseProgression();
 		}
 	}
@@ -158,28 +159,18 @@ namespace Engine
 		}
 	}
 
-	const Ptr<Material::MaterialTexture> AssimpModel::LoadTexture(const aiMaterial* material, const aiTextureType type, const TextureType textureType)
+	std::string AssimpModel::GetTexturePath(const aiMaterial* material, const aiTextureType type, const TextureType textureType)
 	{
 		if (material->GetTextureCount(type) > 0)
 		{
 			aiString filename;
 			material->GetTexture(type, 0, &filename);
-			std::string path = (this->m_directory / +filename.C_Str()).string();
-			Ptr<Texture2D> texture = (*m_textureMap)[path];
-			Ptr<Material::MaterialTexture> materialTexture = CreatePtr<Material::MaterialTexture>();
-			if (texture == nullptr)
-			{
-				materialTexture->image = CreatePtr<Image>(path, false);
-			}
-			else
-			{
-				materialTexture->texture = texture;
-			}
+			std::string path = (this->m_directory /+ filename.C_Str()).string();
 
-			return materialTexture;
+			return path;
 		}
 
-		return nullptr;
+		return {};
 	}
 
 	void AssimpModel::UpdateBoundingValues(glm::vec3 position)
