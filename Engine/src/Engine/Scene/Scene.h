@@ -26,7 +26,6 @@ namespace Engine
 
 		bool EntityExists(entt::entity entity);
 		Entity GetPrimaryCameraEntity();
-		Ptr<TextureMap> GetLoadedTextureMap() { return m_textureMap; }
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
@@ -34,7 +33,6 @@ namespace Engine
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
 		Uniq<ShadowBox> m_shadowBox = nullptr;
-		Ptr<TextureMap> m_textureMap = nullptr;
 		Uniq<Collision> m_collision = nullptr;
 
 		friend class Entity;

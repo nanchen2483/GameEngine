@@ -6,12 +6,12 @@
 
 namespace Engine
 {
-	Ptr<VertexArray> VertexArray::Create()
+	Uniq<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLVertexArray>();
+		case RendererAPI::API::OpenGL:		return CreateUniq<OpenGLVertexArray>();
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");

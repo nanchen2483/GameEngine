@@ -15,8 +15,8 @@ namespace Engine
 	{
 	public:
 		AssimpModel(std::string const& path, bool gamma = false);
-		AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<TextureMap> textureMap);
-		AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<TextureMap> textureMap, Ptr<float> progression);
+		AssimpModel(std::string const& path, bool gamma, int entityId);
+		AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<float> progression);
 		
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
 		virtual bool HasAnimations() override { return m_hasAnimations; }
@@ -35,14 +35,13 @@ namespace Engine
 		void LoadMeshes(const aiScene* scene);
 		void LoadAnimations(const aiScene* scene);
 		void LoadBones(std::vector<Vertex>& vertices, const aiMesh* mesh);
-		const Ptr<Material::MaterialTexture> LoadTexture(const aiMaterial* material, const aiTextureType type, const TextureType textureType);
+		std::string GetTexturePath(const aiMaterial* material, const aiTextureType type, const TextureType textureType);
 		void UpdateBoundingValues(glm::vec3 position);
 
 		const std::filesystem::path m_filePath;
 		const std::filesystem::path m_directory = m_filePath.parent_path();
 		const bool m_gammaCorrection;
 
-		Ptr<TextureMap> m_textureMap;
 		std::vector<AssimpMesh> m_meshes;
 
 		// Bounding volume

@@ -553,7 +553,7 @@ namespace Engine
 							std::thread([=]()
 								{
 									component->loading = true;
-									component->model = Model::Create(path.string(), false, entity, m_context->GetLoadedTextureMap(), component->progression);
+									component->model = Model::Create(path.string(), false, entity, component->progression);
 									component->loading = false;
 									*component->progression = 0.0f;
 								}).detach();

@@ -10,10 +10,12 @@
 namespace Engine
 {
 	OpenGLTexture3D::OpenGLTexture3D(const std::vector<Ptr<Image>>& faces)
+		: m_format({})
 	{
 		ENGINE_PROFILE_FUNCTION();
 		ENGINE_CORE_ASSERT(faces.size() == 6, "3D textures must have 6 faces");
 
+		m_textureName = std::filesystem::path(faces.front()->GetFilePath()).parent_path().filename().string();
 		m_faces.reserve(faces.size());
 		m_width.reserve(faces.size());
 		m_height.reserve(faces.size());
