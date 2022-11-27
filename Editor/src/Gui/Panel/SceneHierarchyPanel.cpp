@@ -1,4 +1,5 @@
 #include "SceneHierarchyPanel.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>
@@ -491,7 +492,7 @@ namespace Engine
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
-						component.texture = Texture2D::Create(path.string());
+						component.texture = Texture2D::Create(path.string(), TextureType::Diffuse, false);
 					}
 				}
 
@@ -648,14 +649,15 @@ namespace Engine
 					else
 					{
 						SkyboxComponent& component = entity.GetComponent<SkyboxComponent>();
-						uint64_t textureId = component.GetTextureId(type, 0);
-						if (textureId == 0)
+						Ptr<Image> image = component.images[(uint32_t)type];
+						if (image == nullptr)
 						{
 							ImGui::Button(buttonName, ImVec2(72, 70));
 						}
 						else
 						{
-							ImGui::ImageButton((void*)textureId, ImVec2(64, 64), ImVec2(1.0f, 0.0f), ImVec2(0.0f, 1.0f));
+							Ptr<Texture> texture = TextureLibrary::GetInstance()->Load(image, TextureType::Skybox);
+							ImGui::ImageButton((void*)texture->GetRendererId(), ImVec2(64, 64), ImVec2(1.0f, 0.0f), ImVec2(0.0f, 1.0f));
 						}
 
 						if (ImGui::BeginDragDropTarget())
@@ -664,7 +666,20 @@ namespace Engine
 							{
 								const wchar_t* filepath = (const wchar_t*)payload->Data;
 								const std::filesystem::path path = filepath;
-								component.SetFace(type, path.string());
+								
+								image = CreatePtr<Image>(path.string(), false);
+								component.images[(uint32_t)type] = image;
+								if (std::find(component.images.begin(), component.images.end(), nullptr) == component.images.end())
+								{
+									if (component.skybox == nullptr)
+									{
+										component.skybox = CreatePtr<Skybox>(component.images);
+									}
+									else
+									{
+										component.skybox->GetTexture()->SetData(image->GetData(), type, image->GetSize());
+									}
+								}
 							}
 							ImGui::EndDragDropTarget();
 						}
