@@ -332,7 +332,7 @@ namespace Engine {
 					YAML::Node& filePathNode = spriteRendererComponent["TextureFilePath"];
 					if (filePathNode)
 					{
-						deserializedSRC.texture = Texture2D::Create(filePathNode.as<std::string>(), TextureType::Diffuse, false);
+						deserializedSRC.texture = Texture2D::Create(filePathNode.as<std::string>(), TextureType::Diffuse);
 					}
 				}
 
@@ -351,12 +351,12 @@ namespace Engine {
 				{
 					SkyboxComponent& deserializedSkybox = deserializedEntity.AddComponent<SkyboxComponent>();
 
-					deserializedSkybox.images[(uint32_t)TextureOrientationType::Right] = CreatePtr<Image>(skyboxComponent["RightFilePath"].as<std::string>(), false);
-					deserializedSkybox.images[(uint32_t)TextureOrientationType::Left] = CreatePtr<Image>(skyboxComponent["LeftFilePath"].as<std::string>(), false);
-					deserializedSkybox.images[(uint32_t)TextureOrientationType::Top] = CreatePtr<Image>(skyboxComponent["TopFilePath"].as<std::string>(), false);
-					deserializedSkybox.images[(uint32_t)TextureOrientationType::Bottom] = CreatePtr<Image>(skyboxComponent["BottomFilePath"].as<std::string>(), false);
-					deserializedSkybox.images[(uint32_t)TextureOrientationType::Back] = CreatePtr<Image>(skyboxComponent["BackFilePath"].as<std::string>(), false);
-					deserializedSkybox.images[(uint32_t)TextureOrientationType::Front] = CreatePtr<Image>(skyboxComponent["FrontFilePath"].as<std::string>(), false);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Right] = CreatePtr<Image>(skyboxComponent["RightFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Left] = CreatePtr<Image>(skyboxComponent["LeftFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Top] = CreatePtr<Image>(skyboxComponent["TopFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Bottom] = CreatePtr<Image>(skyboxComponent["BottomFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Back] = CreatePtr<Image>(skyboxComponent["BackFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Front] = CreatePtr<Image>(skyboxComponent["FrontFilePath"].as<std::string>(), true);
 
 					deserializedSkybox.skybox = CreatePtr<Skybox>(deserializedSkybox.images);
 				}
@@ -365,7 +365,7 @@ namespace Engine {
 				if (terrainComponent)
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
-					deserializedSkybox.texture = Texture2D::Create(terrainComponent["Path"].as<std::string>(), TextureType::Height, false);
+					deserializedSkybox.texture = Texture2D::Create(terrainComponent["Path"].as<std::string>(), TextureType::Height);
 					deserializedSkybox.terrain = Terrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}

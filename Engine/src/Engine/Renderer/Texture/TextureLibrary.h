@@ -11,7 +11,7 @@ namespace Engine
 		void Add(Ptr<Texture2D> texture);
 		void Add(Ptr<Image> image);
 
-		Ptr<Texture2D> Load(const std::string& filePath, const TextureType type, bool flipVertically);
+		Ptr<Texture2D> Load(const std::string& filePath, const TextureType type, bool flipVertically = false);
 		Ptr<Texture2D> Load(Ptr<Image> image, const TextureType type);
 
 		Ptr<Texture2D> Get(const std::string& filePath);

@@ -492,7 +492,7 @@ namespace Engine
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
-						component.texture = Texture2D::Create(path.string(), TextureType::Diffuse, false);
+						component.texture = Texture2D::Create(path.string(), TextureType::Diffuse);
 					}
 				}
 
@@ -667,7 +667,7 @@ namespace Engine
 								const wchar_t* filepath = (const wchar_t*)payload->Data;
 								const std::filesystem::path path = filepath;
 								
-								image = CreatePtr<Image>(path.string(), false);
+								image = CreatePtr<Image>(path.string(), true);
 								component.images[(uint32_t)type] = image;
 								if (std::find(component.images.begin(), component.images.end(), nullptr) == component.images.end())
 								{
@@ -734,7 +734,7 @@ namespace Engine
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
-						component.texture = Texture2D::Create(path.string(), TextureType::Height, false);
+						component.texture = Texture2D::Create(path.string(), TextureType::Height);
 						component.terrain = Terrain::Create(TerrainType::Default, component.texture, entity);
 					}
 				}

@@ -34,22 +34,22 @@ namespace Engine
 			TextureLibrary* s_library = TextureLibrary::GetInstance();
 			if (!diffusePath.empty())
 			{
-				s_library->Load(diffusePath, TextureType::Diffuse, false)->Bind(DIFFUSE_TEXTURE_SLOT);
+				s_library->Load(diffusePath, TextureType::Diffuse, true)->Bind(DIFFUSE_TEXTURE_SLOT);
 			}
 
 			if (!specularPath.empty())
 			{
-				s_library->Load(specularPath, TextureType::Specular, false)->Bind(SPECULAR_TEXTURE_SLOT);
+				s_library->Load(specularPath, TextureType::Specular, true)->Bind(SPECULAR_TEXTURE_SLOT);
 			}
 
 			if (!normalPath.empty())
 			{
-				s_library->Load(normalPath, TextureType::Normal, false)->Bind(NORMAL_TEXTURE_SLOT);
+				s_library->Load(normalPath, TextureType::Normal, true)->Bind(NORMAL_TEXTURE_SLOT);
 			}
 
 			if (!heightPath.empty())
 			{
-				s_library->Load(heightPath, TextureType::Height, false)->Bind(HEIGHT_TEXTURE_SLOT);
+				s_library->Load(heightPath, TextureType::Height, true)->Bind(HEIGHT_TEXTURE_SLOT);
 			}
 		}
 	};
