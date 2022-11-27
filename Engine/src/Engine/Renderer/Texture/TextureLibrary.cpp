@@ -34,6 +34,19 @@ namespace Engine
 		return texture;
 	}
 
+	Ptr<Texture2D> TextureLibrary::Load(Ptr<Image> image, const TextureType type)
+	{
+		if (Exists(image->GetFilePath()))
+		{
+			return Get(image->GetFilePath());
+		}
+
+		Ptr<Texture2D> texture = Texture2D::Create(image, type);
+		Add(texture);
+
+		return texture;
+	}
+
 	Ptr<Texture2D> TextureLibrary::Get(const std::string& filePath)
 	{
 		ENGINE_CORE_ASSERT(Exists(filePath), "Texture not found!");

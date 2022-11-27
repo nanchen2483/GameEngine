@@ -14,6 +14,7 @@ namespace Engine
 		Skybox(const std::vector<Ptr<Image>> faces);
 		Skybox(Ptr<Texture3D> texture);
 
+		Ptr<Texture3D> GetTexture() const { return m_texture; }
 		void SetTexture(Ptr<Texture3D> texture) { m_texture = texture; }
 		void Draw();
 	private:

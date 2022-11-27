@@ -14,6 +14,7 @@ namespace Engine
 		const int32_t GetWidth() const { return m_width; }
 		const int32_t GetHeight() const { return m_height; }
 		const int32_t GetChannels() const { return m_channels; }
+		const int32_t GetSize() const { return m_channels * m_height * m_width; }
 		const std::string& GetName() const { return m_imageName; }
 	private:
 		const std::string m_filePath;

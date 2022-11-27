@@ -136,45 +136,11 @@ namespace Engine
 	struct SkyboxComponent
 	{
 		Ptr<Skybox> skybox = nullptr;
+		// Editor-only
 		std::vector<Ptr<Image>> images = std::vector<Ptr<Image>>(6);
 
 		SkyboxComponent() = default;
 		SkyboxComponent(const SkyboxComponent& component) = default;
-		
-		bool ReadyToLoad() { return std::find(images.begin(), images.end(), nullptr) == images.end(); }
-		void SetFace(TextureOrientationType type, std::string filePath)
-		{
-			images[(uint32_t)type] = CreatePtr<Image>(filePath, false);
-			textures[(uint32_t)type] = Texture2D::Create(images[(uint32_t)type]);
-			if (ReadyToLoad())
-			{
-				if (skybox == nullptr)
-				{
-					skybox = CreatePtr<Skybox>(Texture3D::Create(images));
-				}
-				else
-				{
-					skybox->SetTexture(Texture3D::Create(images));
-				}
-			}
-		}
-		
-		// Editor-only
-		uint32_t GetTextureId(TextureOrientationType type, uint32_t defaultValue)
-		{
-			Ptr<Texture2D> texture = textures[(uint32_t)type];
-			if (texture != nullptr)
-			{
-				return texture->GetRendererId();
-			}
-			else
-			{
-				return defaultValue;
-			}
-		}
-	private:
-		// Editor-only
-		std::vector<Ptr<Texture2D>> textures = std::vector<Ptr<Texture2D>>(6);
 	};
 
 	struct TerrainComponent
