@@ -9,6 +9,14 @@
 
 namespace Engine
 {
+	enum class ImGuiColor
+	{
+		Default = 0,
+		Red = 1,
+		Green,
+		Blue,
+	};
+
 	class ImGuiExtension
 	{
 	public:
@@ -28,5 +36,8 @@ namespace Engine
 		static void DrawTextureSubSection(const std::string& label, Ptr<Texture2D>& texture, TextureType type = TextureType::Diffuse, std::function<void(void)> OnDrop = nullptr);
 		static void DrawMeshSubSection(const std::string& label, Ptr<Model>& model, std::function<void(const std::string&)> OnDrop);
 		static void DrawAnimationSubSection(Ptr<Model>& model, bool& enableAnimation);
+
+		static bool DrawFloatControl(const std::string& label, float& value, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f, ImGuiColor buttonColor = ImGuiColor::Blue);
+		static void ButtonColor(ImGuiColor buttonColor, std::function<void(void)> InlineCode);
 	};
 }
