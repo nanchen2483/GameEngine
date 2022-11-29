@@ -26,6 +26,7 @@ namespace Engine
 
 		static void DrawEntitySection(const std::string& label, bool isSelected, std::function<void(void)> OnSelect, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove);
 		static void DrawPropertySection(const std::string& label, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove);
+		static void DrawPropertySubSection(const std::string& label, std::function<void(void)> InlineCode);
 
 		static bool DrawFloatSubSection(const std::string& label, float& value, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f);
 		static void DrawVec3SubSection(const std::string& label, glm::vec3& values, float resetValue = 0.0f);

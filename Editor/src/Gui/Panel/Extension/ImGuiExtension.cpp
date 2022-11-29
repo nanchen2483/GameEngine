@@ -100,9 +100,8 @@ namespace Engine
 		}
 	}
 
-	bool ImGuiExtension::DrawFloatSubSection(const std::string& label, float& value, float resetValue, float speed, float min, float max)
+	void ImGuiExtension::DrawPropertySubSection(const std::string& label, std::function<void(void)> InlineCode)
 	{
-		bool isChanged = false;
 		ImGui::PushID(label.c_str());
 		{
 			ImGui::Columns(2);
@@ -110,121 +109,92 @@ namespace Engine
 				ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
 				ImGui::Text(label.c_str());
 				ImGui::NextColumn();
-
 				ImGui::PushItemWidth(ImGui::CalcItemWidth());
-				isChanged = DrawFloatControl("V", value, resetValue, speed, min, max, ImGuiColor::Default);
+				InlineCode();
 				ImGui::PopItemWidth();
 			}
 			ImGui::Columns(1);
 		}
 		ImGui::PopID();
+	}
 
+	bool ImGuiExtension::DrawFloatSubSection(const std::string& label, float& value, float resetValue, float speed, float min, float max)
+	{
+		bool isChanged = false;
+		DrawPropertySubSection(label,
+			[&]()
+			{
+				isChanged = DrawFloatControl("V", value, resetValue, speed, min, max, ImGuiColor::Default);
+			});
 		return isChanged;
 	}
 
 	void ImGuiExtension::DrawVec3SubSection(const std::string& label, glm::vec3& values, float resetValue)
 	{
-		ImGui::PushID(label.c_str());
-		{
-			ImGui::Columns(2);
+		DrawPropertySubSection(label,
+			[&]()
 			{
-				ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
-				ImGui::Text(label.c_str());
-				ImGui::NextColumn();
+				ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+				float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+				ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
 				{
-					ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
-					{
-						float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-						ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
-						{
-							DrawFloatControl("X", values.x, resetValue, 0.1f, 0.0f, 0.0f, ImGuiColor::Red);
-							ImGui::PopItemWidth();
-						}
-						ImGui::SameLine();
-						{
-							DrawFloatControl("Y", values.y, resetValue, 0.1f, 0.0f, 0.0f, ImGuiColor::Green);
-							ImGui::PopItemWidth();
-						}
-						ImGui::SameLine();
-						{
-							DrawFloatControl("Z", values.z, resetValue, 0.1f, 0.0f, 0.0f, ImGuiColor::Blue);
-							ImGui::PopItemWidth();
-						}
-					}
+					DrawFloatControl("X", values.x, resetValue, 0.1f, 0.0f, 0.0f, ImGuiColor::Red);
+					ImGui::PopItemWidth();
 				}
-			}
-
-			ImGui::Columns(1);
-		}
-		ImGui::PopID();
+				ImGui::SameLine();
+				{
+					DrawFloatControl("Y", values.y, resetValue, 0.1f, 0.0f, 0.0f, ImGuiColor::Green);
+					ImGui::PopItemWidth();
+				}
+				ImGui::SameLine();
+				{
+					DrawFloatControl("Z", values.z, resetValue, 0.1f, 0.0f, 0.0f, ImGuiColor::Blue);
+					ImGui::PopItemWidth();
+				}
+			});
 	}
 	
 	void ImGuiExtension::DrawColorEdit4SubSection(const std::string& label, glm::vec4& color)
 	{
-		ImGui::PushID(label.c_str());
-		{
-			ImGui::Columns(2);
+		DrawPropertySubSection(label,
+			[&]()
 			{
-				ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
-				ImGui::Text(label.c_str());
-				ImGui::NextColumn();
-				ImGui::PushItemWidth(ImGui::CalcItemWidth());
 				ImGui::ColorEdit4("##label", glm::value_ptr(color), ImGuiColorEditFlags_NoLabel);
-				ImGui::PopItemWidth();
-			}
-			ImGui::Columns(1);
-		}
-		ImGui::PopID();
+			});
 	}
 
 	void ImGuiExtension::DrawBeginComboSubSection(const std::string& label, std::string selected, std::unordered_map<uint32_t, std::string> options, std::function<void(uint32_t)> OnSelect)
 	{
-		ImGui::PushID(label.c_str());
-		{
-			ImGui::Columns(2);
-			ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
-			ImGui::Text(label.c_str());
-			ImGui::NextColumn();
-			ImGui::PushItemWidth(ImGui::CalcItemWidth());
-			if (ImGui::BeginCombo("##BeginCombo", selected.c_str()))
+		DrawPropertySubSection(label,
+			[&]()
 			{
-				for (std::pair<uint32_t, std::string> option : options)
+				if (ImGui::BeginCombo("##BeginCombo", selected.c_str()))
 				{
-					bool isSelected = option.second == selected;
-					if (ImGui::Selectable(option.second.c_str(), isSelected))
+					for (std::pair<uint32_t, std::string> option : options)
 					{
-						OnSelect(option.first);
-					}
+						bool isSelected = option.second == selected;
+						if (ImGui::Selectable(option.second.c_str(), isSelected))
+						{
+							OnSelect(option.first);
+						}
 
-					if (isSelected)
-					{
-						ImGui::SetItemDefaultFocus();
+						if (isSelected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
 					}
+					ImGui::EndCombo();
 				}
-				ImGui::EndCombo();
-			}
-			ImGui::PopItemWidth();
-			ImGui::Columns(1);
-		}
-		ImGui::PopID();
+			});
 	}
 
 	void ImGuiExtension::DrawCheckboxSubSection(const std::string& label, bool* checked)
 	{
-		ImGui::PushID(label.c_str());
-		{
-			ImGui::Columns(2);
+		DrawPropertySubSection(label,
+			[&]()
 			{
-				ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
-				ImGui::Text(label.c_str());
-				ImGui::NextColumn();
-				ImGui::PushItemWidth(ImGui::CalcItemWidth());
 				ImGui::Checkbox("##Checkbox", checked);
-				ImGui::PopItemWidth();
-			}
-			ImGui::Columns(1);
-		}
-		ImGui::PopID();
+			});
 	}
 	
 	void ImGuiExtension::DrawTextureSubSection(const std::string& label, Ptr<Texture2D>& texture, TextureType type, std::function<void(void)> OnDrop)
@@ -237,16 +207,9 @@ namespace Engine
 			filePath = "Path: " + texture->GetFilePath();
 		}
 
-		ImGui::PushID(label.c_str());
-		{
-			ImGui::Columns(2);
+		DrawPropertySubSection(label,
+			[&]()
 			{
-				ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
-				ImGui::Text(label.c_str());
-
-				ImGui::NextColumn();
-
-				ImGui::PushItemWidth(ImGui::CalcItemWidth());
 				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
 				{
@@ -262,11 +225,7 @@ namespace Engine
 					}
 				}
 				ImGui::Text(filePath.c_str());
-				ImGui::PopItemWidth();
-			}
-			ImGui::Columns(1);
-		}
-		ImGui::PopID();
+			});
 	}
 	
 	void ImGuiExtension::DrawMeshSubSection(const std::string& label, Ptr<Model>& model, std::function<void(const std::string&)> OnDrop)
@@ -278,14 +237,9 @@ namespace Engine
 			filePath = model->GetFilePath().string();
 		}
 
-		ImGui::PushID(label.c_str());
-		{
-			ImGui::Columns(2);
+		DrawPropertySubSection(label,
+			[&]()
 			{
-				ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
-				ImGui::Text(label.c_str());
-				ImGui::NextColumn();
-				ImGui::PushItemWidth(ImGui::CalcItemWidth());
 				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
 				{
@@ -297,11 +251,7 @@ namespace Engine
 					}
 				}
 				ImGui::Text(filePath.c_str());
-				ImGui::PopItemWidth();
-			}
-			ImGui::Columns(1);
-		}
-		ImGui::PopID();
+			});
 
 	}
 
@@ -309,14 +259,9 @@ namespace Engine
 	{
 		if (model != nullptr && model->HasAnimations())
 		{
-			ImGui::PushID("Animation");
-			{
-				ImGui::Columns(2);
+			DrawPropertySubSection("Animation",
+				[&]()
 				{
-					ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
-					ImGui::Text("Animation");
-					ImGui::NextColumn();
-					ImGui::PushItemWidth(ImGui::CalcItemWidth());
 					ImGui::Checkbox("##EnableAnimation", &enableAnimation);
 					AnimationInfo selectedAnimation = model->GetSelectedAnimation();
 					if (ImGui::BeginCombo("##BeginCombo", selectedAnimation.displayName.c_str()))
@@ -338,11 +283,7 @@ namespace Engine
 						ImGui::EndCombo();
 					}
 					ImGui::SliderFloat("##SliderFloat", selectedAnimation.animationTime.get(), 0.0f, selectedAnimation.duration);
-					ImGui::PopItemWidth();
-				}
-				ImGui::Columns(1);
-			}
-			ImGui::PopID();
+				});
 		}
 	}
 	
