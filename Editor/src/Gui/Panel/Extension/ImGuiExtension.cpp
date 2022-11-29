@@ -100,7 +100,7 @@ namespace Engine
 		}
 	}
 
-	bool ImGuiExtension::DrawFloatControl(const std::string& label, float& value, float resetValue, float speed, float min, float max)
+	bool ImGuiExtension::DrawFloatSubSection(const std::string& label, float& value, float resetValue, float speed, float min, float max)
 	{
 		const float originValue = value;
 		ImGui::PushID(label.c_str());
@@ -124,10 +124,8 @@ namespace Engine
 					value = resetValue;
 				}
 				ImGui::PopStyleColor(3);
-
 				ImGui::SameLine();
 				ImGui::DragFloat("##V", &value, speed, min, max, "%.2f");
-
 				ImGui::PopItemWidth();
 				ImGui::PopStyleVar();
 			}
@@ -138,7 +136,7 @@ namespace Engine
 		return originValue != value;
 	}
 
-	void ImGuiExtension::DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue)
+	void ImGuiExtension::DrawVec3SubSection(const std::string& label, glm::vec3& values, float resetValue)
 	{
 		ImGui::PushID(label.c_str());
 		{
@@ -206,7 +204,7 @@ namespace Engine
 		ImGui::PopID();
 	}
 	
-	void ImGuiExtension::DrawColorEdit4Control(const std::string& label, glm::vec4& color)
+	void ImGuiExtension::DrawColorEdit4SubSection(const std::string& label, glm::vec4& color)
 	{
 		ImGui::PushID(label.c_str());
 		{
@@ -224,7 +222,7 @@ namespace Engine
 		ImGui::PopID();
 	}
 
-	void ImGuiExtension::DrawBeginComboControl(const std::string& label, std::string selected, std::unordered_map<uint32_t, std::string> options, std::function<void(uint32_t)> OnSelect)
+	void ImGuiExtension::DrawBeginComboSubSection(const std::string& label, std::string selected, std::unordered_map<uint32_t, std::string> options, std::function<void(uint32_t)> OnSelect)
 	{
 		ImGui::PushID(label.c_str());
 		{
@@ -256,7 +254,7 @@ namespace Engine
 		ImGui::PopID();
 	}
 
-	void ImGuiExtension::DrawCheckboxControl(const std::string& label, bool* checked)
+	void ImGuiExtension::DrawCheckboxSubSection(const std::string& label, bool* checked)
 	{
 		ImGui::PushID(label.c_str());
 		{
@@ -274,7 +272,7 @@ namespace Engine
 		ImGui::PopID();
 	}
 	
-	void ImGuiExtension::DrawTextureControl(const std::string& label, Ptr<Texture2D>& texture, TextureType type, std::function<void(void)> OnDrop)
+	void ImGuiExtension::DrawTextureSubSection(const std::string& label, Ptr<Texture2D>& texture, TextureType type, std::function<void(void)> OnDrop)
 	{
 		uint64_t textureId = 0;
 		std::string filePath = "";
@@ -316,7 +314,7 @@ namespace Engine
 		ImGui::PopID();
 	}
 	
-	void ImGuiExtension::DrawMeshControl(const std::string& label, Ptr<Model>& model, std::function<void(const std::string&)> OnDrop)
+	void ImGuiExtension::DrawMeshSubSection(const std::string& label, Ptr<Model>& model, std::function<void(const std::string&)> OnDrop)
 	{
 		uint64_t textureId = 0;
 		std::string filePath = "";
@@ -352,7 +350,7 @@ namespace Engine
 
 	}
 
-	void ImGuiExtension::DrawAnimationControl(Ptr<Model>& model, bool& enableAnimation)
+	void ImGuiExtension::DrawAnimationSubSection(Ptr<Model>& model, bool& enableAnimation)
 	{
 		if (model != nullptr && model->HasAnimations())
 		{

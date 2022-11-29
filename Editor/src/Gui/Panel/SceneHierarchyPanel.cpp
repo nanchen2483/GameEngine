@@ -170,11 +170,11 @@ namespace Engine
 				[&]()
 				{
 					Transform& transform = entity.GetComponent<TransformComponent>();
-					ImGuiExtension::DrawVec3Control("Location", transform.translation);
+					ImGuiExtension::DrawVec3SubSection("Location", transform.translation);
 					glm::vec3 rotation = glm::degrees(transform.rotation);
-					ImGuiExtension::DrawVec3Control("Rotation", rotation);
+					ImGuiExtension::DrawVec3SubSection("Rotation", rotation);
 					transform.rotation = glm::radians(rotation);
-					ImGuiExtension::DrawVec3Control("Scale", transform.scale, 1.0f);
+					ImGuiExtension::DrawVec3SubSection("Scale", transform.scale, 1.0f);
 				},
 				[&]()
 				{
@@ -190,13 +190,13 @@ namespace Engine
 					CameraComponent& cameraComponent = entity.GetComponent<CameraComponent>();
 					SceneCamera& camera = cameraComponent.camera;
 
-					ImGuiExtension::DrawCheckboxControl("Primary", &cameraComponent.primary);
+					ImGuiExtension::DrawCheckboxSubSection("Primary", &cameraComponent.primary);
 					std::unordered_map<uint32_t, std::string> projectionTypeMap =
 					{
 						{ (uint32_t)CameraProjectionType::Perspective, "Perspective" },
 						{ (uint32_t)CameraProjectionType::Orthographic, "Orthographic" }
 					};
-					ImGuiExtension::DrawBeginComboControl("Projection", projectionTypeMap[(uint32_t)camera.GetProjectionType()], projectionTypeMap,
+					ImGuiExtension::DrawBeginComboSubSection("Projection", projectionTypeMap[(uint32_t)camera.GetProjectionType()], projectionTypeMap,
 						[&](uint32_t selected)
 						{
 							camera.SetProjectionType((CameraProjectionType)selected);
@@ -205,19 +205,19 @@ namespace Engine
 					if (camera.GetProjectionType() == CameraProjectionType::Perspective)
 					{
 						float FOV = camera.GetPerspectiveFOV();
-						if (ImGuiExtension::DrawFloatControl("FOV", FOV))
+						if (ImGuiExtension::DrawFloatSubSection("FOV", FOV))
 						{
 							camera.SetPerspectiveFOV(FOV);
 						}
 
 						float perspectNear = camera.GetPerspectiveNearClip();
-						if (ImGuiExtension::DrawFloatControl("Near", perspectNear))
+						if (ImGuiExtension::DrawFloatSubSection("Near", perspectNear))
 						{
 							camera.SetPerspectiveNearClip(perspectNear);
 						}
 
 						float perspectFar = camera.GetPerspectiveFarClip();
-						if (ImGuiExtension::DrawFloatControl("Far", perspectFar))
+						if (ImGuiExtension::DrawFloatSubSection("Far", perspectFar))
 						{
 							camera.SetPerspectiveFarClip(perspectFar);
 						}
@@ -226,24 +226,24 @@ namespace Engine
 					if (camera.GetProjectionType() == CameraProjectionType::Orthographic)
 					{
 						float orthoSize = camera.GetOrthographicSize();
-						if (ImGuiExtension::DrawFloatControl("Size", orthoSize))
+						if (ImGuiExtension::DrawFloatSubSection("Size", orthoSize))
 						{
 							camera.SetOrthographicSize(orthoSize);
 						}
 
 						float orthoNear = camera.GetOrthographicNearClip();
-						if (ImGuiExtension::DrawFloatControl("Near", orthoNear))
+						if (ImGuiExtension::DrawFloatSubSection("Near", orthoNear))
 						{
 							camera.SetOrthographicNearClip(orthoNear);
 						}
 
 						float orthoFar = camera.GetOrthographicFarClip();
-						if (ImGuiExtension::DrawFloatControl("Far", orthoFar))
+						if (ImGuiExtension::DrawFloatSubSection("Far", orthoFar))
 						{
 							camera.SetOrthographicFarClip(orthoFar);
 						}
 
-						ImGuiExtension::DrawCheckboxControl("Fixed aspect ratio", &cameraComponent.fixedAspectRatio);
+						ImGuiExtension::DrawCheckboxSubSection("Fixed aspect ratio", &cameraComponent.fixedAspectRatio);
 					}
 				},
 				[&]()
@@ -258,13 +258,13 @@ namespace Engine
 				[&]()
 				{
 					LightComponent& component = entity.GetComponent<LightComponent>();
-					ImGuiExtension::DrawFloatControl("Constant", component.constant, 1.0f, 0.01f, 0.0f, 1.0f);
-					ImGuiExtension::DrawFloatControl("Linear", component.linear, 0.9f, 0.001f, 0.001f, 1.0f);
-					ImGuiExtension::DrawFloatControl("Quadratic", component.quadratic, 0.03f, 0.001f, 0.01f, 2.0f);
+					ImGuiExtension::DrawFloatSubSection("Constant", component.constant, 1.0f, 0.01f, 0.0f, 1.0f);
+					ImGuiExtension::DrawFloatSubSection("Linear", component.linear, 0.9f, 0.001f, 0.001f, 1.0f);
+					ImGuiExtension::DrawFloatSubSection("Quadratic", component.quadratic, 0.03f, 0.001f, 0.01f, 2.0f);
 					ImGui::NewLine();
-					ImGuiExtension::DrawVec3Control("Ambient", component.ambient);
-					ImGuiExtension::DrawVec3Control("Diffuse", component.diffuse);
-					ImGuiExtension::DrawVec3Control("Specular", component.specular);
+					ImGuiExtension::DrawVec3SubSection("Ambient", component.ambient);
+					ImGuiExtension::DrawVec3SubSection("Diffuse", component.diffuse);
+					ImGuiExtension::DrawVec3SubSection("Specular", component.specular);
 				},
 				[&]()
 				{
@@ -278,8 +278,8 @@ namespace Engine
 				[&]()
 				{
 					SpriteRendererComponent& component = entity.GetComponent<SpriteRendererComponent>();
-					ImGuiExtension::DrawColorEdit4Control("Color", component.color);
-					ImGuiExtension::DrawTextureControl("Texture", component.texture);
+					ImGuiExtension::DrawColorEdit4SubSection("Color", component.color);
+					ImGuiExtension::DrawTextureSubSection("Texture", component.texture);
 				},
 				[&]()
 				{
@@ -300,7 +300,7 @@ namespace Engine
 					}
 					else
 					{
-						ImGuiExtension::DrawMeshControl("Mesh", component->model,
+						ImGuiExtension::DrawMeshSubSection("Mesh", component->model,
 							[&](const std::string& filePath)
 							{
 								std::thread([=]()
@@ -311,7 +311,7 @@ namespace Engine
 										*component->progression = 0.0f;
 									}).detach();
 							});
-						ImGuiExtension::DrawAnimationControl(component->model, component->enableAnimation);
+						ImGuiExtension::DrawAnimationSubSection(component->model, component->enableAnimation);
 					}
 				},
 				[&]()
@@ -402,7 +402,7 @@ namespace Engine
 				[&]()
 				{
 					TerrainComponent& component = entity.GetComponent<TerrainComponent>();
-					ImGuiExtension::DrawTextureControl("Texture", component.texture, TextureType::Height,
+					ImGuiExtension::DrawTextureSubSection("Texture", component.texture, TextureType::Height,
 						[&]()
 						{
 							component.terrain = Terrain::Create(TerrainType::Quadtree, component.texture, entity);
