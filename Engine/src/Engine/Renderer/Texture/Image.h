@@ -6,7 +6,8 @@ namespace Engine
 	class Image
 	{
 	public:
-		Image(const std::string& filePath, const bool flipVertically = true);
+		Image(const std::string& filePath);
+		Image(const std::string& filePath, bool flipVertically);
 		~Image();
 
 		const std::string GetFilePath() const { return m_filePath; }

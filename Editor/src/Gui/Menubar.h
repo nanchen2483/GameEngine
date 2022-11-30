@@ -1,12 +1,12 @@
 #pragma once
-#include "Widget.h"
+#include "IGui.h"
 #include "Engine.h"
 
 #include <functional>
 
 namespace Engine
 {
-	class Menubar : public Widget
+	class Menubar : public IGui
 	{
 	public:
 		Menubar() = default;

@@ -86,7 +86,7 @@ namespace Engine
 		m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 #endif // 0
 
-		m_sceneHierachyPanel.SetContext(m_activeScene);
+		m_hierachyPanel.SetContext(m_activeScene);
 
 		m_menubar.SetFunctions(
 			ENGINE_BIND_FN(EditorLayer::NewScene),
@@ -173,6 +173,8 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
+		ImGui::ShowDemoWindow();
+
 		static bool dockSpaceOpen = true;
 		static bool opt_fullscreen = true;
 		static bool opt_padding = false;
@@ -236,7 +238,7 @@ namespace Engine
 
 			m_menubar.OnImGuiRender();
 			m_toolbar.OnImGuiRender();
-			m_sceneHierachyPanel.OnImGuiRender();
+			m_hierachyPanel.OnImGuiRender();
 			m_contentBrowserPanel.OnImGuiRender();
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -268,7 +270,7 @@ namespace Engine
 				}
 
 				// ImGuizmo
-				Entity selectedEntity = m_sceneHierachyPanel.GetSelectedEntity();
+				Entity selectedEntity = m_hierachyPanel.GetSelectedEntity();
 				if (selectedEntity && m_gizmoType != -1)
 				{
 					ImGuizmo::SetOrthographic(false);
@@ -428,7 +430,7 @@ namespace Engine
 		{
 			if (m_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(KeyCode::LEFT_ALT))
 			{
-				m_sceneHierachyPanel.SetSelectedEntity(m_hoveredEntity);
+				m_hierachyPanel.SetSelectedEntity(m_hoveredEntity);
 			}
 		}
 
@@ -439,7 +441,7 @@ namespace Engine
 	{
 		m_activeScene = CreatePtr<Scene>();
 		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-		m_sceneHierachyPanel.SetContext(m_activeScene);
+		m_hierachyPanel.SetContext(m_activeScene);
 	}
 	
 	void EditorLayer::OpenScene()
@@ -456,7 +458,7 @@ namespace Engine
 	{
 		m_activeScene = CreatePtr<Scene>();
 		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-		m_sceneHierachyPanel.SetContext(m_activeScene);
+		m_hierachyPanel.SetContext(m_activeScene);
 
 		SceneSerializer serializer(m_activeScene);
 		serializer.Deserialize(filepath.string());

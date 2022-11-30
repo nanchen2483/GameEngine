@@ -26,6 +26,7 @@
 #include "Engine/Renderer/Skybox/Skybox.h"
 #include "Engine/Renderer/Terrain/Terrain.h"
 #include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 // Scene
 #include "Engine/Scene/Component.h"

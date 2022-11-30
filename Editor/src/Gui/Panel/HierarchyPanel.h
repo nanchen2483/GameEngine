@@ -1,14 +1,14 @@
 #pragma once
-#include "Gui/Widget.h"
+#include "Gui/IGui.h"
 #include "Engine.h"
 
 namespace Engine
 {
-	class SceneHierarchyPanel : public Widget
+	class HierarchyPanel : public IGui
 	{
 	public:
-		SceneHierarchyPanel() = default;
-		SceneHierarchyPanel(const Ptr<Scene>& context);
+		HierarchyPanel() = default;
+		HierarchyPanel(const Ptr<Scene>& context);
 
 		void SetContext(const Ptr<Scene>& context);
 		virtual void OnImGuiRender() override;
