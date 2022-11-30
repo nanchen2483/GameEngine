@@ -31,22 +31,17 @@ namespace Engine
 		ImGui::Text("Loading...");
 	}
 
-	void ImGuiExtension::DrawEntitySection(const std::string& label, bool isSelected, std::function<void(void)> OnSelect, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
+	void ImGuiExtension::DrawSection(const std::string& label, int treeNodeFlags, std::function<void(void)> InlineCode, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
-		ImGuiTreeNodeFlags treeNodeFlags = (isSelected ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth;
-
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-		bool isOpen = ImGui::TreeNodeEx((void*)std::hash<std::string>()(label), treeNodeFlags, label.c_str());
-		if (ImGui::IsItemClicked())
-		{
-			OnSelect();
-		}
+		bool isOpen = ImGui::TreeNodeEx((void*)std::hash<std::string>()(label), (ImGuiTreeNodeFlags)treeNodeFlags, label.c_str());
+		InlineCode();
 		ImGui::PopStyleVar();
 
 		bool isRemoved = false;
-		if (ImGui::BeginPopup("ComponentSettings"))
+		if (ImGui::BeginPopup("ComponentSettings") || ImGui::BeginPopupContextItem())
 		{
-			if (ImGui::MenuItem("Delete Entity"))
+			if (ImGui::MenuItem("Remove"))
 			{
 				isRemoved = true;
 			}
@@ -65,39 +60,35 @@ namespace Engine
 		}
 	}
 
+	void ImGuiExtension::DrawEntitySection(const std::string& label, bool isSelected, std::function<void(void)> OnSelect, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
+	{
+		ImGuiTreeNodeFlags treeNodeFlags = (isSelected ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth;
+		DrawSection(label, treeNodeFlags,
+			[&]()
+			{
+				if (ImGui::IsItemClicked())
+				{
+					OnSelect();
+				}
+			},
+			[&]() { OnOpen(); },
+			[&]() { OnRemove(); });
+	}
+
 	void ImGuiExtension::DrawPropertySection(const std::string& label, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
 		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth;
-
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-		bool isOpen = ImGui::TreeNodeEx((void*)std::hash<std::string>()(label), treeNodeFlags, label.c_str());
-		ImGui::SameLine(ImGui::GetWindowContentRegionWidth() - 13.0f);
-		if (ImGui::Button("+", ImVec2(20, 20)))
-		{
-			ImGui::OpenPopup("ComponentSettings");
-		}
-		ImGui::PopStyleVar();
-
-		bool isRemoved = false;
-		if (ImGui::BeginPopup("ComponentSettings"))
-		{
-			if (ImGui::MenuItem("Remove component"))
+		DrawSection(label, treeNodeFlags,
+			[&]()
 			{
-				isRemoved = true;
-			}
-			ImGui::EndPopup();
-		}
-
-		if (isOpen)
-		{
-			OnOpen();
-			ImGui::TreePop();
-		}
-
-		if (isRemoved)
-		{
-			OnRemove();
-		}
+				ImGui::SameLine(ImGui::GetWindowContentRegionWidth() - 13.0f);
+				if (ImGui::Button("+", ImVec2(20, 20)))
+				{
+					ImGui::OpenPopup("ComponentSettings");
+				}
+			},
+			[&]() { OnOpen(); },
+			[&]() { OnRemove(); });
 	}
 
 	void ImGuiExtension::DrawPropertySubSection(const std::string& label, std::function<void(void)> InlineCode)
@@ -204,7 +195,7 @@ namespace Engine
 		if (texture != nullptr)
 		{
 			textureId = texture->GetRendererId();
-			filePath = "Path: " + texture->GetFilePath();
+			filePath = texture->GetFilePath();
 		}
 
 		DrawPropertySubSection(label,

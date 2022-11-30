@@ -24,6 +24,7 @@ namespace Engine
 		static void LabelText(const std::string& label, const std::string& text);
 		static void ProgressBar(float fragtion);
 
+		static void DrawSection(const std::string& label, int treeNodeFlags, std::function<void(void)> InlineCode, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove);
 		static void DrawEntitySection(const std::string& label, bool isSelected, std::function<void(void)> OnSelect, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove);
 		static void DrawPropertySection(const std::string& label, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove);
 		static void DrawPropertySubSection(const std::string& label, std::function<void(void)> InlineCode);
