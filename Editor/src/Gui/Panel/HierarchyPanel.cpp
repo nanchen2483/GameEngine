@@ -1,4 +1,4 @@
-#include "SceneHierarchyPanel.h"
+#include "HierarchyPanel.h"
 #include "Extension/ImGuiExtension.h"
 
 #include <filesystem>
@@ -9,20 +9,20 @@
 
 namespace Engine
 {
-	SceneHierarchyPanel::SceneHierarchyPanel(const Ptr<Scene>& context)
+	HierarchyPanel::HierarchyPanel(const Ptr<Scene>& context)
 	{
 		SetContext(context);
 	}
 
-	void SceneHierarchyPanel::SetContext(const Ptr<Scene>& context)
+	void HierarchyPanel::SetContext(const Ptr<Scene>& context)
 	{
 		m_context = context;
 		m_selectionContext = {};
 	}
 
-	void SceneHierarchyPanel::OnImGuiRender()
+	void HierarchyPanel::OnImGuiRender()
 	{
-		ImGui::Begin("Scene Hierarchy");
+		ImGui::Begin("Hierarchy");
 		m_context->m_registry.each([&](entt::entity entityId) {
 			Entity entity = Entity{ entityId, m_context.get() };
 			DrawEntityNode(entity);
@@ -102,12 +102,12 @@ namespace Engine
 		ImGui::End();
 	}
 	
-	void SceneHierarchyPanel::SetSelectedEntity(Entity& entity)
+	void HierarchyPanel::SetSelectedEntity(Entity& entity)
 	{
 		m_selectionContext = entity;
 	}
 
-	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
+	void HierarchyPanel::DrawEntityNode(Entity entity)
 	{
 		std::string& tag = entity.GetComponent<TagComponent>().tag;
 		bool isSelected = m_selectionContext == entity;;
@@ -154,7 +154,7 @@ namespace Engine
 		}
 	}
 
-	void SceneHierarchyPanel::DrawComponents(Entity entity)
+	void HierarchyPanel::DrawComponents(Entity entity)
 	{
 		if (entity.HasComponent<TagComponent>())
 		{

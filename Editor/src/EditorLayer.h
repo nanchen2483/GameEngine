@@ -2,7 +2,7 @@
 #include "Engine.h"
 #include "Gui/Menubar.h"
 #include "Gui/Panel/ContentBrowserPanel.h"
-#include "Gui/Panel/SceneHierarchyPanel.h"
+#include "Gui/Panel/HierarchyPanel.h"
 #include "Gui/Toolbar.h"
 
 namespace Engine
@@ -42,7 +42,7 @@ namespace Engine
 		// Gui
 		Menubar m_menubar;
 		Toolbar m_toolbar;
-		SceneHierarchyPanel m_sceneHierachyPanel;
+		HierarchyPanel m_hierachyPanel;
 		ContentBrowserPanel m_contentBrowserPanel;
 	};
 }

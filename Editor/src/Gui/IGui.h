@@ -2,10 +2,10 @@
 
 namespace Engine
 {
-	class Widget
+	class IGui
 	{
 	public:
-		virtual ~Widget() = default;
+		virtual ~IGui() = default;
 		virtual void OnImGuiRender() = 0;
 	};
 }

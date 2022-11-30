@@ -1,10 +1,10 @@
 #pragma once
-#include "Widget.h"
+#include "IGui.h"
 #include "Engine.h"
 
 namespace Engine
 {
-	class Toolbar : public Widget
+	class Toolbar : public IGui
 	{
 	public:
 		Toolbar();
