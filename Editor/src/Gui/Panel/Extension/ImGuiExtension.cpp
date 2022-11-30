@@ -34,14 +34,23 @@ namespace Engine
 	void ImGuiExtension::DrawSection(const std::string& label, int treeNodeFlags, std::function<void(void)> InlineCode, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-		bool isOpen = ImGui::TreeNodeEx((void*)std::hash<std::string>()(label), (ImGuiTreeNodeFlags)treeNodeFlags, label.c_str());
+		bool isOpen = ImGui::TreeNodeEx((void*)std::hash<std::string>()(label), (ImGuiTreeNodeFlags)treeNodeFlags | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth, label.c_str());
 		InlineCode();
 		ImGui::PopStyleVar();
 
 		bool isRemoved = false;
-		if (ImGui::BeginPopup("ComponentSettings") || ImGui::BeginPopupContextItem())
+		if (ImGui::BeginPopup("ComponentSettings"))
 		{
-			if (ImGui::MenuItem("Remove"))
+			if (ImGui::MenuItem("Remove component"))
+			{
+				isRemoved = true;
+			}
+			ImGui::EndPopup();
+		}
+
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem("Delete Entity"))
 			{
 				isRemoved = true;
 			}
@@ -62,7 +71,7 @@ namespace Engine
 
 	void ImGuiExtension::DrawEntitySection(const std::string& label, bool isSelected, std::function<void(void)> OnSelect, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
-		ImGuiTreeNodeFlags treeNodeFlags = (isSelected ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth;
+		ImGuiTreeNodeFlags treeNodeFlags = (isSelected ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		DrawSection(label, treeNodeFlags,
 			[&]()
 			{
@@ -77,11 +86,11 @@ namespace Engine
 
 	void ImGuiExtension::DrawPropertySection(const std::string& label, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
-		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth;
+		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_NoAutoOpenOnLog;
 		DrawSection(label, treeNodeFlags,
 			[&]()
 			{
-				ImGui::SameLine(ImGui::GetWindowContentRegionWidth() - 13.0f);
+				ImGui::SameLine(ImGui::GetWindowContentRegionWidth() - 8.0f);
 				if (ImGui::Button("+", ImVec2(20, 20)))
 				{
 					ImGui::OpenPopup("ComponentSettings");
