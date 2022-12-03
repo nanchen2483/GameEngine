@@ -16,7 +16,10 @@ namespace Engine
 
 		bool m_play = false;
 		bool m_pause = false;
-		float m_thumbnailSize = 32.0f;
+		const float m_buttonPadding = 5.0f;
+		const float m_buttonSize = 20.0f;
+		const float m_toolbarPadding = 7.0f;
+		const float m_toolbarSize = m_buttonSize + (m_buttonPadding * 2) + (m_toolbarPadding * 2);
 		
 		Ptr<Texture2D> m_playIcon;
 		Ptr<Texture2D> m_pauseIcon;
