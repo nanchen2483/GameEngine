@@ -14,7 +14,7 @@ namespace Engine
 
 	void Menubar::OnImGuiRender()
 	{
-		if (ImGui::BeginMenuBar())
+		if (ImGui::BeginMainMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
 			{
@@ -42,10 +42,10 @@ namespace Engine
 				ImGui::EndMenu();
 			}
 
-			ImGui::EndMenuBar();
+			ImGui::EndMainMenuBar();
 		}
 
-		if (ImGui::BeginMenuBar())
+		if (ImGui::BeginMainMenuBar())
 		{
 			if (ImGui::BeginMenu("Debug"))
 			{
@@ -68,7 +68,7 @@ namespace Engine
 				}
 				ImGui::EndMenu();
 			}
-			ImGui::EndMenuBar();
+			ImGui::EndMainMenuBar();
 		}
 
 		if (m_showShadowMap)

@@ -22,7 +22,7 @@ namespace Engine
 
 	void HierarchyPanel::OnImGuiRender()
 	{
-		ImGui::Begin("Hierarchy");
+		ImGui::Begin("Outliner");
 		m_context->m_registry.each([&](entt::entity entityId) {
 			Entity entity = Entity{ entityId, m_context.get() };
 			DrawEntityNode(entity);
@@ -46,7 +46,7 @@ namespace Engine
 
 		ImGui::End();
 
-		ImGui::Begin("Properties");
+		ImGui::Begin("Details");
 		if (m_selectionContext)
 		{	
 			if (ImGui::Button("+ Add Component", {150.0f, 30.0f}))
