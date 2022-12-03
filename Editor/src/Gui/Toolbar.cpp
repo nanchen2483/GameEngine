@@ -14,8 +14,10 @@ namespace Engine
 
 	void Toolbar::OnImGuiRender()
 	{
+		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse
+										| ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs;
 		m_thumbnailSize = 32.0f;
-		if (ImGui::Begin("Toolbar", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+		if (ImGui::Begin("Toolbar", 0, windowFlags))
 		{
 			float panelWidth = ImGui::GetContentRegionAvail().x;
 			ImGui::SetCursorPosX((panelWidth - m_thumbnailSize) * 0.5f);

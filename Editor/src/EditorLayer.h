@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine.h"
+#include "Gui/Dockspace.h"
 #include "Gui/Menubar.h"
 #include "Gui/Panel/ContentBrowserPanel.h"
 #include "Gui/Panel/HierarchyPanel.h"
@@ -40,6 +41,7 @@ namespace Engine
 		int32_t m_textureId = -1;
 		
 		// Gui
+		Dockspace m_dockspace;
 		Menubar m_menubar;
 		Toolbar m_toolbar;
 		HierarchyPanel m_hierachyPanel;
