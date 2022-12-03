@@ -16,11 +16,9 @@ namespace Engine
 	{
 		ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse;
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { m_toolbarPadding, m_toolbarPadding });
-		if (ImGui::BeginViewportSideBar("##ToolMenuBar", viewport, ImGuiDir_Up, m_toolbarSize, windowFlags))
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { m_toolbarPadding.x, m_toolbarPadding.y });
+		if (ImGui::BeginViewportSideBar("##ToolMenuBar", viewport, ImGuiDir_Up, m_toolbarHeight, windowFlags))
 		{
-			float panelWidth = ImGui::GetContentRegionAvail().x;
-			ImGui::SetCursorPosX((panelWidth - m_buttonSize) * 0.5f);
 			ImageButton(m_playIcon, m_play, [=]()
 				{
 					m_play = true;
@@ -48,7 +46,7 @@ namespace Engine
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		}
 		
-		ImGui::ImageButton((ImTextureID)(uint64_t)texture->GetRendererId(), { m_buttonSize, m_buttonSize }, { 0, 1 }, { 1, 0 }, m_buttonPadding);
+		ImGui::ImageButton((ImTextureID)(uint64_t)texture->GetRendererId(), { m_buttonSize.x, m_buttonSize.y }, { 0, 1 }, { 1, 0 }, m_buttonPadding.x);
 
 		if (isDisabled)
 		{

@@ -1,10 +1,10 @@
 #pragma once
 #include "Engine.h"
 #include "Gui/Dockspace.h"
-#include "Gui/Menubar.h"
+#include "Gui/Sidebar/Menubar.h"
+#include "Gui/Sidebar/Toolbar.h"
 #include "Gui/Panel/ContentBrowserPanel.h"
 #include "Gui/Panel/HierarchyPanel.h"
-#include "Gui/Toolbar.h"
 
 namespace Engine
 {

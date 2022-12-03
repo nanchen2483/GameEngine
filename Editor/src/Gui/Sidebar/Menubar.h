@@ -1,5 +1,5 @@
 #pragma once
-#include "IGui.h"
+#include "Gui/IGui.h"
 #include "Engine.h"
 
 #include <functional>
