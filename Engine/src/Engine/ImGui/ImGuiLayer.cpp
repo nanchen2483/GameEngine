@@ -7,6 +7,7 @@
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 #include <ImGuizmo.h>
+#include <IconFontCppHeaders/IconsFontAwesome6.h>
 
 //TEMPORARY
 #include <GLFW/glfw3.h>
@@ -35,6 +36,14 @@ namespace Engine
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 		//io.ConfigViewportsNoAutoMerge = true;
 		//io.ConfigViewportsNoTaskBarIcon = true;
+		
+		// Merge icons into default tool font
+		io.Fonts->AddFontDefault();
+		ImFontConfig config;
+		config.MergeMode = true;
+		config.GlyphMinAdvanceX = 13.0f; // Use if you want to make the icon monospaced
+		static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+		io.Fonts->AddFontFromFileTTF("resources/fonts/fa-solid-900.ttf", 10.0f, &config, icon_ranges);
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();

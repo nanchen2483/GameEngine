@@ -2,6 +2,7 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <IconFontCppHeaders/IconsFontAwesome6.h>
 
 namespace Engine
 {
@@ -17,7 +18,7 @@ namespace Engine
 
 	void ContentBrowserPanel::OnImGuiRender()
 	{
-		if (ImGui::Begin("Content Browser"))
+		if (ImGui::Begin(ICON_FA_FOLDER " Content Browser"))
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 			bool onRootDir = m_currentDirectory == std::filesystem::path(s_assetPath);
