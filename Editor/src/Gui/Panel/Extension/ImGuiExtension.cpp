@@ -91,10 +91,12 @@ namespace Engine
 			[&]()
 			{
 				ImGui::SameLine(ImGui::GetWindowContentRegionWidth() - 8.0f);
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				if (ImGui::Button("+", ImVec2(20, 20)))
 				{
 					ImGui::OpenPopup("ComponentSettings");
 				}
+				ImGui::PopStyleColor();
 			},
 			[&]() { OnOpen(); },
 			[&]() { OnRemove(); });
