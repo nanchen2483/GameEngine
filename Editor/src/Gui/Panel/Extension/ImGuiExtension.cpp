@@ -142,7 +142,18 @@ namespace Engine
 		{
 			ImGui::Columns(2);
 			{
-				ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
+				float labelWidth = LABEL_COLUMN_WIDTH;
+				float currentRowTotalWidth = ImGui::GetWindowContentRegionWidth();
+				if (currentRowTotalWidth < (LABEL_COLUMN_WIDTH + VALUE_COLUMN_MINIMUM_WIDTH))
+				{
+					labelWidth = currentRowTotalWidth - VALUE_COLUMN_MINIMUM_WIDTH;
+					if (labelWidth < LABEL_COLUMN_MINIMUM_WIDTH)
+					{
+						labelWidth = -1;
+					}
+				}
+
+				ImGui::SetColumnWidth(0, labelWidth);
 				ImGui::Text(label.c_str());
 				ImGui::NextColumn();
 				ImGui::PushItemWidth(-1);
@@ -198,7 +209,7 @@ namespace Engine
 		DrawPropertySubSection(label,
 			[&]()
 			{
-				ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+				ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth() - (5 + 2) * 3);
 				{
 					DrawFloatControl("X", values.x, resetValue, 0.1f, 0.0f, 0.0f, ImGuiColor::Red);
 					ImGui::PopItemWidth();
@@ -355,12 +366,12 @@ namespace Engine
 		ButtonColor(buttonColor,
 			[&]()
 			{
-				if (ImGui::Button("##DrawFloatControlButton", { 5 , 0 }))
+				if (ImGui::Button(("##DrawFloatControlButton" + buttonLabel).c_str(), {5 , 0}))
 				{
 					value = resetValue;
 				}
 				ImGui::SameLine(0, 0);
-				ImGui::DragFloat(("##" + buttonLabel).c_str(), &value, speed, min, max, "%.2f");
+				ImGui::DragFloat(("##DrawFloatControlDragFloat" + buttonLabel).c_str(), &value, speed, min, max, "%.2f");
 			});
 		return originValue != value;
 	}

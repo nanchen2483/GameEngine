@@ -5,6 +5,8 @@
 #include <string>
 
 #define LABEL_COLUMN_WIDTH 100.0f
+#define LABEL_COLUMN_MINIMUM_WIDTH 20.0f
+#define VALUE_COLUMN_MINIMUM_WIDTH 150.0f
 #define LABEL_WIDTH 50.0f
 
 namespace Engine
