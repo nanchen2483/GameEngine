@@ -10,8 +10,10 @@ namespace Engine
 	{
 	public:
 		ContentBrowserPanel();
+		void ToggleWindowStatus() { m_open = !m_open; }
 		virtual void OnImGuiRender() override;
 	private:
+		bool m_open = true;
 		std::filesystem::path m_currentDirectory;
 
 		Ptr<Texture2D> m_folderIcon;

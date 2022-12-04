@@ -86,8 +86,7 @@ namespace Engine
 		m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 #endif // 0
 
-		m_hierachyPanel.SetContext(m_activeScene);
-
+		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 		m_menubar.SetFunctions(
 			ENGINE_BIND_FN(EditorLayer::NewScene),
 			ENGINE_BIND_FN(EditorLayer::OpenScene),
@@ -182,8 +181,7 @@ namespace Engine
 			{
 				m_menubar.OnImGuiRender();
 				m_toolbar.OnImGuiRender();
-				m_hierachyPanel.OnImGuiRender();
-				m_contentBrowserPanel.OnImGuiRender();
+				m_statusbar.OnImGuiRender();
 
 				ImGuiWindowClass windowClass;
 				windowClass.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar;
@@ -217,7 +215,7 @@ namespace Engine
 					}
 
 					// ImGuizmo
-					Entity selectedEntity = m_hierachyPanel.GetSelectedEntity();
+					Entity selectedEntity = m_menubar.GetHierarchy()->GetSelectedEntity();
 					if (selectedEntity && m_gizmoType != -1)
 					{
 						ImGuizmo::SetOrthographic(false);
@@ -356,7 +354,7 @@ namespace Engine
 		{
 			if (m_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(KeyCode::LEFT_ALT))
 			{
-				m_hierachyPanel.SetSelectedEntity(m_hoveredEntity);
+				m_menubar.GetHierarchy()->SetSelectedEntity(m_hoveredEntity);
 			}
 		}
 
@@ -367,7 +365,7 @@ namespace Engine
 	{
 		m_activeScene = CreatePtr<Scene>();
 		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-		m_hierachyPanel.SetContext(m_activeScene);
+		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 	}
 	
 	void EditorLayer::OpenScene()
@@ -384,7 +382,7 @@ namespace Engine
 	{
 		m_activeScene = CreatePtr<Scene>();
 		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-		m_hierachyPanel.SetContext(m_activeScene);
+		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 
 		SceneSerializer serializer(m_activeScene);
 		serializer.Deserialize(filepath.string());

@@ -17,7 +17,7 @@ namespace Engine
 
 	void ContentBrowserPanel::OnImGuiRender()
 	{
-		if (ImGui::Begin(ICON_FA_FOLDER " Content Browser"))
+		if (m_open && ImGui::Begin(ICON_FA_FOLDER " Content Browser", &m_open))
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 			if (!m_backToPathStack.empty())
@@ -116,12 +116,7 @@ namespace Engine
 				ImGui::NextColumn();
 				ImGui::PopID();
 			}
-
 			ImGui::Columns(1);
-
-			//ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 16, 512);
-			//ImGui::SliderFloat("Padding", &padding, 0, 128);
-
 			ImGui::End();
 		}
 	}
