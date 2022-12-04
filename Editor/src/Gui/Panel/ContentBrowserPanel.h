@@ -16,6 +16,8 @@ namespace Engine
 
 		Ptr<Texture2D> m_folderIcon;
 		Ptr<Texture2D> m_fileIcon;
-		Ptr<Texture2D> m_backIcon;
+
+		std::vector<std::filesystem::path> m_backToPathStack;
+		std::vector<std::filesystem::path> m_forwardToPathStack;
 	};
 }
