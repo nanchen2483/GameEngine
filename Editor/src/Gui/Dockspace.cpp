@@ -13,7 +13,7 @@ namespace Engine
 		static bool dockSpaceOpen = true;
 		static bool opt_fullscreen = true;
 		static bool opt_padding = false;
-		static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
+		static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_NoCloseButton;
 
 		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
 		// because it would be confusing to have two docking targets within each others.
