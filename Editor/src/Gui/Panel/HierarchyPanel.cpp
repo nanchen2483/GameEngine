@@ -23,37 +23,39 @@ namespace Engine
 
 	void HierarchyPanel::OnImGuiRender()
 	{
-		ImGui::Begin(ICON_FA_SITEMAP " Outliner");
-		m_context->m_registry.each([&](entt::entity entityId) {
-			Entity entity = Entity{ entityId, m_context.get() };
-			DrawEntityNode(entity);
-		});
-
-		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+		if (m_openOutliner && ImGui::Begin(ICON_FA_SITEMAP " Outliner", &m_openOutliner))
 		{
-			m_selectionContext = {};
-		}
+			m_context->m_registry.each([&](entt::entity entityId) {
+				Entity entity = Entity{ entityId, m_context.get() };
+				DrawEntityNode(entity);
+			});
 
-		// Right-click on blank space
-		if (ImGui::BeginPopupContextWindow(0, 1, false))
-		{
-			if (ImGui::MenuItem("Create Empty Entity"))
+			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 			{
-				m_context->CreateEntity("Empty Entity");
+				m_selectionContext = {};
 			}
 
-			ImGui::EndPopup();
+			// Right-click on blank space
+			if (ImGui::BeginPopupContextWindow(0, 1, false))
+			{
+				if (ImGui::MenuItem("Create Empty Entity"))
+				{
+					m_context->CreateEntity("Empty Entity");
+				}
+
+				ImGui::EndPopup();
+			}
+			ImGui::End();
 		}
 
-		ImGui::End();
-
-		ImGui::Begin(ICON_FA_PENCIL " Details");
-		if (m_selectionContext)
+		if (m_openDetails && ImGui::Begin(ICON_FA_PENCIL " Details", &m_openDetails))
 		{
-			DrawComponents(m_selectionContext);
+			if (m_selectionContext)
+			{
+				DrawComponents(m_selectionContext);
+			}
+			ImGui::End();
 		}
-
-		ImGui::End();
 	}
 	
 	void HierarchyPanel::SetSelectedEntity(Entity& entity)

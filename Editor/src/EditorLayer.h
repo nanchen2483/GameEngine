@@ -2,9 +2,8 @@
 #include "Engine.h"
 #include "Gui/Dockspace.h"
 #include "Gui/Sidebar/Menubar.h"
+#include "Gui/Sidebar/Statusbar.h"
 #include "Gui/Sidebar/Toolbar.h"
-#include "Gui/Panel/ContentBrowserPanel.h"
-#include "Gui/Panel/HierarchyPanel.h"
 
 namespace Engine
 {
@@ -44,7 +43,6 @@ namespace Engine
 		Dockspace m_dockspace;
 		Menubar m_menubar;
 		Toolbar m_toolbar;
-		HierarchyPanel m_hierachyPanel;
-		ContentBrowserPanel m_contentBrowserPanel;
+		Statusbar m_statusbar;
 	};
 }
