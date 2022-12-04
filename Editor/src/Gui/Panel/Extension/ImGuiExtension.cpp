@@ -16,7 +16,7 @@ namespace Engine
 		{
 			char buffer[256];
 			strcpy(buffer, text.c_str());
-			ImGui::PushItemWidth(ImGui::GetWindowContentRegionWidth());
+			ImGui::PushItemWidth(-1);
 			if (ImGui::InputText("##EditableText", buffer, IM_ARRAYSIZE(buffer)))
 			{
 				text = std::string(buffer);
@@ -44,7 +44,7 @@ namespace Engine
 		ImGui::SameLine(LABEL_WIDTH);
 		char buffer[256];
 		strcpy(buffer, text.c_str());
-		ImGui::PushItemWidth(ImGui::GetWindowContentRegionWidth());
+		ImGui::PushItemWidth(-1);
 		if (ImGui::InputText("##InputText", buffer, IM_ARRAYSIZE(buffer)))
 		{
 			text = std::string(buffer);
@@ -145,7 +145,7 @@ namespace Engine
 				ImGui::SetColumnWidth(0, LABEL_COLUMN_WIDTH);
 				ImGui::Text(label.c_str());
 				ImGui::NextColumn();
-				ImGui::PushItemWidth(ImGui::CalcItemWidth());
+				ImGui::PushItemWidth(-1);
 				InlineCode();
 				ImGui::PopItemWidth();
 			}
@@ -154,7 +154,7 @@ namespace Engine
 		ImGui::PopID();
 	}
 
-	void ImGuiExtension::DrawPropertyTagSection(std::string& tag, std::string buttonText, glm::vec2 buttonSize, std::function<void(void)> OnClick)
+	void ImGuiExtension::DrawPropertyTagSection(std::string& tag, std::string buttonLabel, glm::vec2 buttonSize, std::function<void(void)> OnClick)
 	{
 		ImGui::PushID(ICON_FA_TAG);
 		{
@@ -164,8 +164,8 @@ namespace Engine
 				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + buttonSize.y / 2 - ImGui::GetFontSize() / 2);
 				EditableText(ICON_FA_TAG, tag, 0);
 				ImGui::NextColumn();
-				ImGui::PushItemWidth(ImGui::CalcItemWidth());
-				if (ImGui::Button(buttonText.c_str(), { buttonSize.x, buttonSize.y }))
+				ImGui::PushItemWidth(-1);
+				if (ImGui::Button(buttonLabel.c_str(), { buttonSize.x, buttonSize.y }))
 				{
 					ImGui::OpenPopup("AddComponent");
 				}
@@ -199,8 +199,6 @@ namespace Engine
 			[&]()
 			{
 				ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
-				float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-				ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
 				{
 					DrawFloatControl("X", values.x, resetValue, 0.1f, 0.0f, 0.0f, ImGuiColor::Red);
 					ImGui::PopItemWidth();
@@ -354,13 +352,10 @@ namespace Engine
 	bool ImGuiExtension::DrawFloatControl(const std::string& buttonLabel, float& value, float resetValue, float speed, float min, float max, ImGuiColor buttonColor)
 	{
 		const float originValue = value;
-
-		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
 		ButtonColor(buttonColor,
 			[&]()
 			{
-				if (ImGui::Button(buttonLabel.c_str(), buttonSize))
+				if (ImGui::Button("##DrawFloatControlButton", { 5 , 0 }))
 				{
 					value = resetValue;
 				}
