@@ -2,6 +2,7 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <IconFontCppHeaders/IconsFontAwesome4.h>
 
 namespace Engine
 {
@@ -12,30 +13,63 @@ namespace Engine
 	{
 		m_folderIcon = Texture2D::Create("resources/Icons/folder.png");
 		m_fileIcon = Texture2D::Create("resources/Icons/file.png");
-		m_backIcon = Texture2D::Create("resources/Icons/left-arrow.png");
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()
 	{
-		if (ImGui::Begin("Content Browser"))
+		if (ImGui::Begin(ICON_FA_FOLDER " Content Browser"))
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-			bool onRootDir = m_currentDirectory == std::filesystem::path(s_assetPath);
-			if (!onRootDir)
+			if (!m_backToPathStack.empty())
 			{
-				ImGui::ImageButton((ImTextureID)(uint64_t)m_backIcon->GetRendererId(), { 15, 15 }, { 0, 1 }, { 1, 0 });
+				ImGui::Button(ICON_FA_ARROW_CIRCLE_O_LEFT, { 20, 20 });
 				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 				{
-					m_currentDirectory = m_currentDirectory.parent_path();
+					m_forwardToPathStack.push_back(m_currentDirectory);
+					m_currentDirectory = m_backToPathStack.back();
+					m_backToPathStack.pop_back();
 				}
 			}
 			else
 			{
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-				ImGui::ImageButton((ImTextureID)(uint64_t)m_backIcon->GetRendererId(), { 15, 15 }, { 0, 1 }, { 1, 0 });
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+				ImGui::Button(ICON_FA_ARROW_CIRCLE_O_LEFT, { 20, 20 });
 				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+			}
+			ImGui::SameLine(0, 0);
+			if (!m_forwardToPathStack.empty())
+			{
+				ImGui::Button(ICON_FA_ARROW_CIRCLE_O_RIGHT, { 20, 20 });
+				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+				{
+					m_backToPathStack.push_back(m_currentDirectory);
+					m_currentDirectory = m_forwardToPathStack.back();
+					m_forwardToPathStack.pop_back();
+				}
+			}
+			else
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+				ImGui::Button(ICON_FA_ARROW_CIRCLE_O_RIGHT, { 20, 20 });
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
 			}
 			ImGui::PopStyleColor();
+			ImGui::SameLine();
+			ImGui::Text(ICON_FA_FOLDER);
+			for (const std::filesystem::path& folder : m_currentDirectory)
+			{
+				ImGui::SameLine();
+				ImGui::Text(folder.string().c_str());
+				ImGui::SameLine();
+				ImGui::Text(ICON_FA_CHEVRON_RIGHT);
+			}
+
+			ImGui::Separator();
+			ImGui::NewLine();
 
 			static float padding = 32.0f;
 			static float thumbnailSize = 48.0f;
@@ -59,7 +93,7 @@ namespace Engine
 				ImGui::PushID(filenameString.c_str());
 				Ptr<Texture2D> icon = directoryEntry.is_directory() ? m_folderIcon : m_fileIcon;
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-				ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererId(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererId(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 }, 10);
 			
 				if (ImGui::BeginDragDropSource())
 				{
@@ -73,6 +107,7 @@ namespace Engine
 				{
 					if (directoryEntry.is_directory())
 					{
+						m_backToPathStack.push_back(m_currentDirectory);
 						m_currentDirectory /= path.filename();
 					}
 				}
