@@ -7,9 +7,18 @@ namespace Engine
 {
 	Toolbar::Toolbar()
 	{
+		m_openIcon = Texture2D::Create("resources/Icons/open-folder.png");
+		m_saveIcon = Texture2D::Create("resources/Icons/save.png");
 		m_playIcon = Texture2D::Create("resources/Icons/play-button.png");
 		m_pauseIcon = Texture2D::Create("resources/Icons/pause-button.png");
 		m_stopIcon = Texture2D::Create("resources/Icons/stop-button.png");
+	}
+
+	void Toolbar::SetFunctions(Func newScene, Func openScene, Func saveSceneAs)
+	{
+		NewScene = newScene;
+		OpenScene = openScene;
+		SaveSceneAs = saveSceneAs;
 	}
 
 	void Toolbar::OnImGuiRender()
@@ -19,6 +28,13 @@ namespace Engine
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { m_toolbarPadding.x, m_toolbarPadding.y });
 		if (ImGui::BeginViewportSideBar("##ToolMenuBar", viewport, ImGuiDir_Up, m_toolbarHeight, windowFlags))
 		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+			ImageButton(m_openIcon, false, OpenScene);
+			ImGui::SameLine(0, 0);
+			ImageButton(m_saveIcon, false, SaveSceneAs);
+			ImGui::SameLine(0, 30);
+			ImGui::PopStyleColor();
+
 			ImageButton(m_playIcon, m_play, [=]()
 				{
 					m_play = true;
@@ -37,8 +53,8 @@ namespace Engine
 		}
 		ImGui::PopStyleVar();
 	}
-	
-	void Toolbar::ImageButton(Ptr<Texture2D> texture, bool isDisabled, std::function<void(void)> OnClick)
+
+	void Toolbar::ImageButton(Ptr<Texture2D> texture, bool isDisabled, Func OnClick)
 	{
 		if (isDisabled)
 		{

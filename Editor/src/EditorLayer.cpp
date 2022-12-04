@@ -92,6 +92,10 @@ namespace Engine
 			ENGINE_BIND_FN(EditorLayer::NewScene),
 			ENGINE_BIND_FN(EditorLayer::OpenScene),
 			ENGINE_BIND_FN(EditorLayer::SaveSceneAs));
+		m_toolbar.SetFunctions(
+			ENGINE_BIND_FN(EditorLayer::NewScene),
+			ENGINE_BIND_FN(EditorLayer::OpenScene),
+			ENGINE_BIND_FN(EditorLayer::SaveSceneAs));
 	}
 
 	void EditorLayer::OnDetach()
