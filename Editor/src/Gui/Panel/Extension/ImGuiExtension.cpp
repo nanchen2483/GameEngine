@@ -3,19 +3,53 @@
 #include <functional>
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <IconFontCppHeaders/IconsFontAwesome6.h>
 
 namespace Engine
 {
+	void ImGuiExtension::EditableText(const std::string& label, std::string& text, float labelSize)
+	{
+		static bool isEditMode = false;
+		ImGui::Text(label.c_str());
+		ImGui::SameLine(labelSize == -1 ? LABEL_WIDTH : 0);
+		if (isEditMode)
+		{
+			char buffer[256];
+			strcpy(buffer, text.c_str());
+			ImGui::PushItemWidth(ImGui::GetWindowContentRegionWidth());
+			if (ImGui::InputText("##EditableText", buffer, IM_ARRAYSIZE(buffer)))
+			{
+				text = std::string(buffer);
+			}
+			ImGui::PopItemWidth();
+			if (!ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+			{
+				isEditMode = false;
+			}
+		}
+		else
+		{
+			ImGui::Text(text.c_str());
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+			{
+				isEditMode = true;
+			
+			}
+		}
+	}
+
 	void ImGuiExtension::InputText(const std::string& label, std::string& text)
 	{
 		ImGui::Text(label.c_str());
 		ImGui::SameLine(LABEL_WIDTH);
 		char buffer[256];
 		strcpy(buffer, text.c_str());
+		ImGui::PushItemWidth(ImGui::GetWindowContentRegionWidth());
 		if (ImGui::InputText("##InputText", buffer, IM_ARRAYSIZE(buffer)))
 		{
 			text = std::string(buffer);
 		}
+		ImGui::PopItemWidth();
 	}
 
 	void ImGuiExtension::LabelText(const std::string& label, const std::string& text)
@@ -120,6 +154,34 @@ namespace Engine
 		ImGui::PopID();
 	}
 
+	void ImGuiExtension::DrawPropertyTagSection(std::string& tag, std::string buttonText, glm::vec2 buttonSize, std::function<void(void)> OnClick)
+	{
+		ImGui::PushID(ICON_FA_TAG);
+		{
+			ImGui::Columns(2, 0, false);
+			{
+				ImGui::SetColumnWidth(0, ImGui::GetWindowContentRegionWidth() - buttonSize.x);
+				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + buttonSize.y / 2 - ImGui::GetFontSize() / 2);
+				EditableText(ICON_FA_TAG, tag, 0);
+				ImGui::NextColumn();
+				ImGui::PushItemWidth(ImGui::CalcItemWidth());
+				if (ImGui::Button(buttonText.c_str(), { buttonSize.x, buttonSize.y }))
+				{
+					ImGui::OpenPopup("AddComponent");
+				}
+
+				if (ImGui::BeginPopup("AddComponent"))
+				{
+					OnClick();
+					ImGui::EndPopup();
+				}
+				ImGui::PopItemWidth();
+			}
+			ImGui::Columns(1);
+		}
+		ImGui::PopID();
+	}
+
 	bool ImGuiExtension::DrawFloatSubSection(const std::string& label, float& value, float resetValue, float speed, float min, float max)
 	{
 		bool isChanged = false;
@@ -202,7 +264,7 @@ namespace Engine
 	void ImGuiExtension::DrawTextureSubSection(const std::string& label, Ptr<Texture2D>& texture, TextureType type, std::function<void(void)> OnDrop)
 	{
 		uint64_t textureId = 0;
-		std::string filePath = "";
+		std::string filePath = "none";
 		if (texture != nullptr)
 		{
 			textureId = texture->GetRendererId();
@@ -233,7 +295,7 @@ namespace Engine
 	void ImGuiExtension::DrawMeshSubSection(const std::string& label, Ptr<Model>& model, std::function<void(const std::string&)> OnDrop)
 	{
 		uint64_t textureId = 0;
-		std::string filePath = "";
+		std::string filePath = "none";
 		if (model != nullptr)
 		{
 			filePath = model->GetFilePath().string();

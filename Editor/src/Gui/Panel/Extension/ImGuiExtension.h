@@ -20,6 +20,7 @@ namespace Engine
 	class ImGuiExtension
 	{
 	public:
+		static void EditableText(const std::string& label, std::string& text, float labelSize = -1);
 		static void InputText(const std::string& label, std::string& text);
 		static void LabelText(const std::string& label, const std::string& text);
 		static void ProgressBar(float fragtion);
@@ -28,6 +29,7 @@ namespace Engine
 		static void DrawEntitySection(const std::string& label, bool isSelected, std::function<void(void)> OnSelect, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove);
 		static void DrawPropertySection(const std::string& label, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove);
 		static void DrawPropertySubSection(const std::string& label, std::function<void(void)> InlineCode);
+		static void DrawPropertyTagSection(std::string& text, std::string buttonText, glm::vec2 buttonSize, std::function<void(void)> OnClick);
 
 		static bool DrawFloatSubSection(const std::string& label, float& value, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f);
 		static void DrawVec3SubSection(const std::string& label, glm::vec3& values, float resetValue = 0.0f);

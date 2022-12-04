@@ -49,54 +49,7 @@ namespace Engine
 
 		ImGui::Begin(ICON_FA_PENCIL " Details");
 		if (m_selectionContext)
-		{	
-			if (ImGui::Button("+ Add Component", {150.0f, 30.0f}))
-			{
-				ImGui::OpenPopup("AddComponent");
-			}
-
-			if (ImGui::BeginPopup("AddComponent"))
-			{
-				if (!m_selectionContext.HasComponent<CameraComponent>() && ImGui::MenuItem("Camera"))
-				{
-					m_selectionContext.AddComponent<CameraComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-
-				if (!m_selectionContext.HasComponent<LightComponent>() && ImGui::MenuItem("Light"))
-				{
-					m_selectionContext.AddComponent<LightComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-
-				if (!m_selectionContext.HasComponent<SpriteRendererComponent>() && ImGui::MenuItem("Sprite Renderer"))
-				{
-					m_selectionContext.AddComponent<SpriteRendererComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-
-				if (!m_selectionContext.HasComponent<ModelComponent>() && ImGui::MenuItem("Model"))
-				{
-					m_selectionContext.AddComponent<ModelComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-
-				if (!m_selectionContext.HasComponent<SkyboxComponent>() && ImGui::MenuItem("Skybox"))
-				{
-					m_selectionContext.AddComponent<SkyboxComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-
-				if (!m_selectionContext.HasComponent<TerrainComponent>() && ImGui::MenuItem("Terrian"))
-				{
-					m_selectionContext.AddComponent<TerrainComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-
-				ImGui::EndPopup();
-			}
-			ImGui::Separator();
-
+		{
 			DrawComponents(m_selectionContext);
 		}
 
@@ -160,7 +113,45 @@ namespace Engine
 		if (entity.HasComponent<TagComponent>())
 		{
 			std::string& tag = entity.GetComponent<TagComponent>().tag;
-			ImGuiExtension::InputText("Name", tag);
+			ImGuiExtension::DrawPropertyTagSection(tag, "+ Add", { 100.0f, 25.f },
+				[&]()
+				{
+					if (!m_selectionContext.HasComponent<CameraComponent>() && ImGui::MenuItem("Camera"))
+					{
+						m_selectionContext.AddComponent<CameraComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+					
+					if (!m_selectionContext.HasComponent<LightComponent>() && ImGui::MenuItem("Light"))
+					{
+						m_selectionContext.AddComponent<LightComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (!m_selectionContext.HasComponent<SpriteRendererComponent>() && ImGui::MenuItem("Sprite Renderer"))
+					{
+						m_selectionContext.AddComponent<SpriteRendererComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (!m_selectionContext.HasComponent<ModelComponent>() && ImGui::MenuItem("Model"))
+					{
+						m_selectionContext.AddComponent<ModelComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (!m_selectionContext.HasComponent<SkyboxComponent>() && ImGui::MenuItem("Skybox"))
+					{
+						m_selectionContext.AddComponent<SkyboxComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (!m_selectionContext.HasComponent<TerrainComponent>() && ImGui::MenuItem("Terrian"))
+					{
+						m_selectionContext.AddComponent<TerrainComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+				});
 		}
 
 		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
