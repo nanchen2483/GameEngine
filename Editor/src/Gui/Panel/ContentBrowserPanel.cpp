@@ -19,11 +19,11 @@ namespace Engine
 	{
 		if (m_open && ImGui::Begin(ICON_FA_FOLDER " Content Browser", &m_open))
 		{
-			ImVec2 size = ImGui::GetContentRegionAvail();
+			ImVec2 regionSize = ImGui::GetContentRegionAvail();
 			static float splitterSize = 2;
 			static float folderOverviewHeight = 25.0f;
 			static float folderHierarchyWidth = 200;
-			float folderHierarchyHeight = size.y - folderOverviewHeight - splitterSize - 10;
+			float folderHierarchyHeight = regionSize.y - folderOverviewHeight - splitterSize - 10;
 
 			if (ImGui::BeginChild("folderOverviewChild", ImVec2(0, folderOverviewHeight), false))
 			{
@@ -41,7 +41,12 @@ namespace Engine
 				ImGui::Button("hsplitter", ImVec2(splitterSize, -1));
 				if (ImGui::IsItemActive())
 				{
-					folderHierarchyWidth += ImGui::GetIO().MouseDelta.x;
+					float deltaX = ImGui::GetIO().MouseDelta.x;
+					float newWidth = deltaX + folderHierarchyWidth;
+					if (newWidth > 0 && newWidth < regionSize.x - 20)
+					{
+						folderHierarchyWidth = newWidth;
+					}
 				}
 				ImGui::SameLine();
 				if (ImGui::BeginChild("FolderContentChild", ImVec2(0, folderHierarchyHeight + splitterSize), false))
