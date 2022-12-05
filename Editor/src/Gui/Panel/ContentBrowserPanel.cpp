@@ -158,11 +158,9 @@ namespace Engine
 			icon = ICON_FA_FOLDER " ";
 		}
 
-		bool isOpen = ImGui::TreeNodeEx((void*)treeNodeId, treeNodeFlag, (icon + directory.filename().string()).c_str());
-		bool isClicked = ImGui::IsItemClicked();
-		if (isOpen)
+		if (ImGui::TreeNodeEx((void*)treeNodeId, treeNodeFlag, (icon + directory.filename().string()).c_str()))
 		{
-			if (isClicked)
+			if (ImGui::IsItemFocused())
 			{
 				m_backToPathStack.push_back(m_currentDirectory);
 				m_currentDirectory = directory;
