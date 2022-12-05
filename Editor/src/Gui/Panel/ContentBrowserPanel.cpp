@@ -21,7 +21,7 @@ namespace Engine
 		{
 			ImVec2 regionSize = ImGui::GetContentRegionAvail();
 			static float splitterSize = 2;
-			static float folderOverviewHeight = 25.0f;
+			static float folderOverviewHeight = 20.0f;
 			static float folderHierarchyWidth = 200;
 			float folderHierarchyHeight = regionSize.y - folderOverviewHeight - splitterSize - 10;
 
