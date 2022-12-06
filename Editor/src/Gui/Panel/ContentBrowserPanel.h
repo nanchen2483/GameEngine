@@ -13,9 +13,12 @@ namespace Engine
 		void ToggleWindowStatus() { m_open = !m_open; }
 		virtual void OnImGuiRender() override;
 	private:
+		void FolderOverview();
+		void FolderHierarcy(std::filesystem::path directory);
+		void FolderContent();
+
 		bool m_open = true;
 		std::filesystem::path m_currentDirectory;
-
 		Ptr<Texture2D> m_folderIcon;
 		Ptr<Texture2D> m_fileIcon;
 
