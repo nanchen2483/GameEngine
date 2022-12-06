@@ -37,6 +37,55 @@ namespace Engine
 
 		m_editorCamera = EditorCamera(45.0f, m_viewportSize.x, m_viewportSize.y, 0.1f, 10000.0f);
 
+#if 0
+		m_squareEntity = m_activeScene->CreateEntity("Lightblue square");
+		m_squareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.6f, 0.8f, 1.0f, 1.0f));
+
+		m_cameraEntity = m_activeScene->CreateEntity("Camera entity");
+		m_cameraEntity.AddComponent<CameraComponent>();
+
+		m_secondCameraEntity = m_activeScene->CreateEntity("Second camera entity");
+		m_secondCameraEntity.AddComponent<CameraComponent>(false);
+
+		class CameraController : public ScriptableEntity
+		{
+		public:
+			virtual void OnCreate() override
+			{
+			}
+
+			virtual void OnDestroy() override
+			{
+
+			}
+
+			virtual void OnUpdate(TimeStep ts) override
+			{
+				auto& translation = GetComponent<TransformComponent>().translation;
+				float speed = 5.0f;
+
+				if (Input::IsKeyPressed(ENGINE_KEY_A))
+				{
+					translation.x -= speed * ts;
+				}
+				if (Input::IsKeyPressed(ENGINE_KEY_D))
+				{
+					translation.x += speed * ts;
+				}
+				if (Input::IsKeyPressed(ENGINE_KEY_W))
+				{
+					translation.y += speed * ts;
+				}
+				if (Input::IsKeyPressed(ENGINE_KEY_S))
+				{
+					translation.y -= speed * ts;
+				}
+			}
+		};
+
+		m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif // 0
+
 		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 		m_menubar.SetFunctions(
 			ENGINE_BIND_FN(EditorLayer::NewScene),
