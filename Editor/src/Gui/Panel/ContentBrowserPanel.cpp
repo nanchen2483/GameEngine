@@ -162,8 +162,11 @@ namespace Engine
 		{
 			if (ImGui::IsItemFocused())
 			{
-				m_backToPathStack.push_back(m_currentDirectory);
-				m_currentDirectory = directory;
+				if (m_currentDirectory != directory)
+				{
+					m_backToPathStack.push_back(m_currentDirectory);
+					m_currentDirectory = directory;
+				}
 			}
 
 			for (const std::filesystem::path& subdir : subdirs)
