@@ -17,7 +17,7 @@ namespace Engine
 		void FolderHierarcy(std::filesystem::path directory);
 		void FolderContent();
 
-		bool m_open = true;
+		bool m_open = false;
 		std::filesystem::path m_currentDirectory;
 		Ptr<Texture2D> m_folderIcon;
 		Ptr<Texture2D> m_fileIcon;
