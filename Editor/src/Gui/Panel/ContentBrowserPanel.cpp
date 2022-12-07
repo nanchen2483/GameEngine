@@ -17,42 +17,45 @@ namespace Engine
 
 	void ContentBrowserPanel::OnImGuiRender()
 	{
-		if (m_open && ImGui::Begin(ICON_FA_FOLDER " Content Browser", &m_open))
+		if (m_open)
 		{
-			ImVec2 regionSize = ImGui::GetContentRegionAvail();
-			static float splitterSize = 2;
-			static float folderOverviewHeight = 20.0f;
-			static float folderHierarchyWidth = 200;
-			float folderHierarchyHeight = regionSize.y - folderOverviewHeight - splitterSize - 10;
+			if (ImGui::Begin(ICON_FA_FOLDER " Content Browser", &m_open))
+			{
+				ImVec2 regionSize = ImGui::GetContentRegionAvail();
+				static float splitterSize = 2;
+				static float folderOverviewHeight = 20.0f;
+				static float folderHierarchyWidth = 200;
+				float folderHierarchyHeight = regionSize.y - folderOverviewHeight - splitterSize - 10;
 
-			if (ImGui::BeginChild("folderOverviewChild", ImVec2(0, folderOverviewHeight), false))
-			{
-				FolderOverview();
-				ImGui::EndChild();
-			}
-			ImGui::Button("vsplitter", ImVec2(-1, splitterSize));
-			{
-				if (ImGui::BeginChild("folderHierarcyChild", ImVec2(folderHierarchyWidth, folderHierarchyHeight + splitterSize), false))
+				if (ImGui::BeginChild("folderOverviewChild", ImVec2(0, folderOverviewHeight), false))
 				{
-					FolderHierarcy(s_rootPath);
+					FolderOverview();
 					ImGui::EndChild();
 				}
-				ImGui::SameLine();
-				ImGui::Button("hsplitter", ImVec2(splitterSize, -1));
-				if (ImGui::IsItemActive())
+				ImGui::Button("vsplitter", ImVec2(-1, splitterSize));
 				{
-					float deltaX = ImGui::GetIO().MouseDelta.x;
-					float newWidth = deltaX + folderHierarchyWidth;
-					if (newWidth > 0 && newWidth < regionSize.x - 20)
+					if (ImGui::BeginChild("folderHierarcyChild", ImVec2(folderHierarchyWidth, folderHierarchyHeight + splitterSize), false))
 					{
-						folderHierarchyWidth = newWidth;
+						FolderHierarcy(s_rootPath);
+						ImGui::EndChild();
 					}
-				}
-				ImGui::SameLine();
-				if (ImGui::BeginChild("FolderContentChild", ImVec2(0, folderHierarchyHeight + splitterSize), false))
-				{
-					FolderContent();
-					ImGui::EndChild();
+					ImGui::SameLine();
+					ImGui::Button("hsplitter", ImVec2(splitterSize, -1));
+					if (ImGui::IsItemActive())
+					{
+						float deltaX = ImGui::GetIO().MouseDelta.x;
+						float newWidth = deltaX + folderHierarchyWidth;
+						if (newWidth > 0 && newWidth < regionSize.x - 20)
+						{
+							folderHierarchyWidth = newWidth;
+						}
+					}
+					ImGui::SameLine();
+					if (ImGui::BeginChild("FolderContentChild", ImVec2(0, folderHierarchyHeight + splitterSize), false))
+					{
+						FolderContent();
+						ImGui::EndChild();
+					}
 				}
 			}
 			ImGui::End();

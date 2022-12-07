@@ -72,8 +72,7 @@ namespace Engine
 			}
 
 			callbackFunction();
-
-			ImGui::End();
 		}
+		ImGui::End();
 	}
 }
