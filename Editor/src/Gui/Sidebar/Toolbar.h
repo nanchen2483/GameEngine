@@ -12,7 +12,8 @@ namespace Engine
 		Toolbar();
 
 		virtual void OnImGuiRender() override;
-		bool IsPlaying() const { return m_play; }
+		bool OnPlayMode() const { return m_play; }
+		bool OnEditMode() const { return !m_play; }
 		typedef std::function<void()> Func;
 		void SetFunctions(Func newScene, Func openScene, Func saveSceneAs);
 	private:

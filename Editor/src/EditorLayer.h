@@ -31,7 +31,7 @@ namespace Engine
 		bool m_viewportFocused = false, m_viewportHovered = false;
 		Ptr<Scene> m_activeScene;
 		EditorCamera m_editorCamera;
-		int32_t m_gizmoType = -1;
+		int32_t m_guizmoType = -1;
 
 		Entity m_hoveredEntity;
 		glm::vec2 m_viewportBounds[2] = { glm::vec2(0.0f), glm::vec2(0.0f) };
