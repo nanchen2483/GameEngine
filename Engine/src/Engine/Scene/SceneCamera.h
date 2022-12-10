@@ -34,10 +34,18 @@ namespace Engine
 		float GetOrthographicFarClip() const { return m_orthographicFar; }
 		void SetOrthographicFarClip(float farClip);
 
+		float GetMoveSpeed() const { return m_moveSpeed; }
+		void SetMoveSpeed(float speed);
+		float GetRotationSpeed() const { return m_rotationSpeed; }
+		void SetRotationSpeed(float speed);
+
+		glm::vec3 GetUpDirection() const { return m_upDirection; }
+		void SetUpDirection(glm::vec3 direction);
+
 		CameraProjectionType GetProjectionType() const { return m_projectionType; }
 		void SetProjectionType(CameraProjectionType type);
 	private:
-		void RecalculateProjection();
+		void UpdateProjection();
 
 		CameraType m_type;
 		CameraProjectionType m_projectionType;
@@ -50,7 +58,11 @@ namespace Engine
 		float m_orthographicSize;
 		float m_orthographicNear;
 		float m_orthographicFar;
+		
+		float m_moveSpeed;
+		float m_rotationSpeed;
 
+		glm::vec3 m_upDirection;
 		glm::mat4 m_projection;
 	};
 }

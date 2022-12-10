@@ -58,8 +58,8 @@ namespace Engine
 
 		m_FPSCalculator.Update();
 
-		if (FramebufferSpecification spec = m_framebuffer->GetSpecification();
-			m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f && // zero sized framebuffer is invalid
+		FramebufferSpecification spec = m_framebuffer->GetSpecification();
+		if (m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f && // zero sized framebuffer is invalid
 			(spec.width != m_viewportSize.x || spec.height != m_viewportSize.y))
 		{
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
@@ -67,31 +67,32 @@ namespace Engine
 			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		}
 
-		if (m_viewportHovered && !m_toolbar.IsPlaying())
-		{
-			ENGINE_PROFILE_SCOPE("Camera OnUpdate");
-			m_editorCamera.OnUpdate(timeStep);
-		}
-
-		Renderer3D::ResetStates();
 		m_framebuffer->Bind();
 		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RendererCommand::Clear();
 
-		// Clear entity id buffer attachment to -1
-		m_framebuffer->ClearAttachment(ENTITY_ID_ATTACHMENT_INDEX, -1);
-
-		if (m_toolbar.IsPlaying())
+		if (m_toolbar.OnEditMode())
 		{
-			m_activeScene->OnUpdateRuntime(timeStep);
+			Renderer3D::ResetStates();
+			if (m_viewportHovered)
+			{
+				ENGINE_PROFILE_SCOPE("Camera OnUpdate");
+				m_editorCamera.OnUpdate(timeStep);
+			}
+
+			// Clear entity id buffer attachment to -1
+			m_framebuffer->ClearAttachment(ENTITY_ID_ATTACHMENT_INDEX, -1);
+
+			m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
+
+			m_framebuffer->Bind();
+			UpdateHoveredEntity();
 		}
 		else
 		{
-			m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
+			m_activeScene->OnUpdateRuntime(timeStep);
 		}
-
-		m_framebuffer->Bind();
-		UpdateHoveredEntity();
+		
 		m_framebuffer->Unbind();
 	}
 
@@ -156,60 +157,63 @@ namespace Engine
 					uint64_t textureId = m_framebuffer->GetColorAttachmentRendererId(0);
 					ImGui::Image((void*)textureId, ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 
-					if (ImGui::BeginDragDropTarget())
+					if (m_toolbar.OnEditMode())
 					{
-						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						if (ImGui::BeginDragDropTarget())
 						{
-							const wchar_t* path = (const wchar_t*)payload->Data;
-							OpenScene(path);
-						}
-					}
-
-					// ImGuizmo
-					Entity selectedEntity = m_menubar.GetHierarchy()->GetSelectedEntity();
-					if (selectedEntity && m_gizmoType != -1)
-					{
-						ImGuizmo::SetOrthographic(false);
-						ImGuizmo::SetDrawlist();
-						ImGuizmo::SetRect(m_viewportBounds[0].x, m_viewportBounds[0].y, m_viewportBounds[1].x - m_viewportBounds[0].x, m_viewportBounds[1].y - m_viewportBounds[0].y);
-
-						// Editor camera
-						const glm::mat4& cameraProjection = m_editorCamera.GetProjection();
-						glm::mat4 cameraView = m_editorCamera.GetViewMatrix();
-
-						// Entity transform
-						Transform& transform = selectedEntity.GetComponent<TransformComponent>();
-						glm::mat4 transformMatrix = transform;
-
-						// Snapping
-						bool snap = Input::IsKeyPressed(KeyCode::LEFT_CONTROL);
-						float snapValue = 0.5f; // 0.5 meter for translation/scale
-						if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
-						{
-							snapValue = 45.0f; // 45.0 degrees for rotation
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+							{
+								const wchar_t* path = (const wchar_t*)payload->Data;
+								OpenScene(path);
+							}
 						}
 
-						float snapValues[3] = { snapValue, snapValue, snapValue };
-
-						ImGuizmo::Manipulate(
-							glm::value_ptr(cameraView),
-							glm::value_ptr(cameraProjection),
-							(ImGuizmo::OPERATION)m_gizmoType,
-							ImGuizmo::LOCAL,
-							glm::value_ptr(transformMatrix),
-							nullptr,
-							snap ? snapValues : nullptr
-						);
-
-						if (ImGuizmo::IsUsing())
+						// ImGuizmo
+						Entity selectedEntity = m_menubar.GetHierarchy()->GetSelectedEntity();
+						if (selectedEntity && m_guizmoType != -1)
 						{
-							glm::vec3 translation, rotation, scale;
-							Math::DecomposeTransform(transformMatrix, translation, rotation, scale);
+							ImGuizmo::SetOrthographic(false);
+							ImGuizmo::SetDrawlist();
+							ImGuizmo::SetRect(m_viewportBounds[0].x, m_viewportBounds[0].y, m_viewportBounds[1].x - m_viewportBounds[0].x, m_viewportBounds[1].y - m_viewportBounds[0].y);
 
-							glm::vec3 deltaRotation = rotation - transform.rotation;
-							transform.translation = translation;
-							transform.rotation += deltaRotation;
-							transform.scale = scale;
+							// Editor camera
+							const glm::mat4& cameraProjection = m_editorCamera.GetProjection();
+							glm::mat4 cameraView = m_editorCamera.GetViewMatrix();
+
+							// Entity transform
+							Transform& transform = selectedEntity.GetComponent<TransformComponent>();
+							glm::mat4 transformMatrix = transform;
+
+							// Snapping
+							bool snap = Input::IsKeyPressed(KeyCode::LEFT_CONTROL);
+							float snapValue = 0.5f; // 0.5 meter for translation/scale
+							if (m_guizmoType == ImGuizmo::OPERATION::ROTATE)
+							{
+								snapValue = 45.0f; // 45.0 degrees for rotation
+							}
+
+							float snapValues[3] = { snapValue, snapValue, snapValue };
+
+							ImGuizmo::Manipulate(
+								glm::value_ptr(cameraView),
+								glm::value_ptr(cameraProjection),
+								(ImGuizmo::OPERATION)m_guizmoType,
+								ImGuizmo::LOCAL,
+								glm::value_ptr(transformMatrix),
+								nullptr,
+								snap ? snapValues : nullptr
+							);
+
+							if (ImGuizmo::IsUsing())
+							{
+								glm::vec3 translation, rotation, scale;
+								Math::DecomposeTransform(transformMatrix, translation, rotation, scale);
+
+								glm::vec3 deltaRotation = rotation - transform.rotation;
+								transform.translation = translation;
+								transform.rotation += deltaRotation;
+								transform.scale = scale;
+							}
 						}
 					}
 				}
@@ -239,7 +243,12 @@ namespace Engine
 	{
 		bool control = Input::IsKeyPressed(KeyCode::LEFT_CONTROL) || Input::IsKeyPressed(KeyCode::RIGHT_CONTROL);
 		bool shift = Input::IsKeyPressed(KeyCode::LEFT_SHIFT) || Input::IsKeyPressed(KeyCode::RIGHT_SHIFT);
-		bool cameraInUse = m_editorCamera.InUse();
+		bool inEditMode = m_toolbar.OnEditMode();
+		bool manipulatable = !m_editorCamera.InUse() && inEditMode;
+		if (manipulatable)
+		{
+			m_guizmoType = -1;
+		}
 
 		switch (event.GetKeyCode())
 		{
@@ -262,27 +271,27 @@ namespace Engine
 			}
 			break;
 		case KeyCode::Q:
-			if (!cameraInUse)
+			if (manipulatable)
 			{
-				m_gizmoType = -1;
+				m_guizmoType = -1;
 			}
 			break;
 		case KeyCode::W:
-			if (!cameraInUse)
+			if (manipulatable)
 			{
-				m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				m_guizmoType = ImGuizmo::OPERATION::TRANSLATE;
 			}
 			break;
 		case KeyCode::E:
-			if (!cameraInUse)
+			if (manipulatable)
 			{
-				m_gizmoType = ImGuizmo::OPERATION::SCALE;
+				m_guizmoType = ImGuizmo::OPERATION::SCALE;
 			}
 			break;
 		case KeyCode::R:
-			if (!cameraInUse)
+			if (manipulatable)
 			{
-				m_gizmoType = ImGuizmo::OPERATION::ROTATE;
+				m_guizmoType = ImGuizmo::OPERATION::ROTATE;
 			}
 			break;
 		case KeyCode::F:
@@ -290,6 +299,12 @@ namespace Engine
 			{
 				Transform& transform = m_hoveredEntity.GetComponent<TransformComponent>();
 				m_editorCamera.UpdateFocusPoint(transform);
+			}
+			break;
+		case KeyCode::ESCAPE:
+			if (m_toolbar.OnPlayMode())
+			{
+				Input::ShowCursor();
 			}
 			break;
 		default:
@@ -306,6 +321,11 @@ namespace Engine
 			if (m_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(KeyCode::LEFT_ALT))
 			{
 				m_menubar.GetHierarchy()->SetSelectedEntity(m_hoveredEntity);
+			}
+
+			if (m_toolbar.OnPlayMode())
+			{
+				Input::HideCursor();
 			}
 		}
 

@@ -24,6 +24,7 @@ Entities:
     ModelComponent:
       Path: assets\models\vampire\dancing_vampire.dae
       EnableAnimation: true
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Plan
@@ -98,6 +99,7 @@ Entities:
     ModelComponent:
       Path: assets\models\backpack\backpack.obj
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Skybox
@@ -122,6 +124,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube-model 2
@@ -132,6 +135,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube-model 3
@@ -142,3 +146,4 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false

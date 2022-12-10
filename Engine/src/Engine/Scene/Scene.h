@@ -4,6 +4,7 @@
 #include "Engine/Renderer/Shadow/ShadowBox.h"
 #include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Physics/Collision/Collision.h"
+#include "System/CameraSystem.h"
 
 #include <entt/entt.hpp>
 
@@ -14,7 +15,7 @@ namespace Engine
 	class Scene
 	{
 	public:
-		Scene(bool enableShadow = true);
+		Scene();
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = "");
@@ -29,7 +30,7 @@ namespace Engine
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
-	private:
+		
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
 		Uniq<ShadowBox> m_shadowBox = nullptr;

@@ -300,6 +300,7 @@ namespace Engine
 					}
 					else
 					{
+						ImGuiExtension::DrawCheckboxSubSection("IsPlayer", &component->isPlayer);
 						ImGuiExtension::DrawMeshSubSection("Mesh", component->model,
 							[&](const std::string& filePath)
 							{

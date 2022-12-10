@@ -2,14 +2,40 @@ Scene: Untitled
 Entities:
   - Entity: 123
     TagComponent:
-      Tag: Plan
+      Tag: Red cube
     TransformComponent:
-      Translation: [0, -4.23649549, 4.04193997e-06]
-      Rotation: [0, 0, 0]
-      Scale: [500, 1, 500]
+      Translation: [2.02971911, 1.3626895, -11.4038324]
+      Rotation: [-0.000229859652, 0.0398453586, 0.012294312]
+      Scale: [9, 9, 2.20000219]
     SpriteRendererComponent:
-      Color: [0.813725471, 0.813717306, 0.813717306, 1]
-      TextureFilePath: assets\textures\blocks.png
+      Color: [0.931372523, 0.228277594, 0.228277594, 1]
+  - Entity: 123
+    TagComponent:
+      Tag: Lightblue cube
+    TransformComponent:
+      Translation: [-0.555010855, -0.179317594, -10.7059622]
+      Rotation: [-0.500811815, 0.0608921349, 0.00290317717]
+      Scale: [9, 9, 1]
+    SpriteRendererComponent:
+      Color: [0.600000024, 0.800000012, 1, 1]
+  - Entity: 123
+    TagComponent:
+      Tag: Camera entity
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 46.7849998
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
   - Entity: 123
     TagComponent:
       Tag: Second camera entity
@@ -30,37 +56,11 @@ Entities:
       FixedAspectRatio: false
   - Entity: 123
     TagComponent:
-      Tag: Camera entity
+      Tag: Plan
     TransformComponent:
-      Translation: [0, 0, 0]
+      Translation: [0, -4.23649549, 4.04193997e-06]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 1
-        PerspectiveFOV: 0.785398185
-        PerspectiveNear: 0.00999999978
-        PerspectiveFar: 1000
-        OrthographicSize: 10
-        OrthographicNear: -1
-        OrthographicFar: 1
-      Primary: true
-      FixedAspectRatio: false
-  - Entity: 123
-    TagComponent:
-      Tag: Lightblue cube
-    TransformComponent:
-      Translation: [-0.555010855, -0.179317594, -10.7059622]
-      Rotation: [-0.500811815, 0.0608921349, 0.00290317717]
-      Scale: [9, 9, 1]
+      Scale: [500, 1, 500]
     SpriteRendererComponent:
-      Color: [0.600000024, 0.800000012, 1, 1]
-  - Entity: 123
-    TagComponent:
-      Tag: Red cube
-    TransformComponent:
-      Translation: [2.02971911, 1.3626895, -11.4038324]
-      Rotation: [-0.000229859652, 0.0398453586, 0.012294312]
-      Scale: [9, 9, 2.20000219]
-    SpriteRendererComponent:
-      Color: [0.931372523, 0.228277594, 0.228277594, 1]
+      Color: [0.813725471, 0.813717306, 0.813717306, 1]
+      TextureFilePath: assets\textures\blocks.png
