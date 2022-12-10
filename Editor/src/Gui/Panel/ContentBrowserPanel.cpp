@@ -211,7 +211,8 @@ namespace Engine
 			if (ImGui::BeginDragDropSource())
 			{
 				const wchar_t* itemPath = path.c_str();
-				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+				ImGui::SetDragDropPayload(File::GetFileType(path).c_str(), itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+				ImGui::Text(path.filename().string().c_str());
 				ImGui::EndDragDropSource();
 			}
 

@@ -161,11 +161,12 @@ namespace Engine
 					{
 						if (ImGui::BeginDragDropTarget())
 						{
-							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(FileType::Scene.c_str()))
 							{
 								const wchar_t* path = (const wchar_t*)payload->Data;
 								OpenScene(path);
 							}
+							ImGui::EndDragDropTarget();
 						}
 
 						// ImGuizmo

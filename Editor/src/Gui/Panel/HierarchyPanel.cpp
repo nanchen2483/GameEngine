@@ -365,7 +365,7 @@ namespace Engine
 
 							if (ImGui::BeginDragDropTarget())
 							{
-								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(FileType::Texture.c_str()))
 								{
 									const wchar_t* filepath = (const wchar_t*)payload->Data;
 									const std::filesystem::path path = filepath;

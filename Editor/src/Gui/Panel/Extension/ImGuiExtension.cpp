@@ -286,7 +286,7 @@ namespace Engine
 				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
 				{
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(FileType::Texture.c_str()))
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
@@ -296,6 +296,7 @@ namespace Engine
 							OnDrop();
 						}
 					}
+					ImGui::EndDragDropTarget();
 				}
 				ImGui::Text(filePath.c_str());
 			});
@@ -316,12 +317,13 @@ namespace Engine
 				ImGui::ImageButton((void*)textureId, ImVec2(128, 128), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
 				{
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(FileType::Model.c_str()))
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
 						OnDrop(path.string());
 					}
+					ImGui::EndDragDropTarget();
 				}
 				ImGui::Text(filePath.c_str());
 			});
