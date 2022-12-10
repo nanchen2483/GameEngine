@@ -86,6 +86,7 @@ namespace Engine
 
 	struct ModelComponent
 	{
+		bool isPlayer = false;
 		bool loading = false;
 		Ptr<float> progression = CreatePtr<float>(0.0f);
 		bool isOnViewFrustum = false;

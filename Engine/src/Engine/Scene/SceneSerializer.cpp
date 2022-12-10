@@ -181,6 +181,7 @@ namespace Engine {
 
 			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetFilePath().string();
 			out << YAML::Key << "EnableAnimation" << YAML::Value << modelComponent.enableAnimation;
+			out << YAML::Key << "IsPlayer" << YAML::Value << modelComponent.isPlayer;
 			out << YAML::EndMap;
 		}
 
@@ -343,6 +344,7 @@ namespace Engine {
 
 					std::string path = modelComponent["Path"].as<std::string>();
 					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
+					deserializedModel.isPlayer = modelComponent["IsPlayer"].as<bool>();
 					deserializedModel.model = Model::Create(path, false, deserializedEntity);
 				}
 
