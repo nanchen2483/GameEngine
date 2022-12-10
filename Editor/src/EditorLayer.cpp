@@ -52,7 +52,7 @@ namespace Engine
 	{
 	}
 
-	void EditorLayer::OnUpdate(TimeStep timeStep)
+	void EditorLayer::OnUpdate()
 	{
 		ENGINE_PROFILE_FUNCTION();
 
@@ -77,20 +77,20 @@ namespace Engine
 			if (m_viewportHovered)
 			{
 				ENGINE_PROFILE_SCOPE("Camera OnUpdate");
-				m_editorCamera.OnUpdate(timeStep);
+				m_editorCamera.OnUpdate();
 			}
 
 			// Clear entity id buffer attachment to -1
 			m_framebuffer->ClearAttachment(ENTITY_ID_ATTACHMENT_INDEX, -1);
 
-			m_activeScene->OnUpdateEditor(timeStep, m_editorCamera);
+			m_activeScene->OnUpdateEditor(m_editorCamera);
 
 			m_framebuffer->Bind();
 			UpdateHoveredEntity();
 		}
 		else
 		{
-			m_activeScene->OnUpdateRuntime(timeStep);
+			m_activeScene->OnUpdateRuntime();
 		}
 		
 		m_framebuffer->Unbind();

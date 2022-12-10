@@ -135,7 +135,7 @@ namespace Engine
 			m_selectedAnimationInfo = m_animationInfo.front();
 				
 			// Initial bone transform-matrix
-			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms(0.0f);
+			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms();
 		}
 	}
 
@@ -213,11 +213,11 @@ namespace Engine
 		return m_boundingBox->IsOnFrustum(frustum, transform);
 	}
 
-	void AssimpModel::OnUpdate(float deltaTime)
+	void AssimpModel::OnUpdate()
 	{
 		if (m_hasAnimations)
 		{
-			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms(deltaTime);
+			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms();
 		}
 	}
 

@@ -1,6 +1,8 @@
 #include "enginepch.h"
 #include "AssimpAnimation.h"
 
+#include "Engine/Core/System/System.h"
+
 namespace Engine
 {
 	AssimpAnimation::AssimpAnimation(const aiAnimation* animation, const AssimpNode rootNode)
@@ -17,15 +19,15 @@ namespace Engine
 		}
 	}
 
-	void AssimpAnimation::UpdateBoneTransforms(float deltaTime)
+	void AssimpAnimation::UpdateBoneTransforms()
 	{
-		CalculateAnimationTime(deltaTime);
+		CalculateAnimationTime();
 		CalculateBoneTransform(m_rootNode, glm::mat4(1.0f));
 	}
 
-	void AssimpAnimation::CalculateAnimationTime(float deltaTime)
+	void AssimpAnimation::CalculateAnimationTime()
 	{
-		*m_animationTime += m_ticksPerSecond * deltaTime;
+		*m_animationTime += m_ticksPerSecond * System::GetDeltaTime();
 		*m_animationTime = fmod(*m_animationTime, m_duration);
 	}
 

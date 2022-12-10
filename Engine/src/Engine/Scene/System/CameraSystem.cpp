@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	void CameraSystem::Update(float deltaTime, Transform *transform, SceneCamera *camera)
+	void CameraSystem::Update(Transform *transform, SceneCamera *camera)
 	{
 		// Update rotation
 		const glm::vec2& deltaMousePosition = System::GetMouseDeltaPosition();
@@ -18,7 +18,7 @@ namespace Engine
 		const glm::vec3& rightDirection = glm::rotate(orientation, glm::vec3(1.0f, 0.0f, 0.0f));
 		const glm::vec3& forwardDirection = glm::rotate(orientation, glm::vec3(0.0f, 0.0f, -1.0f));
 
-		float velocity = camera->GetMoveSpeed() * deltaTime;
+		float velocity = camera->GetMoveSpeed() * System::GetDeltaTime();
 		if (Input::IsKeyPressed(KeyCode::W))
 		{
 			transform->translation += forwardDirection * velocity;

@@ -2,7 +2,6 @@
 #include "Camera.h"
 #include "Engine/Core/Events/Event.h"
 #include "Engine/Core/Events/MouseEvent.h"
-#include "Engine/Core/TimeStep.h"
 
 #include <glm/glm.hpp>
 
@@ -14,7 +13,7 @@ namespace Engine
 		EditorCamera();
 		EditorCamera(float fov, float viewportWidth, float viewportHeight, float nearClip, float farClip);
 
-		void OnUpdate(TimeStep ts);
+		void OnUpdate();
 		void OnEvent(Event& e);
 
 		virtual const glm::mat4& GetProjection() const { return m_projection; };
@@ -32,7 +31,7 @@ namespace Engine
 		bool InUse() const { return m_type != CameraType::None; }
 	private:
 		void OnFocusPointUpdate(const glm::vec2& delta);
-		void OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta);
+		void OnFreeLookUpdate(const glm::vec2& delta);
 		bool OnMouseScroll(MouseScrolledEvent& e);
 		void OnMousePan(const glm::vec2& data);
 		void OnMouseRotate(const glm::vec2& delta);

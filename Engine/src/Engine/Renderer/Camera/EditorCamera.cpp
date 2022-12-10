@@ -3,6 +3,7 @@
 
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
+#include "Engine/Core/System/System.h"
 #include "Engine/Core/Window/Input.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -48,7 +49,7 @@ namespace Engine
 		UpdateProjection();
 	}
 
-	void EditorCamera::OnUpdate(TimeStep ts)
+	void EditorCamera::OnUpdate()
 	{
 		const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
 		glm::vec2 delta = (mouse - m_mousePosition) * 0.003f;
@@ -67,7 +68,7 @@ namespace Engine
 		{
 			m_type = CameraType::FreeLook;
 			Input::HideCursor();
-			OnFreeLookUpdate(ts, delta);
+			OnFreeLookUpdate(delta);
 		}
 		else
 		{
@@ -93,9 +94,9 @@ namespace Engine
 		}
 	}
 
-	void EditorCamera::OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta)
+	void EditorCamera::OnFreeLookUpdate(const glm::vec2& delta)
 	{
-		float velocity = m_moveSpeed * deltaTime;
+		float velocity = m_moveSpeed * System::GetDeltaTime();
 		if (Input::IsKeyPressed(KeyCode::W))
 		{
 			m_position += m_forwardDirection * velocity;
