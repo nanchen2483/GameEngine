@@ -3,18 +3,16 @@
 
 #include "Component.h"
 #include "Entity.h"
+#include "Engine/Core/Window/Input.h"
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/Renderer3D.h"
 
 namespace Engine
 {
-	Scene::Scene(bool enableShadow)
+	Scene::Scene()
 	{
 		m_collision = Collision::Create(CollisionType::GJK_EPA_3D);
-		if (enableShadow)
-		{
-			m_shadowBox = CreateUniq<ShadowBox>();
-		}
+		m_shadowBox = CreateUniq<ShadowBox>();
 	}
 
 	Scene::~Scene()
@@ -143,27 +141,43 @@ namespace Engine
 					});
 		}
 
-		Camera* mainCamera = nullptr;
-		TransformComponent* mainTransform;
+		CameraComponent* mainCamera = nullptr;
 		{
-			auto view = m_registry.view<TransformComponent, CameraComponent>();
+			auto view = m_registry.view<CameraComponent>();
 			for (entt::entity entity : view)
 			{
-				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+				CameraComponent& camera = view.get<CameraComponent>(entity);
 				if (camera.primary)
 				{
-					mainCamera = &camera.camera;
-					mainTransform = &transform;
+					mainCamera = &camera;
 					break;
 				}
 			}
 		}
 
-		if (mainCamera != nullptr)
+		TransformComponent* playerTransform = nullptr;
+		auto view = m_registry.view<TransformComponent, ModelComponent>();
+		for (entt::entity entity : view)
 		{
-			Frustum frustum = mainCamera->GetFrustum(*mainTransform);
+			auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
+			if (model.isPlayer)
+			{
+				playerTransform = &transform;
+				break;
+			}
+		}
+
+		if (mainCamera != nullptr && playerTransform != nullptr)
+		{
+			if (!Input::IsCursorVisible())
+			{
+				CameraSystem::Update(time, &playerTransform->transform, &mainCamera->camera);
+			}
+
+			glm::mat4 viewMatrix = CameraSystem::CalculateViewMatrix(*playerTransform);
+			Frustum frustum = mainCamera->camera.GetFrustum(*playerTransform);
 			uint32_t numOflights = m_registry.view<LightComponent>().size();
-			Renderer3D::BeginScene(mainTransform->GetViewMatrix(), mainCamera->GetProjection(), mainTransform->GetTranslation(), numOflights);
+			Renderer3D::BeginScene(viewMatrix, mainCamera->camera.GetProjection(), playerTransform->GetTranslation(), numOflights);
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](TransformComponent& transform, SpriteRendererComponent& component)
@@ -189,7 +203,7 @@ namespace Engine
 			m_registry.view<TransformComponent, TerrainComponent>()
 				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						component.OnUpdate(mainTransform->GetTranslation());
+						component.OnUpdate(playerTransform->GetTranslation());
 						Renderer3D::Draw(transform, component, frustum);
 					});
 
@@ -201,7 +215,7 @@ namespace Engine
 
 			if (m_shadowBox != nullptr)
 			{
-				m_shadowBox->Update(mainTransform->GetViewMatrix(), mainCamera->GetFOV(), mainCamera->GetAspectRatio());
+				m_shadowBox->Update(viewMatrix, mainCamera->camera.GetFOV(), mainCamera->camera.GetAspectRatio());
 				m_shadowBox->Bind();
 				Ptr<Shader> shader = m_shadowBox->GetShader();
 				m_registry.view<TransformComponent, ModelComponent>()

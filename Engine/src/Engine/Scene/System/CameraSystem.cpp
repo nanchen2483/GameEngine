@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	void CameraSystem::OnUpdate(float deltaTime, Transform *transform, SceneCamera *camera)
+	void CameraSystem::Update(float deltaTime, Transform *transform, SceneCamera *camera)
 	{
 		// Update rotation
 		const glm::vec2& deltaMousePosition = System::GetMouseDeltaPosition();
