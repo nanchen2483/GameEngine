@@ -2,6 +2,7 @@
 #include "Application.h"
 
 #include "Events/ApplicationEvent.h"
+#include "System/System.h"
 #include "TimeStep.h"
 #include "Window/Input.h"
 
@@ -69,6 +70,7 @@ namespace Engine
 			float time = (float)glfwGetTime();
 			TimeStep timeStep = time - lastFrameTime;
 			lastFrameTime = time;
+			System::OnUpdate();
 
 			if (!m_minimized)
 			{
