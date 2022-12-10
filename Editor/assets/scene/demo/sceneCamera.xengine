@@ -2,24 +2,15 @@ Scene: Untitled
 Entities:
   - Entity: 123
     TagComponent:
-      Tag: Cube
+      Tag: Cube2
     TransformComponent:
-      Translation: [0.800000012, -0.0399999991, 8]
+      Translation: [-0.300000012, -1.25, -1.11758709e-07]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
-  - Entity: 123
-    TagComponent:
-      Tag: Plan
-    TransformComponent:
-      Translation: [0, -3.9000001, 0.50000006]
-      Rotation: [0, 0, 0]
-      Scale: [20, 1, 20]
-    ModelComponent:
-      Path: assets\models\cube\cube.dae
-      EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Camera
@@ -40,11 +31,23 @@ Entities:
       FixedAspectRatio: false
   - Entity: 123
     TagComponent:
-      Tag: Cube2
+      Tag: Plan
     TransformComponent:
-      Translation: [-0.300000012, -1.25, -1.11758709e-07]
+      Translation: [0, -3.9000001, 0.50000006]
+      Rotation: [0, 0, 0]
+      Scale: [20, 1, 20]
+    ModelComponent:
+      Path: assets\models\cube\cube.dae
+      EnableAnimation: false
+      IsPlayer: false
+  - Entity: 123
+    TagComponent:
+      Tag: Cube
+    TransformComponent:
+      Translation: [0.800000012, -0.0399999991, 8]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: true

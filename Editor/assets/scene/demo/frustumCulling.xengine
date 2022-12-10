@@ -10,6 +10,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 1
@@ -20,6 +21,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 2
@@ -30,6 +32,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 3
@@ -40,6 +43,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 4
@@ -50,6 +54,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 5
@@ -60,6 +65,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 6
@@ -70,6 +76,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 7
@@ -80,6 +87,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 8
@@ -90,6 +98,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 9
@@ -100,6 +109,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 10
@@ -110,6 +120,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 11
@@ -120,6 +131,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 12
@@ -130,6 +142,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 13
@@ -140,6 +153,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 14
@@ -150,6 +164,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 15
@@ -160,6 +175,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 16
@@ -170,6 +186,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 17
@@ -180,6 +197,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 18
@@ -190,6 +208,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 19
@@ -200,6 +219,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 20
@@ -210,3 +230,4 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
