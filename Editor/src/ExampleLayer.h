@@ -10,7 +10,7 @@ namespace Engine
 		virtual ~ExampleLayer() = default;
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-		virtual void OnUpdate(Engine::TimeStep timeStep) override;
+		virtual void OnUpdate() override;
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Engine::Event& event) override;
 	private:

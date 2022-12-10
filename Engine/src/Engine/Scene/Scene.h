@@ -1,5 +1,4 @@
 #pragma once
-#include "Engine/Core/TimeStep.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Shadow/ShadowBox.h"
 #include "Engine/Renderer/Texture/Texture.h"
@@ -21,8 +20,8 @@ namespace Engine
 		Entity CreateEntity(const std::string& name = "");
 		void DestoryEntity(Entity entity);
 
-		void OnUpdateEditor(TimeStep time, EditorCamera& camera);
-		void OnUpdateRuntime(TimeStep time);
+		void OnUpdateEditor(EditorCamera& camera);
+		void OnUpdateRuntime();
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		bool EntityExists(entt::entity entity);

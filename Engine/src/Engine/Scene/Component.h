@@ -109,12 +109,12 @@ namespace Engine
 			return {};
 		}
 
-		void OnUpdate(float deltaTime, const Frustum& frustum, const Transform& transform)
+		void OnUpdate(const Frustum& frustum, const Transform& transform)
 		{
 			bool isOnViewFrustum = IsOnViewFrustum(frustum, transform);
 			if (isOnViewFrustum && enableAnimation && model != nullptr)
 			{
-				model->OnUpdate(deltaTime);
+				model->OnUpdate();
 			}
 		}
 

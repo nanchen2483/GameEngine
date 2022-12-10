@@ -23,7 +23,7 @@ namespace Engine
 		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
 		virtual BoundingValue GetBoundingValue() const override;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const override;
-		virtual void OnUpdate(float deltaTime) override;
+		virtual void OnUpdate() override;
 
 		virtual const std::vector<AnimationInfo> GetAnimations() const override { return m_animationInfo; };
 		virtual const AnimationInfo GetSelectedAnimation() const override { return m_selectedAnimationInfo; }

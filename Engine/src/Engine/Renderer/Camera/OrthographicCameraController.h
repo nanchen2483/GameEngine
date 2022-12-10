@@ -1,7 +1,6 @@
 #pragma once
 #include "Engine/Core/Events/ApplicationEvent.h"
 #include "Engine/Core/Events/MouseEvent.h"
-#include "Engine/Core/TimeStep.h"
 #include "OrthographicCamera.h"
 
 namespace Engine
@@ -14,7 +13,7 @@ namespace Engine
 		OrthographicCamera& GetCamera() { return m_camera; };
 		const OrthographicCamera& GetCamera() const { return m_camera; };
 
-		void OnUpdate(TimeStep timeStep);
+		void OnUpdate();
 		void OnEvent(Event& e);
 		void OnResize(float width, float height);
 	private:

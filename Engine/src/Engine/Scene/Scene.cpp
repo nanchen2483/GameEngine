@@ -33,7 +33,7 @@ namespace Engine
 		m_registry.destroy(entity);
 	}
 
-	void Scene::OnUpdateEditor(TimeStep time, EditorCamera& camera)
+	void Scene::OnUpdateEditor(EditorCamera& camera)
 	{
 		if (!m_registry.empty())
 		{
@@ -77,7 +77,7 @@ namespace Engine
 							});
 						
 						terrainComponent.SetHeight(thisTransform);
-						thisComponent.OnUpdate(time, frustum, thisTransform);
+						thisComponent.OnUpdate(frustum, thisTransform);
 						Renderer3D::Draw(thisTransform, thisComponent);
 					});
 
@@ -123,7 +123,7 @@ namespace Engine
 		}
 	}
 
-	void Scene::OnUpdateRuntime(TimeStep time)
+	void Scene::OnUpdateRuntime()
 	{
 		// Script
 		{
@@ -137,7 +137,7 @@ namespace Engine
 							nsc.instance->OnCreate();
 						}
 
-						nsc.instance->OnUpdate(time);
+						nsc.instance->OnUpdate();
 					});
 		}
 
@@ -171,7 +171,7 @@ namespace Engine
 		{
 			if (!Input::IsCursorVisible())
 			{
-				CameraSystem::Update(time, &playerTransform->transform, &mainCamera->camera);
+				CameraSystem::Update(&playerTransform->transform, &mainCamera->camera);
 			}
 
 			glm::mat4 viewMatrix = CameraSystem::CalculateViewMatrix(*playerTransform);
@@ -196,7 +196,7 @@ namespace Engine
 			m_registry.view<TransformComponent, ModelComponent>()
 				.each([=](TransformComponent& transform, ModelComponent& component)
 					{
-						component.OnUpdate(time, frustum, transform);
+						component.OnUpdate(frustum, transform);
 						Renderer3D::Draw(transform, component);
 					});
 
