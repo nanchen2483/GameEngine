@@ -360,7 +360,7 @@ namespace Engine
 							else
 							{
 								Ptr<Texture> texture = TextureLibrary::GetInstance()->Load(image, TextureType::Skybox);
-								ImGui::ImageButton((void*)texture->GetRendererId(), ImVec2(64, 64), ImVec2(1.0f, 0.0f), ImVec2(0.0f, 1.0f));
+								ImGui::ImageButton((ImTextureID)(uint64_t)texture->GetRendererId(), ImVec2(64, 64), ImVec2(1.0f, 0.0f), ImVec2(0.0f, 1.0f));
 							}
 
 							if (ImGui::BeginDragDropTarget())
