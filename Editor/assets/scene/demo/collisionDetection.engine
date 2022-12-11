@@ -10,6 +10,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube C
@@ -20,6 +21,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube B
@@ -30,6 +32,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube A
@@ -40,6 +43,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Plane
@@ -50,3 +54,4 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false

@@ -25,7 +25,7 @@ namespace Engine
 		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
 		virtual BoundingValue GetBoundingValue() const = 0;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const = 0;
-		virtual void OnUpdate(float deltaTime) = 0;
+		virtual void OnUpdate() = 0;
 
 		virtual const std::vector<AnimationInfo> GetAnimations() const = 0;
 		virtual const AnimationInfo GetSelectedAnimation() const = 0;
@@ -33,7 +33,7 @@ namespace Engine
 		virtual void Draw() = 0;
 
 		static Ptr<Model> Create(std::string path, bool gamma = false);
-		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, Ptr<TextureMap> textureMap);
-		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, Ptr<TextureMap> textureMap, Ptr<float> progression);
+		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId);
+		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, Ptr<float> progression);
 	};
 }

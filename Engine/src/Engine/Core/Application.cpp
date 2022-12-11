@@ -2,12 +2,8 @@
 #include "Application.h"
 
 #include "Events/ApplicationEvent.h"
-#include "TimeStep.h"
-#include "Window/Input.h"
-
 #include "Engine/Renderer/Renderer.h"
-
-#include <GLFW/glfw3.h>
+#include "System/System.h"
 
 namespace Engine
 {
@@ -65,15 +61,13 @@ namespace Engine
 	{
 		while (m_running)
 		{
-			float time = (float)glfwGetTime();
-			TimeStep timeStep = time - m_lastFrameTime;
-			m_lastFrameTime = time;
+			System::OnUpdate();
 
 			if (!m_minimized)
 			{
 				for (Layer* layer : m_layerStack)
 				{
-					layer->OnUpdate(timeStep);
+					layer->OnUpdate();
 				}
 			}
 

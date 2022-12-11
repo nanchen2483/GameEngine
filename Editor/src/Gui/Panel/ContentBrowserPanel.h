@@ -1,21 +1,28 @@
 #pragma once
-#include "Gui/Widget.h"
+#include "Gui/IGui.h"
 #include "Engine.h"
 
 #include <filesystem>
 
 namespace Engine
 {
-	class ContentBrowserPanel : public Widget
+	class ContentBrowserPanel : public IGui
 	{
 	public:
 		ContentBrowserPanel();
+		void ToggleWindowStatus() { m_open = !m_open; }
 		virtual void OnImGuiRender() override;
 	private:
-		std::filesystem::path m_currentDirectory;
+		void FolderOverview();
+		void FolderHierarcy(std::filesystem::path directory);
+		void FolderContent();
 
+		bool m_open = false;
+		std::filesystem::path m_currentDirectory;
 		Ptr<Texture2D> m_folderIcon;
 		Ptr<Texture2D> m_fileIcon;
-		Ptr<Texture2D> m_backIcon;
+
+		std::vector<std::filesystem::path> m_backToPathStack;
+		std::vector<std::filesystem::path> m_forwardToPathStack;
 	};
 }

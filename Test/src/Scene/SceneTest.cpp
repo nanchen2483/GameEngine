@@ -60,7 +60,7 @@ namespace EngineTest
 		EXPECT_EQ(expectedRotation, actualTransformComponent.GetRotation());
 		EXPECT_EQ(expectedScale, actualTransformComponent.GetScale());
 		EXPECT_EQ(expectedTransform, (glm::mat4)actualTransformComponent);
-		EXPECT_EQ(expectedViewMatrix, actualTransformComponent.GetViewMatrix());
+		EXPECT_EQ(expectedViewMatrix, glm::inverse((glm::mat4)actualTransformComponent));
 	}
 
 	TEST_F(SceneTest, GetPrimaryCameraSuccessfully)

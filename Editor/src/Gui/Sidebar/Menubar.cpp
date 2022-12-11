@@ -5,6 +5,11 @@
 
 namespace Engine
 {
+	Menubar::Menubar()
+	{
+		m_hierachyPanel = CreatePtr<HierarchyPanel>();
+	}
+
 	void Menubar::SetFunctions(Func newScene, Func openScene, Func saveSceneAs)
 	{
 		NewScene = newScene;
@@ -14,7 +19,10 @@ namespace Engine
 
 	void Menubar::OnImGuiRender()
 	{
-		if (ImGui::BeginMenuBar())
+		m_showOutliner = m_hierachyPanel->IsOutlinerWindowOpen();
+		m_showDetails = m_hierachyPanel->IsDetailsWindowOpen();
+
+		if (ImGui::BeginMainMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
 			{
@@ -42,14 +50,28 @@ namespace Engine
 				ImGui::EndMenu();
 			}
 
-			ImGui::EndMenuBar();
+			ImGui::EndMainMenuBar();
 		}
 
-		if (ImGui::BeginMenuBar())
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("View"))
+			{
+				ImGui::MenuItem("Outliner", nullptr, &m_showOutliner);
+				m_hierachyPanel->SetOutlinerWindowStatus(m_showOutliner);
+				ImGui::MenuItem("Details", nullptr, &m_showDetails);
+				m_hierachyPanel->SetDetailsWindowStatus(m_showDetails);
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMainMenuBar();
+		}
+
+		if (ImGui::BeginMainMenuBar())
 		{
 			if (ImGui::BeginMenu("Debug"))
 			{
-				ImGui::MenuItem("ShadowMap", NULL, &m_showShadowMap);
+				ImGui::MenuItem("ShadowMap", nullptr, &m_showShadowMap);
 				if (ImGui::BeginMenu("PolygonMode"))
 				{
 					static std::array<std::string, 3> s_polygonModes = { "Point", "Line", "Fill" };
@@ -68,7 +90,7 @@ namespace Engine
 				}
 				ImGui::EndMenu();
 			}
-			ImGui::EndMenuBar();
+			ImGui::EndMainMenuBar();
 		}
 
 		if (m_showShadowMap)
@@ -85,5 +107,7 @@ namespace Engine
 
 			ImGui::End();
 		}
+
+		m_hierachyPanel->OnImGuiRender();
 	}
 }

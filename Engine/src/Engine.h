@@ -8,6 +8,10 @@
 #include "Engine/Core/Log/Log.h"
 #include "Engine/Core/Window/Input.h"
 
+// File
+#include "Engine/File/File.h"
+#include "Engine/File/FileType.h"
+
 // Debug
 #include "Engine/Debug/FPSCalculator.h"
 #include "Engine/Renderer/Shadow/Debug/ShadowDebug.h"
@@ -26,6 +30,7 @@
 #include "Engine/Renderer/Skybox/Skybox.h"
 #include "Engine/Renderer/Terrain/Terrain.h"
 #include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 // Scene
 #include "Engine/Scene/Component.h"

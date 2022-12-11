@@ -11,13 +11,14 @@ namespace Engine
 		OpenGLTexture3D(const std::vector<Ptr<Image>>& faces);
 		~OpenGLTexture3D();
 
-		inline virtual std::string GetFilePath(uint32_t index) const override { return m_faces[index]; }
-		inline virtual uint32_t GetWidth(uint32_t index) const override { return m_width[index]; }
-		inline virtual uint32_t GetHeight(uint32_t index) const override { return m_height[index]; }
+		inline virtual std::string GetFilePath(TextureOrientationType type) const override { return m_faces[(uint32_t)type]; }
+		inline virtual uint32_t GetWidth(TextureOrientationType type) const override { return m_widths[(uint32_t)type]; }
+		inline virtual uint32_t GetHeight(TextureOrientationType type) const override { return m_heights[(uint32_t)type]; }
 		inline virtual uint32_t GetRendererId() const override { return m_rendererId; }
 		inline virtual TextureType GetType() const override { return m_type; }
-		
-		virtual void SetData(void* data, uint32_t size) override { ENGINE_CORE_ERROR("Not implemented"); };
+		inline virtual const std::string& GetName() const { return m_textureName; }
+
+		virtual void SetData(void* data, TextureOrientationType type, uint32_t size) override;
 		virtual void BindImage(uint32_t slot, TextureAccessType access) const override;
 		virtual void Bind(uint32_t slot) const override;
 
@@ -26,12 +27,13 @@ namespace Engine
 			return m_rendererId == ((OpenGLTexture3D&)other).m_rendererId;
 		}
 	private:
+		void Init(const std::vector<Ptr<Image>>& faces);
+
 		uint32_t m_rendererId;
 		const TextureType m_type = TextureType::Skybox;
-		std::filesystem::path m_filePath;
-		std::filesystem::path m_directory = m_filePath.parent_path();
 		std::vector<std::string> m_faces;
-		std::vector<uint32_t> m_width, m_height;
-		TextureFormat m_format;
+		std::vector<uint32_t> m_widths, m_heights;
+		std::vector<TextureFormat> m_formats;
+		std::string m_textureName;
 	};
 }

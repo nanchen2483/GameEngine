@@ -1,7 +1,7 @@
 # CMakeList.txt : CMake project for Engine, include source and define
 # project specific logic here.
 #
-cmake_minimum_required (VERSION 3.16)
+cmake_minimum_required (VERSION 3.24)
 
 set (CMAKE_CXX_STANDARD 17)
 
@@ -15,10 +15,12 @@ find_package (imguizmo CONFIG REQUIRED)
 find_package (spdlog CONFIG REQUIRED)
 find_package (yaml-cpp CONFIG REQUIRED)
 
-find_path (STB_INCLUDE_DIRS "stb_image.h")
+find_path (STB_INCLUDE_DIRS "stb_image.h" REQUIRED)
+find_path (ICONS_FONT_AWESOME_INCLUDE_DIRS "IconsFontAwesome6.h" PATHS external/IconFontCppHeaders REQUIRED)
 
 file (GLOB_RECURSE ENGINE_FILES "src/Engine/*.h" "src/Engine/*.cpp")
 file (GLOB_RECURSE PLATFORM_FILES "src/Platform/*.h" "src/Platform/*.cpp")
+file (GLOB_RECURSE EXTERNAL_FILES "external/*.h" "external/*.cpp")
 
 set (CROSS_PLATFORM_FILES
 	"src/Engine.h"
@@ -27,15 +29,14 @@ set (CROSS_PLATFORM_FILES
 
 	${ENGINE_FILES}
 	${PLATFORM_FILES}
-	
-	"external/stb/stb_image.cpp"
+	${EXTERNAL_FILES}
 )
 
 add_library (Engine STATIC ${CROSS_PLATFORM_FILES})
 
 target_precompile_headers (Engine PRIVATE "src/enginepch.h")
 
-target_include_directories (Engine PUBLIC "src")
+target_include_directories (Engine PUBLIC "src" "external")
 
 target_compile_definitions (Engine
 	PRIVATE

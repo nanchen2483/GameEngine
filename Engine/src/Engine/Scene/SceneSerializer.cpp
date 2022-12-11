@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "SceneSerializer.h"
-
 #include "Component.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 #include <yaml-cpp/yaml.h>
 
@@ -181,6 +181,7 @@ namespace Engine {
 
 			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetFilePath().string();
 			out << YAML::Key << "EnableAnimation" << YAML::Value << modelComponent.enableAnimation;
+			out << YAML::Key << "IsPlayer" << YAML::Value << modelComponent.isPlayer;
 			out << YAML::EndMap;
 		}
 
@@ -191,12 +192,13 @@ namespace Engine {
 
 			SkyboxComponent& skyboxComponent = entity.GetComponent<SkyboxComponent>();
 
-			out << YAML::Key << "RightFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Right]->GetFilePath();
-			out << YAML::Key << "LeftFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Left]->GetFilePath();
-			out << YAML::Key << "TopFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Top]->GetFilePath();
-			out << YAML::Key << "BottomFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Bottom]->GetFilePath();
-			out << YAML::Key << "BackFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Back]->GetFilePath();
-			out << YAML::Key << "FrontFilePath" << YAML::Value << skyboxComponent.images[(uint32_t)TextureOrientationType::Front]->GetFilePath();
+			Ptr<Texture3D> texture = skyboxComponent.skybox->GetTexture();
+			out << YAML::Key << "RightFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Right);
+			out << YAML::Key << "LeftFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Left);
+			out << YAML::Key << "TopFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Top);
+			out << YAML::Key << "BottomFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Bottom);
+			out << YAML::Key << "BackFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Back);
+			out << YAML::Key << "FrontFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Front);
 
 			out << YAML::EndMap;
 		}
@@ -331,7 +333,7 @@ namespace Engine {
 					YAML::Node& filePathNode = spriteRendererComponent["TextureFilePath"];
 					if (filePathNode)
 					{
-						deserializedSRC.texture = Texture2D::Create(filePathNode.as<std::string>());
+						deserializedSRC.texture = Texture2D::Create(filePathNode.as<std::string>(), TextureType::Diffuse);
 					}
 				}
 
@@ -342,26 +344,30 @@ namespace Engine {
 
 					std::string path = modelComponent["Path"].as<std::string>();
 					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
-					deserializedModel.model = Model::Create(path, false, deserializedEntity, m_scene->GetLoadedTextureMap());
+					deserializedModel.isPlayer = modelComponent["IsPlayer"].as<bool>();
+					deserializedModel.model = Model::Create(path, false, deserializedEntity);
 				}
 
 				YAML::Node skyboxComponent = entity["SkyboxComponent"];
 				if (skyboxComponent)
 				{
 					SkyboxComponent& deserializedSkybox = deserializedEntity.AddComponent<SkyboxComponent>();
-					deserializedSkybox.SetFace(TextureOrientationType::Right, skyboxComponent["RightFilePath"].as<std::string>());
-					deserializedSkybox.SetFace(TextureOrientationType::Left, skyboxComponent["LeftFilePath"].as<std::string>());
-					deserializedSkybox.SetFace(TextureOrientationType::Top, skyboxComponent["TopFilePath"].as<std::string>());
-					deserializedSkybox.SetFace(TextureOrientationType::Bottom, skyboxComponent["BottomFilePath"].as<std::string>());
-					deserializedSkybox.SetFace(TextureOrientationType::Back, skyboxComponent["BackFilePath"].as<std::string>());
-					deserializedSkybox.SetFace(TextureOrientationType::Front, skyboxComponent["FrontFilePath"].as<std::string>());
+
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Right] = CreatePtr<Image>(skyboxComponent["RightFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Left] = CreatePtr<Image>(skyboxComponent["LeftFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Top] = CreatePtr<Image>(skyboxComponent["TopFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Bottom] = CreatePtr<Image>(skyboxComponent["BottomFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Back] = CreatePtr<Image>(skyboxComponent["BackFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Front] = CreatePtr<Image>(skyboxComponent["FrontFilePath"].as<std::string>(), true);
+
+					deserializedSkybox.skybox = CreatePtr<Skybox>(deserializedSkybox.images);
 				}
 
 				YAML::Node terrainComponent = entity["TerrainComponent"];
 				if (terrainComponent)
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
-					deserializedSkybox.texture = Texture2D::Create(terrainComponent["Path"].as<std::string>(), TextureType::Height, false);
+					deserializedSkybox.texture = Texture2D::Create(terrainComponent["Path"].as<std::string>(), TextureType::Height);
 					deserializedSkybox.terrain = Terrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}

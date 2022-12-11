@@ -12,6 +12,8 @@ namespace Engine
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height, uint32_t levels, TextureFormatType format)
 		: m_width(width), m_height(height), m_format(OpenGLUtil::ToGL(format)), m_type(TextureType::None)
 	{
+		m_textureName = "Texture_w:" + std::to_string(width) + "_h:" + std::to_string(height) + "_f:" + std::to_string((int)format);
+
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererId);
 		glTextureStorage2D(m_rendererId, levels, m_format.internalFormat, m_width, m_height);
 
@@ -30,7 +32,7 @@ namespace Engine
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const Ptr<Image> image, const TextureType type)
-		: m_filePath(image->GetFilePath()), m_type(type), m_width(image->GetWidth()), m_height(image->GetHeight())
+		: m_filePath(image->GetFilePath()), m_type(type), m_width(image->GetWidth()), m_height(image->GetHeight()), m_textureName(image->GetName())
 	{
 		ENGINE_PROFILE_FUNCTION();
 

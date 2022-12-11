@@ -10,6 +10,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 1
@@ -20,6 +21,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 2
@@ -30,6 +32,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 3
@@ -40,6 +43,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 4
@@ -50,6 +54,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 5
@@ -60,6 +65,7 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false
   - Entity: 123
     TagComponent:
       Tag: Cube 6
@@ -70,3 +76,4 @@ Entities:
     ModelComponent:
       Path: assets\models\cube\cube.dae
       EnableAnimation: false
+      IsPlayer: false

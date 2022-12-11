@@ -3,6 +3,7 @@
 
 #include "Debug/OpenGLDebug.h"
 
+#include <filesystem>
 #include <fstream>
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -53,11 +54,7 @@ namespace Engine
 		std::unordered_map<GLenum, std::string> shaderSource = PreProcess(source);
 		Compile(shaderSource);
 
-		size_t lastSlash = filePath.find_last_of("/\\");
-		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		size_t lastDot = filePath.rfind('.');
-		size_t nameSize = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
-		m_shaderName = filePath.substr(lastSlash, nameSize);
+		m_shaderName = std::filesystem::path(filePath).stem().string();
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)

@@ -30,9 +30,9 @@ namespace Engine
 	{
 	}
 
-	void ExampleLayer::OnUpdate(Engine::TimeStep timeStep)
+	void ExampleLayer::OnUpdate()
 	{
-		m_editorCamera.OnUpdate(timeStep);
+		m_editorCamera.OnUpdate();
 
 		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RendererCommand::Clear();

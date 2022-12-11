@@ -3,6 +3,7 @@
 
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
+#include "Engine/Core/System/System.h"
 #include "Engine/Core/Window/Input.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -29,16 +30,26 @@ namespace Engine
 		m_rotationSpeed = 0.8f;
 		m_distanceToFocusPoint = 10.0f;
 
+		m_rotation = glm::vec3(0.0f);
+		m_orientation = glm::quat();
+
+		m_upDirection = glm::vec3(0.0f);
+		m_rightDirection = glm::vec3(0.0f);
+		m_forwardDirection = glm::vec3(0.0f);
+
 		m_mousePosition = glm::vec2(0.0f);
 		m_position = glm::vec3(0.0f);
 		m_focusPoint = glm::vec3(0.0f);
+		m_viewMatrix = glm::mat4(1.0f);
+		m_projection = glm::mat4(1.0f);
+		m_viewProjection = glm::mat4(1.0f);
 
 		UpdateRotation();
 		UpdatePosition(true);
 		UpdateProjection();
 	}
 
-	void EditorCamera::OnUpdate(TimeStep ts)
+	void EditorCamera::OnUpdate()
 	{
 		const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
 		glm::vec2 delta = (mouse - m_mousePosition) * 0.003f;
@@ -57,7 +68,7 @@ namespace Engine
 		{
 			m_type = CameraType::FreeLook;
 			Input::HideCursor();
-			OnFreeLookUpdate(ts, delta);
+			OnFreeLookUpdate(delta);
 		}
 		else
 		{
@@ -83,9 +94,9 @@ namespace Engine
 		}
 	}
 
-	void EditorCamera::OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta)
+	void EditorCamera::OnFreeLookUpdate(const glm::vec2& delta)
 	{
-		float velocity = GetMoveSpeed() * deltaTime;
+		float velocity = m_moveSpeed * System::GetDeltaTime();
 		if (Input::IsKeyPressed(KeyCode::W))
 		{
 			m_position += m_forwardDirection * velocity;
@@ -116,7 +127,7 @@ namespace Engine
 			m_position -= m_upDirection * velocity;
 		}
 
-		m_focusPoint = m_position + GetForwardDirection() * m_distanceToFocusPoint;
+		m_focusPoint = m_position + m_forwardDirection * m_distanceToFocusPoint;
 
 		OnMouseRotate(delta);
 	}
@@ -133,17 +144,17 @@ namespace Engine
 	void EditorCamera::OnMousePan(const glm::vec2& delta)
 	{
 		auto [xSpeed, ySpeed] = GetPanSpeed();
-		m_focusPoint -= GetRightDirection() * delta.x * xSpeed * m_distanceToFocusPoint;
-		m_focusPoint += GetUpDirection() * delta.y * ySpeed * m_distanceToFocusPoint;
+		m_focusPoint -= m_rightDirection * delta.x * xSpeed * m_distanceToFocusPoint;
+		m_focusPoint += m_upDirection * delta.y * ySpeed * m_distanceToFocusPoint;
 
 		UpdatePosition();
 	}
 
 	void EditorCamera::OnMouseRotate(const glm::vec2& delta)
 	{
-		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
-		m_yaw += yawSign * delta.x * GetRotationSpeed();
-		m_pitch += delta.y * GetRotationSpeed();
+		float yawSign = m_upDirection.y < 0 ? -1.0f : 1.0f;
+		m_yaw += delta.x * m_rotationSpeed * yawSign;
+		m_pitch += delta.y * m_rotationSpeed;
 
 		UpdateRotation();
 		UpdatePosition();
@@ -154,7 +165,7 @@ namespace Engine
 		m_distanceToFocusPoint -= delta * GetZoomSpeed();
 		if (m_distanceToFocusPoint < 1.0f)
 		{
-			m_focusPoint += GetForwardDirection();
+			m_focusPoint += m_forwardDirection;
 			m_distanceToFocusPoint = 1.0f;
 		}
 
@@ -231,7 +242,7 @@ namespace Engine
 	{
 		if (m_type == CameraType::FocusPoint || forceUpdate)
 		{
-			m_position = m_focusPoint - GetForwardDirection() * m_distanceToFocusPoint;
+			m_position = m_focusPoint - m_forwardDirection * m_distanceToFocusPoint;
 		}
 		
 		UpdateView();

@@ -2,7 +2,6 @@
 #include "Camera.h"
 #include "Engine/Core/Events/Event.h"
 #include "Engine/Core/Events/MouseEvent.h"
-#include "Engine/Core/TimeStep.h"
 
 #include <glm/glm.hpp>
 
@@ -14,7 +13,7 @@ namespace Engine
 		EditorCamera();
 		EditorCamera(float fov, float viewportWidth, float viewportHeight, float nearClip, float farClip);
 
-		void OnUpdate(TimeStep ts);
+		void OnUpdate();
 		void OnEvent(Event& e);
 
 		virtual const glm::mat4& GetProjection() const { return m_projection; };
@@ -23,31 +22,16 @@ namespace Engine
 		virtual Frustum GetFrustum(const Transform& transform = {}) const override;
 		virtual void SetViewportSize(uint32_t width, uint32_t height) override;
 
-		inline const float GetDistance() const { return m_distanceToFocusPoint; }
-		inline void SetDistance(float distance) { m_distanceToFocusPoint = distance; }
-
-		inline float GetRotationSpeed() const { return m_rotationSpeed; }
-		inline float GetMoveSpeed() const { return m_moveSpeed; }
-
-		inline const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
-		inline const glm::mat4& GetViewProjection() const { return m_viewProjection; }
-
-		inline const glm::vec3& GetPosition() const { return m_position; }
-		inline const glm::vec3& GetRotation() const { return m_rotation; }
-		inline const glm::quat& GetOrientation() const { return m_orientation; }
-		inline const glm::vec3& GetUpDirection() const { return m_upDirection; }
-		inline const glm::vec3& GetRightDirection() const { return m_rightDirection; }
-		inline const glm::vec3& GetForwardDirection() const { return m_forwardDirection; }
-
-		inline const float GetPitch() const { return m_pitch; }
-		inline const float GetYaw() const { return m_yaw; }
+		const glm::vec3& GetPosition() const { return m_position; }
+		const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
+		const glm::mat4& GetViewProjection() const { return m_viewProjection; }
 
 		void UpdateFocusPoint(const Transform& transform);
 		bool IsCursorInsideViewport() const;
-		inline bool InUse() const { return m_type != CameraType::None; }
+		bool InUse() const { return m_type != CameraType::None; }
 	private:
 		void OnFocusPointUpdate(const glm::vec2& delta);
-		void OnFreeLookUpdate(TimeStep deltaTime, const glm::vec2& delta);
+		void OnFreeLookUpdate(const glm::vec2& delta);
 		bool OnMouseScroll(MouseScrolledEvent& e);
 		void OnMousePan(const glm::vec2& data);
 		void OnMouseRotate(const glm::vec2& delta);
