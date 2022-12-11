@@ -9,10 +9,13 @@
 
 namespace Engine
 {
-	Scene::Scene()
+	Scene::Scene(bool enableShadow)
 	{
 		m_collision = Collision::Create(CollisionType::GJK_EPA_3D);
-		m_shadowBox = CreateUniq<ShadowBox>();
+		if (enableShadow)
+		{
+			m_shadowBox = CreateUniq<ShadowBox>();
+		}
 	}
 
 	Scene::~Scene()
