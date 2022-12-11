@@ -2,12 +2,8 @@
 #include "Application.h"
 
 #include "Events/ApplicationEvent.h"
-#include "System/System.h"
-#include "Window/Input.h"
-
 #include "Engine/Renderer/Renderer.h"
-
-#include <GLFW/glfw3.h>
+#include "System/System.h"
 
 namespace Engine
 {

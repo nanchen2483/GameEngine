@@ -10,6 +10,5 @@ namespace Engine
 		void OnImGuiRender(std::function<void(void)> callbackFunction);
 	private:
 		const float m_toolbarSize = 50;
-		float m_menuBarHeight;
 	};
 }
