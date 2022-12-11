@@ -14,7 +14,7 @@ namespace Engine
 	class Scene
 	{
 	public:
-		Scene();
+		Scene(bool enableShadow = true);
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = "");

@@ -10,6 +10,9 @@ call ninja -j7 Test
 
 pushd Test
 call .\Test
+if %ERRORLEVEL% GEQ 1 (
+	exit 1
+)
 popd
 popd
 popd

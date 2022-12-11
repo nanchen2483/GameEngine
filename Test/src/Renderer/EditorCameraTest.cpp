@@ -19,18 +19,6 @@ namespace EngineTest
 		{
 		}
 
-		glm::vec3 GetUpDirection() const
-		{
-			glm::quat orientation = GetOrientation();
-			return glm::rotate(orientation, glm::vec3(0.0f, 1.0f, 0.0f));
-		}
-
-		glm::vec3 GetRightDirection() const
-		{
-			glm::quat orientation = GetOrientation();
-			return glm::rotate(orientation, glm::vec3(1.0f, 0.0f, 0.0f));
-		}
-
 		glm::vec3 GetForwardDirection() const
 		{
 			glm::quat orientation = GetOrientation();
@@ -65,10 +53,6 @@ namespace EngineTest
 	TEST_F(EditorCameraTest, CreateSuccessfully)
 	{
 		// Arrange
-		glm::quat expectedOrientation = GetOrientation();
-		glm::vec3 expectedUpDirection = GetUpDirection();
-		glm::vec3 expectedRightDirection = GetRightDirection();
-		glm::vec3 expectedForwardDirection = GetForwardDirection();
 		glm::vec3 expectedPosition = GetPosition();
 		glm::mat4 expectedViewMatrix = GetViewMatrix();
 		glm::mat4 expectedProjection = GetProjection();
@@ -78,15 +62,7 @@ namespace EngineTest
 		Engine::EditorCamera camera;
 
 		// Assert
-		EXPECT_EQ(distance, camera.GetDistance());
-		EXPECT_EQ(pitch, camera.GetPitch());
-		EXPECT_EQ(yaw, camera.GetYaw());
 		EXPECT_EQ(FOV, camera.GetFOV());
-
-		EXPECT_EQ(expectedOrientation, camera.GetOrientation());
-		EXPECT_EQ(expectedUpDirection, camera.GetUpDirection());
-		EXPECT_EQ(expectedRightDirection, camera.GetRightDirection());
-		EXPECT_EQ(expectedForwardDirection, camera.GetForwardDirection());
 		EXPECT_EQ(expectedPosition, camera.GetPosition());
 		EXPECT_EQ(expectedViewMatrix, camera.GetViewMatrix());
 		EXPECT_EQ(expectedProjection, camera.GetProjection());
