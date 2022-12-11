@@ -204,10 +204,6 @@ namespace Engine
 		ResetRendererData();
 	}
 	
-	void Renderer3D::BeginScene(OrthographicCamera& camera)
-	{
-	}
-	
 	void Renderer3D::EndScene()
 	{
 		ENGINE_PROFILE_FUNCTION();

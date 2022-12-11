@@ -13,7 +13,6 @@ namespace Engine
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 		static void BeginScene(glm::mat4 cameraViewMatrix, glm::mat4 cameraProjection, glm::vec3 cameraPosition, uint32_t numOfPointLights = 0);
-		static void BeginScene(OrthographicCamera& camera);
 		
 		static void Draw(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId = -1);
 		static void Draw(const TransformComponent& transform, LightComponent& light, int entityId = -1);
