@@ -2,7 +2,9 @@
 #include "Renderer3D.h"
 #include "RendererCommand.h"
 #include "Model/Vertex.h"
+#include "Shadow/ShadowBox.h"
 
+#include <array>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Engine

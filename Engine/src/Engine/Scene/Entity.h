@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "Component/IComponent.h"
 
 #include <entt/entt.hpp>
 
@@ -12,7 +13,7 @@ namespace Engine
 		Entity(entt::entity handle, Scene* scene);
 		Entity(const Entity& other) = default;
 
-		template<typename T, typename... Args>
+		template<typename T, typename... Args, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 		T& AddComponent(Args&&... args)
 		{
 			ENGINE_CORE_ASSERT(!HasComponent<T>(), "Entity already has component!");
@@ -21,7 +22,7 @@ namespace Engine
 			return componet;
 		}
 
-		template<typename T>
+		template<typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 		T& GetComponent()
 		{
 			ENGINE_CORE_ASSERT(HasComponent<T>(), "Entity does not have component!");
@@ -29,13 +30,13 @@ namespace Engine
 			return m_scene->m_registry.get<T>(m_entityHandle);
 		}
 
-		template<typename T>
+		template<typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 		bool HasComponent()
 		{
 			return m_scene->m_registry.any_of<T>(m_entityHandle);
 		}
 
-		template<typename T>
+		template<typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 		void RemoveComponent()
 		{
 			ENGINE_CORE_ASSERT(HasComponent<T>(), "Entity does not have component!");

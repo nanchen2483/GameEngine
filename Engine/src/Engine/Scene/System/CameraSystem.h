@@ -1,10 +1,11 @@
 #pragma once
+#include "ISystem.h"
 #include "Engine/Math/Transform.h"
 #include "Engine/Scene/SceneCamera.h"
 
 namespace Engine
 {
-	class CameraSystem
+	class CameraSystem : public ISystem
 	{
 	public:
 		static void Update(Transform *transform, SceneCamera *camera);

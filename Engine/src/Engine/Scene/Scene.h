@@ -4,6 +4,7 @@
 #include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Physics/Collision/Collision.h"
 #include "System/CameraSystem.h"
+#include "Component/IComponent.h"
 
 #include <entt/entt.hpp>
 
@@ -27,7 +28,7 @@ namespace Engine
 		bool EntityExists(entt::entity entity);
 		Entity GetPrimaryCameraEntity();
 	private:
-		template<typename T>
+		template<class T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 		void OnComponentAdded(Entity entity, T& component);
 		
 		entt::registry m_registry;

@@ -1,7 +1,15 @@
 #include "enginepch.h"
 #include "Scene.h"
 
-#include "Component.h"
+#include "Component/CameraComponent.h"
+#include "Component/LightComponent.h"
+#include "Component/NativeScriptComponent.h"
+#include "Component/ModelComponent.h"
+#include "Component/SkyboxComponent.h"
+#include "Component/SpriteRendererComponent.h"
+#include "Component/TagComponent.h"
+#include "Component/TerrainComponent.h"
+
 #include "Entity.h"
 #include "Engine/Core/Window/Input.h"
 #include "Engine/Renderer/Renderer2D.h"
@@ -279,7 +287,7 @@ namespace Engine
 		return Entity();
 	}
 
-	template<typename T>
+	template<typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type*>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
 		static_assert(false);

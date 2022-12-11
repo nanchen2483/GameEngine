@@ -2,7 +2,9 @@
 #include "Renderer2D.h"
 #include "RendererCommand.h"
 #include "Model/Vertex.h"
+#include "Shader/Shader.h"
 
+#include <array>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Engine

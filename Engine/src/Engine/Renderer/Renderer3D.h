@@ -1,5 +1,10 @@
 #pragma once
-#include "Engine/Scene/Component.h"
+#include "Engine/Scene/Component/LightComponent.h"
+#include "Engine/Scene/Component/ModelComponent.h"
+#include "Engine/Scene/Component/SkyboxComponent.h"
+#include "Engine/Scene/Component/SpriteRendererComponent.h"
+#include "Engine/Scene/Component/TerrainComponent.h"
+#include "Engine/Scene/Component/TransformComponent.h"
 #include "Engine/Renderer/Camera/OrthographicCamera.h"
 #include "RendererAPI.h"
 

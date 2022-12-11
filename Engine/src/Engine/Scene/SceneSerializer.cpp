@@ -1,7 +1,14 @@
 #include "enginepch.h"
 #include "SceneSerializer.h"
-#include "Component.h"
+#include "Component/CameraComponent.h"
+#include "Component/LightComponent.h"
+#include "Component/ModelComponent.h"
+#include "Component/TagComponent.h"
+#include "Component/SkyboxComponent.h"
+#include "Component/SpriteRendererComponent.h"
+#include "Component/TerrainComponent.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Entity.h"
 
 #include <yaml-cpp/yaml.h>
 
