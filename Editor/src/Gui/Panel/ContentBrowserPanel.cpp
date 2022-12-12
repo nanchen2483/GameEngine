@@ -29,14 +29,14 @@ namespace Engine
 
 				if (ImGui::BeginChild("folderOverviewChild", ImVec2(0, folderOverviewHeight), false))
 				{
-					FolderOverview();
+					AddressBar();
 					ImGui::EndChild();
 				}
 				ImGui::Button("vsplitter", ImVec2(-1, splitterSize));
 				{
 					if (ImGui::BeginChild("folderHierarcyChild", ImVec2(folderHierarchyWidth, folderHierarchyHeight + splitterSize), false))
 					{
-						FolderHierarcy(s_rootPath);
+						NavigationPanel(s_rootPath);
 						ImGui::EndChild();
 					}
 					ImGui::SameLine();
@@ -62,7 +62,7 @@ namespace Engine
 		}
 	}
 	
-	void ContentBrowserPanel::FolderOverview()
+	void ContentBrowserPanel::AddressBar()
 	{
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 		if (!m_backToPathStack.empty())
@@ -105,16 +105,29 @@ namespace Engine
 		ImGui::PopStyleColor();
 		ImGui::SameLine();
 		ImGui::Text(ICON_FA_FOLDER);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		std::filesystem::path currentSubDir = {};
 		for (const std::filesystem::path& folder : m_currentDirectory)
 		{
+			currentSubDir /= folder;
 			ImGui::SameLine();
-			ImGui::Text(folder.string().c_str());
+			if (ImGui::Button(folder.string().c_str()))
+			{
+				if (m_currentDirectory != currentSubDir)
+				{
+					m_backToPathStack.push_back(m_currentDirectory);
+					m_forwardToPathStack = {};
+					m_currentDirectory = currentSubDir;
+					break;
+				}
+			}
 			ImGui::SameLine();
 			ImGui::Text(ICON_FA_CHEVRON_RIGHT);
 		}
+		ImGui::PopStyleColor();
 	}
 
-	void ContentBrowserPanel::FolderHierarcy(std::filesystem::path directory)
+	void ContentBrowserPanel::NavigationPanel(std::filesystem::path directory)
 	{
 		if (directory.empty())
 		{
@@ -175,7 +188,7 @@ namespace Engine
 			for (const std::filesystem::path& subdir : subdirs)
 			{
 				ImGui::PushID(subdir.string().c_str());
-				FolderHierarcy(subdir);
+				NavigationPanel(subdir);
 				ImGui::PopID();
 			}
 			ImGui::TreePop();
@@ -222,6 +235,7 @@ namespace Engine
 				if (directoryEntry.is_directory())
 				{
 					m_backToPathStack.push_back(m_currentDirectory);
+					m_forwardToPathStack = {};
 					m_currentDirectory /= path.filename();
 				}
 			}
