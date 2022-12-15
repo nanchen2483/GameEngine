@@ -10,11 +10,11 @@ namespace Engine
 		Ptr<Terrain> terrain = nullptr;
 		Ptr<Texture2D> texture = nullptr;
 
-		void SetHeight(TransformComponent& translate)
+		void SetHeight(TransformComponent& component)
 		{
 			if (terrain != nullptr)
 			{
-				translate.transform.translation.y = terrain->GetHeight(translate.GetTranslation().x, translate.GetTranslation().z);
+				component.transform.translation.y = terrain->GetHeight(component.transform.translation.x, component.transform.translation.z);
 			}
 		}
 
