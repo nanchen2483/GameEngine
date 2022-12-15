@@ -49,6 +49,28 @@ namespace Engine
 		{
 			static TerrainComponent terrainComponent;
 			Frustum frustum = camera.GetFrustum();
+			
+			// Update
+			m_registry.view<TransformComponent, TerrainComponent>()
+				.each([&](TransformComponent& transform, TerrainComponent& component)
+					{
+						terrainComponent = component;
+						component.OnUpdate(camera.GetPosition());
+					});
+
+			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
+			modelView.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
+				{
+					modelView.each([&](TransformComponent& thatTransform, ModelComponent& thatComponent)
+						{
+							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
+						});
+					
+					terrainComponent.SetHeight(thisTransform);
+					thisComponent.OnUpdate(frustum, thisTransform);
+				});
+
+			// Draw
 			uint32_t numOfLights = m_registry.view<LightComponent>().size();
 			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), numOfLights);
 
@@ -66,24 +88,15 @@ namespace Engine
 
 			Renderer3D::EndScene();
 
-			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
-			modelView.each([&](entt::entity thisEntity, TransformComponent& thisTransform, ModelComponent& thisComponent)
+			m_registry.view<TransformComponent, ModelComponent>()
+				.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
 					{
-						modelView.each([&](entt::entity thatEntity, TransformComponent& thatTransform, ModelComponent& thatComponent)
-							{
-								CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
-							});
-						
-						terrainComponent.SetHeight(thisTransform);
-						thisComponent.OnUpdate(frustum, thisTransform);
 						Renderer3D::Draw(thisTransform, thisComponent);
 					});
 
 			m_registry.view<TransformComponent, TerrainComponent>()
 				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						terrainComponent = component;
-						component.OnUpdate(camera.GetPosition());
 						Renderer3D::Draw(transform, component, frustum);
 					});
 
@@ -136,8 +149,29 @@ namespace Engine
 				CameraSystem::OnUpdate(&playerTransform.transform, &primaryCamera.camera);
 			}
 
-			glm::mat4 viewMatrix = CameraSystem::CalculateViewMatrix(playerTransform);
+			// Update
+			m_registry.view<TransformComponent, TerrainComponent>()
+				.each([&](TransformComponent& transform, TerrainComponent& component)
+					{
+						terrainComponent = component;
+						component.OnUpdate(playerTransform.GetTranslation());
+					});
+
 			Frustum frustum = primaryCamera.camera.GetFrustum(playerTransform);
+			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
+			modelView.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
+				{
+					modelView.each([&](TransformComponent& thatTransform, ModelComponent& thatComponent)
+						{
+							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
+						});
+
+					terrainComponent.SetHeight(thisTransform);
+					thisComponent.OnUpdate(frustum, thisTransform);
+				});
+
+			// Draw
+			glm::mat4 viewMatrix = CameraSystem::GetViewMatrix(playerTransform);
 			uint32_t numOflights = m_registry.view<LightComponent>().size();
 			Renderer3D::BeginScene(viewMatrix, primaryCamera.camera.GetProjection(), playerTransform.GetTranslation(), numOflights);
 
@@ -155,24 +189,15 @@ namespace Engine
 
 			Renderer3D::EndScene();
 
-			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
-			modelView.each([&](entt::entity thisEntity, TransformComponent& thisTransform, ModelComponent& thisComponent)
-				{
-					modelView.each([&](entt::entity thatEntity, TransformComponent& thatTransform, ModelComponent& thatComponent)
-						{
-							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
-						});
-
-					terrainComponent.SetHeight(thisTransform);
-					thisComponent.OnUpdate(frustum, thisTransform);
-					Renderer3D::Draw(thisTransform, thisComponent);
-				});
+			m_registry.view<TransformComponent, ModelComponent>()
+				.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
+					{
+						Renderer3D::Draw(thisTransform, thisComponent);
+					});
 
 			m_registry.view<TransformComponent, TerrainComponent>()
 				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						terrainComponent = component;
-						component.OnUpdate(playerTransform.GetTranslation());
 						Renderer3D::Draw(transform, component, frustum);
 					});
 

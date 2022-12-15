@@ -17,7 +17,7 @@ namespace Engine
 		void OnUpdate(const Frustum& frustum, const Transform& transform)
 		{
 			bool isOnViewFrustum = IsOnViewFrustum(frustum, transform);
-			if (isOnViewFrustum && enableAnimation && model != nullptr)
+			if (isOnViewFrustum && enableAnimation)
 			{
 				model->OnUpdate();
 			}

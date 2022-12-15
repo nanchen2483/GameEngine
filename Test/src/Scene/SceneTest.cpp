@@ -9,7 +9,7 @@ namespace EngineTest
 
 		SceneTest()
 		{
-			scene = Engine::CreatePtr<Engine::Scene>(false);
+			scene = Engine::CreatePtr<Engine::Scene>();
 		}
 
 		glm::mat4 GetTransform(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale)
@@ -69,7 +69,7 @@ namespace EngineTest
 		Engine::Entity entity = scene->CreateEntity();
 		glm::vec2 viewportSize = { 1280.0f, 720.0f };
 		scene->OnViewportResize(viewportSize.x, viewportSize.y);
-		entity.AddComponent<Engine::CameraComponent>();
+		entity.AddComponent<Engine::CameraComponent>().primary = true;
 
 		// Act
 		Engine::Entity primaryCameraEntity = scene->GetPrimaryCameraEntity();

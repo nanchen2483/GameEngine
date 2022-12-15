@@ -9,6 +9,6 @@ namespace Engine
 	{
 	public:
 		static void OnUpdate(Transform *transform, SceneCamera *camera);
-		static glm::mat4 CalculateViewMatrix(const Transform& transform) { return glm::inverse((glm::mat4)transform); }
+		static glm::mat4 GetViewMatrix(const Transform& transform) { return glm::inverse((glm::mat4)transform); }
 	};
 }

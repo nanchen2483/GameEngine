@@ -271,7 +271,6 @@ namespace Engine
 
 	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component, Ptr<Shader> shader)
 	{
-
 		if (component.isOnViewFrustum)
 		{
 			if (shader == nullptr)
