@@ -14,16 +14,6 @@ namespace Engine
 		bool enableAnimation = false;
 		Ptr<Model> model = nullptr;
 
-		BoundingValue GetBoundingValue()
-		{
-			if (model != nullptr)
-			{
-				return model->GetBoundingValue();
-			}
-
-			return {};
-		}
-
 		void OnUpdate(const Frustum& frustum, const Transform& transform)
 		{
 			bool isOnViewFrustum = IsOnViewFrustum(frustum, transform);
@@ -32,9 +22,6 @@ namespace Engine
 				model->OnUpdate();
 			}
 		}
-
-		operator BoundingValue() { return GetBoundingValue(); }
-		operator bool() { return model != nullptr; }
 	private:
 		bool IsOnViewFrustum(const Frustum& frustum, const Transform& transform)
 		{
