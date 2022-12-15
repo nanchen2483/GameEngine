@@ -3,10 +3,11 @@
 #include "Component/CameraComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/ModelComponent.h"
-#include "Component/TagComponent.h"
 #include "Component/SkyboxComponent.h"
 #include "Component/SpriteRendererComponent.h"
+#include "Component/TagComponent.h"
 #include "Component/TerrainComponent.h"
+#include "Component/TransformComponent.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
 #include "Entity.h"
 

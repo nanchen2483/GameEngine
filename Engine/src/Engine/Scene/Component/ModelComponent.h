@@ -13,25 +13,5 @@ namespace Engine
 
 		bool enableAnimation = false;
 		Ptr<Model> model = nullptr;
-
-		void OnUpdate(const Frustum& frustum, const Transform& transform)
-		{
-			bool isOnViewFrustum = IsOnViewFrustum(frustum, transform);
-			if (isOnViewFrustum && enableAnimation)
-			{
-				model->OnUpdate();
-			}
-		}
-	private:
-		bool IsOnViewFrustum(const Frustum& frustum, const Transform& transform)
-		{
-			isOnViewFrustum = false;
-			if (model != nullptr)
-			{
-				isOnViewFrustum = model->IsOnFrustum(frustum, transform);
-			}
-
-			return isOnViewFrustum;
-		}
 	};
 }

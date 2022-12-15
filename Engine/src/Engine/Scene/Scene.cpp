@@ -17,6 +17,7 @@
 
 #include "System/CameraSystem.h"
 #include "System/CollisionSystem.h"
+#include "System/ModelSystem.h"
 #include "System/ShadowSystem.h"
 
 namespace Engine
@@ -47,15 +48,18 @@ namespace Engine
 	{
 		if (!m_registry.empty())
 		{
-			static TerrainComponent terrainComponent;
+			static Ptr<Terrain> terrain;
 			Frustum frustum = camera.GetFrustum();
 			
 			// Update
 			m_registry.view<TransformComponent, TerrainComponent>()
 				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						terrainComponent = component;
-						component.OnUpdate(camera.GetPosition());
+						if (component.terrain != nullptr)
+						{
+							terrain = component.terrain;
+							terrain->OnUpdate(camera.GetPosition());
+						}
 					});
 
 			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
@@ -66,8 +70,7 @@ namespace Engine
 							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
 						});
 					
-					terrainComponent.SetHeight(thisTransform);
-					thisComponent.OnUpdate(frustum, thisTransform);
+					ModelSystem::OnUpdate(thisComponent, thisTransform, frustum, terrain);
 				});
 
 			// Draw
@@ -142,7 +145,8 @@ namespace Engine
 		{
 			CameraComponent &primaryCamera = cameraEntity.GetComponent<CameraComponent>();
 			TransformComponent &playerTransform = playerEntity.GetComponent<TransformComponent>();
-			static TerrainComponent terrainComponent;
+			Frustum frustum = primaryCamera.camera.GetFrustum(playerTransform);
+			static Ptr<Terrain> terrain;
 
 			if (!Input::IsCursorVisible())
 			{
@@ -153,11 +157,13 @@ namespace Engine
 			m_registry.view<TransformComponent, TerrainComponent>()
 				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						terrainComponent = component;
-						component.OnUpdate(playerTransform.GetTranslation());
+						if (component.terrain != nullptr)
+						{
+							terrain = component.terrain;
+							terrain->OnUpdate(playerTransform.GetTranslation());
+						}
 					});
 
-			Frustum frustum = primaryCamera.camera.GetFrustum(playerTransform);
 			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
 			modelView.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
 				{
@@ -165,9 +171,8 @@ namespace Engine
 						{
 							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
 						});
-
-					terrainComponent.SetHeight(thisTransform);
-					thisComponent.OnUpdate(frustum, thisTransform);
+					
+					ModelSystem::OnUpdate(thisComponent, thisTransform, frustum, terrain);
 				});
 
 			// Draw
