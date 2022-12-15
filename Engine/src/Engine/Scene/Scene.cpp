@@ -3,8 +3,8 @@
 
 #include "Component/CameraComponent.h"
 #include "Component/LightComponent.h"
-#include "Component/NativeScriptComponent.h"
 #include "Component/ModelComponent.h"
+#include "Component/NativeScriptComponent.h"
 #include "Component/SkyboxComponent.h"
 #include "Component/SpriteRendererComponent.h"
 #include "Component/TagComponent.h"
@@ -15,15 +15,14 @@
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/Renderer3D.h"
 
+#include "System/CameraSystem.h"
+#include "System/CollisionSystem.h"
+#include "System/ShadowSystem.h"
+
 namespace Engine
 {
-	Scene::Scene(bool enableShadow)
+	Scene::Scene()
 	{
-		m_collision = Collision::Create(CollisionType::GJK_EPA_3D);
-		if (enableShadow)
-		{
-			m_shadowBox = CreateUniq<ShadowBox>();
-		}
 	}
 
 	Scene::~Scene()
@@ -70,21 +69,9 @@ namespace Engine
 			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
 			modelView.each([&](entt::entity thisEntity, TransformComponent& thisTransform, ModelComponent& thisComponent)
 					{
-						bool isComparable = false;
 						modelView.each([&](entt::entity thatEntity, TransformComponent& thatTransform, ModelComponent& thatComponent)
 							{
-								if (isComparable)
-								{
-									m_collision->Detect(thisTransform, thatTransform, thisComponent, thatComponent);
-									if (m_collision->GetDistance() < 0)
-									{
-										glm::vec3 x = m_collision->GetDirectionFromAToB() / 2.0f;
-										thisTransform.transform.translation += x;
-										thatTransform.transform.translation -= x;
-									}
-								}
-
-								if (thisEntity == thatEntity && thisComponent && thatComponent) { isComparable = true; }
+								CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
 							});
 						
 						terrainComponent.SetHeight(thisTransform);
@@ -106,31 +93,15 @@ namespace Engine
 						Renderer3D::Draw(component);
 					});
 
-			if (m_shadowBox != nullptr)
-			{
-				m_shadowBox->Update(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio());
-				m_shadowBox->Bind();
-				Ptr<Shader> shader = m_shadowBox->GetShader();
-				m_registry.view<TransformComponent, ModelComponent>()
-					.each([=](TransformComponent& transform, ModelComponent& modelComponent)
-						{
-							if (modelComponent.isOnViewFrustum)
+			ShadowSystem::OnUpdate(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio(),
+				[=]()
+				{
+					m_registry.view<TransformComponent, ModelComponent>()
+						.each([=](TransformComponent& transformComponent, ModelComponent& modelComponent)
 							{
-								shader->SetMat4("uModel", transform);
-								if (modelComponent.model->HasAnimations())
-								{
-									std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();
-									for (uint32_t i = 0; i < transforms.size(); i++)
-									{
-										shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
-									}
-								}
-								modelComponent.model->Draw();
-							}
-						});
-				m_shadowBox->Ubind();
-				m_shadowBox->BindTexture();
-			}
+								Renderer3D::Draw(transformComponent, modelComponent, ShadowSystem::GetShader());
+							});
+				});
 		}
 	}
 
@@ -152,43 +123,23 @@ namespace Engine
 					});
 		}
 
-		CameraComponent* mainCamera = nullptr;
+		Entity cameraEntity = GetPrimaryCameraEntity();
+		Entity playerEntity = GetPlayerEntity();
+		if (cameraEntity && playerEntity)
 		{
-			auto view = m_registry.view<CameraComponent>();
-			for (entt::entity entity : view)
-			{
-				CameraComponent& camera = view.get<CameraComponent>(entity);
-				if (camera.primary)
-				{
-					mainCamera = &camera;
-					break;
-				}
-			}
-		}
+			CameraComponent &primaryCamera = cameraEntity.GetComponent<CameraComponent>();
+			TransformComponent &playerTransform = playerEntity.GetComponent<TransformComponent>();
+			static TerrainComponent terrainComponent;
 
-		TransformComponent* playerTransform = nullptr;
-		auto view = m_registry.view<TransformComponent, ModelComponent>();
-		for (entt::entity entity : view)
-		{
-			auto [transform, model] = view.get<TransformComponent, ModelComponent>(entity);
-			if (model.isPlayer)
-			{
-				playerTransform = &transform;
-				break;
-			}
-		}
-
-		if (mainCamera != nullptr && playerTransform != nullptr)
-		{
 			if (!Input::IsCursorVisible())
 			{
-				CameraSystem::Update(&playerTransform->transform, &mainCamera->camera);
+				CameraSystem::OnUpdate(&playerTransform.transform, &primaryCamera.camera);
 			}
 
-			glm::mat4 viewMatrix = CameraSystem::CalculateViewMatrix(*playerTransform);
-			Frustum frustum = mainCamera->camera.GetFrustum(*playerTransform);
+			glm::mat4 viewMatrix = CameraSystem::CalculateViewMatrix(playerTransform);
+			Frustum frustum = primaryCamera.camera.GetFrustum(playerTransform);
 			uint32_t numOflights = m_registry.view<LightComponent>().size();
-			Renderer3D::BeginScene(viewMatrix, mainCamera->camera.GetProjection(), playerTransform->GetTranslation(), numOflights);
+			Renderer3D::BeginScene(viewMatrix, primaryCamera.camera.GetProjection(), playerTransform.GetTranslation(), numOflights);
 
 			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 				.each([](TransformComponent& transform, SpriteRendererComponent& component)
@@ -204,17 +155,24 @@ namespace Engine
 
 			Renderer3D::EndScene();
 
-			m_registry.view<TransformComponent, ModelComponent>()
-				.each([=](TransformComponent& transform, ModelComponent& component)
-					{
-						component.OnUpdate(frustum, transform);
-						Renderer3D::Draw(transform, component);
-					});
+			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
+			modelView.each([&](entt::entity thisEntity, TransformComponent& thisTransform, ModelComponent& thisComponent)
+				{
+					modelView.each([&](entt::entity thatEntity, TransformComponent& thatTransform, ModelComponent& thatComponent)
+						{
+							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
+						});
+
+					terrainComponent.SetHeight(thisTransform);
+					thisComponent.OnUpdate(frustum, thisTransform);
+					Renderer3D::Draw(thisTransform, thisComponent);
+				});
 
 			m_registry.view<TransformComponent, TerrainComponent>()
 				.each([&](TransformComponent& transform, TerrainComponent& component)
 					{
-						component.OnUpdate(playerTransform->GetTranslation());
+						terrainComponent = component;
+						component.OnUpdate(playerTransform.GetTranslation());
 						Renderer3D::Draw(transform, component, frustum);
 					});
 
@@ -224,31 +182,15 @@ namespace Engine
 						Renderer3D::Draw(component);
 					});
 
-			if (m_shadowBox != nullptr)
-			{
-				m_shadowBox->Update(viewMatrix, mainCamera->camera.GetFOV(), mainCamera->camera.GetAspectRatio());
-				m_shadowBox->Bind();
-				Ptr<Shader> shader = m_shadowBox->GetShader();
-				m_registry.view<TransformComponent, ModelComponent>()
-					.each([=](TransformComponent& transform, ModelComponent& modelComponent)
-						{
-							if (modelComponent.isOnViewFrustum)
+			ShadowSystem::OnUpdate(viewMatrix, primaryCamera.camera.GetFOV(), primaryCamera.camera.GetAspectRatio(),
+				[=]()
+				{
+					m_registry.view<TransformComponent, ModelComponent>()
+						.each([=](TransformComponent& transformComponent, ModelComponent& modelComponent)
 							{
-								shader->SetMat4("uModel", transform);
-								if (modelComponent.model->HasAnimations())
-								{
-									std::vector<glm::mat4> transforms = modelComponent.model->GetBoneTransforms();
-									for (uint32_t i = 0; i < transforms.size(); i++)
-									{
-										shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
-									}
-								}
-								modelComponent.model->Draw();
-							}
-						});
-				m_shadowBox->Ubind();
-				m_shadowBox->BindTexture();
-			}
+								Renderer3D::Draw(transformComponent, modelComponent, ShadowSystem::GetShader());
+							});
+				});
 		}
 	}
 	
@@ -280,6 +222,20 @@ namespace Engine
 		{
 			const CameraComponent& camera = view.get<CameraComponent>(entity);
 			if (camera.primary)
+			{
+				return Entity(entity, this);
+			}
+		}
+		return Entity();
+	}
+
+	Entity Scene::GetPlayerEntity()
+	{
+		auto view = m_registry.view<ModelComponent>();
+		for (entt::entity entity : view)
+		{
+			const ModelComponent& camera = view.get<ModelComponent>(entity);
+			if (camera.isPlayer)
 			{
 				return Entity(entity, this);
 			}

@@ -269,18 +269,24 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component)
+	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component, Ptr<Shader> shader)
 	{
+
 		if (component.isOnViewFrustum)
 		{
-			s_data.shader->SetMat4("uModel", transform);
-			s_data.shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
+			if (shader == nullptr)
+			{
+				shader = s_data.shader;
+				shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
+			}
+
+			shader->SetMat4("uModel", transform);
 			if (component.model->HasAnimations())
 			{
 				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms();
 				for (uint32_t i = 0; i < transforms.size(); i++)
 				{
-					s_data.shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
+					shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
 				}
 			}
 
