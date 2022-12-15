@@ -26,6 +26,7 @@ namespace Engine
 		bool EntityExists(entt::entity entity);
 		Entity GetPrimaryCameraEntity();
 		Entity GetPlayerEntity();
+		Entity GetTerrainEntity();
 	private:
 		template<class T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 		void OnComponentAdded(Entity entity, T& component);

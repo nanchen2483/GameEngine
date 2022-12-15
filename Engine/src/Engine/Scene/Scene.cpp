@@ -46,97 +46,88 @@ namespace Engine
 
 	void Scene::OnUpdateEditor(EditorCamera& camera)
 	{
-		if (!m_registry.empty())
+		if (m_registry.empty())
 		{
-			static Ptr<Terrain> terrain;
-			Frustum frustum = camera.GetFrustum();
-			
-			// Update
-			m_registry.view<TransformComponent, TerrainComponent>()
-				.each([&](TransformComponent& transform, TerrainComponent& component)
-					{
-						if (component.terrain != nullptr)
-						{
-							terrain = component.terrain;
-							terrain->OnUpdate(camera.GetPosition());
-						}
-					});
-
-			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
-			modelView.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
-				{
-					modelView.each([&](TransformComponent& thatTransform, ModelComponent& thatComponent)
-						{
-							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
-						});
-					
-					ModelSystem::OnUpdate(thisComponent, thisTransform, frustum, terrain);
-				});
-
-			// Draw
-			uint32_t numOfLights = m_registry.view<LightComponent>().size();
-			Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), numOfLights);
-
-			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
-				.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& component)
-					{
-						Renderer3D::Draw(transform, component, (int)entity);
-					});
-
-			m_registry.view<TransformComponent, LightComponent>()
-				.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
-					{
-						Renderer3D::Draw(transform, component, (int)entity);
-					});
-
-			Renderer3D::EndScene();
-
-			m_registry.view<TransformComponent, ModelComponent>()
-				.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
-					{
-						Renderer3D::Draw(thisTransform, thisComponent);
-					});
-
-			m_registry.view<TransformComponent, TerrainComponent>()
-				.each([&](TransformComponent& transform, TerrainComponent& component)
-					{
-						Renderer3D::Draw(transform, component, frustum);
-					});
-
-			m_registry.view<SkyboxComponent>()
-				.each([](SkyboxComponent& component)
-					{
-						Renderer3D::Draw(component);
-					});
-
-			ShadowSystem::OnUpdate(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio(),
-				[=]()
-				{
-					m_registry.view<TransformComponent, ModelComponent>()
-						.each([=](TransformComponent& transformComponent, ModelComponent& modelComponent)
-							{
-								Renderer3D::Draw(transformComponent, modelComponent, ShadowSystem::GetShader());
-							});
-				});
+			return;
 		}
+
+		Frustum frustum = camera.GetFrustum();
+			
+		// Update
+		Entity terrainEntity = GetTerrainEntity();
+		static Ptr<Terrain> terrain;
+		if (terrainEntity)
+		{
+			terrain = terrainEntity.GetComponent<TerrainComponent>().terrain;
+			if (terrain != nullptr)
+			{
+				terrain->OnUpdate(camera.GetPosition());
+			}
+		}
+
+		auto modelView = m_registry.view<TransformComponent, ModelComponent>();
+		modelView.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
+			{
+				modelView.each([&](TransformComponent& thatTransform, ModelComponent& thatComponent)
+					{
+						CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
+					});
+					
+				ModelSystem::OnUpdate(thisComponent, thisTransform, frustum, terrain);
+			});
+
+		// Draw
+		uint32_t numOfLights = m_registry.view<LightComponent>().size();
+		Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), numOfLights);
+
+		m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
+			.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& component)
+				{
+					Renderer3D::Draw(transform, component, (int)entity);
+				});
+
+		m_registry.view<TransformComponent, LightComponent>()
+			.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
+				{
+					Renderer3D::Draw(transform, component, (int)entity);
+				});
+
+		Renderer3D::EndScene();
+
+		m_registry.view<TransformComponent, ModelComponent>()
+			.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
+				{
+					Renderer3D::Draw(thisTransform, thisComponent);
+				});
+
+		m_registry.view<TransformComponent, TerrainComponent>()
+			.each([&](TransformComponent& transform, TerrainComponent& component)
+				{
+					Renderer3D::Draw(transform, component, frustum);
+				});
+
+		m_registry.view<SkyboxComponent>()
+			.each([](SkyboxComponent& component)
+				{
+					Renderer3D::Draw(component);
+				});
+
+		ShadowSystem::OnUpdate(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio(),
+			[=]()
+			{
+				m_registry.view<TransformComponent, ModelComponent>()
+					.each([=](TransformComponent& transformComponent, ModelComponent& modelComponent)
+						{
+							Renderer3D::Draw(transformComponent, modelComponent, ShadowSystem::GetShader());
+						});
+			});
 	}
 
 	void Scene::OnUpdateRuntime()
 	{
-		// Script
+		if (m_registry.empty())
 		{
-			m_registry.view<NativeScriptComponent>()
-				.each([=](entt::entity entity, NativeScriptComponent& nsc)
-					{
-						if (!nsc.instance)
-						{
-							nsc.instance = nsc.InstantiateScript();
-							nsc.instance->m_entity = Entity{ entity, this };
-							nsc.instance->OnCreate();
-						}
-
-						nsc.instance->OnUpdate();
-					});
+			return;
 		}
 
 		Entity cameraEntity = GetPrimaryCameraEntity();
@@ -146,23 +137,39 @@ namespace Engine
 			CameraComponent &primaryCamera = cameraEntity.GetComponent<CameraComponent>();
 			TransformComponent &playerTransform = playerEntity.GetComponent<TransformComponent>();
 			Frustum frustum = primaryCamera.camera.GetFrustum(playerTransform);
-			static Ptr<Terrain> terrain;
 
 			if (!Input::IsCursorVisible())
 			{
 				CameraSystem::OnUpdate(&playerTransform.transform, &primaryCamera.camera);
 			}
 
-			// Update
-			m_registry.view<TransformComponent, TerrainComponent>()
-				.each([&](TransformComponent& transform, TerrainComponent& component)
-					{
-						if (component.terrain != nullptr)
+			// Script
+			{
+				m_registry.view<NativeScriptComponent>()
+					.each([=](entt::entity entity, NativeScriptComponent& nsc)
 						{
-							terrain = component.terrain;
-							terrain->OnUpdate(playerTransform.GetTranslation());
-						}
-					});
+							if (!nsc.instance)
+							{
+								nsc.instance = nsc.InstantiateScript();
+								nsc.instance->m_entity = Entity{ entity, this };
+								nsc.instance->OnCreate();
+							}
+
+							nsc.instance->OnUpdate();
+						});
+			}
+
+			// Update
+			Entity terrainEntity = GetTerrainEntity();
+			static Ptr<Terrain> terrain;
+			if (terrainEntity)
+			{
+				terrain = terrainEntity.GetComponent<TerrainComponent>().terrain;
+				if (terrain != nullptr)
+				{
+					terrain->OnUpdate(playerTransform.GetTranslation());
+				}
+			}
 
 			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
 			modelView.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
@@ -256,7 +263,7 @@ namespace Engine
 				return Entity(entity, this);
 			}
 		}
-		return Entity();
+		return {};
 	}
 
 	Entity Scene::GetPlayerEntity()
@@ -270,7 +277,17 @@ namespace Engine
 				return Entity(entity, this);
 			}
 		}
-		return Entity();
+		return {};
+	}
+
+	Entity Scene::GetTerrainEntity()
+	{
+		auto view = m_registry.view<TerrainComponent>();
+		for (entt::entity entity : view)
+		{
+			return Entity(entity, this);
+		}
+		return {};
 	}
 
 	template<typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type*>
