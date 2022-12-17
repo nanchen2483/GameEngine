@@ -1,6 +1,6 @@
 [submodule "Dependencies/vcpkg"]
 	path = Dependencies/vcpkg
-	url = https://github.com/microsoft/vcpkg
+	url = https://github.com/nanchen2483/vcpkg.git
 [submodule "Engine/external/IconFontCppHeaders"]
 	path = Engine/external/IconFontCppHeaders
 	url = https://github.com/nanchen2483/IconFontCppHeaders.git
