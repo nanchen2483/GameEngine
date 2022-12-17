@@ -15,7 +15,7 @@ namespace Engine
 		virtual float GetHeight(float x, float z) const override { return m_buffer->GetTerrainHeight(x, z); }
 		virtual TerrainType GetType() const override { return TerrainType::Quadtree; };
 
-		virtual void OnUpdate(glm::vec3 position) override;
+		virtual void OnUpdate(glm::vec3 cameraPosition) override;
 		virtual void Draw(glm::mat4 model, const Frustum& frustum) override;
 	private:
 		Ptr<TerrainBuffer> m_buffer = nullptr;

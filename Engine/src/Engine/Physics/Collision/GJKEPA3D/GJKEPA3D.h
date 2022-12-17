@@ -10,7 +10,8 @@ namespace Engine
 		GJKEPA3D();
 
 		virtual bool Detect(Transform transformA, Transform transformB, BoundingValue boundingValueA, BoundingValue boundingValueB) override;
-		virtual float GetDistance() const override { return m_distanceBetweenAToB; }
+		virtual bool IsCollided() const override { return m_distanceBetweenAToB < 0.0f; }
+		virtual float GetDistanceBetweenAAndB() const override { return m_distanceBetweenAToB; }
 		virtual glm::vec3 GetDirectionFromAToB() const override { return m_directionFromAToB; }
 	private:
 		bool Solve();

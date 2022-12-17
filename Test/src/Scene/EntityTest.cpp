@@ -11,7 +11,7 @@ namespace EngineTest
 
 		EntityTest()
 		{
-			scene = Engine::CreatePtr<Engine::Scene>(false);
+			scene = Engine::CreatePtr<Engine::Scene>();
 			scene->OnViewportResize(viewportSize.x, viewportSize.y);
 			entity = scene->CreateEntity();
 		}
@@ -52,7 +52,7 @@ namespace EngineTest
 
 		// Assert
 		EXPECT_TRUE(entity.HasComponent<Engine::CameraComponent>());
-		EXPECT_TRUE(actualCameraComponent.primary);
+		EXPECT_FALSE(actualCameraComponent.primary);
 		EXPECT_FALSE(actualCameraComponent.fixedAspectRatio);
 		EXPECT_EQ(expectedOrthographicNearClip, actualCameraComponent.camera.GetOrthographicNearClip());
 		EXPECT_EQ(expectedOrthographicFarClip, actualCameraComponent.camera.GetOrthographicFarClip());
@@ -122,7 +122,7 @@ namespace EngineTest
 		// Arrange
 		Engine::Entity uninitializedEntity;
 		Engine::Entity entityWithInvalidEntityId((entt::entity)123, scene.get());
-		Engine::Entity entityWithIncorrectScene(entity, new Engine::Scene(false));
+		Engine::Entity entityWithIncorrectScene(entity, new Engine::Scene());
 		Engine::Entity copyEntity(entity, scene.get());
 
 		// Act
