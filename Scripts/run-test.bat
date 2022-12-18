@@ -5,14 +5,10 @@ pushd %~dp0
 call vsenv.bat 64
 
 rem Run tests
-pushd ..\out\build\x64-debug
-call ninja -j7 Test
-
-pushd Test
+pushd ..\out\build\x64-debug\Test
 call .\Test
 if %ERRORLEVEL% GEQ 1 (
 	exit 1
 )
-popd
 popd
 popd
