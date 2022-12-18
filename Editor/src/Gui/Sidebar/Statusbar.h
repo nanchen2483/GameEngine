@@ -1,6 +1,7 @@
 #pragma once
 #include "Gui/IGui.h"
 #include "Gui/Panel/ContentBrowserPanel.h"
+#include "Gui/Panel/OutputLogPanel.h"
 
 namespace Engine
 {
@@ -11,5 +12,6 @@ namespace Engine
 		virtual void OnImGuiRender() override;
 	private:
 		Uniq<ContentBrowserPanel> m_contentBrowserPanel;
+		Uniq<OutputLogPanel> m_outputLogPanel;
 	};
 }

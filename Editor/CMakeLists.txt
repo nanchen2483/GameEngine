@@ -20,6 +20,18 @@ target_compile_definitions (Editor
 		"ENGINE_PLATFORM_WINDOWS"
 )
 
+if (MSVC)
+	# Hide the console window in Visual Studio projects - Release
+	set_target_properties (Editor
+		PROPERTIES
+			LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE"
+			LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+
+	# Sets the local debugger working directory for Visual Studio
+	set_property (TARGET Editor PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Editor)
+endif()
+
+# Copy assets, resources and imgui.ini to binary directory
 add_custom_target (assets ALL
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 			${CMAKE_CURRENT_SOURCE_DIR}/assets
@@ -35,7 +47,3 @@ add_custom_target (resources ALL
 add_dependencies (Editor assets resources)
 
 file (CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini ${CMAKE_CURRENT_BINARY_DIR}/imgui.ini)
-
-if (MSVC)
-	set_property (TARGET Editor PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Editor)
-endif()
