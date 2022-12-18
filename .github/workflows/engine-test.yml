@@ -33,4 +33,4 @@ jobs:
       
       - name: Test
         shell: bash
-        run: '${{ github.workspace }}/Scripts/run-test.bat'
+        run: out/build/x64-release/Test/Test
