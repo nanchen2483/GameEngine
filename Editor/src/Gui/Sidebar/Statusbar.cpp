@@ -9,6 +9,7 @@ namespace Engine
 	Statusbar::Statusbar()
 	{
 		m_contentBrowserPanel = CreateUniq<ContentBrowserPanel>();
+		m_outputLogPanel = CreateUniq<OutputLogPanel>();
 	}
 
 	void Statusbar::OnImGuiRender()
@@ -25,6 +26,11 @@ namespace Engine
 				{
 					m_contentBrowserPanel->ToggleWindowStatus();
 				}
+
+				if (ImGui::Button(ICON_FA_TERMINAL " Output Log"))
+				{
+					m_outputLogPanel->ToggleWindowStatus();
+				}
 				ImGui::PopStyleColor();
 				ImGui::EndMenuBar();
 			}
@@ -32,5 +38,6 @@ namespace Engine
 		}
 
 		m_contentBrowserPanel->OnImGuiRender();
+		m_outputLogPanel->OnImGuiRender();
 	}
 }
