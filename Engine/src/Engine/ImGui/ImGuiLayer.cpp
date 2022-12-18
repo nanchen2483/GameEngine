@@ -54,6 +54,7 @@ namespace Engine
 		if (io.ConfigFlags && ImGuiConfigFlags_ViewportsEnable)
 		{
 			style.WindowRounding = 0.0f;
+			style.FrameRounding = 5.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
