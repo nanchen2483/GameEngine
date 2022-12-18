@@ -28,8 +28,8 @@ jobs:
       - name: Build
         uses: lukka/run-cmake@v10
         with:
-          configurePreset: 'x64-debug'
-          buildPreset: 'x64-debug'
+          configurePreset: 'x64-release'
+          buildPreset: 'x64-release'
       
       - name: Test
         shell: bash
