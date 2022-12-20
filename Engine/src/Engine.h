@@ -21,7 +21,6 @@
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Camera/OrthographicCamera.h"
 #include "Engine/Renderer/Camera/OrthographicCameraController.h"
-#include "Engine/Renderer/Model/Model.h"
 #include "Engine/Renderer/RendererCommand.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
 
