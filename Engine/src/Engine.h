@@ -21,15 +21,7 @@
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Camera/OrthographicCamera.h"
 #include "Engine/Renderer/Camera/OrthographicCameraController.h"
-#include "Engine/Renderer/Model/Model.h"
-#include "Engine/Renderer/Renderer2D.h"
-#include "Engine/Renderer/Renderer3D.h"
 #include "Engine/Renderer/RendererCommand.h"
-#include "Engine/Renderer/Shader/Shader.h"
-#include "Engine/Renderer/Shader/ShaderLibrary.h"
-#include "Engine/Renderer/Skybox/Skybox.h"
-#include "Engine/Renderer/Terrain/Terrain.h"
-#include "Engine/Renderer/Texture/Texture.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
 
 // Scene

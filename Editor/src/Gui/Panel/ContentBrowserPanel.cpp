@@ -210,6 +210,7 @@ namespace Engine
 
 		ImGui::Columns(columnCount, 0, false);
 
+		static uint32_t buttonPadding = 10;
 		for (const std::filesystem::directory_entry& directoryEntry : std::filesystem::directory_iterator(m_currentDirectory))
 		{
 			const std::filesystem::path& path = directoryEntry.path();
@@ -219,13 +220,13 @@ namespace Engine
 			ImGui::PushID(filenameString.c_str());
 			Ptr<Texture2D> icon = directoryEntry.is_directory() ? m_folderIcon : m_fileIcon;
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-			ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererId(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 }, 10);
+			ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererId(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 }, buttonPadding);
 
 			if (ImGui::BeginDragDropSource())
 			{
 				const wchar_t* itemPath = path.c_str();
 				ImGui::SetDragDropPayload(File::GetFileType(path).c_str(), itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
-				ImGui::Text(path.filename().string().c_str());
+				ImGui::Text(filenameString.c_str());
 				ImGui::EndDragDropSource();
 			}
 
@@ -238,6 +239,12 @@ namespace Engine
 					m_forwardToPathStack = {};
 					m_currentDirectory /= path.filename();
 				}
+			}
+
+			float textWidth = ImGui::CalcTextSize(filenameString.c_str()).x;
+			if (textWidth < (thumbnailSize + buttonPadding))
+			{
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (thumbnailSize + buttonPadding - textWidth) * 0.5f);
 			}
 
 			ImGui::TextWrapped(filenameString.c_str());

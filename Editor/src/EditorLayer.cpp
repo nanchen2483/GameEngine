@@ -37,6 +37,9 @@ namespace Engine
 
 		m_editorCamera = EditorCamera(45.0f, m_viewportSize.x, m_viewportSize.y, 0.1f, 10000.0f);
 
+		// Globals are not shared accross DLL https://github.com/ocornut/imgui/issues/3169
+		ImGui::SetCurrentContext(Application::Get().GetImGuiLayer()->GetContext());
+		
 		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 		m_menubar.SetFunctions(
 			ENGINE_BIND_FN(EditorLayer::NewScene),
@@ -73,7 +76,6 @@ namespace Engine
 
 		if (m_toolbar.OnEditMode())
 		{
-			Renderer3D::ResetStates();
 			if (m_viewportHovered)
 			{
 				ENGINE_PROFILE_SCOPE("Camera OnUpdate");

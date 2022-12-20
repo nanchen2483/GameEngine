@@ -54,25 +54,25 @@ namespace Engine
 	class ENGINE_API MouseButtonEvent : public MouseEvent<T>
 	{
 	public:
-		int GetMouseButton() const { return m_button; }
+		int32_t GetMouseButton() const { return m_button; }
 
 	protected:
-		MouseButtonEvent(int button)
+		MouseButtonEvent(int32_t button)
 			: m_button(button) {}
-
-		int m_button;
+	private:
+		int32_t m_button;
 	};
 
 	class ENGINE_API MouseButtonPressedEvent : public MouseButtonEvent<EventType::MouseButtonPressed>
 	{
 	public:
-		MouseButtonPressedEvent(int button)
+		MouseButtonPressedEvent(int32_t button)
 			: MouseButtonEvent(button) {}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonPressedEvent: " << m_button;
+			ss << "MouseButtonPressedEvent: " << GetMouseButton();
 			return ss.str();
 		}
 	};
@@ -80,13 +80,13 @@ namespace Engine
 	class ENGINE_API MouseButtonReleasedEvent : public MouseButtonEvent<EventType::MouseButtonReleased>
 	{
 	public:
-		MouseButtonReleasedEvent(int button)
+		MouseButtonReleasedEvent(int32_t button)
 			: MouseButtonEvent(button) {}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonReleasedEvent: " << m_button;
+			ss << "MouseButtonReleasedEvent: " << GetMouseButton();
 			return ss.str();
 		}
 	};
