@@ -33,4 +33,4 @@ jobs:
       
       - name: Test
         shell: bash
-        run: out/build/x64-release/Test/Test
+        run: out/build/x64-release/Editor/Test
