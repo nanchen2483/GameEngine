@@ -4,6 +4,8 @@
 #include "Engine/Core/Events/MouseEvent.h"
 #include "Engine/Core/Layer/Layer.h"
 
+#include <imgui_internal.h>
+
 namespace Engine
 {
 	class ENGINE_API ImGuiLayer : public Layer
@@ -21,9 +23,11 @@ namespace Engine
 		void End();
 
 		void BlockEvents(bool block) { m_blockEvents = block; }
+		ImGuiContext* GetContext() const { return m_context; }
 	private:
 		float m_time = 0.0f;
 		bool m_blockEvents = false;
+		ImGuiContext* m_context = nullptr;
 	};
 }
 

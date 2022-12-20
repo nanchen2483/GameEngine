@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-	class RendererCommand
+	class ENGINE_API RendererCommand
 	{
 	public:
 		inline static void Init()

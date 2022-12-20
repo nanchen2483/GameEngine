@@ -1,6 +1,6 @@
 #pragma once
 #include "Gui/IGui.h"
-#include "Engine/Core/Log/Log.h"
+#include "Engine.h"
 
 #include <imgui_internal.h>
 #include <set>

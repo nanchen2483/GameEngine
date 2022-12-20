@@ -51,6 +51,7 @@ namespace Engine
 			return;
 		}
 
+		Renderer3D::ResetStates();
 		Frustum frustum = camera.GetFrustum();
 			
 		// Update

@@ -5,7 +5,7 @@ pushd %~dp0
 call vsenv.bat 64
 
 rem Run tests
-pushd ..\out\build\x64-debug\Test
+pushd ..\out\build\x64-debug\Editor
 call .\Test
 if %ERRORLEVEL% GEQ 1 (
 	exit 1
