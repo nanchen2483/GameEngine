@@ -65,6 +65,7 @@ namespace Engine
 		if (m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f && // zero sized framebuffer is invalid
 			(spec.width != m_viewportSize.x || spec.height != m_viewportSize.y))
 		{
+			ENGINE_TRACE("Resize viewport to (" + std::to_string(m_viewportSize.x) + ", " + std::to_string(m_viewportSize.y) + ")");
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 			m_editorCamera.SetViewportSize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
