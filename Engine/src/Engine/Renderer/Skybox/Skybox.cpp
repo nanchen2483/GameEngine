@@ -4,6 +4,7 @@
 
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/Shader/ShaderLibrary.h"
 
 namespace Engine
 {
@@ -23,7 +24,7 @@ namespace Engine
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(SkyboxData::indices), SkyboxData::numOfIndices));
 
-		m_shader = Shader::Create("assets/shaders/Skybox.glsl");
+		m_shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Skybox.glsl");
 	}
 	
 	void Skybox::Draw()

@@ -2,6 +2,7 @@
 #include "TerrainBuffer.h"
 
 #include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/Shader/ShaderLibrary.h"
 
 namespace Engine
 {
@@ -14,7 +15,7 @@ namespace Engine
 		m_loadMorphingArea.reserve(NUM_OF_ROOT_NODES);
 
 		uint32_t index = 0;
-		m_shader = Shader::Create("assets/shaders/TessellationTerrain.glsl");
+		m_shader = ShaderLibrary::GetInstance()->Load("assets/shaders/TessellationTerrain.glsl");
 		m_shader->Bind();
 		m_shader->SetInt("uHeightMap", index++);
 		m_shader->SetInt("uNormalMap", index++);
@@ -102,7 +103,7 @@ namespace Engine
 		uint32_t N = m_heightMapTexture->GetWidth();
 		m_normalMapTexture = Texture2D::Create(N, N, (int)(log(N) / log(2)), TextureFormatType::RGBA32);
 
-		Ptr<Shader> normalShader = Shader::Create("assets/shaders/Compute/NormalMap.glsl");
+		Ptr<Shader> normalShader = ShaderLibrary::GetInstance()->Load("assets/shaders/Compute/NormalMap.glsl");
 		normalShader->Bind();
 		normalShader->SetInt("uHeightMap", 0);
 		normalShader->SetInt("uN", N);
@@ -117,7 +118,7 @@ namespace Engine
 		uint32_t N = m_heightMapTexture->GetWidth();
 		m_splatMapTexture = Texture2D::Create(N, N, (int)(log(N) / log(2)), TextureFormatType::RGBA16);
 
-		Ptr<Shader> splatShader = Shader::Create("assets/shaders/Compute/SplatMap.glsl");
+		Ptr<Shader> splatShader = ShaderLibrary::GetInstance()->Load("assets/shaders/Compute/SplatMap.glsl");
 		splatShader->Bind();
 		splatShader->SetInt("uNormalMap", 0);
 		splatShader->SetInt("uN", N);
