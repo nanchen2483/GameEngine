@@ -3,36 +3,38 @@
 
 namespace Engine
 {
-	void ShaderLibrary::Add(const std::string& name, const Ptr<Shader>& shader)
-	{
-		ENGINE_CORE_ASSERT(!Exists(name), "Shader already exists!");
-		m_shaders[name] = shader;
-	}
+	ShaderLibrary* ShaderLibrary::s_instance = nullptr;
 
 	void ShaderLibrary::Add(const Ptr<Shader>& shader)
 	{
 		std::string shaderName = shader->GetName();
-		Add(shaderName, shader);
+		ENGINE_CORE_ASSERT(!Exists(shaderName), "Shader already exists!");
+		m_shaders[shaderName] = shader;
 	}
 
 	Ptr<Shader> ShaderLibrary::Load(const std::string& filePath)
 	{
+		if (Exists(filePath))
+		{
+			return Get(filePath);
+		}
+
 		Ptr<Shader> shader = Shader::Create(filePath);
 		Add(shader);
-		return shader;
-	}
 
-	Ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filePath)
-	{
-		Ptr<Shader> shader = Shader::Create(filePath);
-		Add(name, shader);
 		return shader;
 	}
 
 	Ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
+		if (Exists(name))
+		{
+			return Get(name);
+		}
+
 		Ptr<Shader> shader = Shader::Create(name, vertexSrc, fragmentSrc);
-		Add(name, shader);
+		Add(shader);
+
 		return shader;
 	}
 
@@ -45,5 +47,15 @@ namespace Engine
 	bool ShaderLibrary::Exists(const std::string& name) const
 	{
 		return m_shaders.find(name) != m_shaders.end();
+	}
+
+	ShaderLibrary* ShaderLibrary::GetInstance()
+	{
+		if (!s_instance)
+		{
+			s_instance = new ShaderLibrary();
+		}
+
+		return s_instance;
 	}
 }

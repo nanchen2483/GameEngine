@@ -2,7 +2,7 @@
 #include "Renderer2D.h"
 #include "RendererCommand.h"
 #include "Model/Vertex.h"
-#include "Shader/Shader.h"
+#include "Shader/ShaderLibrary.h"
 
 #include <array>
 #include <glm/gtc/matrix_transform.hpp>
@@ -74,7 +74,7 @@ namespace Engine
 			samplers[i] = i;
 		}
 
-		s_data.shader = Shader::Create("assets/shaders/Default.glsl");
+		s_data.shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Default.glsl");
 		s_data.shader->Bind();
 		s_data.shader->SetIntArray("uTextures", samplers, s_data.maxTextureSlots);
 		s_data.textureSlots[0] = s_data.whiteTexture;

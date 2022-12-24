@@ -2,6 +2,7 @@
 #include "Renderer3D.h"
 #include "RendererCommand.h"
 #include "Model/Vertex.h"
+#include "Shader/ShaderLibrary.h"
 #include "Shadow/ShadowBox.h"
 
 #include <array>
@@ -116,7 +117,7 @@ namespace Engine
 			samplers[i] = i;
 		}
 
-		s_data.shader = Shader::Create("assets/shaders/Default.glsl");
+		s_data.shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Default.glsl");
 		s_data.shader->Bind();
 		s_data.textureSlots[0] = s_data.whiteTexture;
 		s_data.shader->SetIntArray("uTextures", samplers, Renderer3DData::MAX_TEXTURE_SLOTS);
