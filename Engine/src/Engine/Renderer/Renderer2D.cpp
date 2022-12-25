@@ -3,6 +3,7 @@
 #include "RendererCommand.h"
 #include "Model/Vertex.h"
 #include "Shader/ShaderLibrary.h"
+#include "Texture/TextureLibrary.h"
 
 #include <array>
 #include <glm/gtc/matrix_transform.hpp>
@@ -64,7 +65,7 @@ namespace Engine
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
-		s_data.whiteTexture = Texture2D::Create(1, 1);
+		s_data.whiteTexture = TextureLibrary::GetInstance()->Load(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
 		s_data.whiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
 

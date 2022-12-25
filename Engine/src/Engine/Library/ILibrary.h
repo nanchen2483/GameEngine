@@ -10,10 +10,10 @@ namespace Engine
 	class ILibrary
 	{
 	public:
-		virtual Ptr<T> Load(const std::string filePath) = 0;
-		virtual Ptr<T> Get(const std::string& filePath) const = 0;
-		virtual void Add(const Ptr<T> data) = 0;
+		virtual Ptr<T> Load(const std::filesystem::path& filePath) = 0;
 	protected:
-		virtual bool Exists(const std::string& filePath) const = 0;
+		virtual Ptr<T> Get(const std::string& name) const = 0;
+		virtual void Add(const Ptr<T> data) = 0;
+		virtual bool Exists(const std::string& name) const = 0;
 	};
 }

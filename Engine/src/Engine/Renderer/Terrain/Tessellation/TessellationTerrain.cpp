@@ -1,12 +1,12 @@
 #include "enginepch.h"
 #include "TessellationTerrain.h"
-
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 namespace Engine
 {
 	TessellationTerrain::TessellationTerrain(std::string filePath, int32_t entityId)
-		: TessellationTerrain(Texture2D::Create(filePath, TextureType::Height, false), entityId)
+		: TessellationTerrain(TextureLibrary::GetInstance()->Load(filePath, TextureType::Height, false), entityId)
 	{
 	}
 

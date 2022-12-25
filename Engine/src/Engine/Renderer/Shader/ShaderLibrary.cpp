@@ -5,23 +5,24 @@ namespace Engine
 {
 	ShaderLibrary* ShaderLibrary::s_instance = nullptr;
 
-	Ptr<Shader> ShaderLibrary::Load(const std::string filePath)
+	Ptr<Shader> ShaderLibrary::Load(const std::filesystem::path& filePath)
 	{
-		if (Exists(filePath))
+		const std::string name = filePath.stem().string();
+		if (Exists(name))
 		{
-			return Get(filePath);
+			return Get(name);
 		}
 
-		Ptr<Shader> shader = Shader::Create(filePath);
+		Ptr<Shader> shader = Shader::Create(filePath.string());
 		Add(shader);
 
 		return shader;
 	}
 
-	Ptr<Shader> ShaderLibrary::Get(const std::string& filePath) const
+	Ptr<Shader> ShaderLibrary::Get(const std::string& name) const
 	{
-		ENGINE_CORE_ASSERT(Exists(filePath), "Shader not found!");
-		return m_shaders.at(filePath);
+		ENGINE_CORE_ASSERT(Exists(name), "Shader not found!");
+		return m_shaders.at(name);
 	}
 
 	void ShaderLibrary::Add(const Ptr<Shader> data)
@@ -31,9 +32,9 @@ namespace Engine
 		m_shaders.insert({ shaderName, data });
 	}
 
-	bool ShaderLibrary::Exists(const std::string& filePath) const
+	bool ShaderLibrary::Exists(const std::string& name) const
 	{
-		return m_shaders.find(filePath) != m_shaders.end();
+		return m_shaders.find(name) != m_shaders.end();
 	}
 
 	ShaderLibrary* ShaderLibrary::GetInstance()

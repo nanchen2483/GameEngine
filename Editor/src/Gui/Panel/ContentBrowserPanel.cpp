@@ -11,8 +11,8 @@ namespace Engine
 	ContentBrowserPanel::ContentBrowserPanel()
 		: m_currentDirectory(s_rootPath)
 	{
-		m_folderIcon = Texture2D::Create("resources/Icons/folder.png");
-		m_fileIcon = Texture2D::Create("resources/Icons/file.png");
+		m_folderIcon = TextureLibrary::GetInstance()->Load("resources/Icons/folder.png");
+		m_fileIcon = TextureLibrary::GetInstance()->Load("resources/Icons/file.png");
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()
