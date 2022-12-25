@@ -37,10 +37,12 @@ namespace Engine
 		virtual uint32_t GetHeight() const = 0;
 		virtual const std::vector<float>& GetData() = 0;
 		virtual void SetData(void* data, uint32_t size) = 0;
-
+	private:
 		static Ptr<Texture2D> Create(uint32_t width, uint32_t height, uint32_t levels = 1, TextureFormatType format = TextureFormatType::RGBA8);
 		static Ptr<Texture2D> Create(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = false);
 		static Ptr<Texture2D> Create(const Ptr<Image> image, const TextureType type = TextureType::None);
+
+		friend class TextureLibrary;
 	};
 
 	class Texture3D : public Texture

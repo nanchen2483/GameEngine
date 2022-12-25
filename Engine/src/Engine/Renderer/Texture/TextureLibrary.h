@@ -2,24 +2,24 @@
 #include "Engine/Library/ILibrary.h"
 #include "Texture.h"
 
+#include <filesystem>
+
 namespace Engine
 {
 	class TextureLibrary : public ILibrary<Texture2D>
 	{
 	public:
-		virtual Ptr<Texture2D> Load(const std::string filePath) override;
-		virtual Ptr<Texture2D> Get(const std::string& filePath) const override;
-		virtual void Add(const Ptr<Texture2D> data) override;
-
-		Ptr<Texture2D> Load(const std::string& filePath, const TextureType type, bool flipVertically = false);
+		virtual Ptr<Texture2D> Load(const std::filesystem::path& filePath) override;
+		Ptr<Texture2D> Load(const std::filesystem::path&, const TextureType type, bool flipVertically = false);
 		Ptr<Texture2D> Load(const Ptr<Image> image, const TextureType type);
-		void Add(const Ptr<Image> image);
+		Ptr<Texture2D> Load(uint32_t height, uint32_t width, uint32_t levels = 1, TextureFormatType format = TextureFormatType::RGBA8);
 
 		static TextureLibrary* GetInstance();
-	protected:
-		virtual bool Exists(const std::string& filePath) const override;
 	private:
 		TextureLibrary() = default;
+		virtual Ptr<Texture2D> Get(const std::string& name) const override;
+		virtual void Add(const Ptr<Texture2D> data) override;
+		virtual bool Exists(const std::string& name) const override;
 
 		std::unordered_map<std::string, Ptr<Texture2D>> m_textures;
 		static TextureLibrary* s_instance;
