@@ -1,25 +1,13 @@
 #include "enginepch.h"
 #include "TextureLibrary.h"
 
-#include <filesystem>
-
 namespace Engine
 {
 	TextureLibrary* TextureLibrary::s_instance = nullptr;
 
-	void TextureLibrary::Add(Ptr<Texture2D> texture)
+	Ptr<Texture2D> TextureLibrary::Load(const std::string filePath)
 	{
-		std::string path = texture->GetFilePath();
-		ENGINE_CORE_ASSERT(!Exists(path), "Texture already exists!");
-		m_textures[path] = texture;
-	}
-
-	void TextureLibrary::Add(Ptr<Image> image)
-	{
-		std::string path = image->GetFilePath();
-		ENGINE_CORE_ASSERT(!Exists(path), "Texture already exists!");
-		Ptr<Texture2D> texture = Texture2D::Create(image);
-		m_textures[path] = texture;
+		return Load(filePath, TextureType::Diffuse, false);
 	}
 
 	Ptr<Texture2D> TextureLibrary::Load(const std::string& filePath, const TextureType type, bool flipVertically)
@@ -48,13 +36,28 @@ namespace Engine
 		return texture;
 	}
 
-	Ptr<Texture2D> TextureLibrary::Get(const std::string& filePath)
+	Ptr<Texture2D> TextureLibrary::Get(const std::string& filePath) const
 	{
 		ENGINE_CORE_ASSERT(Exists(filePath), "Texture not found!");
-		return m_textures[filePath];
+		return m_textures.at(filePath);
+	}
+
+	void TextureLibrary::Add(const Ptr<Texture2D> data)
+	{
+		std::string path = data->GetFilePath();
+		ENGINE_CORE_ASSERT(!Exists(path), "Texture already exists!");
+		m_textures.insert({ path, data });
+	}
+
+	void TextureLibrary::Add(const Ptr<Image> image)
+	{
+		std::string path = image->GetFilePath();
+		ENGINE_CORE_ASSERT(!Exists(path), "Texture already exists!");
+		Ptr<Texture2D> texture = Texture2D::Create(image);
+		m_textures.insert({ path, texture });
 	}
 	
-	bool TextureLibrary::Exists(const std::string& filePath)
+	bool TextureLibrary::Exists(const std::string& filePath) const
 	{
 		return m_textures.find(filePath) != m_textures.end();
 	}
