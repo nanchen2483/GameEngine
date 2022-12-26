@@ -341,7 +341,7 @@ namespace Engine {
 					YAML::Node& filePathNode = spriteRendererComponent["TextureFilePath"];
 					if (filePathNode)
 					{
-						deserializedSRC.texture = Texture2D::Create(filePathNode.as<std::string>(), TextureType::Diffuse);
+						deserializedSRC.texture = TextureLibrary::GetInstance()->Load(filePathNode.as<std::string>());
 					}
 				}
 
@@ -375,7 +375,7 @@ namespace Engine {
 				if (terrainComponent)
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
-					deserializedSkybox.texture = Texture2D::Create(terrainComponent["Path"].as<std::string>(), TextureType::Height);
+					deserializedSkybox.texture = TextureLibrary::GetInstance()->Load(terrainComponent["Path"].as<std::string>(), TextureType::Height);
 					deserializedSkybox.terrain = Terrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}

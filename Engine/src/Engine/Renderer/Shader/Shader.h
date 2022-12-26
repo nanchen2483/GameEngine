@@ -25,8 +25,10 @@ namespace Engine
 		virtual void SetBlockBinding(const std::string& name, const int value) = 0;
 
 		virtual const std::string& GetName() const = 0;
-
+	private:
 		static Ptr<Shader> Create(const std::string& filePath);
 		static Ptr<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+
+		friend class ShaderLibrary;
 	};
 }

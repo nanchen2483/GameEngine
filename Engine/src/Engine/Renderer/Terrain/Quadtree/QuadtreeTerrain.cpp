@@ -1,10 +1,11 @@
 #include "enginepch.h"
 #include "QuadtreeTerrain.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 namespace Engine
 {
 	QuadtreeTerrain::QuadtreeTerrain(std::string filePath, int32_t entityId)
-		: QuadtreeTerrain(Texture2D::Create(filePath, TextureType::Height, false), entityId)
+		: QuadtreeTerrain(TextureLibrary::GetInstance()->Load(filePath, TextureType::Height, false), entityId)
 	{
 	}
 

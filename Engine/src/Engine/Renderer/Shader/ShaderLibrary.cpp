@@ -5,43 +5,31 @@ namespace Engine
 {
 	ShaderLibrary* ShaderLibrary::s_instance = nullptr;
 
-	void ShaderLibrary::Add(const Ptr<Shader>& shader)
+	Ptr<Shader> ShaderLibrary::Load(const std::filesystem::path& filePath)
 	{
-		std::string shaderName = shader->GetName();
-		ENGINE_CORE_ASSERT(!Exists(shaderName), "Shader already exists!");
-		m_shaders[shaderName] = shader;
-	}
-
-	Ptr<Shader> ShaderLibrary::Load(const std::string& filePath)
-	{
-		if (Exists(filePath))
-		{
-			return Get(filePath);
-		}
-
-		Ptr<Shader> shader = Shader::Create(filePath);
-		Add(shader);
-
-		return shader;
-	}
-
-	Ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
-	{
+		const std::string name = filePath.stem().string();
 		if (Exists(name))
 		{
 			return Get(name);
 		}
 
-		Ptr<Shader> shader = Shader::Create(name, vertexSrc, fragmentSrc);
+		Ptr<Shader> shader = Shader::Create(filePath.string());
 		Add(shader);
 
 		return shader;
 	}
 
-	Ptr<Shader> ShaderLibrary::Get(const std::string& name)
+	Ptr<Shader> ShaderLibrary::Get(const std::string& name) const
 	{
 		ENGINE_CORE_ASSERT(Exists(name), "Shader not found!");
-		return m_shaders[name];
+		return m_shaders.at(name);
+	}
+
+	void ShaderLibrary::Add(const Ptr<Shader> data)
+	{
+		std::string shaderName = data->GetName();
+		ENGINE_CORE_ASSERT(!Exists(shaderName), "Shader already exists!");
+		m_shaders.insert({ shaderName, data });
 	}
 
 	bool ShaderLibrary::Exists(const std::string& name) const
