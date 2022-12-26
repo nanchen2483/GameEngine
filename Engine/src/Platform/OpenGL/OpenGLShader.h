@@ -30,6 +30,7 @@ namespace Engine
 
 		virtual void SetBlockBinding(const std::string& name, const int value) override;
 
+		inline virtual uint64_t GetUid() const override { return m_uid; }
 		inline virtual const std::string& GetName() const override { return m_shaderName; };
 	private:
 		std::string ReadFile(const std::string& path);
@@ -37,6 +38,7 @@ namespace Engine
 		void Compile(std::unordered_map<GLenum, std::string> shaderSources);
 		void CheckUniformError(int32_t uniformId, const std::string& name);
 	private:
+		uint64_t m_uid;
 		uint32_t m_rendererId;
 		std::string m_shaderName;
 	};

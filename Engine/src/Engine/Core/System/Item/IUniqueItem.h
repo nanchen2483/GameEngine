@@ -6,6 +6,6 @@ namespace Engine
 	class IUniqueItem
 	{
 	public:
-		virtual uint32_t GetId() const = 0;
+		virtual uint64_t GetUid() const = 0;
 	};
 }

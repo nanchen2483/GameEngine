@@ -2,6 +2,7 @@
 #include "OpenGLShader.h"
 
 #include "Debug/OpenGLDebug.h"
+#include "Engine/Core/System/Security/Cryptography/KeyGenerator.h"
 
 #include <filesystem>
 #include <fstream>
@@ -49,6 +50,7 @@ namespace Engine
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filePath)
+		: m_uid(KeyGenerator::HashKey(filePath))
 	{
 		std::string source = ReadFile(filePath);
 		std::unordered_map<GLenum, std::string> shaderSource = PreProcess(source);
@@ -58,7 +60,7 @@ namespace Engine
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
-		: m_shaderName(name)
+		: m_uid(KeyGenerator::HashKey(name)), m_shaderName(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -67,6 +69,7 @@ namespace Engine
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& geometrySrc)
+		: m_uid(KeyGenerator::HashKey(name)), m_shaderName(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
