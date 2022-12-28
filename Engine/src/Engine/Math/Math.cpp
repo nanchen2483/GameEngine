@@ -32,7 +32,7 @@ namespace Engine::Math {
 		outTranslation = vec3(LocalMatrix[3]);
 		LocalMatrix[3] = vec4(0, 0, 0, LocalMatrix[3].w);
 
-		vec3 Row[3], Pdum3;
+		vec3 Row[3];
 
 		// Now get scale and shear.
 		for (length_t i = 0; i < 3; ++i)
@@ -48,6 +48,7 @@ namespace Engine::Math {
 		Row[2] = detail::scale(Row[2], static_cast<T>(1));
 
 #if 0
+		vec3 Pdum3;
 		// At this point, the matrix (in rows[]) is orthonormal.
 		// Check for a coordinate system flip.  If the determinant
 		// is -1, then negate the matrix and the scaling factors.

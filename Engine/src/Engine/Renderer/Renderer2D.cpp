@@ -1,22 +1,15 @@
 #include "enginepch.h"
 #include "Renderer2D.h"
-#include "Platform/OpenGL/OpenGLShader.h"
+#include "RendererCommand.h"
+#include "Model/Vertex.h"
+#include "Shader/ShaderLibrary.h"
+#include "Texture/TextureLibrary.h"
 
+#include <array>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Engine
-{	
-	struct Vertex
-	{
-		glm::vec3 position;
-		glm::vec4 color;
-		glm::vec2 texCoord;
-		float textureIndex;
-
-		// Editor-only
-		int entityId = -1;
-	};
-
+{
 	struct Renderer2DData
 	{
 		static const uint32_t maxQuads = 20000;
@@ -36,7 +29,7 @@ namespace Engine
 		std::array<Ptr<Texture2D>, maxTextureSlots> textureSlots;
 		uint32_t textureSlotIndex = 1;
 
-		glm::vec4 vertexPosition[4];
+		glm::vec4 vertexPosition[4] = {};
 
 		Renderer2D::Statistics states;
 	};
@@ -50,15 +43,8 @@ namespace Engine
 		s_data.vertexArray = VertexArray::Create();
 
 		s_data.vertexBuffer = VertexBuffer::Create(s_data.maxVertices * sizeof(Vertex));
-		s_data.vertexBuffer->SetLayout({
-			{ ShaderDataType::Float3, "aPosition" },
-			{ ShaderDataType::Float4, "aColor" },
-			{ ShaderDataType::Float2, "aTexCoord" },
-			{ ShaderDataType::Float, "aTexIndex" },
-			{ ShaderDataType::Int, "aEntityId" }
-		});
+		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
-
 		s_data.vertexBufferBase = new Vertex[s_data.maxVertices];
 
 		uint32_t* indices = new uint32_t[s_data.maxIndices];
@@ -79,7 +65,7 @@ namespace Engine
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
-		s_data.whiteTexture = Texture2D::Create(1, 1);
+		s_data.whiteTexture = TextureLibrary::GetInstance()->Load(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
 		s_data.whiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
 
@@ -89,7 +75,7 @@ namespace Engine
 			samplers[i] = i;
 		}
 
-		s_data.shader = Shader::Create("asserts/shaders/Color.glsl");
+		s_data.shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Default.glsl");
 		s_data.shader->Bind();
 		s_data.shader->SetIntArray("uTextures", samplers, s_data.maxTextureSlots);
 		s_data.textureSlots[0] = s_data.whiteTexture;
@@ -112,14 +98,12 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		auto& viewProjection = camera.GetViewProjection();
+		const glm::mat4& viewProjection = camera.GetViewProjection();
 
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);
 
-		s_data.indexCount = 0;
-		s_data.vertexBufferPtr = s_data.vertexBufferBase;
-		s_data.textureSlotIndex = 1;
+		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(OrthographicCamera& camera)
@@ -136,7 +120,7 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		auto& viewProjection = camera.GetProjection() * glm::inverse(transform);
+		glm::mat4& viewProjection = camera.GetProjection() * glm::inverse(transform);
 
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);
@@ -167,7 +151,7 @@ namespace Engine
 			s_data.textureSlots[i]->Bind(i);
 		}
 
-		RendererCommand::DrawIndexed(s_data.indexCount);
+		RendererCommand::DrawUint32Indexed(s_data.indexCount);
 		
 		s_data.states.drawCalls++;
 	}
@@ -175,12 +159,8 @@ namespace Engine
 	void Renderer2D::FlushAndReset()
 	{
 		EndScene();
-
-		s_data.indexCount = 0;
-		s_data.vertexBufferPtr = s_data.vertexBufferBase;
-		s_data.textureSlotIndex = 1;
+		StartBatch();
 	}
-
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
@@ -190,7 +170,7 @@ namespace Engine
 		DrawQuad(transform, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ptr<Texture2D>& texture, int entityId)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color, int entityId)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
@@ -199,37 +179,35 @@ namespace Engine
 			FlushAndReset();
 		}
 
-		float textureIndex = 0.0f;
-		for (uint32_t i = 1; i < s_data.textureSlotIndex; i++)
+		uint32_t textureIndex = 0;
+		if (texture != nullptr)
 		{
-			if (*s_data.textureSlots[i].get() == *texture.get())
+			for (uint32_t i = 1; i < s_data.textureSlotIndex; i++)
 			{
-				textureIndex = (float)i;
-				break;
+				if (*s_data.textureSlots[i].get() == *texture.get())
+				{
+					textureIndex = i;
+					break;
+				}
+			}
+
+			if (textureIndex == 0.0f)
+			{
+				textureIndex = s_data.textureSlotIndex;
+				s_data.textureSlots[s_data.textureSlotIndex] = texture;
+				s_data.textureSlotIndex++;
 			}
 		}
 
-		if (textureIndex == 0.0f)
-		{
-			textureIndex = s_data.textureSlotIndex;
-			s_data.textureSlots[s_data.textureSlotIndex] = texture;
-			s_data.textureSlotIndex++;
-		}
-
 		constexpr size_t quadVertexCount = 4;
-		constexpr glm::vec4 color = glm::uvec4(1.0f);
 		constexpr glm::vec2 textureCoords[] = { glm::vec2(0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f), glm::vec2(0.0f, 1.0f) };
-
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
-
 
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[i];
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = textureCoords[i];
-			s_data.vertexBufferPtr->textureIndex = textureIndex;
+			s_data.vertexBufferPtr->material = glm::vec3(textureIndex, -1, 0);
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
@@ -257,7 +235,7 @@ namespace Engine
 			s_data.vertexBufferPtr->position = transform * s_data.vertexPosition[i];
 			s_data.vertexBufferPtr->color = color;
 			s_data.vertexBufferPtr->texCoord = textureCoords[i];
-			s_data.vertexBufferPtr->textureIndex = textureIndex;
+			s_data.vertexBufferPtr->material = glm::vec3(textureIndex, -1, 0);
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
@@ -269,7 +247,7 @@ namespace Engine
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId)
 	{
-		DrawQuad(transform, sprite.color, entityId);
+		DrawQuad(transform, sprite.texture, sprite.color, entityId);
 	}
 
 	void Renderer2D::ResetStates()

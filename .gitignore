@@ -1,9 +1,14 @@
 .vs/
+.vscode/
 bin/
-imd/
+out/
+build/
 Sandbox/*.json
-*Editor/*json
+Editor/*json
+packages/
+packages.config
 
 *.user
 *.vcxproj
 *.vcxproj.filters
+*.sln

@@ -1,8 +1,17 @@
 #include "enginepch.h"
 #include "SceneSerializer.h"
+#include "Component/CameraComponent.h"
+#include "Component/LightComponent.h"
+#include "Component/ModelComponent.h"
+#include "Component/SkyboxComponent.h"
+#include "Component/SpriteRendererComponent.h"
+#include "Component/TagComponent.h"
+#include "Component/TerrainComponent.h"
+#include "Component/TransformComponent.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Entity.h"
 
 #include <yaml-cpp/yaml.h>
-#include <Engine.h>
 
 namespace YAML {
 	template<>
@@ -85,14 +94,14 @@ namespace Engine {
 	void static SerializeEntity(YAML::Emitter& out, Entity& entity)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "Entity" << YAML::Value << "123";
+		out << YAML::Key << "Entity" << YAML::Value << 123;
 		
 		if (entity.HasComponent<TagComponent>())
 		{
 			out << YAML::Key << "TagComponent";
 			out << YAML::BeginMap;
 			
-			auto& tag = entity.GetComponent<TagComponent>().tag;
+			std::string& tag = entity.GetComponent<TagComponent>().tag;
 			out << YAML::Key << "Tag" << YAML::Value << tag;
 			
 			out << YAML::EndMap;
@@ -103,11 +112,11 @@ namespace Engine {
 			out << YAML::Key << "TransformComponent";
 			out << YAML::BeginMap;
 
-			auto& transformComponent = entity.GetComponent<TransformComponent>();
+			TransformComponent& transformComponent = entity.GetComponent<TransformComponent>();
 			
-			out << YAML::Key << "Translation" << YAML::Value << transformComponent.translation;
-			out << YAML::Key << "Rotation" << YAML::Value << transformComponent.rotation;
-			out << YAML::Key << "Scale" << YAML::Value << transformComponent.scale;
+			out << YAML::Key << "Translation" << YAML::Value << transformComponent.GetTranslation();
+			out << YAML::Key << "Rotation" << YAML::Value << transformComponent.GetRotation();
+			out << YAML::Key << "Scale" << YAML::Value << transformComponent.GetScale();
 
 			out << YAML::EndMap;
 		}
@@ -117,8 +126,8 @@ namespace Engine {
 			out << YAML::Key << "CameraComponent";
 			out << YAML::BeginMap;
 
-			auto& cameraComponent = entity.GetComponent<CameraComponent>();
-			auto& camera = cameraComponent.camera;
+			CameraComponent& cameraComponent = entity.GetComponent<CameraComponent>();
+			SceneCamera& camera = cameraComponent.camera;
 
 			out << YAML::Key << "Camera";
 			out << YAML::BeginMap;
@@ -137,15 +146,80 @@ namespace Engine {
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<LightComponent>())
+		{
+			out << YAML::Key << "LightComponent";
+			out << YAML::BeginMap;
+
+			LightComponent& lightComponent = entity.GetComponent<LightComponent>();
+
+			out << YAML::Key << "Constant" << YAML::Value << lightComponent.constant;
+			out << YAML::Key << "Linear" << YAML::Value << lightComponent.linear;
+			out << YAML::Key << "Quadratic" << YAML::Value << lightComponent.quadratic;
+
+			out << YAML::Key << "Ambient" << YAML::Value << lightComponent.ambient;
+			out << YAML::Key << "Diffuse" << YAML::Value << lightComponent.diffuse;
+			out << YAML::Key << "Specular" << YAML::Value << lightComponent.specular;
+
+			out << YAML::EndMap;
+		}
+
 		if (entity.HasComponent<SpriteRendererComponent>())
 		{
 			out << YAML::Key << "SpriteRendererComponent";
 			out << YAML::BeginMap;
 
-			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
+			SpriteRendererComponent& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
 
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.color;
+			if (spriteRendererComponent.texture != nullptr)
+			{
+				out << YAML::Key << "TextureFilePath" << YAML::Value << spriteRendererComponent.texture->GetFilePath();
+			}
 
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<ModelComponent>())
+		{
+			out << YAML::Key << "ModelComponent";
+			out << YAML::BeginMap;
+
+			ModelComponent& modelComponent = entity.GetComponent<ModelComponent>();
+
+			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetFilePath().string();
+			out << YAML::Key << "EnableAnimation" << YAML::Value << modelComponent.enableAnimation;
+			out << YAML::Key << "IsPlayer" << YAML::Value << modelComponent.isPlayer;
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<SkyboxComponent>())
+		{
+			out << YAML::Key << "SkyboxComponent";
+			out << YAML::BeginMap;
+
+			SkyboxComponent& skyboxComponent = entity.GetComponent<SkyboxComponent>();
+
+			Ptr<Texture3D> texture = skyboxComponent.skybox->GetTexture();
+			out << YAML::Key << "RightFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Right);
+			out << YAML::Key << "LeftFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Left);
+			out << YAML::Key << "TopFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Top);
+			out << YAML::Key << "BottomFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Bottom);
+			out << YAML::Key << "BackFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Back);
+			out << YAML::Key << "FrontFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Front);
+
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<TerrainComponent>())
+		{
+			out << YAML::Key << "TerrainComponent";
+			out << YAML::BeginMap;
+
+			TerrainComponent& terrainComponent = entity.GetComponent<TerrainComponent>();
+
+			out << YAML::Key << "Type" << YAML::Value << std::to_string((uint32_t)terrainComponent.terrain->GetType());
+			out << YAML::Key << "Path" << YAML::Value << terrainComponent.terrain->GetFilePath();
 			out << YAML::EndMap;
 		}
 
@@ -158,7 +232,7 @@ namespace Engine {
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
-		m_scene->m_registry.each([&](auto entityId)
+		m_scene->m_registry.each([&](entt::entity entityId)
 			{
 				Entity entity = { entityId, m_scene.get() };
 				if (!entity)
@@ -196,15 +270,15 @@ namespace Engine {
 		std::string sceneName = data["Scene"].as<std::string>();
 		ENGINE_CORE_ASSERT("Deserializing scene '{0}'", sceneName);
 
-		auto entities = data["Entities"];
+		YAML::Node entities = data["Entities"];
 		if (entities)
 		{
-			for (auto entity : entities)
+			for (YAML::detail::iterator_value entity : entities)
 			{
 				uint64_t uuid = entity["Entity"].as<uint64_t>();
 
 				std::string name;
-				auto tagComponent = entity["TagComponent"];
+				YAML::Node tagComponent = entity["TagComponent"];
 				if (tagComponent)
 				{
 					name = tagComponent["Tag"].as<std::string>();
@@ -214,23 +288,23 @@ namespace Engine {
 
 				Entity deserializedEntity = m_scene->CreateEntity(name);
 
-				auto transformComponent = entity["TransformComponent"];
+				YAML::Node transformComponent = entity["TransformComponent"];
 				if (transformComponent)
 				{
 					// Entities always have transforms
-					auto& deserializedTC = deserializedEntity.GetComponent<TransformComponent>();
-					deserializedTC.translation = transformComponent["Translation"].as<glm::vec3>();
-					deserializedTC.rotation = transformComponent["Rotation"].as<glm::vec3>();
-					deserializedTC.scale = transformComponent["Scale"].as<glm::vec3>();
+					TransformComponent& deserializedTC = deserializedEntity.GetComponent<TransformComponent>();
+					deserializedTC.transform.translation = transformComponent["Translation"].as<glm::vec3>();
+					deserializedTC.transform.rotation = transformComponent["Rotation"].as<glm::vec3>();
+					deserializedTC.transform.scale = transformComponent["Scale"].as<glm::vec3>();
 				}
 
-				auto cameraComponent = entity["CameraComponent"];
+				YAML::Node cameraComponent = entity["CameraComponent"];
 				if (cameraComponent)
 				{
-					auto& deserializedCC = deserializedEntity.AddComponent<CameraComponent>();
+					CameraComponent& deserializedCC = deserializedEntity.AddComponent<CameraComponent>();
 					
-					auto& cameraProps = cameraComponent["Camera"];
-					deserializedCC.camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
+					YAML::Node& cameraProps = cameraComponent["Camera"];
+					deserializedCC.camera.SetProjectionType((CameraProjectionType)cameraProps["ProjectionType"].as<int>());
 
 					deserializedCC.camera.SetPerspectiveFOV(cameraProps["PerspectiveFOV"].as<float>());
 					deserializedCC.camera.SetPerspectiveNearClip(cameraProps["PerspectiveNear"].as<float>());
@@ -244,12 +318,65 @@ namespace Engine {
 					deserializedCC.fixedAspectRatio = cameraComponent["FixedAspectRatio"].as<bool>();
 				}
 
-				auto spriteRendererComponent = entity["SpriteRendererComponent"];
+				YAML::Node lightComponent = entity["LightComponent"];
+				if (lightComponent)
+				{
+					LightComponent& deserializedSRC = deserializedEntity.AddComponent<LightComponent>();
+
+					deserializedSRC.constant = lightComponent["Constant"].as<float>();
+					deserializedSRC.linear = lightComponent["Linear"].as<float>();
+					deserializedSRC.quadratic = lightComponent["Quadratic"].as<float>();
+
+					deserializedSRC.ambient = lightComponent["Ambient"].as<glm::vec3>();
+					deserializedSRC.diffuse = lightComponent["Diffuse"].as<glm::vec3>();
+					deserializedSRC.specular = lightComponent["Specular"].as<glm::vec3>();
+				}
+
+				YAML::Node spriteRendererComponent = entity["SpriteRendererComponent"];
 				if (spriteRendererComponent)
 				{
-					auto& deserializedSRC = deserializedEntity.AddComponent<SpriteRendererComponent>();
+					SpriteRendererComponent& deserializedSRC = deserializedEntity.AddComponent<SpriteRendererComponent>();
 
 					deserializedSRC.color = spriteRendererComponent["Color"].as<glm::vec4>();
+					YAML::Node& filePathNode = spriteRendererComponent["TextureFilePath"];
+					if (filePathNode)
+					{
+						deserializedSRC.texture = TextureLibrary::GetInstance()->Load(filePathNode.as<std::string>());
+					}
+				}
+
+				YAML::Node modelComponent = entity["ModelComponent"];
+				if (modelComponent)
+				{
+					ModelComponent& deserializedModel = deserializedEntity.AddComponent<ModelComponent>();
+
+					std::string path = modelComponent["Path"].as<std::string>();
+					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
+					deserializedModel.isPlayer = modelComponent["IsPlayer"].as<bool>();
+					deserializedModel.model = Model::Create(path, false, deserializedEntity);
+				}
+
+				YAML::Node skyboxComponent = entity["SkyboxComponent"];
+				if (skyboxComponent)
+				{
+					SkyboxComponent& deserializedSkybox = deserializedEntity.AddComponent<SkyboxComponent>();
+
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Right] = CreatePtr<Image>(skyboxComponent["RightFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Left] = CreatePtr<Image>(skyboxComponent["LeftFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Top] = CreatePtr<Image>(skyboxComponent["TopFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Bottom] = CreatePtr<Image>(skyboxComponent["BottomFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Back] = CreatePtr<Image>(skyboxComponent["BackFilePath"].as<std::string>(), true);
+					deserializedSkybox.images[(uint32_t)TextureOrientationType::Front] = CreatePtr<Image>(skyboxComponent["FrontFilePath"].as<std::string>(), true);
+
+					deserializedSkybox.skybox = CreatePtr<Skybox>(deserializedSkybox.images);
+				}
+
+				YAML::Node terrainComponent = entity["TerrainComponent"];
+				if (terrainComponent)
+				{
+					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
+					deserializedSkybox.texture = TextureLibrary::GetInstance()->Load(terrainComponent["Path"].as<std::string>(), TextureType::Height);
+					deserializedSkybox.terrain = Terrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}
 		}

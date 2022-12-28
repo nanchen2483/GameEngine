@@ -1,10 +1,10 @@
 #pragma once
+#include "Engine/Core/Events/ApplicationEvent.h"
+#include "Engine/Core/Events/KeyEvent.h"
+#include "Engine/Core/Events/MouseEvent.h"
+#include "Engine/Core/Layer/Layer.h"
 
-#include "Engine/Core/Layer.h"
-
-#include "Engine/Events/ApplicationEvent.h"
-#include "Engine/Events/KeyEvent.h"
-#include "Engine/Events/MouseEvent.h"
+#include <imgui_internal.h>
 
 namespace Engine
 {
@@ -22,10 +22,12 @@ namespace Engine
 		void Begin();
 		void End();
 
-		void DisableEvents(bool disable) { m_disableEvents = disable; }
+		void BlockEvents(bool block) { m_blockEvents = block; }
+		ImGuiContext* GetContext() const { return m_context; }
 	private:
 		float m_time = 0.0f;
-		bool m_disableEvents = false;
+		bool m_blockEvents = false;
+		ImGuiContext* m_context = nullptr;
 	};
 }
 

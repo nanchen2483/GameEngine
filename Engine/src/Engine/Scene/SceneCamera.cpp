@@ -1,51 +1,131 @@
 #include "enginepch.h"
 #include "SceneCamera.h"
+#include "Engine/Core/Window/Input.h"
+#include "Engine/Core/Enum/KeyCodes.h"
+#include "Engine/Core/Enum/MouseButtonCodes.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Engine
 {
 	SceneCamera::SceneCamera()
+		: m_type(CameraType::FreeLook), m_projectionType(CameraProjectionType::Perspective)
 	{
-		RecalculateProjection();
+		m_FOV = 45.0f;
+		m_aspectRatio = 1.778f;
+		m_perspectiveNearClip = 0.1f;
+		m_perspectiveFarClip = 1000.0f;
+
+		m_orthographicSize = 10.0f;
+		m_orthographicNear = -1.0f;
+		m_orthographicFar = 1.0f;
+
+		m_moveSpeed = 20.0f;
+		m_rotationSpeed = 0.8f;
+		m_upDirection = glm::vec3(0.0f);
+
+		UpdateProjection();
 	}
 
 	SceneCamera::~SceneCamera()
 	{
 	}
 
+	Frustum SceneCamera::GetFrustum(const Transform& transform) const
+	{
+		return Frustum(transform.translation, transform.rotation, m_FOV, m_perspectiveNearClip, m_perspectiveFarClip, m_aspectRatio);
+	}
+
+	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
+	{
+		ENGINE_CORE_ASSERT(height > 0, "Viewport height cannot be less or equal to 0");
+		m_aspectRatio = (float)width / (float)height;
+
+		UpdateProjection();
+	}
+
 	void SceneCamera::SetOrthographic(uint32_t size, float nearClip, float farClip)
 	{
-		m_projectionType = ProjectionType::Orthographic;
-		m_orthographicSize = size;
+		m_projectionType = CameraProjectionType::Orthographic;
+		m_orthographicSize = (float)size;
 		m_orthographicNear = nearClip;
 		m_orthographicFar = farClip;
 
-		RecalculateProjection();
+		UpdateProjection();
 	}
 
-	void SceneCamera::SetPerspective(uint32_t FOV, float nearClip, float farClip)
+	void SceneCamera::SetPerspective(float FOV, float nearClip, float farClip)
 	{
-		m_projectionType = ProjectionType::Perspective;
-		m_perspectiveFOV = FOV;
-		m_perspectiveNear = nearClip;
-		m_perspectiveFar = farClip;
+		m_projectionType = CameraProjectionType::Perspective;
+		m_FOV = FOV;
+		m_perspectiveNearClip = nearClip;
+		m_perspectiveFarClip = farClip;
 
-		RecalculateProjection();
+		UpdateProjection();
 	}
-	
-	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
+
+	void SceneCamera::SetPerspectiveFOV(float FOV)
 	{
-		m_aspectRatio = (float)width / (float)height;
-		
-		RecalculateProjection();
+		m_FOV = FOV;
+		UpdateProjection();
 	}
-	
-	void SceneCamera::RecalculateProjection()
+
+	void SceneCamera::SetPerspectiveNearClip(float nearClip)
 	{
-		if (m_projectionType == ProjectionType::Perspective)
+		m_perspectiveNearClip = nearClip;
+		UpdateProjection();
+	}
+
+	void SceneCamera::SetPerspectiveFarClip(float farClip)
+	{
+		m_perspectiveFarClip = farClip;
+		UpdateProjection();
+	}
+
+	void SceneCamera::SetOrthographicSize(float size)
+	{
+		m_orthographicSize = size;
+		UpdateProjection();
+	}
+
+	void SceneCamera::SetOrthographicNearClip(float nearClip)
+	{
+		m_orthographicNear = nearClip;
+		UpdateProjection();
+	}
+
+	void SceneCamera::SetOrthographicFarClip(float farClip)
+	{
+		m_orthographicFar = farClip;
+		UpdateProjection();
+	}
+
+	void SceneCamera::SetMoveSpeed(float speed)
+	{
+		m_moveSpeed = speed;
+	}
+
+	void SceneCamera::SetRotationSpeed(float speed)
+	{
+		m_rotationSpeed = speed;
+	}
+
+	void SceneCamera::SetUpDirection(glm::vec3 direction)
+	{
+		m_upDirection = direction;
+	}
+
+	void SceneCamera::SetProjectionType(CameraProjectionType type)
+	{
+		m_projectionType = type;
+		UpdateProjection();
+	}
+
+	void SceneCamera::UpdateProjection()
+	{
+		if (m_projectionType == CameraProjectionType::Perspective)
 		{
-			m_projection = glm::perspective(m_perspectiveFOV, m_aspectRatio, m_perspectiveNear, m_perspectiveFar);
+			m_projection = glm::perspective(glm::radians(m_FOV), m_aspectRatio, m_perspectiveNearClip, m_perspectiveFarClip);
 		}
 		else
 		{

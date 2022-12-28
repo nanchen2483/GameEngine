@@ -1,12 +1,13 @@
 #include "enginepch.h"
-
 #include "ImGuiLayer.h"
+
 #include "Engine/Core/Application.h"
 
 #include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
 #include <ImGuizmo.h>
-#include <backends/imgui_impl_opengl3.h>
-#include <backends/imgui_impl_glfw.h>
+#include <IconFontCppHeaders/IconsFontAwesome6.h>
 
 //TEMPORARY
 #include <GLFW/glfw3.h>
@@ -27,7 +28,7 @@ namespace Engine
 	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
+		m_context = ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -35,6 +36,14 @@ namespace Engine
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 		//io.ConfigViewportsNoAutoMerge = true;
 		//io.ConfigViewportsNoTaskBarIcon = true;
+		
+		// Merge icons into default tool font
+		io.Fonts->AddFontDefault();
+		ImFontConfig config;
+		config.MergeMode = true;
+		config.GlyphMinAdvanceX = 13.0f; // Use if you want to make the icon monospaced
+		static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+		io.Fonts->AddFontFromFileTTF("resources/fonts/fa-solid-900.ttf", 10.0f, &config, icon_ranges);
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
@@ -42,9 +51,10 @@ namespace Engine
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		ImGuiStyle& style = ImGui::GetStyle();
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		if (io.ConfigFlags && ImGuiConfigFlags_ViewportsEnable)
 		{
 			style.WindowRounding = 0.0f;
+			style.FrameRounding = 5.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
@@ -53,7 +63,7 @@ namespace Engine
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 410");
+		ImGui_ImplOpenGL3_Init("#version 450");
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -66,17 +76,16 @@ namespace Engine
 
 	void ImGuiLayer::OnEvent(Event& e)
 	{
-		if (!m_disableEvents)
+		if (m_blockEvents)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			e.handled |= e.IsIncategory(EventCategoryMouse) & io.WantCaptureMouse;
-			e.handled |= e.IsIncategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+			e.handled |= e.IsIncategory(EventCategory::EventCategoryMouse) && io.WantCaptureMouse;
+			e.handled |= e.IsIncategory(EventCategory::EventCategoryKeyboard) && io.WantCaptureKeyboard;
 		}
 	}
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-		static bool show = true;
 	}
 
 	void ImGuiLayer::Begin()
@@ -100,7 +109,7 @@ namespace Engine
 		// Update and Render additional Platform Windows
 		// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
 		//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		if (io.ConfigFlags && ImGuiConfigFlags_ViewportsEnable)
 		{
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();
 			ImGui::UpdatePlatformWindows();

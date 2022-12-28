@@ -18,20 +18,16 @@ namespace Engine
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		ENGINE_CORE_ASSERT(status, "Failed to initialize GLAD");
 
-		ENGINE_CORE_INFO("OpenGL info:");
-		ENGINE_CORE_INFO("    Vendor: {0}", glGetString(GL_VENDOR));
-		ENGINE_CORE_INFO("    Render: {0}", glGetString(GL_RENDERER));
-		ENGINE_CORE_INFO("    Version: {0}", glGetString(GL_VERSION));
+		ENGINE_CORE_INFO("OpenGL Version: {0} ({1})", (const char*)glGetString(GL_VERSION), (const char*)glGetString(GL_RENDERER));
+		ENGINE_CORE_INFO("GLSL Version: {0}", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 #ifdef ENGINE_ENABLE_ASSERTS
 		int versionMajor;
 		int versionMinor;
 		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
 		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
-
-		ENGINE_CORE_ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 6), "Engine requires at least OpenGL 4.6");
+		ENGINE_CORE_ASSERT(versionMajor > m_minimumMajorVersion || (versionMajor == 4 && m_minimumMinorVersion >= 6), "Engine requires at least OpenGL {0}.{1}", m_minimumMajorVersion, m_minimumMinorVersion);
 #endif // ENGINE_ENABLE_ASSERTS
-
 	}
 
 	void OpenGLContext::SwapBuffers()

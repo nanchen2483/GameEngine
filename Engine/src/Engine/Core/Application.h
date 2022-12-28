@@ -1,23 +1,20 @@
 #pragma once
-
 #include "Base.h"
+#include "Layer/LayerStack.h"
+#include "Window/Window.h"
 
-#include "Window.h"
 #include "Engine/ImGui/ImGuiLayer.h"
-#include "Engine/Core/LayerStack.h"
-#include "Engine/Renderer/Shader.h"
-#include "Engine/Renderer/VertexArray.h"
-#include "Engine/Renderer/OrthographicCamera.h"
+#include "Engine/Renderer/Shader/Shader.h"
+#include "Engine/Renderer/Camera/OrthographicCamera.h"
 
 class WindowCloseEvent;
 
 namespace Engine
 {
-
 	class ENGINE_API Application
 	{
 	public:
-		Application(const std::string & name = "");
+		Application(const std::string& name = "");
 		virtual ~Application();
 
 		void Run();
@@ -39,7 +36,6 @@ namespace Engine
 		bool m_running = true;
 		bool m_minimized = false;
 		LayerStack m_layerStack;
-		float m_lastFrameTime = 0.0f;
 	private:
 		static Application* s_instance;
 	};

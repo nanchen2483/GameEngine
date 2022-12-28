@@ -1,13 +1,9 @@
 #include "enginepch.h"
-
 #include "Application.h"
 
-#include "Engine/Events/ApplicationEvent.h"
-#include "Engine/Core/Input.h"
+#include "Events/ApplicationEvent.h"
 #include "Engine/Renderer/Renderer.h"
-#include "Engine/Core/TimeStep.h"
-
-#include <GLFW/glfw3.h>
+#include "System/System.h"
 
 namespace Engine
 {
@@ -20,7 +16,7 @@ namespace Engine
 		ENGINE_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		m_window = Uniq<Window>(Window::Create(WindowProps(name)));
+		m_window = Window::Create(WindowProps(name));
 		m_window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
@@ -51,7 +47,7 @@ namespace Engine
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 
-		for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
+		for (std::vector<Engine::Layer*>::iterator it = m_layerStack.end(); it != m_layerStack.begin();)
 		{
 			if (e.handled)
 			{
@@ -65,15 +61,13 @@ namespace Engine
 	{
 		while (m_running)
 		{
-			float time = (float)glfwGetTime();
-			TimeStep timeStep = time - m_lastFrameTime;
-			m_lastFrameTime = time;
+			System::OnUpdate();
 
 			if (!m_minimized)
 			{
 				for (Layer* layer : m_layerStack)
 				{
-					layer->OnUpdate(timeStep);
+					layer->OnUpdate();
 				}
 			}
 

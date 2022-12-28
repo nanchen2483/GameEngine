@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Entity.h"
 
 namespace Engine
@@ -17,7 +16,7 @@ namespace Engine
 	protected:
 		virtual void OnCreate() {};
 		virtual void OnDestroy() {};
-		virtual void OnUpdate(TimeStep ts) {};
+		virtual void OnUpdate() {};
 	private:
 		Entity m_entity;
 		friend class Scene;

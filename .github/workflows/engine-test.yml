@@ -1,0 +1,36 @@
+name: Engine Test
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - release-candidate
+      - master
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository with submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      
+      - name: Install latest CMake
+        uses: lukka/get-cmake@latest
+      
+      - name: Restore artifacts
+        uses: lukka/run-vcpkg@v10
+        with:
+          vcpkgDirectory: '${{ github.workspace }}/Dependencies/vcpkg'
+          vcpkgJsonGlob: '${{ github.workspace }}/vcpkg.json'
+      
+      - name: Build
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: 'x64-release'
+          buildPreset: 'x64-release'
+      
+      - name: Test
+        shell: bash
+        run: out/build/x64-release/Editor/Test
