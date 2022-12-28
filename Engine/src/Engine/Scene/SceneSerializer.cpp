@@ -1,7 +1,15 @@
 #include "enginepch.h"
 #include "SceneSerializer.h"
-#include "Component.h"
+#include "Component/CameraComponent.h"
+#include "Component/LightComponent.h"
+#include "Component/ModelComponent.h"
+#include "Component/SkyboxComponent.h"
+#include "Component/SpriteRendererComponent.h"
+#include "Component/TagComponent.h"
+#include "Component/TerrainComponent.h"
+#include "Component/TransformComponent.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Entity.h"
 
 #include <yaml-cpp/yaml.h>
 
@@ -333,7 +341,7 @@ namespace Engine {
 					YAML::Node& filePathNode = spriteRendererComponent["TextureFilePath"];
 					if (filePathNode)
 					{
-						deserializedSRC.texture = Texture2D::Create(filePathNode.as<std::string>(), TextureType::Diffuse);
+						deserializedSRC.texture = TextureLibrary::GetInstance()->Load(filePathNode.as<std::string>());
 					}
 				}
 
@@ -367,7 +375,7 @@ namespace Engine {
 				if (terrainComponent)
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
-					deserializedSkybox.texture = Texture2D::Create(terrainComponent["Path"].as<std::string>(), TextureType::Height);
+					deserializedSkybox.texture = TextureLibrary::GetInstance()->Load(terrainComponent["Path"].as<std::string>(), TextureType::Height);
 					deserializedSkybox.terrain = Terrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}

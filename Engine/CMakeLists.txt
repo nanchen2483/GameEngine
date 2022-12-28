@@ -3,7 +3,14 @@
 #
 cmake_minimum_required (VERSION 3.24)
 
+project (Engine)
+
 set (CMAKE_CXX_STANDARD 17)
+
+if (MSVC)
+	set (CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+	set (BUILD_SHARED_LIBS TRUE)
+endif()
 
 find_package (assimp CONFIG REQUIRED)
 find_package (EnTT CONFIG REQUIRED)
@@ -32,16 +39,18 @@ set (CROSS_PLATFORM_FILES
 	${EXTERNAL_FILES}
 )
 
-add_library (Engine STATIC ${CROSS_PLATFORM_FILES})
+add_library (${PROJECT_NAME} SHARED ${CROSS_PLATFORM_FILES})
 
-target_precompile_headers (Engine PRIVATE "src/enginepch.h")
+target_precompile_headers (${PROJECT_NAME} PRIVATE "src/enginepch.h")
 
-target_include_directories (Engine PUBLIC "src" "external")
+target_include_directories (${PROJECT_NAME} PUBLIC "src" "external")
 
-target_compile_definitions (Engine
+target_compile_definitions (${PROJECT_NAME}
 	PRIVATE
 		"_CRT_SECURE_NO_WARNINGS"
 		"ENGINE_PLATFORM_WINDOWS"
+		"ENGINE_DYNAMIC_LINK"
+		"ENGINE_BUILD_DLL"
 		"GLFW_INCLUDE_NONE"
 
 	PUBLIC
@@ -52,7 +61,7 @@ target_compile_definitions (Engine
 		$<$<CONFIG:MinSizeRel>:ENGINE_RELEASE>
 )
 
-target_link_libraries (Engine
+target_link_libraries (${PROJECT_NAME}
 	PRIVATE
 		assimp::assimp
 		EnTT::EnTT

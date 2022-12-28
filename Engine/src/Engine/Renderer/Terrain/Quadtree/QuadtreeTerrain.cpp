@@ -1,10 +1,11 @@
 #include "enginepch.h"
 #include "QuadtreeTerrain.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 namespace Engine
 {
 	QuadtreeTerrain::QuadtreeTerrain(std::string filePath, int32_t entityId)
-		: QuadtreeTerrain(Texture2D::Create(filePath, TextureType::Height, false), entityId)
+		: QuadtreeTerrain(TextureLibrary::GetInstance()->Load(filePath, TextureType::Height, false), entityId)
 	{
 	}
 
@@ -52,11 +53,11 @@ namespace Engine
 		}
 	}
 
-	void QuadtreeTerrain::OnUpdate(glm::vec3 position)
+	void QuadtreeTerrain::OnUpdate(glm::vec3 cameraPosition)
 	{
 		for (uint32_t i = 0; i < m_children.size(); ++i)
 		{
-			m_children[i].Update(position);
+			m_children[i].Update(cameraPosition);
 		}
 	}
 

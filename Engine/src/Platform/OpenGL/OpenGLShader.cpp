@@ -49,6 +49,7 @@ namespace Engine
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filePath)
+		: m_uid(Uid::NewUid(filePath))
 	{
 		std::string source = ReadFile(filePath);
 		std::unordered_map<GLenum, std::string> shaderSource = PreProcess(source);
@@ -58,7 +59,7 @@ namespace Engine
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
-		: m_shaderName(name)
+		: m_uid(Uid::NewUid(name)), m_shaderName(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -67,6 +68,7 @@ namespace Engine
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& geometrySrc)
+		: m_uid(Uid::NewUid(name)), m_shaderName(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;

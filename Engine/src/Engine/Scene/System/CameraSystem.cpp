@@ -1,3 +1,4 @@
+#include "enginepch.h"
 #include "CameraSystem.h"
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/System/System.h"
@@ -5,7 +6,7 @@
 
 namespace Engine
 {
-	void CameraSystem::Update(Transform *transform, SceneCamera *camera)
+	void CameraSystem::OnUpdate(Transform *transform, SceneCamera *camera)
 	{
 		// Update rotation
 		const glm::vec2& deltaMousePosition = System::GetMouseDeltaPosition();

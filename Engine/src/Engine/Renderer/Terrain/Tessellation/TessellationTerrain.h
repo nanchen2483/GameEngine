@@ -14,9 +14,9 @@ namespace Engine
 
 		inline virtual std::string GetFilePath() const override { return m_heightMapTexture->GetFilePath(); }
 		virtual float GetHeight(float x, float z) const override;
-		virtual TerrainType GetType() const override { return TerrainType::Default; };
+		virtual TerrainType GetType() const override { return TerrainType::Default; }
 
-		virtual void OnUpdate(glm::vec3 position) override {};
+		virtual void OnUpdate(glm::vec3 cameraPosition) override {}
 		virtual void Draw(glm::mat4 model, const Frustum& frustum) override;
 	private:
 		std::vector<TerrainVertex> SetVertices(uint32_t numOfPoints, int32_t width, int32_t height);

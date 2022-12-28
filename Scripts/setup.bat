@@ -4,7 +4,7 @@ rem Check if Visual Studio is installed
 pushd %~dp0
 call findvs.bat
 if %ERRORLEVEL% GEQ 1 (
-	exist 1
+	exit 1
 )
 
 rem Update submodule and setup

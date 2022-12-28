@@ -9,9 +9,8 @@ namespace Engine
 	public:
 		static double GetDeltaTime() { return s_deltaTime; }
 		static glm::vec2 GetMouseDeltaPosition() { return s_deltaMousePosition; }
-
-		static void OnUpdate();
 	private:
+		static void OnUpdate();
 		static void OnTimeUpdate();
 		static void OnMouseUpdate();
 
@@ -20,5 +19,7 @@ namespace Engine
 		static glm::vec2 s_mousePosition;
 		static glm::vec2 s_deltaMousePosition;
 		static float s_mouseVelocity;
+
+		friend class Application;
 	};
 }

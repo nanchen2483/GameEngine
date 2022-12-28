@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Core/Base.h"
+#include "LogSink.h"
 
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
@@ -11,12 +12,13 @@ namespace Engine
 	public:
 		static void Init();
 
-		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_coreLogger; }
-		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_clientLogger; }
-
+		inline static const std::vector<LogMessage>& GetMessages() { return s_logSink->GetMessages(); }
+		inline static Ptr<spdlog::logger>& GetCoreLogger() { return s_coreLogger; }
+		inline static Ptr<spdlog::logger>& GetClientLogger() { return s_clientLogger; }
 	private:
-		static std::shared_ptr<spdlog::logger> s_coreLogger;
-		static std::shared_ptr<spdlog::logger> s_clientLogger;
+		static Ptr<spdlog::logger> s_coreLogger;
+		static Ptr<spdlog::logger> s_clientLogger;
+		static Ptr<LogSink> s_logSink;
 	};
 }
 

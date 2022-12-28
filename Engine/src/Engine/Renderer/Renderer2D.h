@@ -1,5 +1,6 @@
 #pragma once
-#include "Engine/Scene/Component.h"
+#include "Engine/Scene/Component/SpriteRendererComponent.h"
+#include "Camera/EditorCamera.h"
 #include "Camera/OrthographicCamera.h"
 #include "RendererAPI.h"
 

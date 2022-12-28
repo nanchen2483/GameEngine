@@ -7,11 +7,11 @@ namespace Engine
 {
 	Toolbar::Toolbar()
 	{
-		m_openIcon = Texture2D::Create("resources/Icons/open-folder.png");
-		m_saveIcon = Texture2D::Create("resources/Icons/save.png");
-		m_playIcon = Texture2D::Create("resources/Icons/play-button.png");
-		m_pauseIcon = Texture2D::Create("resources/Icons/pause-button.png");
-		m_stopIcon = Texture2D::Create("resources/Icons/stop-button.png");
+		m_openIcon = TextureLibrary::GetInstance()->Load("resources/Icons/open-folder.png");
+		m_saveIcon = TextureLibrary::GetInstance()->Load("resources/Icons/save.png");
+		m_playIcon = TextureLibrary::GetInstance()->Load("resources/Icons/play-button.png");
+		m_pauseIcon = TextureLibrary::GetInstance()->Load("resources/Icons/pause-button.png");
+		m_stopIcon = TextureLibrary::GetInstance()->Load("resources/Icons/stop-button.png");
 	}
 
 	void Toolbar::SetFunctions(Func newScene, Func openScene, Func saveSceneAs)

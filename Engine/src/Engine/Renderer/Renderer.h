@@ -1,9 +1,6 @@
 #pragma once
 #include "Engine/Core/Base.h"
-#include "Camera/OrthographicCamera.h"
 #include "RendererAPI.h"
-#include "RendererCommand.h"
-#include "Shader/Shader.h"
 
 namespace Engine
 {
@@ -12,17 +9,7 @@ namespace Engine
 	public:
 		static void Init();
 		static void OnWindowResize(uint32_t width, uint32_t height);
-		static void BeginScene(OrthographicCamera& camera);
-		static void EndScene();
-		static void Submit(const Ptr<Shader>& shader, const Ptr<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); };
-	private:
-		struct SceneData
-		{
-			glm::mat4 viewProjectionMatrix;
-		};
-
-		static Uniq<SceneData> m_sceneData;
 	};
 }

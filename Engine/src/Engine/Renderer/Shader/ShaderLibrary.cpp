@@ -3,47 +3,47 @@
 
 namespace Engine
 {
-	void ShaderLibrary::Add(const std::string& name, const Ptr<Shader>& shader)
-	{
-		ENGINE_CORE_ASSERT(!Exists(name), "Shader already exists!");
-		m_shaders[name] = shader;
-	}
+	ShaderLibrary* ShaderLibrary::s_instance = nullptr;
 
-	void ShaderLibrary::Add(const Ptr<Shader>& shader)
+	Ptr<Shader> ShaderLibrary::Load(const std::filesystem::path& filePath)
 	{
-		std::string shaderName = shader->GetName();
-		Add(shaderName, shader);
-	}
+		Uid uid = Uid::NewUid(filePath.stem().string());
+		if (Exists(uid))
+		{
+			return Get(uid);
+		}
 
-	Ptr<Shader> ShaderLibrary::Load(const std::string& filePath)
-	{
-		Ptr<Shader> shader = Shader::Create(filePath);
+		Ptr<Shader> shader = Shader::Create(filePath.string());
 		Add(shader);
+
 		return shader;
 	}
 
-	Ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filePath)
+	Ptr<Shader> ShaderLibrary::Get(const Uid& key) const
 	{
-		Ptr<Shader> shader = Shader::Create(filePath);
-		Add(name, shader);
-		return shader;
+		ENGINE_CORE_ASSERT(Exists(key), "Shader not found!");
+		return m_shaders.at(key);
 	}
 
-	Ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+	void ShaderLibrary::Add(const Ptr<Shader> data)
 	{
-		Ptr<Shader> shader = Shader::Create(name, vertexSrc, fragmentSrc);
-		Add(name, shader);
-		return shader;
+		const Uid& uid = data->GetUid();
+		ENGINE_CORE_ASSERT(!Exists(uid), "Shader already exists!");
+		m_shaders.insert({ uid, data });
 	}
 
-	Ptr<Shader> ShaderLibrary::Get(const std::string& name)
+	bool ShaderLibrary::Exists(const Uid& uid) const
 	{
-		ENGINE_CORE_ASSERT(Exists(name), "Shader not found!");
-		return m_shaders[name];
+		return m_shaders.find(uid) != m_shaders.end();
 	}
 
-	bool ShaderLibrary::Exists(const std::string& name) const
+	ShaderLibrary* ShaderLibrary::GetInstance()
 	{
-		return m_shaders.find(name) != m_shaders.end();
+		if (!s_instance)
+		{
+			s_instance = new ShaderLibrary();
+		}
+
+		return s_instance;
 	}
 }

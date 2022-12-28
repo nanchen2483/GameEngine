@@ -2,6 +2,7 @@
 #include "ShadowBox.h"
 
 #include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/Shader/ShaderLibrary.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -15,7 +16,7 @@ namespace Engine
 {
 	ShadowBox::ShadowBox()
 	{
-		m_shader = Shader::Create("assets/shaders/Shadow.glsl");
+		m_shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Shadow.glsl");
 		
 		FramebufferSpecification fbSpec;
 		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::DEPTH_ARRAY });

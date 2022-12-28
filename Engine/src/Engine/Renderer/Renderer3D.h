@@ -1,5 +1,10 @@
 #pragma once
-#include "Engine/Scene/Component.h"
+#include "Engine/Scene/Component/LightComponent.h"
+#include "Engine/Scene/Component/ModelComponent.h"
+#include "Engine/Scene/Component/SkyboxComponent.h"
+#include "Engine/Scene/Component/SpriteRendererComponent.h"
+#include "Engine/Scene/Component/TerrainComponent.h"
+#include "Engine/Scene/Component/TransformComponent.h"
 #include "Engine/Renderer/Camera/OrthographicCamera.h"
 #include "RendererAPI.h"
 
@@ -13,12 +18,11 @@ namespace Engine
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 		static void BeginScene(glm::mat4 cameraViewMatrix, glm::mat4 cameraProjection, glm::vec3 cameraPosition, uint32_t numOfPointLights = 0);
-		static void BeginScene(OrthographicCamera& camera);
 		
 		static void Draw(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId = -1);
 		static void Draw(const TransformComponent& transform, LightComponent& light, int entityId = -1);
 		static void Draw(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), int entityId = -1);
-		static void Draw(const glm::mat4& transform, ModelComponent& component);
+		static void Draw(const glm::mat4& transform, ModelComponent& component, Ptr<Shader> shader = nullptr);
 		static void Draw(const glm::mat4& transform, TerrainComponent& component, const Frustum& frustum);
 		static void Draw(SkyboxComponent& component);
 

@@ -1,23 +1,23 @@
 #pragma once
-#include "Engine/Core/Base.h"
+#include "Engine/Library/ILibrary.h"
 #include "Shader.h"
 
-#include <unordered_map>
+#include <filesystem>
 
 namespace Engine
 {
-	class ShaderLibrary
+	class ShaderLibrary : public ILibrary<Shader>
 	{
 	public:
-		void Add(const Ptr<Shader>& shader);
-		void Add(const std::string& name, const Ptr<Shader>& shader);
-		Ptr<Shader> Load(const std::string& filePath);
-		Ptr<Shader> Load(const std::string& name, const std::string& filePath);
-		Ptr<Shader> Load(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
-		Ptr<Shader> Get(const std::string& name);
-
-		bool Exists(const std::string& name) const;
+		virtual Ptr<Shader> Load(const std::filesystem::path& filePath) override;
+		static ShaderLibrary* GetInstance();
 	private:
-		std::unordered_map<std::string, Ptr<Shader>> m_shaders;
+		ShaderLibrary() = default;
+		virtual Ptr<Shader> Get(const Uid& key) const override;
+		virtual void Add(const Ptr<Shader> data) override;
+		virtual bool Exists(const Uid& key) const override;
+
+		std::unordered_map<uint64_t, Ptr<Shader>> m_shaders;
+		static ShaderLibrary* s_instance;
 	};
 }

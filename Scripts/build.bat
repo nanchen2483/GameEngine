@@ -13,6 +13,11 @@ rem Check if 'cl.exe' exists
 where cl.exe
 if %ERRORLEVEL% neq 0 (echo 'cl.exe' not found exit 1)
 
+pushd ..
+rem Generate project files with CMake
+call cmake -S . --preset=x64-debug
+
 rem Build with CMake
-call cmake -S .. --preset=x64-debug
+call cmake --build --preset=x64-debug
+popd
 popd

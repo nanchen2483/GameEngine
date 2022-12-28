@@ -2,7 +2,11 @@
 #include "Renderer3D.h"
 #include "RendererCommand.h"
 #include "Model/Vertex.h"
+#include "Shader/ShaderLibrary.h"
+#include "Shadow/ShadowBox.h"
+#include "Texture/TextureLibrary.h"
 
+#include <array>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Engine
@@ -104,7 +108,7 @@ namespace Engine
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
-		s_data.whiteTexture = Texture2D::Create(1, 1);
+		s_data.whiteTexture = TextureLibrary::GetInstance()->Load(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
 		s_data.whiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
 
@@ -114,7 +118,7 @@ namespace Engine
 			samplers[i] = i;
 		}
 
-		s_data.shader = Shader::Create("assets/shaders/Default.glsl");
+		s_data.shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Default.glsl");
 		s_data.shader->Bind();
 		s_data.textureSlots[0] = s_data.whiteTexture;
 		s_data.shader->SetIntArray("uTextures", samplers, Renderer3DData::MAX_TEXTURE_SLOTS);
@@ -204,10 +208,6 @@ namespace Engine
 		ResetRendererData();
 	}
 	
-	void Renderer3D::BeginScene(OrthographicCamera& camera)
-	{
-	}
-	
 	void Renderer3D::EndScene()
 	{
 		ENGINE_PROFILE_FUNCTION();
@@ -271,18 +271,23 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component)
+	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component, Ptr<Shader> shader)
 	{
 		if (component.isOnViewFrustum)
 		{
-			s_data.shader->SetMat4("uModel", transform);
-			s_data.shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
+			if (shader == nullptr)
+			{
+				shader = s_data.shader;
+				shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
+			}
+
+			shader->SetMat4("uModel", transform);
 			if (component.model->HasAnimations())
 			{
 				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms();
 				for (uint32_t i = 0; i < transforms.size(); i++)
 				{
-					s_data.shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
+					shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
 				}
 			}
 

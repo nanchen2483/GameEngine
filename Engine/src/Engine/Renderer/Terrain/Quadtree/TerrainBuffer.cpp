@@ -2,6 +2,8 @@
 #include "TerrainBuffer.h"
 
 #include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/Shader/ShaderLibrary.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 namespace Engine
 {
@@ -14,7 +16,7 @@ namespace Engine
 		m_loadMorphingArea.reserve(NUM_OF_ROOT_NODES);
 
 		uint32_t index = 0;
-		m_shader = Shader::Create("assets/shaders/TessellationTerrain.glsl");
+		m_shader = ShaderLibrary::GetInstance()->Load("assets/shaders/TessellationTerrain.glsl");
 		m_shader->Bind();
 		m_shader->SetInt("uHeightMap", index++);
 		m_shader->SetInt("uNormalMap", index++);
@@ -100,9 +102,9 @@ namespace Engine
 	void TerrainBuffer::SetNormalMap()
 	{
 		uint32_t N = m_heightMapTexture->GetWidth();
-		m_normalMapTexture = Texture2D::Create(N, N, (int)(log(N) / log(2)), TextureFormatType::RGBA32);
+		m_normalMapTexture = TextureLibrary::GetInstance()->Load(N, N, (int)(log(N) / log(2)), TextureFormatType::RGBA32);
 
-		Ptr<Shader> normalShader = Shader::Create("assets/shaders/Compute/NormalMap.glsl");
+		Ptr<Shader> normalShader = ShaderLibrary::GetInstance()->Load("assets/shaders/Compute/NormalMap.glsl");
 		normalShader->Bind();
 		normalShader->SetInt("uHeightMap", 0);
 		normalShader->SetInt("uN", N);
@@ -115,9 +117,9 @@ namespace Engine
 	void TerrainBuffer::SetSplatMap()
 	{
 		uint32_t N = m_heightMapTexture->GetWidth();
-		m_splatMapTexture = Texture2D::Create(N, N, (int)(log(N) / log(2)), TextureFormatType::RGBA16);
+		m_splatMapTexture = TextureLibrary::GetInstance()->Load(N, N, (int)(log(N) / log(2)), TextureFormatType::RGBA16);
 
-		Ptr<Shader> splatShader = Shader::Create("assets/shaders/Compute/SplatMap.glsl");
+		Ptr<Shader> splatShader = ShaderLibrary::GetInstance()->Load("assets/shaders/Compute/SplatMap.glsl");
 		splatShader->Bind();
 		splatShader->SetInt("uNormalMap", 0);
 		splatShader->SetInt("uN", N);
@@ -131,9 +133,9 @@ namespace Engine
 		float displacementScaling[3]{ 0.8f, 1.0f, 2.0f };
 		for (uint32_t i = 0; i < m_materials.size(); ++i)
 		{
-			m_materials[i].diffuseMap = Texture2D::Create("assets/textures/terrain/ground_" + std::to_string(i) + "_diffuse.jpg");
-			m_materials[i].normalMap = Texture2D::Create("assets/textures/terrain/ground_" + std::to_string(i) + "_normal.jpg");
-			m_materials[i].displacementMap = Texture2D::Create("assets/textures/terrain/ground_" + std::to_string(i) + "_displacement.jpg");
+			m_materials[i].diffuseMap = TextureLibrary::GetInstance()->Load("assets/textures/terrain/ground_" + std::to_string(i) + "_diffuse.jpg");
+			m_materials[i].normalMap = TextureLibrary::GetInstance()->Load("assets/textures/terrain/ground_" + std::to_string(i) + "_normal.jpg");
+			m_materials[i].displacementMap = TextureLibrary::GetInstance()->Load("assets/textures/terrain/ground_" + std::to_string(i) + "_displacement.jpg");
 			m_materials[i].displacementScaling = displacementScaling[i];
 			m_materials[i].horizontalScaling = 400.0f;
 		}
