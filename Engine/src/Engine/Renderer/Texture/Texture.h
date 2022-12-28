@@ -1,6 +1,7 @@
 #pragma once
 #include "Image.h"
 #include "Enum/TextureType.h"
+#include "Engine/Core/System/Item/IUniqueItem.h"
 
 #include <map>
 #include <string>
@@ -15,7 +16,7 @@ namespace Engine
 		uint32_t channels;
 	};
 
-	class Texture
+	class Texture : public IUniqueItem
 	{
 	public:
 		virtual ~Texture() = default;

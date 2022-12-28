@@ -2,8 +2,6 @@
 #include "Engine/Library/ILibrary.h"
 #include "Texture.h"
 
-#include <filesystem>
-
 namespace Engine
 {
 	class TextureLibrary : public ILibrary<Texture2D>
@@ -17,11 +15,11 @@ namespace Engine
 		static TextureLibrary* GetInstance();
 	private:
 		TextureLibrary() = default;
-		virtual Ptr<Texture2D> Get(const std::string& name) const override;
+		virtual Ptr<Texture2D> Get(const Uid& key) const override;
 		virtual void Add(const Ptr<Texture2D> data) override;
-		virtual bool Exists(const std::string& name) const override;
+		virtual bool Exists(const Uid& key) const override;
 
-		std::unordered_map<std::string, Ptr<Texture2D>> m_textures;
+		std::unordered_map<uint64_t, Ptr<Texture2D>> m_textures;
 		static TextureLibrary* s_instance;
 	};
 }

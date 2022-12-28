@@ -7,10 +7,10 @@ namespace Engine
 
 	Ptr<Shader> ShaderLibrary::Load(const std::filesystem::path& filePath)
 	{
-		const std::string name = filePath.stem().string();
-		if (Exists(name))
+		Uid uid = Uid::NewUid(filePath.stem().string());
+		if (Exists(uid))
 		{
-			return Get(name);
+			return Get(uid);
 		}
 
 		Ptr<Shader> shader = Shader::Create(filePath.string());
@@ -19,22 +19,22 @@ namespace Engine
 		return shader;
 	}
 
-	Ptr<Shader> ShaderLibrary::Get(const std::string& name) const
+	Ptr<Shader> ShaderLibrary::Get(const Uid& key) const
 	{
-		ENGINE_CORE_ASSERT(Exists(name), "Shader not found!");
-		return m_shaders.at(name);
+		ENGINE_CORE_ASSERT(Exists(key), "Shader not found!");
+		return m_shaders.at(key);
 	}
 
 	void ShaderLibrary::Add(const Ptr<Shader> data)
 	{
-		std::string shaderName = data->GetName();
-		ENGINE_CORE_ASSERT(!Exists(shaderName), "Shader already exists!");
-		m_shaders.insert({ shaderName, data });
+		const Uid& uid = data->GetUid();
+		ENGINE_CORE_ASSERT(!Exists(uid), "Shader already exists!");
+		m_shaders.insert({ uid, data });
 	}
 
-	bool ShaderLibrary::Exists(const std::string& name) const
+	bool ShaderLibrary::Exists(const Uid& uid) const
 	{
-		return m_shaders.find(name) != m_shaders.end();
+		return m_shaders.find(uid) != m_shaders.end();
 	}
 
 	ShaderLibrary* ShaderLibrary::GetInstance()

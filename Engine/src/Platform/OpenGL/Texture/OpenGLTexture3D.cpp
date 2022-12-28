@@ -4,6 +4,7 @@
 #include "Platform/OpenGL/Debug/OpenGLDebug.h"
 #include "Platform/Util/OpenGLUtil.h"
 
+#include <numeric>
 #include <stb_image.h>
 #include <glad/glad.h>
 
@@ -13,6 +14,7 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 		Init(faces);
+		m_uid = Uid::NewUid(std::accumulate(m_faces.begin(), m_faces.end(), std::string{}));
 
 		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_rendererId);
 		glTextureStorage2D(m_rendererId, 1, m_formats.front().internalFormat, faces.front()->GetWidth(), faces.front()->GetHeight());
