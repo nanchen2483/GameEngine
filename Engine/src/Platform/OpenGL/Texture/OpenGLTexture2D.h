@@ -23,11 +23,13 @@ namespace Engine
 		virtual void BindImage(uint32_t slot, TextureAccessType access) const override;
 		virtual void Bind(uint32_t slot) const override;
 		
+		inline virtual Uid GetUid() const override { return m_uid; }
 		virtual bool operator==(const Texture& other) const override
 		{
 			return m_rendererId == ((OpenGLTexture2D&)other).m_rendererId;
 		}
 	private:
+		Uid m_uid;
 		uint32_t m_rendererId;
 		std::string m_filePath;
 		uint32_t m_width, m_height;

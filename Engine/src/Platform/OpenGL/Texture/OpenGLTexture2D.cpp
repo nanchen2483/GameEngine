@@ -13,6 +13,7 @@ namespace Engine
 		: m_width(width), m_height(height), m_format(OpenGLUtil::ToGL(format)), m_type(TextureType::None)
 	{
 		m_textureName = "Texture_w:" + std::to_string(width) + "_h:" + std::to_string(height) + "_f:" + std::to_string((int)format);
+		m_uid = Uid::NewUid(m_textureName);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererId);
 		glTextureStorage2D(m_rendererId, levels, m_format.internalFormat, m_width, m_height);
@@ -35,6 +36,7 @@ namespace Engine
 		: m_filePath(image->GetFilePath()), m_type(type), m_width(image->GetWidth()), m_height(image->GetHeight()), m_textureName(image->GetName())
 	{
 		ENGINE_PROFILE_FUNCTION();
+		m_uid = Uid::NewUid(m_filePath);
 
 		int32_t channels = image->GetChannels();
 		switch (channels)
