@@ -1,12 +1,12 @@
 #pragma once
-#include "Engine/Core/System/Item/IUniqueItem.h"
+#include "Engine/Core/System/Object/IUniqueObject.h"
 
 #include <glm/glm.hpp>
 #include <string>
 
 namespace Engine
 {
-	class Shader : public IUniqueItem
+	class Shader : public IUniqueObject
 	{
 	public:
 		virtual ~Shader() = default;

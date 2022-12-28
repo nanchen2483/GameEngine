@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class IUniqueItem
+	class IUniqueObject
 	{
 	public:
 		virtual Uid GetUid() const = 0;
