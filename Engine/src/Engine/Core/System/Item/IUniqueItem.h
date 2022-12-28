@@ -1,11 +1,11 @@
 #pragma once
-#include <cstdint>
+#include "Engine/Core/System/Uid/Uid.h"
 
 namespace Engine
 {
 	class IUniqueItem
 	{
 	public:
-		virtual uint64_t GetUid() const = 0;
+		virtual Uid GetUid() const = 0;
 	};
 }
