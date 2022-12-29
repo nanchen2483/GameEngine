@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Util/AssimpUtil.h"
+#include "Engine/Util/Assimp/AssimpUtil.h"
 
 #include <string>
 #include <vector>

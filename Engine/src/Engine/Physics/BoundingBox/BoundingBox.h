@@ -1,7 +1,9 @@
 #pragma once
+#include "Engine/Core/Base.h"
 #include "Engine/Math/Transform.h"
 #include "Engine/Renderer/Camera/Frustum.h"
 
+#include <functional>
 #include <glm/glm.hpp>
 
 namespace Engine
