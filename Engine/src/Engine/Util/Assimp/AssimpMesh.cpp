@@ -26,4 +26,3 @@ namespace Engine
 		RendererCommand::DrawUint32Indexed(m_vertexArray->GetNumOfIndices());
 	}
 }
-

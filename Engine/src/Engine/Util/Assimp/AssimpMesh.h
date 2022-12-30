@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/Renderer/Buffer/VertexArray.h"
 #include "Engine/Renderer/Model/Vertex.h"
-#include "Material.h"
+#include "Engine/Renderer/Material/Material.h"
 
 namespace Engine
 {
