@@ -354,6 +354,7 @@ namespace Engine {
 					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
 					deserializedModel.isPlayer = modelComponent["IsPlayer"].as<bool>();
 					deserializedModel.model = Model::Create(path, false, deserializedEntity);
+					deserializedModel.meshes = deserializedModel.model->GetMeshes();
 				}
 
 				YAML::Node skyboxComponent = entity["SkyboxComponent"];

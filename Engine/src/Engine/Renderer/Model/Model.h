@@ -1,4 +1,5 @@
 #pragma once
+#include "Mesh.h"
 #include "Engine/Math/Transform.h"
 #include "Engine/Physics/BoundingBox/BoundingBox.h"
 #include "Engine/Renderer/Camera/Frustum.h"
@@ -20,6 +21,7 @@ namespace Engine
 	class Model
 	{
 	public:
+		virtual std::vector<Ptr<Mesh>> GetMeshes() const = 0;
 		virtual std::filesystem::path GetFilePath() = 0;
 		virtual bool HasAnimations() = 0;
 		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
@@ -30,7 +32,6 @@ namespace Engine
 		virtual const std::vector<AnimationInfo> GetAnimations() const = 0;
 		virtual const AnimationInfo GetSelectedAnimation() const = 0;
 		virtual void SetSelectedAnimation(const AnimationInfo animation) = 0;
-		virtual void Draw() = 0;
 
 		static Ptr<Model> Create(std::string path, bool gamma = false);
 		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId);

@@ -308,6 +308,7 @@ namespace Engine
 									{
 										component->loading = true;
 										component->model = Model::Create(filePath, false, entity, component->progression);
+										component->meshes = component->model->GetMeshes();
 										component->loading = false;
 										*component->progression = 0.0f;
 									}).detach();

@@ -104,7 +104,7 @@ namespace Engine
 
 			LoadBones(vertices, mesh);
 
-			m_meshes.push_back(AssimpMesh(vertices, indices, material));
+			m_meshes.push_back(CreatePtr<Mesh>(vertices, indices, material));
 			IncreaseProgression();
 		}
 	}
@@ -218,14 +218,6 @@ namespace Engine
 		if (m_hasAnimations)
 		{
 			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms();
-		}
-	}
-
-	void AssimpModel::Draw()
-	{
-		for (uint32_t i = 0; i < m_meshes.size(); i++)
-		{
-			m_meshes[i].Draw();
 		}
 	}
 }

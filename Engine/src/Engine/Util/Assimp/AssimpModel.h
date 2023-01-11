@@ -1,6 +1,5 @@
 #pragma once
 #include "AssimpAnimation.h"
-#include "AssimpMesh.h"
 #include "Engine/Renderer/Model/Model.h"
 #include "Helper/AssimpHelper.h"
 
@@ -18,6 +17,7 @@ namespace Engine
 		AssimpModel(std::string const& path, bool gamma, int entityId);
 		AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<float> progression);
 		
+		virtual std::vector<Ptr<Mesh>> GetMeshes() const override { return m_meshes; }
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
 		virtual bool HasAnimations() override { return m_hasAnimations; }
 		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
@@ -28,8 +28,6 @@ namespace Engine
 		virtual const std::vector<AnimationInfo> GetAnimations() const override { return m_animationInfo; };
 		virtual const AnimationInfo GetSelectedAnimation() const override { return m_selectedAnimationInfo; }
 		virtual void SetSelectedAnimation(const AnimationInfo animation) override { m_selectedAnimationInfo = animation; }
-		
-		virtual void Draw() override;
 	private:
 		void Load(std::string const& path);
 		void LoadMeshes(const aiScene* scene);
@@ -42,7 +40,7 @@ namespace Engine
 		const std::filesystem::path m_directory = m_filePath.parent_path();
 		const bool m_gammaCorrection;
 
-		std::vector<AssimpMesh> m_meshes;
+		std::vector<Ptr<Mesh>> m_meshes;
 
 		// Bounding volume
 		Uniq<BoundingBox> m_boundingBox;

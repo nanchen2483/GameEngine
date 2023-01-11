@@ -291,7 +291,12 @@ namespace Engine
 				}
 			}
 
-			component.model->Draw();
+			for (uint32_t i = 0; i < component.meshes.size(); i++)
+			{
+				component.meshes[i]->GetMaterial()->Bind();
+				component.meshes[i]->GetVertexArray()->Bind();
+				RendererCommand::DrawUint32Indexed(component.meshes[i]->GetVertexArray()->GetNumOfIndices());
+			}
 
 			s_data.states.drawModels++;
 		}

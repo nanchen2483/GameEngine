@@ -1,6 +1,7 @@
 #pragma once
 #include "IComponent.h"
 #include "Engine/Renderer/Model/Model.h"
+#include "Engine/Renderer/Model/Mesh.h"
 
 namespace Engine
 {
@@ -13,5 +14,6 @@ namespace Engine
 
 		bool enableAnimation = false;
 		Ptr<Model> model = nullptr;
+		std::vector<Ptr<Mesh>> meshes;
 	};
 }
