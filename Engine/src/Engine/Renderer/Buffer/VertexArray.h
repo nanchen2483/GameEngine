@@ -19,6 +19,6 @@ namespace Engine
 		virtual const Ptr<IndexBuffer>& GetIndexBuffer() const = 0;
 		virtual const uint32_t GetNumOfIndices() const = 0;
 
-		static Uniq<VertexArray> Create();
+		static Ptr<VertexArray> Create();
 	};
 }

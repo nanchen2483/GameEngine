@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	Uniq<VertexArray> VertexArray::Create()
+	Ptr<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
