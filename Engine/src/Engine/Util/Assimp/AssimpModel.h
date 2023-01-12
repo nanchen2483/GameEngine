@@ -25,7 +25,7 @@ namespace Engine
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const override;
 		virtual void OnUpdate() override;
 
-		virtual const std::vector<AnimationInfo> GetAnimations() const override { return m_animationInfo; };
+		virtual const std::vector<AnimationInfo> GetAnimationInfo() const override { return m_animationInfo; };
 		virtual const AnimationInfo GetSelectedAnimation() const override { return m_selectedAnimationInfo; }
 		virtual void SetSelectedAnimation(const AnimationInfo animation) override { m_selectedAnimationInfo = animation; }
 
@@ -53,7 +53,7 @@ namespace Engine
 		// Animations
 		bool m_hasAnimations = false;
 		Dictionary<std::string, glm::mat4> m_boneOffsets;
-		std::vector<AssimpAnimation> m_animations;
+		std::vector<Ptr<AssimpAnimation>> m_animations;
 		std::vector<AnimationInfo> m_animationInfo;
 		AnimationInfo m_selectedAnimationInfo;
 

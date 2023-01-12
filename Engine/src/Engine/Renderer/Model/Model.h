@@ -29,7 +29,7 @@ namespace Engine
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const = 0;
 		virtual void OnUpdate() = 0;
 
-		virtual const std::vector<AnimationInfo> GetAnimations() const = 0;
+		virtual const std::vector<AnimationInfo> GetAnimationInfo() const = 0;
 		virtual const AnimationInfo GetSelectedAnimation() const = 0;
 		virtual void SetSelectedAnimation(const AnimationInfo animation) = 0;
 	private:

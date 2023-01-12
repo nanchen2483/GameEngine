@@ -341,7 +341,7 @@ namespace Engine
 					AnimationInfo selectedAnimation = model->GetSelectedAnimation();
 					if (ImGui::BeginCombo("##BeginCombo", selectedAnimation.displayName.c_str()))
 					{
-						for (AnimationInfo animation : model->GetAnimations())
+						for (AnimationInfo animation : model->GetAnimationInfo())
 						{
 							bool isSelected = selectedAnimation.id == animation.id;
 							if (ImGui::Selectable(animation.displayName.c_str(), isSelected))

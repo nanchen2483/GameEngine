@@ -120,16 +120,16 @@ namespace Engine
 			for (uint32_t i = 0; i < scene->mNumAnimations; i++)
 			{
 				Ptr<Node> rootNode = AssimpHelper::ConvertToAssimpNode(scene->mAnimations[i], scene->mRootNode, m_boneOffsets);
-				AssimpAnimation animation = AssimpAnimation(scene->mAnimations[i], rootNode);
+				Ptr<AssimpAnimation> animation = CreatePtr<AssimpAnimation>(scene->mAnimations[i], rootNode);
 				m_animations.push_back(animation);
 				
 				AnimationInfo info;
 				{
 					info.id = i;
-					info.displayName = animation.GetName().length() > 0 ? animation.GetName() : "Unknown (" + std::to_string(i) + ")";
-					info.animationTime = animation.GetTime();
-					info.duration = animation.GetDuration();
-					info.ticksPerSecond = animation.GetTicketPerSecond();
+					info.displayName = animation->GetName().length() > 0 ? animation->GetName() : "Unknown (" + std::to_string(i) + ")";
+					info.animationTime = animation->GetTime();
+					info.duration = animation->GetDuration();
+					info.ticksPerSecond = animation->GetTicketPerSecond();
 				}
 				m_animationInfo.push_back(info);
 				IncreaseProgression();
@@ -138,7 +138,7 @@ namespace Engine
 			m_selectedAnimationInfo = m_animationInfo.front();
 
 			// Initial bone transform-matrix
-			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms();
+			m_animations[m_selectedAnimationInfo.id]->UpdateBoneTransforms();
 		}
 	}
 
@@ -200,7 +200,7 @@ namespace Engine
 	{
 		if (m_hasAnimations)
 		{
-			return m_animations[m_selectedAnimationInfo.id].GetBoneTransforms();
+			return m_animations[m_selectedAnimationInfo.id]->GetBoneTransforms();
 		}
 
 		return std::vector<glm::mat4>();
@@ -220,7 +220,7 @@ namespace Engine
 	{
 		if (m_hasAnimations)
 		{
-			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms();
+			m_animations[m_selectedAnimationInfo.id]->UpdateBoneTransforms();
 		}
 	}
 }
