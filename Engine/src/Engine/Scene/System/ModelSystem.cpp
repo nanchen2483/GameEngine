@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "ModelSystem.h"
 #include "Engine/Renderer/Model/ModelLibrary.h"
+#include "Engine/Scene/System/AnimationSystem.h"
 
 namespace Engine
 {
@@ -11,6 +12,7 @@ namespace Engine
 				modelComponent->loading = true;
 				modelComponent->model = ModelLibrary::GetInstance()->Load(filepath, entityId);
 				modelComponent->meshes = modelComponent->model->GetMeshes();
+				modelComponent->animations = modelComponent->model->GetAnimations();
 				modelComponent->loading = false;
 				*modelComponent->progression = 0.0f;
 			}).detach();
@@ -26,9 +28,9 @@ namespace Engine
 			}
 
 			modelComponent.isOnViewFrustum = modelComponent.model->IsOnFrustum(frustum, modelTransform);
-			if (modelComponent.enableAnimation)
+			if (modelComponent.enableAnimation && !modelComponent.animations.empty())
 			{
-				modelComponent.model->OnUpdate();
+				AnimationSystem::UpdateAnimation(modelComponent.animations[modelComponent.model->GetSelectedAnimation().id]);
 			}
 		}
 	}

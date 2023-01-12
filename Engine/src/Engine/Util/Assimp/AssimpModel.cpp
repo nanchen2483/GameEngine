@@ -2,6 +2,7 @@
 #include "AssimpModel.h"
 #include "AssimpMesh.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Engine/Scene/System/AnimationSystem.h"
 
 #include <stb_image.h>
 
@@ -120,7 +121,7 @@ namespace Engine
 			for (uint32_t i = 0; i < scene->mNumAnimations; i++)
 			{
 				Ptr<Node> rootNode = AssimpHelper::ConvertToAssimpNode(scene->mAnimations[i], scene->mRootNode, m_boneOffsets);
-				Ptr<AssimpAnimation> animation = CreatePtr<AssimpAnimation>(scene->mAnimations[i], rootNode);
+				Ptr<Animation> animation = CreatePtr<AssimpAnimation>(scene->mAnimations[i], rootNode);
 				m_animations.push_back(animation);
 				
 				AnimationInfo info;
@@ -138,7 +139,7 @@ namespace Engine
 			m_selectedAnimationInfo = m_animationInfo.front();
 
 			// Initial bone transform-matrix
-			m_animations[m_selectedAnimationInfo.id]->UpdateBoneTransforms();
+			AnimationSystem::UpdateAnimation(m_animations[m_selectedAnimationInfo.id]);
 		}
 	}
 
@@ -214,13 +215,5 @@ namespace Engine
 	bool AssimpModel::IsOnFrustum(const Frustum& frustum, const Transform& transform) const
 	{
 		return m_boundingBox->IsOnFrustum(frustum, transform);
-	}
-
-	void AssimpModel::OnUpdate()
-	{
-		if (m_hasAnimations)
-		{
-			m_animations[m_selectedAnimationInfo.id]->UpdateBoneTransforms();
-		}
 	}
 }

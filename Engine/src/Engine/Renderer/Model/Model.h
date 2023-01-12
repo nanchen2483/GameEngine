@@ -1,5 +1,6 @@
 #pragma once
 #include "Mesh.h"
+#include "Animation.h"
 #include "Engine/Math/Transform.h"
 #include "Engine/Physics/BoundingBox/BoundingBox.h"
 #include "Engine/Renderer/Camera/Frustum.h"
@@ -21,13 +22,13 @@ namespace Engine
 	class Model : public IUniqueObject
 	{
 	public:
-		virtual std::vector<Ptr<Mesh>> GetMeshes() const = 0;
 		virtual std::filesystem::path GetFilePath() = 0;
+		virtual std::vector<Ptr<Mesh>> GetMeshes() const = 0;
+		virtual std::vector<Ptr<Animation>> GetAnimations() const = 0;
 		virtual bool HasAnimations() = 0;
 		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
 		virtual BoundingValue GetBoundingValue() const = 0;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const = 0;
-		virtual void OnUpdate() = 0;
 
 		virtual const std::vector<AnimationInfo> GetAnimationInfo() const = 0;
 		virtual const AnimationInfo GetSelectedAnimation() const = 0;

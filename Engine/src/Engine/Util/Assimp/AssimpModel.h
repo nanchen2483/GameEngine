@@ -17,13 +17,13 @@ namespace Engine
 		AssimpModel(std::string const& path, bool gamma, int entityId);
 		AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<float> progression);
 		
-		virtual std::vector<Ptr<Mesh>> GetMeshes() const override { return m_meshes; }
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
+		virtual std::vector<Ptr<Mesh>> GetMeshes() const override { return m_meshes; }
+		virtual std::vector<Ptr<Animation>> GetAnimations() const override { return m_animations; }
 		virtual bool HasAnimations() override { return m_hasAnimations; }
 		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
 		virtual BoundingValue GetBoundingValue() const override;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const override;
-		virtual void OnUpdate() override;
 
 		virtual const std::vector<AnimationInfo> GetAnimationInfo() const override { return m_animationInfo; };
 		virtual const AnimationInfo GetSelectedAnimation() const override { return m_selectedAnimationInfo; }
@@ -53,7 +53,7 @@ namespace Engine
 		// Animations
 		bool m_hasAnimations = false;
 		Dictionary<std::string, glm::mat4> m_boneOffsets;
-		std::vector<Ptr<AssimpAnimation>> m_animations;
+		std::vector<Ptr<Animation>> m_animations;
 		std::vector<AnimationInfo> m_animationInfo;
 		AnimationInfo m_selectedAnimationInfo;
 

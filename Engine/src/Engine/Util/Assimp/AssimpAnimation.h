@@ -9,11 +9,13 @@ namespace Engine
 	public:
 		AssimpAnimation(const aiAnimation* animation, const Ptr<Node> rootNode);
 		
-		virtual std::vector<glm::mat4> GetBoneTransforms() const override { return m_boneTransforms; };
 		virtual const std::string GetName() const override { return m_name; }
 		virtual const Ptr<float> GetTime() const override { return m_animationTime; }
 		virtual const float GetDuration() const override { return m_duration; }
 		virtual const float GetTicketPerSecond() const override { return m_ticksPerSecond; }
+		virtual const Ptr<Node> GetRootNode() const { return m_rootNode; }
+		virtual std::vector<glm::mat4> GetBoneTransforms() const override { return m_boneTransforms; };
+		virtual void UpdateBoneTransforms(uint32_t boneId, glm::mat4 updatedTransform) override { m_boneTransforms[boneId] = updatedTransform; };
 
 		void UpdateBoneTransforms();
 	private:
