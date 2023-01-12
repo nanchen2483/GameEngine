@@ -119,7 +119,7 @@ namespace Engine
 			ENGINE_CORE_ASSERT(m_boneOffsets.Size() > 0, "BoneOffsets is empty");
 			for (uint32_t i = 0; i < scene->mNumAnimations; i++)
 			{
-				AssimpNode rootNode = AssimpHelper::ConvertToAssimpNode(scene->mAnimations[i], scene->mRootNode, m_boneOffsets);
+				Ptr<Node> rootNode = AssimpHelper::ConvertToAssimpNode(scene->mAnimations[i], scene->mRootNode, m_boneOffsets);
 				AssimpAnimation animation = AssimpAnimation(scene->mAnimations[i], rootNode);
 				m_animations.push_back(animation);
 				

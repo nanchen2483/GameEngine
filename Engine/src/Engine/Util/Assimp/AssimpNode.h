@@ -1,27 +1,28 @@
 #pragma once
+#include "Engine/Renderer/Model/Node.h"
 #include "AssimpBone.h"
 
 namespace Engine
 {
-	class AssimpNode
+	class AssimpNode : public Node
 	{
 	public:
 		AssimpNode() = default;
 		AssimpNode(const aiNode* node, const AssimpBone bone);
 
-		const bool HasBone() const { return m_hasBone; }
-		const uint32_t GetBoneId() const;
-		const glm::mat4 GetBoneOffset() const;
-		const glm::mat4 GetTransform(float animationTime) const;
+		virtual const bool AnyBones() const { return m_anyBones; }
+		virtual const uint32_t GetBoneId() const;
+		virtual const glm::mat4 GetBoneOffset() const;
+		virtual const glm::mat4 GetTransform(float animationTime) const;
 
-		const AssimpNode& GetChildNode(const uint32_t index) const;
-		const uint32_t GetNumOfChildNodes() const { return m_numOfchildren; }
-		void AddChildNode(const AssimpNode childNode) { m_children.push_back(childNode); }
+		virtual const Ptr<Node> GetChildNode(const uint32_t index) const;
+		virtual const uint32_t GetNumOfChildNodes() const { return m_numOfchildren; }
+		virtual void AddChildNode(Ptr<Node> childNode) { m_children.push_back(childNode); }
 	private:
 		glm::mat4 m_transformation;
 		AssimpBone m_bone;
-		bool m_hasBone;
+		bool m_anyBones;
 		uint32_t m_numOfchildren;
-		std::vector<AssimpNode> m_children;
+		std::vector<Ptr<Node>> m_children;
 	};
 }
