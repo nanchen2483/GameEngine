@@ -8,6 +8,7 @@
 #include "Component/TagComponent.h"
 #include "Component/TerrainComponent.h"
 #include "Component/TransformComponent.h"
+#include "Engine/Renderer/Model/ModelLibrary.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
 #include "Entity.h"
 
@@ -353,7 +354,7 @@ namespace Engine {
 					std::string path = modelComponent["Path"].as<std::string>();
 					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
 					deserializedModel.isPlayer = modelComponent["IsPlayer"].as<bool>();
-					deserializedModel.model = Model::Create(path, false, deserializedEntity);
+					deserializedModel.model = ModelLibrary::GetInstance()->Load(path, deserializedEntity);
 					deserializedModel.meshes = deserializedModel.model->GetMeshes();
 				}
 

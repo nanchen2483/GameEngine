@@ -1,5 +1,6 @@
 #include "HierarchyPanel.h"
 #include "Extension/ImGuiExtension.h"
+#include "Engine/Scene/System/ModelSystem.h"
 
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>
@@ -304,14 +305,7 @@ namespace Engine
 						ImGuiExtension::DrawMeshSubSection("Mesh", component->model,
 							[&](const std::string& filePath)
 							{
-								std::thread([=]()
-									{
-										component->loading = true;
-										component->model = Model::Create(filePath, false, entity, component->progression);
-										component->meshes = component->model->GetMeshes();
-										component->loading = false;
-										*component->progression = 0.0f;
-									}).detach();
+								ModelSystem::Load(component, filePath, entity);
 							});
 						ImGuiExtension::DrawAnimationSubSection(component->model, component->enableAnimation);
 					}

@@ -32,9 +32,11 @@ namespace Engine
 		virtual const std::vector<AnimationInfo> GetAnimations() const = 0;
 		virtual const AnimationInfo GetSelectedAnimation() const = 0;
 		virtual void SetSelectedAnimation(const AnimationInfo animation) = 0;
-
+	private:
 		static Ptr<Model> Create(std::string path, bool gamma = false);
 		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId);
 		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, Ptr<float> progression);
+
+		friend class ModelLibrary;
 	};
 }
