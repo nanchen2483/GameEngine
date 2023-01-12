@@ -1,8 +1,6 @@
 #include "enginepch.h"
 #include "TextureLibrary.h"
 
-#include <filesystem>
-
 namespace Engine
 {
 	TextureLibrary* TextureLibrary::s_instance = nullptr;

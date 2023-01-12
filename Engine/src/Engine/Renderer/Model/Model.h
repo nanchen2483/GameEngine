@@ -18,7 +18,7 @@ namespace Engine
 		float ticksPerSecond = 0.0f;
 	};
 
-	class Model
+	class Model : public IUniqueObject
 	{
 	public:
 		virtual std::vector<Ptr<Mesh>> GetMeshes() const = 0;

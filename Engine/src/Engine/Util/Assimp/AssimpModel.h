@@ -28,6 +28,8 @@ namespace Engine
 		virtual const std::vector<AnimationInfo> GetAnimations() const override { return m_animationInfo; };
 		virtual const AnimationInfo GetSelectedAnimation() const override { return m_selectedAnimationInfo; }
 		virtual void SetSelectedAnimation(const AnimationInfo animation) override { m_selectedAnimationInfo = animation; }
+
+		virtual Uid GetUid() const override { return m_uid; }
 	private:
 		void Load(std::string const& path);
 		void LoadMeshes(const aiScene* scene);
@@ -36,6 +38,7 @@ namespace Engine
 		std::string GetTexturePath(const aiMaterial* material, const aiTextureType type, const TextureType textureType);
 		void UpdateBoundingValues(glm::vec3 position);
 
+		Uid m_uid;
 		const std::filesystem::path m_filePath;
 		const std::filesystem::path m_directory = m_filePath.parent_path();
 		const bool m_gammaCorrection;
@@ -55,6 +58,7 @@ namespace Engine
 		AnimationInfo m_selectedAnimationInfo;
 
 		// Editor-only
+		bool m_isLoaded = false;
 		const int m_entityId;
 		Ptr<float> m_progression = nullptr;
 		float m_currentProgression = 0.0f;

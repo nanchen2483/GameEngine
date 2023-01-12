@@ -19,6 +19,8 @@ namespace Engine
 	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<float> progression)
 		: m_filePath(path), m_gammaCorrection(gamma), m_entityId(entityId), m_progression(progression)
 	{
+		m_uid = Uid::NewUid(path);
+
 		Load(path);
 	}
 
@@ -133,7 +135,7 @@ namespace Engine
 			}
 
 			m_selectedAnimationInfo = m_animationInfo.front();
-				
+
 			// Initial bone transform-matrix
 			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms();
 		}
