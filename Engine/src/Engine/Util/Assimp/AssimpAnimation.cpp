@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-	AssimpAnimation::AssimpAnimation(const aiAnimation* animation, const AssimpNode rootNode)
+	AssimpAnimation::AssimpAnimation(const aiAnimation* animation, const Ptr<Node> rootNode)
 		:	m_name(animation->mName.data),
 			m_animationTime(CreatePtr<float>(0.0f)),
 			m_duration((float)animation->mDuration),
@@ -31,17 +31,17 @@ namespace Engine
 		*m_animationTime = fmod(*m_animationTime, m_duration);
 	}
 
-	void AssimpAnimation::CalculateBoneTransform(const AssimpNode& node, glm::mat4 globalTransformation)
+	void AssimpAnimation::CalculateBoneTransform(const Ptr<Node> node, glm::mat4 globalTransformation)
 	{
-		globalTransformation *= node.GetTransform(*m_animationTime);
-		if (node.HasBone())
+		globalTransformation *= node->GetTransform(*m_animationTime);
+		if (node->AnyBones())
 		{
-			m_boneTransforms[node.GetBoneId()] = globalTransformation * node.GetBoneOffset();
+			m_boneTransforms[node->GetBoneId()] = globalTransformation * node->GetBoneOffset();
 		}
 
-		for (uint32_t i = 0; i < node.GetNumOfChildNodes(); i++)
+		for (uint32_t i = 0; i < node->GetNumOfChildNodes(); i++)
 		{
-			CalculateBoneTransform(node.GetChildNode(i), globalTransformation);
+			CalculateBoneTransform(node->GetChildNode(i), globalTransformation);
 		}
 	}
 }
