@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "AssimpModel.h"
+#include "AssimpMesh.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
 
 #include <stb_image.h>
@@ -106,7 +107,7 @@ namespace Engine
 
 			LoadBones(vertices, mesh);
 
-			m_meshes.push_back(CreatePtr<Mesh>(vertices, indices, material));
+			m_meshes.push_back(CreatePtr<AssimpMesh>(vertices, indices, material));
 			IncreaseProgression();
 		}
 	}

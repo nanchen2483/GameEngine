@@ -1,12 +1,16 @@
-#include "Mesh.h"
+#include "enginepch.h"
+#include "AssimpMesh.h"
+
+#include "Engine/Renderer/RendererCommand.h"
+
 namespace Engine
 {
-	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, Material material)
+	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, const Material& material)
 		: m_vertices(vertices), m_indices(indices), m_material(CreatePtr<Material>(material))
 	{
 	}
 
-	Ptr<VertexArray> Mesh::GetVertexArray()
+	Ptr<VertexArray> AssimpMesh::GetVertexArray()
 	{
 		if (m_vertexArray == nullptr)
 		{
