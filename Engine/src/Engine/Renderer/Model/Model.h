@@ -16,9 +16,6 @@ namespace Engine
 		virtual std::filesystem::path GetFilePath() = 0;
 		virtual std::vector<Ptr<Mesh>> GetMeshes() const = 0;
 		virtual std::vector<Ptr<Animation>> GetAnimations() const = 0;
-		virtual bool HasAnimations() = 0;
-		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
-		virtual BoundingValue GetBoundingValue() const = 0;
 		virtual Ptr<BoundingBox> GetBoundingBox() const = 0;
 	private:
 		static Ptr<Model> Create(std::string path, bool gamma = false);

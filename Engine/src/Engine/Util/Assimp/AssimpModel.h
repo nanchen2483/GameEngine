@@ -20,9 +20,6 @@ namespace Engine
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
 		virtual std::vector<Ptr<Mesh>> GetMeshes() const override { return m_meshes; }
 		virtual std::vector<Ptr<Animation>> GetAnimations() const override { return m_animations; }
-		virtual bool HasAnimations() override { return m_hasAnimations; }
-		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
-		virtual BoundingValue GetBoundingValue() const override;
 		virtual Ptr<BoundingBox> GetBoundingBox() const override { return m_boundingBox; }
 		
 		virtual Uid GetUid() const override { return m_uid; }

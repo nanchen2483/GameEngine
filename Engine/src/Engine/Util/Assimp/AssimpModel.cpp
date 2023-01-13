@@ -185,19 +185,4 @@ namespace Engine
 			(*m_progression) = (m_currentProgression / m_totalProgression);
 		}
 	}
-
-	std::vector<glm::mat4> AssimpModel::GetBoneTransforms() const
-	{
-		if (m_hasAnimations)
-		{
-			return m_animations.front()->GetBoneTransforms();
-		}
-
-		return std::vector<glm::mat4>();
-	}
-
-	BoundingValue AssimpModel::GetBoundingValue() const
-	{
-		return m_boundingBox->GetBoundingValue();
-	}
 }
