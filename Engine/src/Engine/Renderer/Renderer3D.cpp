@@ -282,9 +282,9 @@ namespace Engine
 			}
 
 			shader->SetMat4("uModel", transform);
-			if (component.model->HasAnimations())
+			if (!component.animations.empty())
 			{
-				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms();
+				std::vector<glm::mat4> transforms = component.animations[component.selectedAnimationIndex]->GetBoneTransforms();
 				for (uint32_t i = 0; i < transforms.size(); i++)
 				{
 					shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);

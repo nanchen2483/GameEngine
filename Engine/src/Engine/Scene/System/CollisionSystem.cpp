@@ -6,7 +6,7 @@ namespace Engine
 	Uniq<Collision> CollisionSystem::s_collision = Collision::Create(CollisionType::GJK_EPA_3D);
 	void CollisionSystem::OnUpdate(TransformComponent& transformComA, TransformComponent& transformComB, ModelComponent& modelComA, ModelComponent& modelComB)
 	{
-		if (modelComA.model == nullptr || modelComB.model == nullptr)
+		if (modelComA.boundingBox == nullptr || modelComB.boundingBox == nullptr)
 		{
 			return;
 		}
@@ -14,8 +14,8 @@ namespace Engine
 		s_collision->Detect(
 			transformComA.transform,
 			transformComB.transform,
-			modelComA.model->GetBoundingValue(),
-			modelComB.model->GetBoundingValue());
+			modelComA.boundingBox->GetBoundingValue(),
+			modelComB.boundingBox->GetBoundingValue());
 		if (s_collision->IsCollided())
 		{
 			glm::vec3 halfDistance = s_collision->GetDirectionFromAToB() / 2.0f;

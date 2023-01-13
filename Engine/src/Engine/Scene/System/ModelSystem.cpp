@@ -10,10 +10,11 @@ namespace Engine
 		std::thread([=]()
 			{
 				modelComponent->loading = true;
-				modelComponent->model = ModelLibrary::GetInstance()->Load(filepath, entityId);
-				modelComponent->meshes = modelComponent->model->GetMeshes();
-				modelComponent->animations = modelComponent->model->GetAnimations();
-				modelComponent->boundingBox = modelComponent->model->GetBoundingBox();
+				modelComponent->filePath = filepath;
+				Ptr<Model> model = ModelLibrary::GetInstance()->Load(filepath, entityId);
+				modelComponent->meshes = model->GetMeshes();
+				modelComponent->animations = model->GetAnimations();
+				modelComponent->boundingBox = model->GetBoundingBox();
 				modelComponent->loading = false;
 				*modelComponent->progression = 0.0f;
 			}).detach();
@@ -31,7 +32,7 @@ namespace Engine
 			modelComponent.isOnViewFrustum = modelComponent.boundingBox->IsOnFrustum(frustum, modelTransform);
 			if (modelComponent.enableAnimation && !modelComponent.animations.empty())
 			{
-				AnimationSystem::UpdateAnimation(modelComponent.animations[modelComponent.model->GetSelectedAnimation().id]);
+				AnimationSystem::UpdateAnimation(modelComponent.animations[modelComponent.selectedAnimationIndex]);
 			}
 		}
 	}

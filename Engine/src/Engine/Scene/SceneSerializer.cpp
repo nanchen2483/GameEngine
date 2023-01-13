@@ -188,7 +188,7 @@ namespace Engine {
 
 			ModelComponent& modelComponent = entity.GetComponent<ModelComponent>();
 
-			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetFilePath().string();
+			out << YAML::Key << "Path" << YAML::Value << modelComponent.filePath;
 			out << YAML::Key << "EnableAnimation" << YAML::Value << modelComponent.enableAnimation;
 			out << YAML::Key << "IsPlayer" << YAML::Value << modelComponent.isPlayer;
 			out << YAML::EndMap;
@@ -354,10 +354,11 @@ namespace Engine {
 					std::string path = modelComponent["Path"].as<std::string>();
 					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
 					deserializedModel.isPlayer = modelComponent["IsPlayer"].as<bool>();
-					deserializedModel.model = ModelLibrary::GetInstance()->Load(path, deserializedEntity);
-					deserializedModel.meshes = deserializedModel.model->GetMeshes();
-					deserializedModel.animations = deserializedModel.model->GetAnimations();
-					deserializedModel.boundingBox = deserializedModel.model->GetBoundingBox();
+					Ptr<Model> model = ModelLibrary::GetInstance()->Load(path, deserializedEntity);
+					deserializedModel.filePath = path;
+					deserializedModel.meshes = model->GetMeshes();
+					deserializedModel.animations = model->GetAnimations();
+					deserializedModel.boundingBox = model->GetBoundingBox();
 				}
 
 				YAML::Node skyboxComponent = entity["SkyboxComponent"];

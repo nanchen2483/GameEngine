@@ -302,12 +302,16 @@ namespace Engine
 					else
 					{
 						ImGuiExtension::DrawCheckboxSubSection("IsPlayer", &component->isPlayer);
-						ImGuiExtension::DrawMeshSubSection("Mesh", component->model,
+						ImGuiExtension::DrawMeshSubSection("Mesh", component->filePath,
 							[&](const std::string& filePath)
 							{
 								ModelSystem::Load(component, filePath, entity);
 							});
-						ImGuiExtension::DrawAnimationSubSection(component->model, component->enableAnimation);
+						ImGuiExtension::DrawAnimationSubSection(component->animations, component->selectedAnimationIndex, component->enableAnimation,
+							[&](uint32_t selectedIndex)
+							{
+								component->selectedAnimationIndex = selectedIndex;
+							});
 					}
 				},
 				[&]()
