@@ -15,7 +15,7 @@ namespace Engine
 		Ptr<float> progression = CreatePtr<float>(0.0f);
 		bool isOnViewFrustum = false;
 		bool enableAnimation = false;
-		uint32_t selectedAnimationIndex;
+		uint32_t selectedAnimationIndex = 0;
 
 		std::vector<Ptr<Mesh>> meshes;
 		std::vector<Ptr<Animation>> animations;

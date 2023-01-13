@@ -10,15 +10,6 @@
 
 namespace Engine
 {
-	struct AnimationInfo
-	{
-		uint32_t id = -1;
-		std::string displayName;
-		Ptr<float> animationTime = nullptr;
-		float duration = 0.0f;
-		float ticksPerSecond = 0.0f;
-	};
-
 	class Model : public IUniqueObject
 	{
 	public:
@@ -29,10 +20,6 @@ namespace Engine
 		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
 		virtual BoundingValue GetBoundingValue() const = 0;
 		virtual Ptr<BoundingBox> GetBoundingBox() const = 0;
-
-		virtual const std::vector<AnimationInfo> GetAnimationInfo() const = 0;
-		virtual const AnimationInfo GetSelectedAnimation() const = 0;
-		virtual void SetSelectedAnimation(const AnimationInfo animation) = 0;
 	private:
 		static Ptr<Model> Create(std::string path, bool gamma = false);
 		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId);

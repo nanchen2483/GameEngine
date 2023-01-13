@@ -123,23 +123,12 @@ namespace Engine
 				Ptr<Node> rootNode = AssimpHelper::ConvertToAssimpNode(scene->mAnimations[i], scene->mRootNode, m_boneOffsets);
 				Ptr<Animation> animation = CreatePtr<AssimpAnimation>(scene->mAnimations[i], rootNode);
 				m_animations.push_back(animation);
-				
-				AnimationInfo info;
-				{
-					info.id = i;
-					info.displayName = animation->GetName().length() > 0 ? animation->GetName() : "Unknown (" + std::to_string(i) + ")";
-					info.animationTime = animation->GetTime();
-					info.duration = animation->GetDuration();
-					info.ticksPerSecond = animation->GetTicketPerSecond();
-				}
-				m_animationInfo.push_back(info);
+
 				IncreaseProgression();
 			}
 
-			m_selectedAnimationInfo = m_animationInfo.front();
-
 			// Initial bone transform-matrix
-			AnimationSystem::UpdateAnimation(m_animations[m_selectedAnimationInfo.id]);
+			AnimationSystem::UpdateAnimation(m_animations.front());
 		}
 	}
 
@@ -201,7 +190,7 @@ namespace Engine
 	{
 		if (m_hasAnimations)
 		{
-			return m_animations[m_selectedAnimationInfo.id]->GetBoneTransforms();
+			return m_animations.front()->GetBoneTransforms();
 		}
 
 		return std::vector<glm::mat4>();

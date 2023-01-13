@@ -24,11 +24,7 @@ namespace Engine
 		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
 		virtual BoundingValue GetBoundingValue() const override;
 		virtual Ptr<BoundingBox> GetBoundingBox() const override { return m_boundingBox; }
-
-		virtual const std::vector<AnimationInfo> GetAnimationInfo() const override { return m_animationInfo; };
-		virtual const AnimationInfo GetSelectedAnimation() const override { return m_selectedAnimationInfo; }
-		virtual void SetSelectedAnimation(const AnimationInfo animation) override { m_selectedAnimationInfo = animation; }
-
+		
 		virtual Uid GetUid() const override { return m_uid; }
 	private:
 		void Load(std::string const& path);
@@ -54,8 +50,6 @@ namespace Engine
 		bool m_hasAnimations = false;
 		Dictionary<std::string, glm::mat4> m_boneOffsets;
 		std::vector<Ptr<Animation>> m_animations;
-		std::vector<AnimationInfo> m_animationInfo;
-		AnimationInfo m_selectedAnimationInfo;
 
 		// Editor-only
 		bool m_isLoaded = false;
