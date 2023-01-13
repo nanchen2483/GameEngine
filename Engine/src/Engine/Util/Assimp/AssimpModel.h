@@ -23,7 +23,7 @@ namespace Engine
 		virtual bool HasAnimations() override { return m_hasAnimations; }
 		virtual std::vector<glm::mat4> GetBoneTransforms() const override;
 		virtual BoundingValue GetBoundingValue() const override;
-		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const override;
+		virtual Ptr<BoundingBox> GetBoundingBox() const override { return m_boundingBox; }
 
 		virtual const std::vector<AnimationInfo> GetAnimationInfo() const override { return m_animationInfo; };
 		virtual const AnimationInfo GetSelectedAnimation() const override { return m_selectedAnimationInfo; }
@@ -46,7 +46,7 @@ namespace Engine
 		std::vector<Ptr<Mesh>> m_meshes;
 
 		// Bounding volume
-		Uniq<BoundingBox> m_boundingBox;
+		Ptr<BoundingBox> m_boundingBox;
 		glm::vec3 m_minAABB = glm::vec3(std::numeric_limits<float>::max());
 		glm::vec3 m_maxAABB = glm::vec3(std::numeric_limits<float>::min());
 

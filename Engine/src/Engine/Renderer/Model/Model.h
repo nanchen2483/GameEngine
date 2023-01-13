@@ -28,7 +28,7 @@ namespace Engine
 		virtual bool HasAnimations() = 0;
 		virtual std::vector<glm::mat4> GetBoneTransforms() const = 0;
 		virtual BoundingValue GetBoundingValue() const = 0;
-		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const = 0;
+		virtual Ptr<BoundingBox> GetBoundingBox() const = 0;
 
 		virtual const std::vector<AnimationInfo> GetAnimationInfo() const = 0;
 		virtual const AnimationInfo GetSelectedAnimation() const = 0;

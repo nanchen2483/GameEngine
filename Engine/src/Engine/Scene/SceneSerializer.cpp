@@ -357,6 +357,7 @@ namespace Engine {
 					deserializedModel.model = ModelLibrary::GetInstance()->Load(path, deserializedEntity);
 					deserializedModel.meshes = deserializedModel.model->GetMeshes();
 					deserializedModel.animations = deserializedModel.model->GetAnimations();
+					deserializedModel.boundingBox = deserializedModel.model->GetBoundingBox();
 				}
 
 				YAML::Node skyboxComponent = entity["SkyboxComponent"];

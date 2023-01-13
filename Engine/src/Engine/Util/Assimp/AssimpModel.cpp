@@ -211,9 +211,4 @@ namespace Engine
 	{
 		return m_boundingBox->GetBoundingValue();
 	}
-
-	bool AssimpModel::IsOnFrustum(const Frustum& frustum, const Transform& transform) const
-	{
-		return m_boundingBox->IsOnFrustum(frustum, transform);
-	}
 }

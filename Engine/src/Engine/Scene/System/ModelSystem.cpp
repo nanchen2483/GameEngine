@@ -13,6 +13,7 @@ namespace Engine
 				modelComponent->model = ModelLibrary::GetInstance()->Load(filepath, entityId);
 				modelComponent->meshes = modelComponent->model->GetMeshes();
 				modelComponent->animations = modelComponent->model->GetAnimations();
+				modelComponent->boundingBox = modelComponent->model->GetBoundingBox();
 				modelComponent->loading = false;
 				*modelComponent->progression = 0.0f;
 			}).detach();
@@ -27,7 +28,7 @@ namespace Engine
 				modelTransform.translation.y = terrain->GetHeight(modelTransform.translation.x, modelTransform.translation.z);
 			}
 
-			modelComponent.isOnViewFrustum = modelComponent.model->IsOnFrustum(frustum, modelTransform);
+			modelComponent.isOnViewFrustum = modelComponent.boundingBox->IsOnFrustum(frustum, modelTransform);
 			if (modelComponent.enableAnimation && !modelComponent.animations.empty())
 			{
 				AnimationSystem::UpdateAnimation(modelComponent.animations[modelComponent.model->GetSelectedAnimation().id]);

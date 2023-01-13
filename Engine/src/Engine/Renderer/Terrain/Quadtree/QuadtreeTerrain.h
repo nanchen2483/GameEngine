@@ -20,6 +20,6 @@ namespace Engine
 	private:
 		Ptr<TerrainBuffer> m_buffer = nullptr;
 		std::vector<TerrainNode> m_children;
-		std::vector<Uniq<BoundingBox>> m_boundingBoxes;
+		std::vector<Ptr<BoundingBox>> m_boundingBoxes;
 	};
 }

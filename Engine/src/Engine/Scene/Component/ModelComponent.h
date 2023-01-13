@@ -18,5 +18,6 @@ namespace Engine
 
 		std::vector<Ptr<Mesh>> meshes;
 		std::vector<Ptr<Animation>> animations;
+		Ptr<BoundingBox> boundingBox;
 	};
 }
