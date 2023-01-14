@@ -44,7 +44,6 @@ namespace Engine
 		glm::vec3 m_maxAABB = glm::vec3(std::numeric_limits<float>::min());
 
 		// Animations
-		bool m_hasAnimations = false;
 		Dictionary<std::string, glm::mat4> m_boneOffsets;
 		std::vector<Ptr<Animation>> m_animations;
 

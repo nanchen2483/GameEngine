@@ -54,8 +54,6 @@ namespace Engine
 
 	void AssimpModel::LoadMeshes(const aiScene* scene)
 	{
-		m_hasAnimations = scene->HasAnimations();
-
 		std::vector<Material> materials;
 		materials.reserve(scene->mNumMaterials);
 		for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; materialIndex++)
@@ -85,8 +83,6 @@ namespace Engine
 				vertex.color = glm::vec4(1.0f);
 				vertex.material = material.GetTextureSlotIndices();
 				vertex.texCoord = mesh->HasTextureCoords(0) ? AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]) : glm::vec2(0.0f);
-				vertex.isWorldPos = false;
-				vertex.hasAnimations = m_hasAnimations;
 				vertex.entityId = m_entityId;
 				vertices.push_back(vertex);
 

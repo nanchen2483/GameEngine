@@ -203,6 +203,7 @@ namespace Engine
 
 		s_data.shader->Bind();
 		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
+		s_data.shader->SetBool("uHasAnimation", false);
 		s_data.cameraUniformBuffer->SetData({ &cameraViewMatrix, &cameraProjection, &cameraPosition });
 		s_data.vertexArray->Bind();
 		ResetRendererData();
@@ -263,7 +264,6 @@ namespace Engine
 			s_data.vertexBufferPtr->texCoord = s_data.textureCoords[i];
 			s_data.vertexBufferPtr->material = glm::vec3(currentTextureIndex, -1, 0);
 			s_data.vertexBufferPtr->isWorldPos = true;
-			s_data.vertexBufferPtr->hasAnimations = false;
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
@@ -282,6 +282,7 @@ namespace Engine
 			}
 
 			shader->SetMat4("uModel", transform);
+			shader->SetBool("uHasAnimation", false);
 			for (uint32_t i = 0; i < meshes.size(); i++)
 			{
 				meshes[i]->GetMaterial()->Bind();
@@ -304,6 +305,7 @@ namespace Engine
 			}
 
 			shader->SetMat4("uModel", transform);
+			shader->SetBool("uHasAnimation", !component.animations.empty());
 			if (!component.animations.empty())
 			{
 				std::vector<glm::mat4> transforms = component.animations[component.selectedAnimationIndex]->GetBoneTransforms();
