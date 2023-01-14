@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "Scene.h"
 
+#include "Component/AnimationComponent.h"
 #include "Component/CameraComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/ModelComponent.h"
@@ -15,6 +16,7 @@
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/Renderer3D.h"
 
+#include "System/AnimationSystem.h"
 #include "System/CameraSystem.h"
 #include "System/CollisionSystem.h"
 #include "System/ModelSystem.h"
@@ -77,6 +79,12 @@ namespace Engine
 				ModelSystem::OnUpdate(thisComponent, thisTransform, frustum, terrain);
 			});
 
+		m_registry.view<AnimationComponent>()
+			.each([](AnimationComponent& component)
+				{
+					AnimationSystem::UpdateAnimation(component);
+				});
+
 		// Draw
 		uint32_t numOfLights = m_registry.view<LightComponent>().size();
 		Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), numOfLights);
@@ -96,9 +104,16 @@ namespace Engine
 		Renderer3D::EndScene();
 
 		m_registry.view<TransformComponent, MeshComponent>()
-			.each([&](TransformComponent& transform, MeshComponent& component)
+			.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 				{
-					Renderer3D::Draw(transform, component.meshes);
+					if (m_registry.all_of<AnimationComponent>(entity))
+					{
+						Renderer3D::Draw(transform, mesh, m_registry.get<AnimationComponent>(entity));
+					}
+					else
+					{
+						Renderer3D::Draw(transform, mesh);
+					}
 				});
 
 		m_registry.view<TransformComponent, ModelComponent>()
@@ -189,6 +204,12 @@ namespace Engine
 					ModelSystem::OnUpdate(thisComponent, thisTransform, frustum, terrain);
 				});
 
+			m_registry.view<AnimationComponent>()
+				.each([](AnimationComponent& component)
+					{
+						AnimationSystem::UpdateAnimation(component);
+					});
+
 			// Draw
 			glm::mat4 viewMatrix = CameraSystem::GetViewMatrix(playerTransform);
 			uint32_t numOflights = m_registry.view<LightComponent>().size();
@@ -209,10 +230,18 @@ namespace Engine
 			Renderer3D::EndScene();
 
 			m_registry.view<TransformComponent, MeshComponent>()
-				.each([&](TransformComponent& transform, MeshComponent& component)
+				.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 					{
-						Renderer3D::Draw(transform, component.meshes);
+						if (m_registry.all_of<AnimationComponent>(entity))
+						{
+							Renderer3D::Draw(transform, mesh, m_registry.get<AnimationComponent>(entity));
+						}
+						else
+						{
+							Renderer3D::Draw(transform, mesh);
+						}
 					});
+
 
 			m_registry.view<TransformComponent, ModelComponent>()
 				.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
@@ -337,6 +366,11 @@ namespace Engine
 
 	template<>
 	void Scene::OnComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<AnimationComponent>(Entity entity, AnimationComponent& component)
 	{
 	}
 

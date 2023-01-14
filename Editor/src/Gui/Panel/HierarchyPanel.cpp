@@ -154,6 +154,15 @@ namespace Engine
 						m_selectionContext.AddComponent<MeshComponent>();
 						ImGui::CloseCurrentPopup();
 					}
+					
+					if (m_selectionContext.HasComponent<MeshComponent>())
+					{
+						if (!m_selectionContext.HasComponent<AnimationComponent>() && ImGui::MenuItem("Animation"))
+						{
+							m_selectionContext.AddComponent<AnimationComponent>();
+							ImGui::CloseCurrentPopup();
+						}
+					}
 
 					if (!m_selectionContext.HasComponent<SkyboxComponent>() && ImGui::MenuItem("Skybox"))
 					{
@@ -332,7 +341,6 @@ namespace Engine
 				[&]()
 				{
 					MeshComponent* component = &entity.GetComponent<MeshComponent>();
-					uint64_t modelId = 0;
 					if (!component->isLoading)
 					{
 						ImGuiExtension::DrawMeshSubSection("Mesh", component->filePath,
@@ -344,7 +352,29 @@ namespace Engine
 				},
 				[&]()
 				{
-					m_selectionContext.RemoveComponent<ModelComponent>();
+					m_selectionContext.RemoveComponent<MeshComponent>();
+				});
+		}
+
+		if (entity.HasComponent<AnimationComponent>())
+		{
+			ImGuiExtension::DrawPropertySection("Animation",
+				[&]()
+				{
+					AnimationComponent* component = &entity.GetComponent<AnimationComponent>();
+					ImGuiExtension::DrawAnimationSubSection(component->animations, component->selectedAnimationIndex, component->isEnabled,
+						[&](uint32_t selectedIndex)
+						{
+							component->selectedAnimationIndex = selectedIndex;
+						});
+					if (component->animations.empty())
+					{
+						component->animations = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GetAnimations();
+					}
+				},
+				[&]()
+				{
+					m_selectionContext.RemoveComponent<AnimationComponent>();
 				});
 		}
 

@@ -271,7 +271,7 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::Draw(const glm::mat4& transform, std::vector<Ptr<Mesh>> meshes, Ptr<Shader> shader)
+	void Renderer3D::Draw(const glm::mat4& transform, std::vector<Ptr<Mesh>> meshes, Ptr<Animation> animation, Ptr<Shader> shader)
 	{
 		if (!meshes.empty())
 		{
@@ -282,7 +282,16 @@ namespace Engine
 			}
 
 			shader->SetMat4("uModel", transform);
-			shader->SetBool("uHasAnimation", false);
+			shader->SetBool("uHasAnimation", animation != nullptr);
+			if (animation != nullptr)
+			{
+				std::vector<glm::mat4> transforms = animation->GetBoneTransforms();
+				for (uint32_t i = 0; i < transforms.size(); i++)
+				{
+					shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
+				}
+			}
+
 			for (uint32_t i = 0; i < meshes.size(); i++)
 			{
 				meshes[i]->GetMaterial()->Bind();

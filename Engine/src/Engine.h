@@ -31,6 +31,7 @@
 #include "Engine/Scene/ScriptableEntity.h"
 
 // Component
+#include "Engine/Scene/Component/AnimationComponent.h"
 #include "Engine/Scene/Component/CameraComponent.h"
 #include "Engine/Scene/Component/LightComponent.h"
 #include "Engine/Scene/Component/NativeScriptComponent.h"
@@ -41,6 +42,10 @@
 #include "Engine/Scene/Component/TagComponent.h"
 #include "Engine/Scene/Component/TerrainComponent.h"
 #include "Engine/Scene/Component/TransformComponent.h"
+
+// Library
+#include "Engine/Renderer/Model/ModelLibrary.h"
+#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 // Math
 #include "Engine/Math/Math.h"

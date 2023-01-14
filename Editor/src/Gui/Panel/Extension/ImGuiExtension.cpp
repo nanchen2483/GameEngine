@@ -324,14 +324,14 @@ namespace Engine
 
 	}
 
-	void ImGuiExtension::DrawAnimationSubSection(std::vector<Ptr<Animation>> animations, uint32_t selectedAnimationIndex, bool& enableAnimation, std::function<void(uint32_t)> OnSelect)
+	void ImGuiExtension::DrawAnimationSubSection(std::vector<Ptr<Animation>> animations, uint32_t selectedAnimationIndex, bool& isEnabled, std::function<void(uint32_t)> OnSelect)
 	{
 		if (!animations.empty())
 		{
 			DrawPropertySubSection("Animation",
 				[&]()
 				{
-					ImGui::Checkbox("##EnableAnimation", &enableAnimation);
+					ImGui::Checkbox("##EnableAnimation", &isEnabled);
 					Ptr<Animation> selectedAnimation = animations[selectedAnimationIndex];
 					if (ImGui::BeginCombo("##BeginCombo", selectedAnimation->GetName().c_str()))
 					{

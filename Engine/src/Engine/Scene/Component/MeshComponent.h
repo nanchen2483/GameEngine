@@ -11,5 +11,7 @@ namespace Engine
 		bool isLoading;
 		std::string filePath;
 		std::vector<Ptr<Mesh>> meshes;
+
+		operator std::vector<Ptr<Mesh>>() { return meshes; }
 	};
 }

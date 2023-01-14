@@ -41,7 +41,7 @@ namespace Engine
 		
 		static void DrawTextureSubSection(const std::string& label, Ptr<Texture2D>& texture, TextureType type = TextureType::Diffuse, std::function<void(void)> OnDrop = nullptr);
 		static void DrawMeshSubSection(const std::string& label, const std::string& filePath, std::function<void(const std::string&)> OnDrop);
-		static void DrawAnimationSubSection(std::vector<Ptr<Animation>> animations, uint32_t selectedAnimationIndex, bool& enableAnimation, std::function<void(uint32_t)> OnSelect);
+		static void DrawAnimationSubSection(std::vector<Ptr<Animation>> animations, uint32_t selectedAnimationIndex, bool& isEnabled, std::function<void(uint32_t)> OnSelect);
 
 		static bool DrawFloatControl(const std::string& label, float& value, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f, ImGuiColor buttonColor = ImGuiColor::Blue);
 		static void ButtonColor(ImGuiColor buttonColor, std::function<void(void)> InlineCode);
