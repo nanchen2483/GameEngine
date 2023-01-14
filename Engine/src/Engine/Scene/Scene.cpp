@@ -95,6 +95,12 @@ namespace Engine
 
 		Renderer3D::EndScene();
 
+		m_registry.view<TransformComponent, MeshComponent>()
+			.each([&](TransformComponent& transform, MeshComponent& component)
+				{
+					Renderer3D::Draw(transform, component.meshes);
+				});
+
 		m_registry.view<TransformComponent, ModelComponent>()
 			.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
 				{
@@ -201,6 +207,12 @@ namespace Engine
 					});
 
 			Renderer3D::EndScene();
+
+			m_registry.view<TransformComponent, MeshComponent>()
+				.each([&](TransformComponent& transform, MeshComponent& component)
+					{
+						Renderer3D::Draw(transform, component.meshes);
+					});
 
 			m_registry.view<TransformComponent, ModelComponent>()
 				.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
@@ -320,6 +332,11 @@ namespace Engine
 
 	template<>
 	void Scene::OnComponentAdded<LightComponent>(Entity entity, LightComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
 	{
 	}
 

@@ -20,6 +20,18 @@ namespace Engine
 			}).detach();
 	}
 
+	void ModelSystem::Load(MeshComponent* meshComponent, const std::string& filepath, uint32_t entityId)
+	{
+		std::thread([=]()
+			{
+				meshComponent->isLoading = true;
+				meshComponent->filePath = filepath;
+				Ptr<Model> model = ModelLibrary::GetInstance()->Load(filepath, entityId);
+				meshComponent->meshes = model->GetMeshes();
+				meshComponent->isLoading = false;
+			}).detach();
+	}
+
 	void ModelSystem::OnUpdate(ModelComponent& modelComponent, Transform& modelTransform, const Frustum& frustum, const Ptr<Terrain>& terrain)
 	{
 		if (!modelComponent.meshes.empty())

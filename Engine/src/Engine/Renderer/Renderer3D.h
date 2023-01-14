@@ -22,6 +22,7 @@ namespace Engine
 		static void Draw(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId = -1);
 		static void Draw(const TransformComponent& transform, LightComponent& light, int entityId = -1);
 		static void Draw(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), int entityId = -1);
+		static void Draw(const glm::mat4& transform, std::vector<Ptr<Mesh>> meshes, Ptr<Shader> shader = nullptr);
 		static void Draw(const glm::mat4& transform, ModelComponent& component, Ptr<Shader> shader = nullptr);
 		static void Draw(const glm::mat4& transform, TerrainComponent& component, const Frustum& frustum);
 		static void Draw(SkyboxComponent& component);

@@ -271,6 +271,28 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
+	void Renderer3D::Draw(const glm::mat4& transform, std::vector<Ptr<Mesh>> meshes, Ptr<Shader> shader)
+	{
+		if (!meshes.empty())
+		{
+			if (shader == nullptr)
+			{
+				shader = s_data.shader;
+				shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
+			}
+
+			shader->SetMat4("uModel", transform);
+			for (uint32_t i = 0; i < meshes.size(); i++)
+			{
+				meshes[i]->GetMaterial()->Bind();
+				meshes[i]->GetVertexArray()->Bind();
+				RendererCommand::DrawUint32Indexed(meshes[i]->GetVertexArray()->GetNumOfIndices());
+			}
+
+			s_data.states.drawModels++;
+		}
+	}
+
 	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component, Ptr<Shader> shader)
 	{
 		if (component.isOnViewFrustum)

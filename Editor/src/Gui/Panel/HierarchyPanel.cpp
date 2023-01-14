@@ -149,6 +149,12 @@ namespace Engine
 						ImGui::CloseCurrentPopup();
 					}
 
+					if (!m_selectionContext.HasComponent<MeshComponent>() && ImGui::MenuItem("Mesh"))
+					{
+						m_selectionContext.AddComponent<MeshComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+
 					if (!m_selectionContext.HasComponent<SkyboxComponent>() && ImGui::MenuItem("Skybox"))
 					{
 						m_selectionContext.AddComponent<SkyboxComponent>();
@@ -311,6 +317,28 @@ namespace Engine
 							[&](uint32_t selectedIndex)
 							{
 								component->selectedAnimationIndex = selectedIndex;
+							});
+					}
+				},
+				[&]()
+				{
+					m_selectionContext.RemoveComponent<ModelComponent>();
+				});
+		}
+
+		if (entity.HasComponent<MeshComponent>())
+		{
+			ImGuiExtension::DrawPropertySection("Mesh",
+				[&]()
+				{
+					MeshComponent* component = &entity.GetComponent<MeshComponent>();
+					uint64_t modelId = 0;
+					if (!component->isLoading)
+					{
+						ImGuiExtension::DrawMeshSubSection("Mesh", component->filePath,
+							[&](const std::string& filePath)
+							{
+								ModelSystem::Load(component, filePath, entity);
 							});
 					}
 				},

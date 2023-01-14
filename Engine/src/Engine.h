@@ -34,6 +34,7 @@
 #include "Engine/Scene/Component/CameraComponent.h"
 #include "Engine/Scene/Component/LightComponent.h"
 #include "Engine/Scene/Component/NativeScriptComponent.h"
+#include "Engine/Scene/Component/MeshComponent.h"
 #include "Engine/Scene/Component/ModelComponent.h"
 #include "Engine/Scene/Component/SkyboxComponent.h"
 #include "Engine/Scene/Component/SpriteRendererComponent.h"
