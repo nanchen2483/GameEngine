@@ -4,46 +4,62 @@ Entities:
     TagComponent:
       Tag: Cube D
     TransformComponent:
-      Translation: [-5.63945468e-06, 3.20000005, 8.75022852e-06]
+      Translation: [-5.66616654e-06, 3.20000005, 8.72835517e-06]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
-    ModelComponent:
+    MeshComponent:
       Path: assets\models\cube\cube.dae
-      EnableAnimation: false
       IsPlayer: false
+    AnimationComponent:
+      IsEnabled: false
+      SelectedAnimationIndex: 0
+    CollisionComponent:
+      {}
   - Entity: 123
     TagComponent:
       Tag: Cube C
     TransformComponent:
-      Translation: [3.80329329e-05, 2.20000005, -2.65747385e-05]
+      Translation: [3.80687416e-05, 2.20000005, -2.65575945e-05]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
-    ModelComponent:
+    MeshComponent:
       Path: assets\models\cube\cube.dae
-      EnableAnimation: false
       IsPlayer: false
+    AnimationComponent:
+      IsEnabled: false
+      SelectedAnimationIndex: 0
+    CollisionComponent:
+      {}
   - Entity: 123
     TagComponent:
       Tag: Cube B
     TransformComponent:
-      Translation: [1.5, 1.20000005, 1.31017757e-07]
+      Translation: [1.5, 1.20000005, 1.3038516e-07]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
-    ModelComponent:
+    MeshComponent:
       Path: assets\models\cube\cube.dae
-      EnableAnimation: false
       IsPlayer: false
+    AnimationComponent:
+      IsEnabled: false
+      SelectedAnimationIndex: 0
+    CollisionComponent:
+      {}
   - Entity: 123
     TagComponent:
       Tag: Cube A
     TransformComponent:
-      Translation: [-2.98023224e-08, 1.20000005, 0]
+      Translation: [-3.7252903e-08, 1.20000005, 7.4505806e-09]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
-    ModelComponent:
+    MeshComponent:
       Path: assets\models\cube\cube.dae
-      EnableAnimation: false
       IsPlayer: false
+    AnimationComponent:
+      IsEnabled: false
+      SelectedAnimationIndex: 0
+    CollisionComponent:
+      {}
   - Entity: 123
     TagComponent:
       Tag: Plane
@@ -51,7 +67,11 @@ Entities:
       Translation: [0.899999976, -0.100000001, 0]
       Rotation: [0, 0, 0]
       Scale: [9.60000038, 1.60000002, 6.19999981]
-    ModelComponent:
+    MeshComponent:
       Path: assets\models\cube\cube.dae
-      EnableAnimation: false
       IsPlayer: false
+    AnimationComponent:
+      IsEnabled: false
+      SelectedAnimationIndex: 0
+    CollisionComponent:
+      {}
