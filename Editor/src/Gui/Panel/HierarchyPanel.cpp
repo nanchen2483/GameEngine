@@ -1,6 +1,5 @@
 #include "HierarchyPanel.h"
 #include "Extension/ImGuiExtension.h"
-#include "Engine/Scene/System/ModelSystem.h"
 
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>

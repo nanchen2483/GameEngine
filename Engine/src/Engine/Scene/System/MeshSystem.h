@@ -6,9 +6,9 @@
 
 namespace Engine
 {
-	class ModelSystem : public ISystem
+	class MeshSystem : public ISystem
 	{
 	public:
-		static void OnUpdate(MeshComponent& meshComponent, Ptr<BoundingBox> boundingBox, Transform& modelTransform, const Frustum& frustum, const Ptr<Terrain>& terrain);
+		static void OnUpdate(MeshComponent& meshComponent, Ptr<BoundingBox> boundingBox, Transform& meshTransform, const Frustum& frustum, const Ptr<Terrain>& terrain);
 	};
 }

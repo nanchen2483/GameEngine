@@ -19,7 +19,7 @@
 #include "System/AnimationSystem.h"
 #include "System/CameraSystem.h"
 #include "System/CollisionSystem.h"
-#include "System/ModelSystem.h"
+#include "System/MeshSystem.h"
 #include "System/ShadowSystem.h"
 
 namespace Engine
@@ -68,15 +68,15 @@ namespace Engine
 			}
 		}
 
-		auto collisionView = m_registry.view<TransformComponent, MeshComponent, CollisionComponent>();
-		collisionView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, CollisionComponent& thisComponent)
+		auto meshView = m_registry.view<TransformComponent, MeshComponent, CollisionComponent>();
+		meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, CollisionComponent& thisComponent)
 			{
-				collisionView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, CollisionComponent& thatComponent)
+				meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, CollisionComponent& thatComponent)
 					{
 						CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
 					});
 					
-				ModelSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);
+				MeshSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);
 			});
 
 		m_registry.view<AnimationComponent>()
@@ -196,15 +196,15 @@ namespace Engine
 				}
 			}
 
-			auto modelView = m_registry.view<TransformComponent, MeshComponent, CollisionComponent>();
-			modelView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, CollisionComponent& thisComponent)
+			auto meshView = m_registry.view<TransformComponent, MeshComponent, CollisionComponent>();
+			meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, CollisionComponent& thisComponent)
 				{
-					modelView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, CollisionComponent& thatComponent)
+					meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, CollisionComponent& thatComponent)
 						{
 							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
 						});
 					
-					ModelSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);
+					MeshSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);
 				});
 
 			m_registry.view<AnimationComponent>()
