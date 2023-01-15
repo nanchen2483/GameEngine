@@ -1,8 +1,8 @@
 #include "enginepch.h"
 #include "TessellationTerrain.h"
-#include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Library/TextureLibrary.h"
 #include "Engine/Renderer/RendererCommand.h"
-#include "Engine/Renderer/Shader/ShaderLibrary.h"
 
 namespace Engine
 {

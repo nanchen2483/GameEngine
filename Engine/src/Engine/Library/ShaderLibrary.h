@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Library/ILibrary.h"
-#include "Shader.h"
+#include "ILibrary.h"
+#include "Engine/Renderer/Shader/Shader.h"
 
 #include <filesystem>
 
@@ -10,6 +10,7 @@ namespace Engine
 	{
 	public:
 		virtual Ptr<Shader> Load(const std::filesystem::path& filePath) override;
+
 		static ShaderLibrary* GetInstance();
 	private:
 		ShaderLibrary() = default;

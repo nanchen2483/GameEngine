@@ -1,9 +1,9 @@
 #include "enginepch.h"
 #include "TerrainBuffer.h"
 
+#include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Library/TextureLibrary.h"
 #include "Engine/Renderer/RendererCommand.h"
-#include "Engine/Renderer/Shader/ShaderLibrary.h"
-#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 namespace Engine
 {

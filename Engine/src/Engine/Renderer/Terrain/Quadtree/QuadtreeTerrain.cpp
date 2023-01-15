@@ -1,6 +1,6 @@
 #include "enginepch.h"
 #include "QuadtreeTerrain.h"
-#include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Engine/Library/TextureLibrary.h"
 
 namespace Engine
 {

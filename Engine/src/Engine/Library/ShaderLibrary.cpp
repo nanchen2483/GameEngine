@@ -7,7 +7,7 @@ namespace Engine
 
 	Ptr<Shader> ShaderLibrary::Load(const std::filesystem::path& filePath)
 	{
-		Uid uid = Uid::NewUid(filePath.stem().string());
+		Uid uid = Uid::NewUid(filePath.string());
 		if (Exists(uid))
 		{
 			return Get(uid);

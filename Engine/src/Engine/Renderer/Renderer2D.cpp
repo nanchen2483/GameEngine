@@ -2,8 +2,8 @@
 #include "Renderer2D.h"
 #include "RendererCommand.h"
 #include "Model/Vertex.h"
-#include "Shader/ShaderLibrary.h"
-#include "Texture/TextureLibrary.h"
+#include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Library/TextureLibrary.h"
 
 #include <array>
 #include <glm/gtc/matrix_transform.hpp>

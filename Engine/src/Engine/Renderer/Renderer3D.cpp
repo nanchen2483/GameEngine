@@ -2,9 +2,9 @@
 #include "Renderer3D.h"
 #include "RendererCommand.h"
 #include "Model/Vertex.h"
-#include "Shader/ShaderLibrary.h"
 #include "Shadow/ShadowBox.h"
-#include "Texture/TextureLibrary.h"
+#include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Library/TextureLibrary.h"
 
 #include <array>
 #include <glm/gtc/type_ptr.hpp>
