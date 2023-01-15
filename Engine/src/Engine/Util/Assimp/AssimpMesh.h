@@ -1,20 +1,19 @@
 #pragma once
-#include "Engine/Renderer/Buffer/VertexArray.h"
-#include "Engine/Renderer/Model/Vertex.h"
-#include "Material.h"
+#include "Engine/Renderer/Model/Mesh.h"
 
 namespace Engine
 {
-	class AssimpMesh
+	class AssimpMesh : public Mesh
 	{
 	public:
 		AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, const Material& material);
 
-		void Draw();
+		virtual Ptr<VertexArray> GetVertexArray() override;
+		virtual Ptr<Material> GetMaterial() override { return m_material; }
 	private:
-		Uniq<VertexArray> m_vertexArray;
+		Ptr<VertexArray> m_vertexArray;
 		std::vector<Vertex> m_vertices;
 		std::vector<uint32_t> m_indices;
-		Uniq<Material> m_material;
+		Ptr<Material> m_material;
 	};
 }

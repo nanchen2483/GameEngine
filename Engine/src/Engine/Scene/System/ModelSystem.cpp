@@ -1,22 +1,32 @@
 #include "enginepch.h"
 #include "ModelSystem.h"
+#include "Engine/Renderer/Model/ModelLibrary.h"
+#include "Engine/Scene/System/AnimationSystem.h"
 
 namespace Engine
 {
-	void ModelSystem::OnUpdate(ModelComponent& modelComponent, Transform& modelTransform, const Frustum& frustum, const Ptr<Terrain>& terrain)
+	void ModelSystem::Load(MeshComponent* meshComponent, const std::string& filepath)
 	{
-		if (modelComponent.model != nullptr)
+		std::thread([=]()
+			{
+				meshComponent->isLoading = true;
+				meshComponent->filePath = filepath;
+				Ptr<Model> model = ModelLibrary::GetInstance()->Load(filepath);
+				meshComponent->meshes = model->GetMeshes();
+				meshComponent->isLoading = false;
+			}).detach();
+	}
+
+	void ModelSystem::OnUpdate(MeshComponent& meshComponent, Ptr<BoundingBox> boundingBox, Transform& modelTransform, const Frustum& frustum, const Ptr<Terrain>& terrain)
+	{
+		if (!meshComponent.meshes.empty())
 		{
 			if (terrain != nullptr)
 			{
 				modelTransform.translation.y = terrain->GetHeight(modelTransform.translation.x, modelTransform.translation.z);
 			}
 
-			modelComponent.isOnViewFrustum = modelComponent.model->IsOnFrustum(frustum, modelTransform);
-			if (modelComponent.enableAnimation)
-			{
-				modelComponent.model->OnUpdate();
-			}
+			meshComponent.isOnViewFrustum = boundingBox->IsOnFrustum(frustum, modelTransform);
 		}
 	}
 }

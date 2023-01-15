@@ -1,24 +1,28 @@
 #include "enginepch.h"
 #include "AssimpModel.h"
+#include "AssimpMesh.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Engine/Scene/System/AnimationSystem.h"
 
 #include <stb_image.h>
 
 namespace Engine
 {
+	AssimpModel::AssimpModel(std::string const& path)
+		: AssimpModel(path, false)
+	{
+	}
+
 	AssimpModel::AssimpModel(std::string const& path, bool gamma)
-		: AssimpModel(path, gamma, -1)
+		: AssimpModel(path, gamma, nullptr)
 	{
 	}
 
-	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId)
-		: AssimpModel(path, gamma, entityId, nullptr)
+	AssimpModel::AssimpModel(std::string const& path, bool gamma, Ptr<float> progression)
+		: m_filePath(path), m_gammaCorrection(gamma), m_progression(progression)
 	{
-	}
+		m_uid = Uid::NewUid(path);
 
-	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<float> progression)
-		: m_filePath(path), m_gammaCorrection(gamma), m_entityId(entityId), m_progression(progression)
-	{
 		Load(path);
 	}
 
@@ -50,8 +54,6 @@ namespace Engine
 
 	void AssimpModel::LoadMeshes(const aiScene* scene)
 	{
-		m_hasAnimations = scene->HasAnimations();
-
 		std::vector<Material> materials;
 		materials.reserve(scene->mNumMaterials);
 		for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; materialIndex++)
@@ -81,9 +83,6 @@ namespace Engine
 				vertex.color = glm::vec4(1.0f);
 				vertex.material = material.GetTextureSlotIndices();
 				vertex.texCoord = mesh->HasTextureCoords(0) ? AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]) : glm::vec2(0.0f);
-				vertex.isWorldPos = false;
-				vertex.hasAnimations = m_hasAnimations;
-				vertex.entityId = m_entityId;
 				vertices.push_back(vertex);
 
 				UpdateBoundingValues(vertex.position);
@@ -104,7 +103,7 @@ namespace Engine
 
 			LoadBones(vertices, mesh);
 
-			m_meshes.push_back(AssimpMesh(vertices, indices, material));
+			m_meshes.push_back(CreatePtr<AssimpMesh>(vertices, indices, material));
 			IncreaseProgression();
 		}
 	}
@@ -116,26 +115,15 @@ namespace Engine
 			ENGINE_CORE_ASSERT(m_boneOffsets.Size() > 0, "BoneOffsets is empty");
 			for (uint32_t i = 0; i < scene->mNumAnimations; i++)
 			{
-				AssimpNode rootNode = AssimpHelper::ConvertToAssimpNode(scene->mAnimations[i], scene->mRootNode, m_boneOffsets);
-				AssimpAnimation animation = AssimpAnimation(scene->mAnimations[i], rootNode);
+				Ptr<Node> rootNode = AssimpHelper::ConvertToAssimpNode(scene->mAnimations[i], scene->mRootNode, m_boneOffsets);
+				Ptr<Animation> animation = CreatePtr<AssimpAnimation>(scene->mAnimations[i], rootNode);
 				m_animations.push_back(animation);
-				
-				AnimationInfo info;
-				{
-					info.id = i;
-					info.displayName = animation.GetName().length() > 0 ? animation.GetName() : "Unknown (" + std::to_string(i) + ")";
-					info.animationTime = animation.GetTime();
-					info.duration = animation.GetDuration();
-					info.ticksPerSecond = animation.GetTicketPerSecond();
-				}
-				m_animationInfo.push_back(info);
+
 				IncreaseProgression();
 			}
 
-			m_selectedAnimationInfo = m_animationInfo.front();
-				
 			// Initial bone transform-matrix
-			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms();
+			AnimationSystem::UpdateAnimation(m_animations.front());
 		}
 	}
 
@@ -190,42 +178,6 @@ namespace Engine
 		{
 			m_currentProgression++;
 			(*m_progression) = (m_currentProgression / m_totalProgression);
-		}
-	}
-
-	std::vector<glm::mat4> AssimpModel::GetBoneTransforms() const
-	{
-		if (m_hasAnimations)
-		{
-			return m_animations[m_selectedAnimationInfo.id].GetBoneTransforms();
-		}
-
-		return std::vector<glm::mat4>();
-	}
-
-	BoundingValue AssimpModel::GetBoundingValue() const
-	{
-		return m_boundingBox->GetBoundingValue();
-	}
-
-	bool AssimpModel::IsOnFrustum(const Frustum& frustum, const Transform& transform) const
-	{
-		return m_boundingBox->IsOnFrustum(frustum, transform);
-	}
-
-	void AssimpModel::OnUpdate()
-	{
-		if (m_hasAnimations)
-		{
-			m_animations[m_selectedAnimationInfo.id].UpdateBoneTransforms();
-		}
-	}
-
-	void AssimpModel::Draw()
-	{
-		for (uint32_t i = 0; i < m_meshes.size(); i++)
-		{
-			m_meshes[i].Draw();
 		}
 	}
 }

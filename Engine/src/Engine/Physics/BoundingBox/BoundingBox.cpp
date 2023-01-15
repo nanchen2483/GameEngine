@@ -5,12 +5,12 @@
 
 namespace Engine
 {
-	Uniq<BoundingBox> BoundingBox::Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max)
+	Ptr<BoundingBox> BoundingBox::Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max)
 	{
 		switch (type)
 		{
 		case Engine::BoundingBoxType::AABB:
-			return CreateUniq<AABB>(min, max);
+			return CreatePtr<AABB>(min, max);
 		default:
 			ENGINE_CORE_ASSERT(false, "Unknow Bouding Box type");
 			return nullptr;

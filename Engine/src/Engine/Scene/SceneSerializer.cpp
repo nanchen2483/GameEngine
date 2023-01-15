@@ -1,13 +1,16 @@
 #include "enginepch.h"
 #include "SceneSerializer.h"
+#include "Component/AnimationComponent.h"
 #include "Component/CameraComponent.h"
+#include "Component/CollisionComponent.h"
 #include "Component/LightComponent.h"
-#include "Component/ModelComponent.h"
+#include "Component/MeshComponent.h"
 #include "Component/SkyboxComponent.h"
 #include "Component/SpriteRendererComponent.h"
 #include "Component/TagComponent.h"
 #include "Component/TerrainComponent.h"
 #include "Component/TransformComponent.h"
+#include "Engine/Renderer/Model/ModelLibrary.h"
 #include "Engine/Renderer/Texture/TextureLibrary.h"
 #include "Entity.h"
 
@@ -180,16 +183,34 @@ namespace Engine {
 			out << YAML::EndMap;
 		}
 
-		if (entity.HasComponent<ModelComponent>())
+		if (entity.HasComponent<MeshComponent>())
 		{
-			out << YAML::Key << "ModelComponent";
+			out << YAML::Key << "MeshComponent";
 			out << YAML::BeginMap;
 
-			ModelComponent& modelComponent = entity.GetComponent<ModelComponent>();
+			MeshComponent& meshComponent = entity.GetComponent<MeshComponent>();
 
-			out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetFilePath().string();
-			out << YAML::Key << "EnableAnimation" << YAML::Value << modelComponent.enableAnimation;
-			out << YAML::Key << "IsPlayer" << YAML::Value << modelComponent.isPlayer;
+			out << YAML::Key << "Path" << YAML::Value << meshComponent.filePath;
+			out << YAML::Key << "IsPlayer" << YAML::Value << meshComponent.isPlayer;
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<AnimationComponent>())
+		{
+			out << YAML::Key << "AnimationComponent";
+			out << YAML::BeginMap;
+
+			AnimationComponent& animationComponent = entity.GetComponent<AnimationComponent>();
+
+			out << YAML::Key << "IsEnabled" << YAML::Value << animationComponent.isEnabled;
+			out << YAML::Key << "SelectedAnimationIndex" << YAML::Value << animationComponent.selectedAnimationIndex;
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<CollisionComponent>())
+		{
+			out << YAML::Key << "CollisionComponent";
+			out << YAML::BeginMap;
 			out << YAML::EndMap;
 		}
 
@@ -345,15 +366,33 @@ namespace Engine {
 					}
 				}
 
-				YAML::Node modelComponent = entity["ModelComponent"];
-				if (modelComponent)
+				YAML::Node meshComponent = entity["MeshComponent"];
+				if (meshComponent)
 				{
-					ModelComponent& deserializedModel = deserializedEntity.AddComponent<ModelComponent>();
+					MeshComponent& deserializedMesh = deserializedEntity.AddComponent<MeshComponent>();
 
-					std::string path = modelComponent["Path"].as<std::string>();
-					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
-					deserializedModel.isPlayer = modelComponent["IsPlayer"].as<bool>();
-					deserializedModel.model = Model::Create(path, false, deserializedEntity);
+					deserializedMesh.filePath = meshComponent["Path"].as<std::string>();
+					deserializedMesh.isPlayer = meshComponent["IsPlayer"].as<bool>();
+					Ptr<Model> model = ModelLibrary::GetInstance()->Load(deserializedMesh.filePath);
+					deserializedMesh.meshes = model->GetMeshes();
+
+					YAML::Node animationComponent = entity["AnimationComponent"];
+					if (animationComponent)
+					{
+						AnimationComponent& deserializeAnimation = deserializedEntity.AddComponent<AnimationComponent>();
+
+						deserializeAnimation.isEnabled = animationComponent["IsEnabled"].as<bool>();
+						deserializeAnimation.selectedAnimationIndex = animationComponent["SelectedAnimationIndex"].as<uint32_t>();
+						deserializeAnimation.animations = model->GetAnimations();
+					}
+
+					YAML::Node collisionComponent = entity["CollisionComponent"];
+					if (collisionComponent)
+					{
+						CollisionComponent& deserializedCollision = deserializedEntity.AddComponent<CollisionComponent>();
+
+						deserializedCollision.boundingBox = model->GetBoundingBox();
+					}
 				}
 
 				YAML::Node skyboxComponent = entity["SkyboxComponent"];

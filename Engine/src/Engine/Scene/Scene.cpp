@@ -1,9 +1,10 @@
 #include "enginepch.h"
 #include "Scene.h"
 
+#include "Component/AnimationComponent.h"
 #include "Component/CameraComponent.h"
+#include "Component/CollisionComponent.h"
 #include "Component/LightComponent.h"
-#include "Component/ModelComponent.h"
 #include "Component/NativeScriptComponent.h"
 #include "Component/SkyboxComponent.h"
 #include "Component/SpriteRendererComponent.h"
@@ -15,6 +16,7 @@
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/Renderer3D.h"
 
+#include "System/AnimationSystem.h"
 #include "System/CameraSystem.h"
 #include "System/CollisionSystem.h"
 #include "System/ModelSystem.h"
@@ -66,16 +68,25 @@ namespace Engine
 			}
 		}
 
-		auto modelView = m_registry.view<TransformComponent, ModelComponent>();
-		modelView.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
+		auto collisionView = m_registry.view<TransformComponent, MeshComponent, CollisionComponent>();
+		collisionView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, CollisionComponent& thisComponent)
 			{
-				modelView.each([&](TransformComponent& thatTransform, ModelComponent& thatComponent)
+				collisionView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, CollisionComponent& thatComponent)
 					{
 						CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
 					});
 					
-				ModelSystem::OnUpdate(thisComponent, thisTransform, frustum, terrain);
+				ModelSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);
 			});
+
+		m_registry.view<AnimationComponent>()
+			.each([=](AnimationComponent& component)
+				{
+					if (component.isEnabled)
+					{
+						AnimationSystem::UpdateAnimation(component);
+					}
+				});
 
 		// Draw
 		uint32_t numOfLights = m_registry.view<LightComponent>().size();
@@ -95,10 +106,16 @@ namespace Engine
 
 		Renderer3D::EndScene();
 
-		m_registry.view<TransformComponent, ModelComponent>()
-			.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
+		m_registry.view<TransformComponent, MeshComponent>()
+			.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 				{
-					Renderer3D::Draw(thisTransform, thisComponent);
+					Ptr<Animation> animation = nullptr;
+					if (m_registry.all_of<AnimationComponent>(entity))
+					{
+						animation = m_registry.get<AnimationComponent>(entity);
+					}
+
+					Renderer3D::Draw(transform, mesh, animation, nullptr, (int)entity);
 				});
 
 		m_registry.view<TransformComponent, TerrainComponent>()
@@ -116,10 +133,17 @@ namespace Engine
 		ShadowSystem::OnUpdate(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio(),
 			[=]()
 			{
-				m_registry.view<TransformComponent, ModelComponent>()
-					.each([=](TransformComponent& transformComponent, ModelComponent& modelComponent)
+				m_registry.view<TransformComponent, MeshComponent>()
+					.each([=](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 						{
-							Renderer3D::Draw(transformComponent, modelComponent, ShadowSystem::GetShader());
+							if (m_registry.all_of<AnimationComponent>(entity))
+							{
+								Renderer3D::Draw(transform, mesh, m_registry.get<AnimationComponent>(entity), ShadowSystem::GetShader());
+							}
+							else
+							{
+								Renderer3D::Draw(transform, mesh, nullptr, ShadowSystem::GetShader());
+							}
 						});
 			});
 	}
@@ -172,16 +196,22 @@ namespace Engine
 				}
 			}
 
-			auto modelView = m_registry.view<TransformComponent, ModelComponent>();
-			modelView.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
+			auto modelView = m_registry.view<TransformComponent, MeshComponent, CollisionComponent>();
+			modelView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, CollisionComponent& thisComponent)
 				{
-					modelView.each([&](TransformComponent& thatTransform, ModelComponent& thatComponent)
+					modelView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, CollisionComponent& thatComponent)
 						{
 							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
 						});
 					
-					ModelSystem::OnUpdate(thisComponent, thisTransform, frustum, terrain);
+					ModelSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);
 				});
+
+			m_registry.view<AnimationComponent>()
+				.each([](AnimationComponent& component)
+					{
+						AnimationSystem::UpdateAnimation(component);
+					});
 
 			// Draw
 			glm::mat4 viewMatrix = CameraSystem::GetViewMatrix(playerTransform);
@@ -202,10 +232,17 @@ namespace Engine
 
 			Renderer3D::EndScene();
 
-			m_registry.view<TransformComponent, ModelComponent>()
-				.each([&](TransformComponent& thisTransform, ModelComponent& thisComponent)
+			m_registry.view<TransformComponent, MeshComponent>()
+				.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 					{
-						Renderer3D::Draw(thisTransform, thisComponent);
+						if (m_registry.all_of<AnimationComponent>(entity))
+						{
+							Renderer3D::Draw(transform, mesh, m_registry.get<AnimationComponent>(entity));
+						}
+						else
+						{
+							Renderer3D::Draw(transform, mesh);
+						}
 					});
 
 			m_registry.view<TransformComponent, TerrainComponent>()
@@ -223,10 +260,17 @@ namespace Engine
 			ShadowSystem::OnUpdate(viewMatrix, primaryCamera.camera.GetFOV(), primaryCamera.camera.GetAspectRatio(),
 				[=]()
 				{
-					m_registry.view<TransformComponent, ModelComponent>()
-						.each([=](TransformComponent& transformComponent, ModelComponent& modelComponent)
+					m_registry.view<TransformComponent, MeshComponent>()
+						.each([=](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 							{
-								Renderer3D::Draw(transformComponent, modelComponent, ShadowSystem::GetShader());
+								if (m_registry.all_of<AnimationComponent>(entity))
+								{
+									Renderer3D::Draw(transform, mesh, m_registry.get<AnimationComponent>(entity), ShadowSystem::GetShader());
+								}
+								else
+								{
+									Renderer3D::Draw(transform, mesh, nullptr, ShadowSystem::GetShader());
+								}
 							});
 				});
 		}
@@ -269,11 +313,11 @@ namespace Engine
 
 	Entity Scene::GetPlayerEntity()
 	{
-		auto view = m_registry.view<ModelComponent>();
+		auto view = m_registry.view<MeshComponent>();
 		for (entt::entity entity : view)
 		{
-			const ModelComponent& camera = view.get<ModelComponent>(entity);
-			if (camera.isPlayer)
+			const MeshComponent& mesh = view.get<MeshComponent>(entity);
+			if (mesh.isPlayer)
 			{
 				return Entity(entity, this);
 			}
@@ -324,7 +368,17 @@ namespace Engine
 	}
 
 	template<>
-	void Scene::OnComponentAdded<ModelComponent>(Entity entity, ModelComponent& component)
+	void Scene::OnComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<AnimationComponent>(Entity entity, AnimationComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<CollisionComponent>(Entity entity, CollisionComponent& component)
 	{
 	}
 

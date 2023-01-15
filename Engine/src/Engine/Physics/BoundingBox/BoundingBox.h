@@ -31,6 +31,6 @@ namespace Engine
 		virtual bool IsOnForwardPlan(const Plan& plan) const = 0;
 		virtual glm::vec3 GetSupportPoint(glm::vec3 direction) const = 0;
 
-		static Uniq<BoundingBox> Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max);
+		static Ptr<BoundingBox> Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max);
 	};
 }

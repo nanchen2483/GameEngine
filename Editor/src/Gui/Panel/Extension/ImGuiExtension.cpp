@@ -302,15 +302,9 @@ namespace Engine
 			});
 	}
 	
-	void ImGuiExtension::DrawMeshSubSection(const std::string& label, Ptr<Model>& model, std::function<void(const std::string&)> OnDrop)
+	void ImGuiExtension::DrawMeshSubSection(const std::string& label, const std::string& filePath, std::function<void(const std::string&)> OnDrop)
 	{
 		uint64_t textureId = 0;
-		std::string filePath = "none";
-		if (model != nullptr)
-		{
-			filePath = model->GetFilePath().string();
-		}
-
 		DrawPropertySubSection(label,
 			[&]()
 			{
@@ -325,29 +319,38 @@ namespace Engine
 					}
 					ImGui::EndDragDropTarget();
 				}
-				ImGui::Text(filePath.c_str());
+
+				if (filePath.empty())
+				{
+					ImGui::Text("none");
+				}
+				else
+				{
+					ImGui::Text(filePath.c_str());
+				}
 			});
 
 	}
 
-	void ImGuiExtension::DrawAnimationSubSection(Ptr<Model>& model, bool& enableAnimation)
+	void ImGuiExtension::DrawAnimationSubSection(std::vector<Ptr<Animation>> animations, uint32_t selectedAnimationIndex, bool& isEnabled, std::function<void(uint32_t)> OnSelect)
 	{
-		if (model != nullptr && model->HasAnimations())
+		if (!animations.empty())
 		{
 			DrawPropertySubSection("Animation",
 				[&]()
 				{
-					ImGui::Checkbox("##EnableAnimation", &enableAnimation);
-					AnimationInfo selectedAnimation = model->GetSelectedAnimation();
-					if (ImGui::BeginCombo("##BeginCombo", selectedAnimation.displayName.c_str()))
+					ImGui::Checkbox("##EnableAnimation", &isEnabled);
+					Ptr<Animation> selectedAnimation = animations[selectedAnimationIndex];
+					if (ImGui::BeginCombo("##BeginCombo", selectedAnimation->GetName().c_str()))
 					{
-						for (AnimationInfo animation : model->GetAnimations())
+						for (uint32_t index = 0; index < animations.size(); index++)
 						{
-							bool isSelected = selectedAnimation.id == animation.id;
-							if (ImGui::Selectable(animation.displayName.c_str(), isSelected))
+							Ptr<Animation> currentAnimation = animations[index];
+							bool isSelected = selectedAnimationIndex == index;
+							if (ImGui::Selectable(currentAnimation->GetName().c_str(), isSelected))
 							{
-								selectedAnimation = animation;
-								model->SetSelectedAnimation(animation);
+								selectedAnimationIndex = index;
+								OnSelect(index);
 							}
 
 							if (isSelected)
@@ -357,7 +360,7 @@ namespace Engine
 						}
 						ImGui::EndCombo();
 					}
-					ImGui::SliderFloat("##SliderFloat", selectedAnimation.animationTime.get(), 0.0f, selectedAnimation.duration);
+					ImGui::SliderFloat("##SliderFloat", selectedAnimation->GetTime().get(), 0.0f, selectedAnimation->GetDuration());
 				});
 		}
 	}

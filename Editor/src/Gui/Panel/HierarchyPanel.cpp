@@ -1,5 +1,6 @@
 #include "HierarchyPanel.h"
 #include "Extension/ImGuiExtension.h"
+#include "Engine/Scene/System/ModelSystem.h"
 
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>
@@ -142,10 +143,25 @@ namespace Engine
 						ImGui::CloseCurrentPopup();
 					}
 
-					if (!m_selectionContext.HasComponent<ModelComponent>() && ImGui::MenuItem("Model"))
+					if (!m_selectionContext.HasComponent<MeshComponent>() && ImGui::MenuItem("Mesh"))
 					{
-						m_selectionContext.AddComponent<ModelComponent>();
+						m_selectionContext.AddComponent<MeshComponent>();
 						ImGui::CloseCurrentPopup();
+					}
+					
+					if (m_selectionContext.HasComponent<MeshComponent>())
+					{
+						if (!m_selectionContext.HasComponent<AnimationComponent>() && ImGui::MenuItem("Animation"))
+						{
+							m_selectionContext.AddComponent<AnimationComponent>();
+							ImGui::CloseCurrentPopup();
+						}
+
+						if (!m_selectionContext.HasComponent<CollisionComponent>() && ImGui::MenuItem("Collision"))
+						{
+							m_selectionContext.AddComponent<CollisionComponent>();
+							ImGui::CloseCurrentPopup();
+						}
 					}
 
 					if (!m_selectionContext.HasComponent<SkyboxComponent>() && ImGui::MenuItem("Skybox"))
@@ -287,37 +303,64 @@ namespace Engine
 				});
 		}
 
-		if (entity.HasComponent<ModelComponent>())
+		if (entity.HasComponent<MeshComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Model",
+			ImGuiExtension::DrawPropertySection("Mesh",
 				[&]()
 				{
-					ModelComponent* component = &entity.GetComponent<ModelComponent>();
-					uint64_t modelId = 0;
-					if (component->loading)
+					MeshComponent* component = &entity.GetComponent<MeshComponent>();
+					if (!component->isLoading)
 					{
-						ImGuiExtension::ProgressBar(*component->progression);
-					}
-					else
-					{
-						ImGuiExtension::DrawCheckboxSubSection("IsPlayer", &component->isPlayer);
-						ImGuiExtension::DrawMeshSubSection("Mesh", component->model,
+						ImGuiExtension::DrawMeshSubSection("Mesh", component->filePath,
 							[&](const std::string& filePath)
 							{
-								std::thread([=]()
-									{
-										component->loading = true;
-										component->model = Model::Create(filePath, false, entity, component->progression);
-										component->loading = false;
-										*component->progression = 0.0f;
-									}).detach();
+								ModelSystem::Load(component, filePath);
 							});
-						ImGuiExtension::DrawAnimationSubSection(component->model, component->enableAnimation);
 					}
 				},
 				[&]()
 				{
-					m_selectionContext.RemoveComponent<ModelComponent>();
+					m_selectionContext.RemoveComponent<MeshComponent>();
+				});
+		}
+
+		if (entity.HasComponent<AnimationComponent>())
+		{
+			ImGuiExtension::DrawPropertySection("Animation",
+				[&]()
+				{
+					AnimationComponent* component = &entity.GetComponent<AnimationComponent>();
+					if (component->animations.empty())
+					{
+						component->animations = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GetAnimations();
+					}
+
+					ImGuiExtension::DrawAnimationSubSection(component->animations, component->selectedAnimationIndex, component->isEnabled,
+						[&](uint32_t selectedIndex)
+						{
+							component->selectedAnimationIndex = selectedIndex;
+						});
+				},
+				[&]()
+				{
+					m_selectionContext.RemoveComponent<AnimationComponent>();
+				});
+		}
+
+		if (entity.HasComponent<CollisionComponent>())
+		{
+			ImGuiExtension::DrawPropertySection("Collision",
+				[&]()
+				{
+					CollisionComponent* component = &entity.GetComponent<CollisionComponent>();
+					if (component->boundingBox == nullptr)
+					{
+						component->boundingBox = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GetBoundingBox();
+					}
+				},
+				[&]()
+				{
+					m_selectionContext.RemoveComponent<CollisionComponent>();
 				});
 		}
 

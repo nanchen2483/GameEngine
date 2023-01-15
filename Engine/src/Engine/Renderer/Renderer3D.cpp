@@ -203,6 +203,8 @@ namespace Engine
 
 		s_data.shader->Bind();
 		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
+		s_data.shader->SetBool("uHasAnimation", false);
+		s_data.shader->SetInt("uEntityId", -1);
 		s_data.cameraUniformBuffer->SetData({ &cameraViewMatrix, &cameraProjection, &cameraPosition });
 		s_data.vertexArray->Bind();
 		ResetRendererData();
@@ -237,9 +239,9 @@ namespace Engine
 		Draw(transform, sprite.texture, sprite.color, entityId);
 	}
 
-	void Renderer3D::Draw(const TransformComponent& transform, LightComponent& light, int entityId)
+	void Renderer3D::Draw(const Transform& transform, LightComponent& light, int entityId)
 	{
-		light.position = transform.GetTranslation();
+		light.position = transform.translation;
 		s_data.pointLightUniformBuffer->SetData(light.GetData());
 		Draw(transform, nullptr, glm::vec4(1.0f), entityId);
 	}
@@ -263,7 +265,6 @@ namespace Engine
 			s_data.vertexBufferPtr->texCoord = s_data.textureCoords[i];
 			s_data.vertexBufferPtr->material = glm::vec3(currentTextureIndex, -1, 0);
 			s_data.vertexBufferPtr->isWorldPos = true;
-			s_data.vertexBufferPtr->hasAnimations = false;
 			s_data.vertexBufferPtr->entityId = entityId;
 			s_data.vertexBufferPtr++;
 		}
@@ -271,27 +272,35 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component, Ptr<Shader> shader)
+	void Renderer3D::Draw(const glm::mat4& transform, std::vector<Ptr<Mesh>> meshes, Ptr<Animation> animation, Ptr<Shader> shader, int entityId)
 	{
-		if (component.isOnViewFrustum)
+		if (!meshes.empty())
 		{
 			if (shader == nullptr)
 			{
+				// Use default shader
 				shader = s_data.shader;
 				shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
+				shader->SetInt("uEntityId", entityId);
 			}
 
 			shader->SetMat4("uModel", transform);
-			if (component.model->HasAnimations())
+			shader->SetBool("uHasAnimation", animation != nullptr);
+			if (animation != nullptr)
 			{
-				std::vector<glm::mat4> transforms = component.model->GetBoneTransforms();
+				std::vector<glm::mat4> transforms = animation->GetBoneTransforms();
 				for (uint32_t i = 0; i < transforms.size(); i++)
 				{
 					shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
 				}
 			}
 
-			component.model->Draw();
+			for (uint32_t i = 0; i < meshes.size(); i++)
+			{
+				meshes[i]->GetMaterial()->Bind();
+				meshes[i]->GetVertexArray()->Bind();
+				RendererCommand::DrawUint32Indexed(meshes[i]->GetVertexArray()->GetNumOfIndices());
+			}
 
 			s_data.states.drawModels++;
 		}

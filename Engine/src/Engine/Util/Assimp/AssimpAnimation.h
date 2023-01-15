@@ -1,31 +1,28 @@
 #pragma once
 #include "AssimpNode.h"
-
-#include <vector>
+#include "Engine/Renderer/Model/Animation.h"
 
 namespace Engine
 {
-	class AssimpAnimation
+	class AssimpAnimation : public Animation
 	{
 	public:
-		AssimpAnimation(const aiAnimation* animation, const AssimpNode rootNode);
+		AssimpAnimation(const aiAnimation* animation, const Ptr<Node> rootNode);
 		
-		void UpdateBoneTransforms();
-		std::vector<glm::mat4> GetBoneTransforms() const { return m_boneTransforms; };
-		const std::string GetName() const { return m_name; }
-		const Ptr<float> GetTime() const { return m_animationTime; }
-		const float GetDuration() const { return m_duration; }
-		const float GetTicketPerSecond() const { return m_ticksPerSecond; }
+		virtual const std::string GetName() const override { return m_name; }
+		virtual const Ptr<float> GetTime() const override { return m_animationTime; }
+		virtual const float GetDuration() const override { return m_duration; }
+		virtual const float GetTicketPerSecond() const override { return m_ticksPerSecond; }
+		virtual const Ptr<Node> GetRootNode() const { return m_rootNode; }
+		virtual std::vector<glm::mat4> GetBoneTransforms() const override { return m_boneTransforms; };
+		virtual void UpdateBoneTransforms(uint32_t boneId, glm::mat4 updatedTransform) override { m_boneTransforms[boneId] = updatedTransform; };
 	private:
-		void CalculateAnimationTime();
-		void CalculateBoneTransform(const AssimpNode& node, glm::mat4 globalTransformation);
-		
 		const std::string m_name;
 		Ptr<float> m_animationTime;
 		const float m_duration;
 		const float m_ticksPerSecond;
 
-		const AssimpNode m_rootNode;
+		const Ptr<Node> m_rootNode;
 		std::vector<glm::mat4> m_boneTransforms;
 	};
 }

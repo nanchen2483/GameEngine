@@ -5,12 +5,12 @@ layout (location = 0) in vec3 aPosition;
 layout (location = 7) in ivec4 aBoneIds;
 layout (location = 8) in vec4 aWeights;
 layout (location = 9) in int aIsWorldPos;
-layout (location = 10) in int aHasAnimations;
 
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
 
 uniform mat4 uModel;
+uniform bool uHasAnimation;
 uniform mat4 uBoneTransforms[MAX_BONES];
 
 vec4 CalcWorldPosition();
@@ -24,7 +24,7 @@ void main()
 vec4 CalcWorldPosition()
 {
 	vec4 position = vec4(0.0f);
-	if (aHasAnimations == 1)
+	if (uHasAnimation == true)
 	{
 		position = CalcBonePosition();
 	}

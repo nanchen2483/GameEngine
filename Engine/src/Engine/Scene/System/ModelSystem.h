@@ -1,13 +1,15 @@
 #pragma once
 #include "ISystem.h"
+#include "Engine/Physics/BoundingBox/BoundingBox.h"
 #include "Engine/Renderer/Terrain/Terrain.h"
-#include "Engine/Scene/Component/ModelComponent.h"
+#include "Engine/Scene/Component/MeshComponent.h"
 
 namespace Engine
 {
 	class ModelSystem : public ISystem
 	{
 	public:
-		static void OnUpdate(ModelComponent& modelComponent, Transform& modelTransform, const Frustum& frustum, const Ptr<Terrain>& terrain);
+		static void Load(MeshComponent* meshComponent, const std::string& filepath);
+		static void OnUpdate(MeshComponent& meshComponent, Ptr<BoundingBox> boundingBox, Transform& modelTransform, const Frustum& frustum, const Ptr<Terrain>& terrain);
 	};
 }

@@ -11,8 +11,7 @@ layout (location = 6) in vec3 aBitangent;
 layout (location = 7) in ivec4 aBoneIds;
 layout (location = 8) in vec4 aWeights;
 layout (location = 9) in int aIsWorldPos;
-layout (location = 10) in int aHasAnimations;
-layout (location = 11) in int aEntityId;
+layout (location = 10) in int aEntityId;
 
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
@@ -26,7 +25,9 @@ layout (std140, binding = 0) uniform CameraBlock
 
 uniform mat4 uModel;
 uniform mat3 uInverseModel;
+uniform bool uHasAnimation;
 uniform mat4 uBoneTransforms[MAX_BONES];
+uniform int uEntityId;
 
 out Vertex
 {
@@ -52,7 +53,7 @@ void main()
 	vertex.color = aColor;
 	vertex.texCoord = aTexCoord;
 	vertex.material = aMaterial;
-	vertex.entityId = aEntityId;
+	vertex.entityId = aEntityId != -1 ? aEntityId : uEntityId;
 	
 	gl_Position = uCamera.projection * uCamera.view * worldPosition;
 }
@@ -60,7 +61,7 @@ void main()
 vec4 CalcWorldPosition()
 {
 	vec4 position = vec4(0.0f);
-	if (aHasAnimations == 1)
+	if (uHasAnimation == true)
 	{
 		position = CalcBonePosition();
 	}

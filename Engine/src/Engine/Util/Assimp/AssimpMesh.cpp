@@ -6,11 +6,11 @@
 namespace Engine
 {
 	AssimpMesh::AssimpMesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, const Material& material)
-		: m_vertices(vertices), m_indices(indices), m_material(CreateUniq<Material>(material))
+		: m_vertices(vertices), m_indices(indices), m_material(CreatePtr<Material>(material))
 	{
 	}
 
-	void AssimpMesh::Draw()
+	Ptr<VertexArray> AssimpMesh::GetVertexArray()
 	{
 		if (m_vertexArray == nullptr)
 		{
@@ -21,9 +21,6 @@ namespace Engine
 			m_indices = {};
 		}
 
-		m_material->Bind();
-		m_vertexArray->Bind();
-		RendererCommand::DrawUint32Indexed(m_vertexArray->GetNumOfIndices());
+		return m_vertexArray;
 	}
 }
-

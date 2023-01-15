@@ -20,7 +20,6 @@ namespace Engine
 		int boneIds[MAX_BONE_WEIGHTS] = {};
 		float weights[MAX_BONE_WEIGHTS] = {};
 		uint32_t isWorldPos = false;
-		uint32_t hasAnimations = false;
 
 		// Editor-only
 		int entityId = -1;
@@ -63,7 +62,6 @@ namespace Engine
 					{ ShaderDataType::Float3 },
 					{ ShaderDataType::Int4 },
 					{ ShaderDataType::Float4 },
-					{ ShaderDataType::Int },
 					{ ShaderDataType::Int },
 					{ ShaderDataType::Int }
 				}
