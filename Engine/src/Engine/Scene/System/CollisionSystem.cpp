@@ -4,23 +4,23 @@
 namespace Engine
 {
 	Uniq<Collision> CollisionSystem::s_collision = Collision::Create(CollisionType::GJK_EPA_3D);
-	void CollisionSystem::OnUpdate(TransformComponent& transformComA, TransformComponent& transformComB, ModelComponent& modelComA, ModelComponent& modelComB)
+	void CollisionSystem::OnUpdate(Transform& transformA, Transform& transformB, Ptr<BoundingBox> boundingBoxA, Ptr<BoundingBox> boundingBoxB)
 	{
-		if (modelComA.boundingBox == nullptr || modelComB.boundingBox == nullptr)
+		if (boundingBoxA == nullptr || boundingBoxB == nullptr)
 		{
 			return;
 		}
 
 		s_collision->Detect(
-			transformComA.transform,
-			transformComB.transform,
-			modelComA.boundingBox->GetBoundingValue(),
-			modelComB.boundingBox->GetBoundingValue());
+			transformA,
+			transformB,
+			boundingBoxA->GetBoundingValue(),
+			boundingBoxB->GetBoundingValue());
 		if (s_collision->IsCollided())
 		{
 			glm::vec3 halfDistance = s_collision->GetDirectionFromAToB() / 2.0f;
-			transformComA.transform.translation += halfDistance;
-			transformComB.transform.translation -= halfDistance;
+			transformA.translation += halfDistance;
+			transformB.translation -= halfDistance;
 		}
 	}
 }

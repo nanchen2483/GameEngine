@@ -1,7 +1,10 @@
 #include "enginepch.h"
 #include "SceneSerializer.h"
+#include "Component/AnimationComponent.h"
 #include "Component/CameraComponent.h"
+#include "Component/CollisionComponent.h"
 #include "Component/LightComponent.h"
+#include "Component/MeshComponent.h"
 #include "Component/ModelComponent.h"
 #include "Component/SkyboxComponent.h"
 #include "Component/SpriteRendererComponent.h"
@@ -194,6 +197,37 @@ namespace Engine {
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<MeshComponent>())
+		{
+			out << YAML::Key << "MeshComponent";
+			out << YAML::BeginMap;
+
+			MeshComponent& meshComponent = entity.GetComponent<MeshComponent>();
+
+			out << YAML::Key << "Path" << YAML::Value << meshComponent.filePath;
+			out << YAML::Key << "IsPlayer" << YAML::Value << meshComponent.isPlayer;
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<AnimationComponent>())
+		{
+			out << YAML::Key << "AnimationComponent";
+			out << YAML::BeginMap;
+
+			AnimationComponent& animationComponent = entity.GetComponent<AnimationComponent>();
+
+			out << YAML::Key << "IsEnabled" << YAML::Value << animationComponent.isEnabled;
+			out << YAML::Key << "SelectedAnimationIndex" << YAML::Value << animationComponent.selectedAnimationIndex;
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<CollisionComponent>())
+		{
+			out << YAML::Key << "CollisionComponent";
+			out << YAML::BeginMap;
+			out << YAML::EndMap;
+		}
+
 		if (entity.HasComponent<SkyboxComponent>())
 		{
 			out << YAML::Key << "SkyboxComponent";
@@ -349,16 +383,49 @@ namespace Engine {
 				YAML::Node modelComponent = entity["ModelComponent"];
 				if (modelComponent)
 				{
-					ModelComponent& deserializedModel = deserializedEntity.AddComponent<ModelComponent>();
+					MeshComponent& deserializedMesh = deserializedEntity.AddComponent<MeshComponent>();
 
 					std::string path = modelComponent["Path"].as<std::string>();
-					deserializedModel.enableAnimation = modelComponent["EnableAnimation"].as<bool>();
-					deserializedModel.isPlayer = modelComponent["IsPlayer"].as<bool>();
 					Ptr<Model> model = ModelLibrary::GetInstance()->Load(path, deserializedEntity);
-					deserializedModel.filePath = path;
-					deserializedModel.meshes = model->GetMeshes();
-					deserializedModel.animations = model->GetAnimations();
-					deserializedModel.boundingBox = model->GetBoundingBox();
+					deserializedMesh.isPlayer = modelComponent["IsPlayer"].as<bool>();
+					deserializedMesh.filePath = path;
+					deserializedMesh.meshes = model->GetMeshes();
+
+					AnimationComponent& deserializeAnimation = deserializedEntity.AddComponent<AnimationComponent>();
+					deserializeAnimation.isEnabled = modelComponent["EnableAnimation"].as<bool>();
+					deserializeAnimation.animations = model->GetAnimations();
+
+					CollisionComponent& deserializedCollision = deserializedEntity.AddComponent<CollisionComponent>();
+					deserializedCollision.boundingBox = model->GetBoundingBox();
+				}
+
+				YAML::Node meshComponent = entity["MeshComponent"];
+				if (meshComponent)
+				{
+					MeshComponent& deserializedMesh = deserializedEntity.AddComponent<MeshComponent>();
+
+					deserializedMesh.filePath = meshComponent["Path"].as<std::string>();
+					deserializedMesh.isPlayer = meshComponent["IsPlayer"].as<bool>();
+					Ptr<Model> model = ModelLibrary::GetInstance()->Load(deserializedMesh.filePath, deserializedEntity);
+					deserializedMesh.meshes = model->GetMeshes();
+
+					YAML::Node animationComponent = entity["AnimationComponent"];
+					if (animationComponent)
+					{
+						AnimationComponent& deserializeAnimation = deserializedEntity.AddComponent<AnimationComponent>();
+
+						deserializeAnimation.isEnabled = animationComponent["IsEnabled"].as<bool>();
+						deserializeAnimation.selectedAnimationIndex = animationComponent["SelectedAnimationIndex"].as<uint32_t>();
+						deserializeAnimation.animations = model->GetAnimations();
+					}
+
+					YAML::Node collisionComponent = entity["CollisionComponent"];
+					if (collisionComponent)
+					{
+						CollisionComponent& deserializedCollision = deserializedEntity.AddComponent<CollisionComponent>();
+
+						deserializedCollision.boundingBox = model->GetBoundingBox();
+					}
 				}
 
 				YAML::Node skyboxComponent = entity["SkyboxComponent"];

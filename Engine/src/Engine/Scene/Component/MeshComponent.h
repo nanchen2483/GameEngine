@@ -6,9 +6,10 @@
 
 namespace Engine
 {
-	struct MeshComponent : IComponent
+	struct MeshComponent : public IComponent
 	{
-		bool isLoading;
+		bool isLoading = false;
+		bool isPlayer = false;
 		std::string filePath;
 		std::vector<Ptr<Mesh>> meshes;
 

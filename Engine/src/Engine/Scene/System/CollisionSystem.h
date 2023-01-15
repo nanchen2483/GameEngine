@@ -10,7 +10,7 @@ namespace Engine
 	class CollisionSystem : public ISystem
 	{
 	public:
-		static void OnUpdate(TransformComponent& transformComA, TransformComponent& transformComB, ModelComponent& modelComA, ModelComponent& modelComB);
+		static void OnUpdate(Transform& transformA, Transform& transformB, Ptr<BoundingBox> boundingBoxA, Ptr<BoundingBox> boundingBoxB);
 	private:
 		static Uniq<Collision> s_collision;
 	};

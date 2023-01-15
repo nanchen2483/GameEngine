@@ -345,7 +345,7 @@ namespace Engine
 	
 	void EditorLayer::OpenScene()
 	{
-		const std::string& filepath = FileDialogs::OpenFile("Game scene (*.xengine)\0*.xengine\0");
+		const std::string& filepath = FileDialogs::OpenFile("Game scene (*.xengine)\0*.engine\0");
 
 		if (!filepath.empty())
 		{
@@ -365,14 +365,14 @@ namespace Engine
 	
 	void EditorLayer::SaveSceneAs()
 	{
-		std::string filepath = FileDialogs::SaveFile("Game scene (*.xengine)\0*.xengine\0");
+		std::string filepath = FileDialogs::SaveFile("Game scene (*.engine)\0*.engine\0");
 
 		if (!filepath.empty())
 		{
 			std::filesystem::path extension = std::filesystem::path(filepath).extension();
-			if (extension != ".xengine")
+			if (extension != ".engine")
 			{
-				filepath += ".xengine";
+				filepath += ".engine";
 			}
 
 			SceneSerializer serializer(m_activeScene);

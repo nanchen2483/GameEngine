@@ -162,6 +162,12 @@ namespace Engine
 							m_selectionContext.AddComponent<AnimationComponent>();
 							ImGui::CloseCurrentPopup();
 						}
+
+						if (!m_selectionContext.HasComponent<CollisionComponent>() && ImGui::MenuItem("Collision"))
+						{
+							m_selectionContext.AddComponent<CollisionComponent>();
+							ImGui::CloseCurrentPopup();
+						}
 					}
 
 					if (!m_selectionContext.HasComponent<SkyboxComponent>() && ImGui::MenuItem("Skybox"))
@@ -362,19 +368,37 @@ namespace Engine
 				[&]()
 				{
 					AnimationComponent* component = &entity.GetComponent<AnimationComponent>();
+					if (component->animations.empty())
+					{
+						component->animations = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GetAnimations();
+					}
+
 					ImGuiExtension::DrawAnimationSubSection(component->animations, component->selectedAnimationIndex, component->isEnabled,
 						[&](uint32_t selectedIndex)
 						{
 							component->selectedAnimationIndex = selectedIndex;
 						});
-					if (component->animations.empty())
-					{
-						component->animations = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GetAnimations();
-					}
 				},
 				[&]()
 				{
 					m_selectionContext.RemoveComponent<AnimationComponent>();
+				});
+		}
+
+		if (entity.HasComponent<CollisionComponent>())
+		{
+			ImGuiExtension::DrawPropertySection("Collision",
+				[&]()
+				{
+					CollisionComponent* component = &entity.GetComponent<CollisionComponent>();
+					if (component->boundingBox == nullptr)
+					{
+						component->boundingBox = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GetBoundingBox();
+					}
+				},
+				[&]()
+				{
+					m_selectionContext.RemoveComponent<CollisionComponent>();
 				});
 		}
 

@@ -33,6 +33,7 @@
 // Component
 #include "Engine/Scene/Component/AnimationComponent.h"
 #include "Engine/Scene/Component/CameraComponent.h"
+#include "Engine/Scene/Component/CollisionComponent.h"
 #include "Engine/Scene/Component/LightComponent.h"
 #include "Engine/Scene/Component/NativeScriptComponent.h"
 #include "Engine/Scene/Component/MeshComponent.h"
