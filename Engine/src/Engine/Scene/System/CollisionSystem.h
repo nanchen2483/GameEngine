@@ -3,7 +3,6 @@
 #include "Engine/Core/Base.h"
 #include "Engine/Physics/Collision/Collision.h"
 #include "Engine/Scene/Component/TransformComponent.h"
-#include "Engine/Scene/Component/ModelComponent.h"
 
 namespace Engine
 {

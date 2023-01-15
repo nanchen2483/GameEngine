@@ -5,7 +5,6 @@
 #include "Component/CollisionComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/MeshComponent.h"
-#include "Component/ModelComponent.h"
 #include "Component/SkyboxComponent.h"
 #include "Component/SpriteRendererComponent.h"
 #include "Component/TagComponent.h"
@@ -181,19 +180,6 @@ namespace Engine {
 				out << YAML::Key << "TextureFilePath" << YAML::Value << spriteRendererComponent.texture->GetFilePath();
 			}
 
-			out << YAML::EndMap;
-		}
-
-		if (entity.HasComponent<ModelComponent>())
-		{
-			out << YAML::Key << "ModelComponent";
-			out << YAML::BeginMap;
-
-			ModelComponent& modelComponent = entity.GetComponent<ModelComponent>();
-
-			out << YAML::Key << "Path" << YAML::Value << modelComponent.filePath;
-			out << YAML::Key << "EnableAnimation" << YAML::Value << modelComponent.enableAnimation;
-			out << YAML::Key << "IsPlayer" << YAML::Value << modelComponent.isPlayer;
 			out << YAML::EndMap;
 		}
 
@@ -378,25 +364,6 @@ namespace Engine {
 					{
 						deserializedSRC.texture = TextureLibrary::GetInstance()->Load(filePathNode.as<std::string>());
 					}
-				}
-
-				YAML::Node modelComponent = entity["ModelComponent"];
-				if (modelComponent)
-				{
-					MeshComponent& deserializedMesh = deserializedEntity.AddComponent<MeshComponent>();
-
-					std::string path = modelComponent["Path"].as<std::string>();
-					Ptr<Model> model = ModelLibrary::GetInstance()->Load(path, deserializedEntity);
-					deserializedMesh.isPlayer = modelComponent["IsPlayer"].as<bool>();
-					deserializedMesh.filePath = path;
-					deserializedMesh.meshes = model->GetMeshes();
-
-					AnimationComponent& deserializeAnimation = deserializedEntity.AddComponent<AnimationComponent>();
-					deserializeAnimation.isEnabled = modelComponent["EnableAnimation"].as<bool>();
-					deserializeAnimation.animations = model->GetAnimations();
-
-					CollisionComponent& deserializedCollision = deserializedEntity.AddComponent<CollisionComponent>();
-					deserializedCollision.boundingBox = model->GetBoundingBox();
 				}
 
 				YAML::Node meshComponent = entity["MeshComponent"];

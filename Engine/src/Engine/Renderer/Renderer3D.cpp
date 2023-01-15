@@ -303,38 +303,6 @@ namespace Engine
 		}
 	}
 
-	void Renderer3D::Draw(const glm::mat4& transform, ModelComponent& component, Ptr<Shader> shader)
-	{
-		if (component.isOnViewFrustum)
-		{
-			if (shader == nullptr)
-			{
-				shader = s_data.shader;
-				shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
-			}
-
-			shader->SetMat4("uModel", transform);
-			shader->SetBool("uHasAnimation", !component.animations.empty());
-			if (!component.animations.empty())
-			{
-				std::vector<glm::mat4> transforms = component.animations[component.selectedAnimationIndex]->GetBoneTransforms();
-				for (uint32_t i = 0; i < transforms.size(); i++)
-				{
-					shader->SetMat4("uBoneTransforms[" + std::to_string(i) + "]", transforms[i]);
-				}
-			}
-
-			for (uint32_t i = 0; i < component.meshes.size(); i++)
-			{
-				component.meshes[i]->GetMaterial()->Bind();
-				component.meshes[i]->GetVertexArray()->Bind();
-				RendererCommand::DrawUint32Indexed(component.meshes[i]->GetVertexArray()->GetNumOfIndices());
-			}
-
-			s_data.states.drawModels++;
-		}
-	}
-
 	void Renderer3D::Draw(const glm::mat4& transform, TerrainComponent& component, const Frustum& frustum)
 	{
 		if (component.terrain != nullptr)

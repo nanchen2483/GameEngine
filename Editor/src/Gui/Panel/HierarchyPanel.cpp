@@ -143,12 +143,6 @@ namespace Engine
 						ImGui::CloseCurrentPopup();
 					}
 
-					if (!m_selectionContext.HasComponent<ModelComponent>() && ImGui::MenuItem("Model"))
-					{
-						m_selectionContext.AddComponent<ModelComponent>();
-						ImGui::CloseCurrentPopup();
-					}
-
 					if (!m_selectionContext.HasComponent<MeshComponent>() && ImGui::MenuItem("Mesh"))
 					{
 						m_selectionContext.AddComponent<MeshComponent>();
@@ -306,38 +300,6 @@ namespace Engine
 				[&]()
 				{
 					m_selectionContext.RemoveComponent<SpriteRendererComponent>();
-				});
-		}
-
-		if (entity.HasComponent<ModelComponent>())
-		{
-			ImGuiExtension::DrawPropertySection("Model",
-				[&]()
-				{
-					ModelComponent* component = &entity.GetComponent<ModelComponent>();
-					uint64_t modelId = 0;
-					if (component->loading)
-					{
-						ImGuiExtension::ProgressBar(*component->progression);
-					}
-					else
-					{
-						ImGuiExtension::DrawCheckboxSubSection("IsPlayer", &component->isPlayer);
-						ImGuiExtension::DrawMeshSubSection("Mesh", component->filePath,
-							[&](const std::string& filePath)
-							{
-								ModelSystem::Load(component, filePath, entity);
-							});
-						ImGuiExtension::DrawAnimationSubSection(component->animations, component->selectedAnimationIndex, component->enableAnimation,
-							[&](uint32_t selectedIndex)
-							{
-								component->selectedAnimationIndex = selectedIndex;
-							});
-					}
-				},
-				[&]()
-				{
-					m_selectionContext.RemoveComponent<ModelComponent>();
 				});
 		}
 
