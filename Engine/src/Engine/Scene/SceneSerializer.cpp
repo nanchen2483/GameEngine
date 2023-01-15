@@ -10,8 +10,8 @@
 #include "Component/TagComponent.h"
 #include "Component/TerrainComponent.h"
 #include "Component/TransformComponent.h"
-#include "Engine/Renderer/Model/ModelLibrary.h"
-#include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Engine/Library/ModelLibrary.h"
+#include "Engine/Library/TextureLibrary.h"
 #include "Entity.h"
 
 #include <yaml-cpp/yaml.h>

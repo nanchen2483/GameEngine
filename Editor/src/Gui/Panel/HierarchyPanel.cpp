@@ -1,6 +1,5 @@
 #include "HierarchyPanel.h"
 #include "Extension/ImGuiExtension.h"
-#include "Engine/Scene/System/ModelSystem.h"
 
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>
@@ -309,12 +308,23 @@ namespace Engine
 				[&]()
 				{
 					MeshComponent* component = &entity.GetComponent<MeshComponent>();
-					if (!component->isLoading)
+					if (component->isLoading)
+					{
+						ImGui::Text("Loading %c", "|/-\\"[(int)(ImGui::GetTime() / 0.05f) & 3]);
+					}
+					else
 					{
 						ImGuiExtension::DrawMeshSubSection("Mesh", component->filePath,
 							[&](const std::string& filePath)
 							{
-								ModelSystem::Load(component, filePath);
+								std::thread([=]()
+									{
+										component->isLoading = true;
+										component->filePath = filePath;
+										Ptr<Model> model = ModelLibrary::GetInstance()->Load(filePath);
+										component->meshes = model->GetMeshes();
+										component->isLoading = false;
+									}).detach();
 							});
 					}
 				},

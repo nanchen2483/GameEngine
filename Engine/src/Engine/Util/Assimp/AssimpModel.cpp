@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "AssimpModel.h"
 #include "AssimpMesh.h"
-#include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Engine/Library/TextureLibrary.h"
 #include "Engine/Scene/System/AnimationSystem.h"
 
 #include <stb_image.h>

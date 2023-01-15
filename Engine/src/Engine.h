@@ -22,7 +22,6 @@
 #include "Engine/Renderer/Camera/OrthographicCamera.h"
 #include "Engine/Renderer/Camera/OrthographicCameraController.h"
 #include "Engine/Renderer/RendererCommand.h"
-#include "Engine/Renderer/Texture/TextureLibrary.h"
 
 // Scene
 #include "Engine/Scene/Entity.h"
@@ -44,8 +43,9 @@
 #include "Engine/Scene/Component/TransformComponent.h"
 
 // Library
-#include "Engine/Renderer/Model/ModelLibrary.h"
-#include "Engine/Renderer/Texture/TextureLibrary.h"
+#include "Engine/Library/ModelLibrary.h"
+#include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Library/TextureLibrary.h"
 
 // Math
 #include "Engine/Math/Math.h"

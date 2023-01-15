@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Library/ILibrary.h"
-#include "Model.h"
+#include "ILibrary.h"
+#include "Engine/Renderer/Model/Model.h"
 
 namespace Engine
 {

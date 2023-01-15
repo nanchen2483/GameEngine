@@ -2,8 +2,8 @@
 #include "ShadowDebug.h"
 #include "ShadowDebugData.h"
 
+#include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Renderer/RendererCommand.h"
-#include "Engine/Renderer/Shader/ShaderLibrary.h"
 
 namespace Engine
 {
