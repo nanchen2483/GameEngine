@@ -13,9 +13,9 @@ namespace Engine
 	class AssimpModel: public Model
 	{
 	public:
-		AssimpModel(std::string const& path, bool gamma = false);
-		AssimpModel(std::string const& path, bool gamma, int entityId);
-		AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<float> progression);
+		AssimpModel(std::string const& path);
+		AssimpModel(std::string const& path, bool gamma);
+		AssimpModel(std::string const& path, bool gamma, Ptr<float> progression);
 		
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
 		virtual std::vector<Ptr<Mesh>> GetMeshes() const override { return m_meshes; }
@@ -49,7 +49,6 @@ namespace Engine
 
 		// Editor-only
 		bool m_isLoaded = false;
-		const int m_entityId;
 		Ptr<float> m_progression = nullptr;
 		float m_currentProgression = 0.0f;
 		float m_totalProgression;

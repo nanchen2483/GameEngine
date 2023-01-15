@@ -9,7 +9,7 @@ namespace Engine
 	class ModelSystem : public ISystem
 	{
 	public:
-		static void Load(MeshComponent* meshComponent, const std::string& filepath, uint32_t entityId);
+		static void Load(MeshComponent* meshComponent, const std::string& filepath);
 		static void OnUpdate(MeshComponent& meshComponent, Ptr<BoundingBox> boundingBox, Transform& modelTransform, const Frustum& frustum, const Ptr<Terrain>& terrain);
 	};
 }

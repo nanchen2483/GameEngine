@@ -8,7 +8,6 @@ namespace Engine
 	{
 	public:
 		virtual Ptr<Model> Load(const std::filesystem::path& filePath) override;
-		Ptr<Model> Load(const std::filesystem::path& filePath, uint32_t entityId);
 
 		static ModelLibrary* GetInstance();
 	private:

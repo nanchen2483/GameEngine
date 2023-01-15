@@ -314,7 +314,7 @@ namespace Engine
 						ImGuiExtension::DrawMeshSubSection("Mesh", component->filePath,
 							[&](const std::string& filePath)
 							{
-								ModelSystem::Load(component, filePath, entity);
+								ModelSystem::Load(component, filePath);
 							});
 					}
 				},

@@ -18,9 +18,9 @@ namespace Engine
 		virtual std::vector<Ptr<Animation>> GetAnimations() const = 0;
 		virtual Ptr<BoundingBox> GetBoundingBox() const = 0;
 	private:
-		static Ptr<Model> Create(std::string path, bool gamma = false);
-		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId);
-		static Ptr<Model> Create(std::string path, bool gamma, uint32_t entityId, Ptr<float> progression);
+		static Ptr<Model> Create(std::string path);
+		static Ptr<Model> Create(std::string path, bool gamma);
+		static Ptr<Model> Create(std::string path, bool gamma, Ptr<float> progression);
 
 		friend class ModelLibrary;
 	};

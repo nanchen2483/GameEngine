@@ -319,7 +319,15 @@ namespace Engine
 					}
 					ImGui::EndDragDropTarget();
 				}
-				ImGui::Text(filePath.c_str());
+
+				if (filePath.empty())
+				{
+					ImGui::Text("none");
+				}
+				else
+				{
+					ImGui::Text(filePath.c_str());
+				}
 			});
 
 	}

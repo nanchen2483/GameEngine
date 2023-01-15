@@ -27,6 +27,7 @@ uniform mat4 uModel;
 uniform mat3 uInverseModel;
 uniform bool uHasAnimation;
 uniform mat4 uBoneTransforms[MAX_BONES];
+uniform int uEntityId;
 
 out Vertex
 {
@@ -52,7 +53,7 @@ void main()
 	vertex.color = aColor;
 	vertex.texCoord = aTexCoord;
 	vertex.material = aMaterial;
-	vertex.entityId = aEntityId;
+	vertex.entityId = aEntityId != -1 ? aEntityId : uEntityId;
 	
 	gl_Position = uCamera.projection * uCamera.view * worldPosition;
 }

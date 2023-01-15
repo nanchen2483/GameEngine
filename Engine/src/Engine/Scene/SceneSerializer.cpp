@@ -373,7 +373,7 @@ namespace Engine {
 
 					deserializedMesh.filePath = meshComponent["Path"].as<std::string>();
 					deserializedMesh.isPlayer = meshComponent["IsPlayer"].as<bool>();
-					Ptr<Model> model = ModelLibrary::GetInstance()->Load(deserializedMesh.filePath, deserializedEntity);
+					Ptr<Model> model = ModelLibrary::GetInstance()->Load(deserializedMesh.filePath);
 					deserializedMesh.meshes = model->GetMeshes();
 
 					YAML::Node animationComponent = entity["AnimationComponent"];

@@ -109,14 +109,13 @@ namespace Engine
 		m_registry.view<TransformComponent, MeshComponent>()
 			.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 				{
+					Ptr<Animation> animation = nullptr;
 					if (m_registry.all_of<AnimationComponent>(entity))
 					{
-						Renderer3D::Draw(transform, mesh, m_registry.get<AnimationComponent>(entity));
+						animation = m_registry.get<AnimationComponent>(entity);
 					}
-					else
-					{
-						Renderer3D::Draw(transform, mesh);
-					}
+
+					Renderer3D::Draw(transform, mesh, animation, nullptr, (int)entity);
 				});
 
 		m_registry.view<TransformComponent, TerrainComponent>()

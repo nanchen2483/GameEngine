@@ -204,6 +204,7 @@ namespace Engine
 		s_data.shader->Bind();
 		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
 		s_data.shader->SetBool("uHasAnimation", false);
+		s_data.shader->SetInt("uEntityId", -1);
 		s_data.cameraUniformBuffer->SetData({ &cameraViewMatrix, &cameraProjection, &cameraPosition });
 		s_data.vertexArray->Bind();
 		ResetRendererData();
@@ -238,9 +239,9 @@ namespace Engine
 		Draw(transform, sprite.texture, sprite.color, entityId);
 	}
 
-	void Renderer3D::Draw(const TransformComponent& transform, LightComponent& light, int entityId)
+	void Renderer3D::Draw(const Transform& transform, LightComponent& light, int entityId)
 	{
-		light.position = transform.GetTranslation();
+		light.position = transform.translation;
 		s_data.pointLightUniformBuffer->SetData(light.GetData());
 		Draw(transform, nullptr, glm::vec4(1.0f), entityId);
 	}
@@ -271,14 +272,16 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::Draw(const glm::mat4& transform, std::vector<Ptr<Mesh>> meshes, Ptr<Animation> animation, Ptr<Shader> shader)
+	void Renderer3D::Draw(const glm::mat4& transform, std::vector<Ptr<Mesh>> meshes, Ptr<Animation> animation, Ptr<Shader> shader, int entityId)
 	{
 		if (!meshes.empty())
 		{
 			if (shader == nullptr)
 			{
+				// Use default shader
 				shader = s_data.shader;
 				shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
+				shader->SetInt("uEntityId", entityId);
 			}
 
 			shader->SetMat4("uModel", transform);

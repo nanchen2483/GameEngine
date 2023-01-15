@@ -5,13 +5,13 @@
 
 namespace Engine
 {
-	void ModelSystem::Load(MeshComponent* meshComponent, const std::string& filepath, uint32_t entityId)
+	void ModelSystem::Load(MeshComponent* meshComponent, const std::string& filepath)
 	{
 		std::thread([=]()
 			{
 				meshComponent->isLoading = true;
 				meshComponent->filePath = filepath;
-				Ptr<Model> model = ModelLibrary::GetInstance()->Load(filepath, entityId);
+				Ptr<Model> model = ModelLibrary::GetInstance()->Load(filepath);
 				meshComponent->meshes = model->GetMeshes();
 				meshComponent->isLoading = false;
 			}).detach();

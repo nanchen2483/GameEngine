@@ -7,18 +7,13 @@ namespace Engine
 
 	Ptr<Model> ModelLibrary::Load(const std::filesystem::path& filePath)
 	{
-		return Load(filePath, -1);
-	}
-
-	Ptr<Model> ModelLibrary::Load(const std::filesystem::path& filePath, uint32_t entityId)
-	{
 		const Uid uid = Uid::NewUid(filePath.string());
 		if (Exists(uid))
 		{
 			return Get(uid);
 		}
 
-		Ptr<Model> model = Model::Create(filePath.string(), false, entityId);
+		Ptr<Model> model = Model::Create(filePath.string());
 		Add(model);
 
 		return model;

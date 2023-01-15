@@ -8,18 +8,18 @@
 
 namespace Engine
 {
+	AssimpModel::AssimpModel(std::string const& path)
+		: AssimpModel(path, false)
+	{
+	}
+
 	AssimpModel::AssimpModel(std::string const& path, bool gamma)
-		: AssimpModel(path, gamma, -1)
+		: AssimpModel(path, gamma, nullptr)
 	{
 	}
 
-	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId)
-		: AssimpModel(path, gamma, entityId, nullptr)
-	{
-	}
-
-	AssimpModel::AssimpModel(std::string const& path, bool gamma, int entityId, Ptr<float> progression)
-		: m_filePath(path), m_gammaCorrection(gamma), m_entityId(entityId), m_progression(progression)
+	AssimpModel::AssimpModel(std::string const& path, bool gamma, Ptr<float> progression)
+		: m_filePath(path), m_gammaCorrection(gamma), m_progression(progression)
 	{
 		m_uid = Uid::NewUid(path);
 
@@ -83,7 +83,6 @@ namespace Engine
 				vertex.color = glm::vec4(1.0f);
 				vertex.material = material.GetTextureSlotIndices();
 				vertex.texCoord = mesh->HasTextureCoords(0) ? AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]) : glm::vec2(0.0f);
-				vertex.entityId = m_entityId;
 				vertices.push_back(vertex);
 
 				UpdateBoundingValues(vertex.position);
