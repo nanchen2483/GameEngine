@@ -2,22 +2,22 @@
 
 namespace Engine
 {
-	struct BoudingBoxDebugData
+	struct BoundingBoxDebugData
 	{
 		static const uint32_t numOfVertices = 24;
 		static const uint32_t numOfIndices = 36;
 		static constexpr float vertices[numOfVertices]
 		{
 			// front
-			-1.0, -1.0,  1.0,
-			 1.0, -1.0,  1.0,
-			 1.0,  1.0,  1.0,
-			-1.0,  1.0,  1.0,
+			-1.01, -1.01,  1.01,
+			 1.01, -1.01,  1.01,
+			 1.01,  1.01,  1.01,
+			-1.01,  1.01,  1.01,
 			// back
-			-1.0, -1.0, -1.0,
-			 1.0, -1.0, -1.0,
-			 1.0,  1.0, -1.0,
-			-1.0,  1.0, -1.0
+			-1.01, -1.01, -1.01,
+			 1.01, -1.01, -1.01,
+			 1.01,  1.01, -1.01,
+			-1.01,  1.01, -1.01
 		};
 
 		static constexpr uint8_t indices[numOfIndices]

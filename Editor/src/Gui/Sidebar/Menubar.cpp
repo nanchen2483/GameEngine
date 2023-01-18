@@ -72,7 +72,7 @@ namespace Engine
 			if (ImGui::BeginMenu("Debug"))
 			{
 				ImGui::MenuItem("ShadowMap", nullptr, &m_showShadowMap);
-				ImGui::MenuItem("BoudingBox", nullptr, &m_showBoudingBox);
+				ImGui::MenuItem("BoundingBox", nullptr, &m_showBoundingBox);
 
 				if (ImGui::BeginMenu("PolygonMode"))
 				{
@@ -110,13 +110,13 @@ namespace Engine
 			ImGui::End();
 		}
 
-		if (m_showBoudingBox)
+		if (m_showBoundingBox)
 		{
-			Configuration::GetInstance()->SetShowBoudingBox(true);
+			Configuration::GetInstance()->SetShowBoundingBox(true);
 		}
 		else
 		{
-			Configuration::GetInstance()->SetShowBoudingBox(false);
+			Configuration::GetInstance()->SetShowBoundingBox(false);
 		}
 
 		m_hierachyPanel->OnImGuiRender();

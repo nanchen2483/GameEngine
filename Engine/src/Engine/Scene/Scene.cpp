@@ -27,7 +27,7 @@ namespace Engine
 {
 	Scene::Scene()
 	{
-		m_boudingBoxDebug = CreatePtr<BoudingBoxDebug>();
+		m_boundingBoxDebug = CreatePtr<BoundingBoxDebug>();
 	}
 
 	Scene::~Scene()
@@ -155,12 +155,12 @@ namespace Engine
 
 	void Scene::Debug()
 	{
-		if (Configuration::GetInstance()->ShowBoudingBox())
+		if (Configuration::GetInstance()->ShowBoundingBox())
 		{
 			m_registry.view<TransformComponent, CollisionComponent>()
 				.each([=](TransformComponent& transform, CollisionComponent& component)
 					{
-						m_boudingBoxDebug->Draw(transform, component.boundingBox->GetBoundingValue());
+						m_boundingBoxDebug->Draw(transform, component.boundingBox->GetBoundingValue());
 					});
 		}
 	}

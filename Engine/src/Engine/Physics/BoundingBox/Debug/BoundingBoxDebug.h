@@ -5,10 +5,10 @@
 
 namespace Engine
 {
-	class BoudingBoxDebug
+	class BoundingBoxDebug
 	{
 	public:
-		BoudingBoxDebug();
+		BoundingBoxDebug();
 
 		void Draw(Transform &transform, BoundingValue boundingValue);
 	private:

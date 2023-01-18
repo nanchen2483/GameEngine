@@ -5,9 +5,9 @@ namespace Engine
 {
 	Configuration* Configuration::s_instance = nullptr;
 
-	void Configuration::SetShowBoudingBox(bool show)
+	void Configuration::SetShowBoundingBox(bool show)
 	{
-		m_showBoudingBox = show;
+		m_showBoundingBox = show;
 	}
 
 	Configuration* Configuration::GetInstance()

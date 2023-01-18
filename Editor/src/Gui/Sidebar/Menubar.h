@@ -20,7 +20,7 @@ namespace Engine
 		PolygonMode m_polygonMode = PolygonMode::FILL;
 		ShadowDebug m_shadowDebug;
 		bool m_showShadowMap = false;
-		bool m_showBoudingBox = false;
+		bool m_showBoundingBox = false;
 		int m_shadowLevel = -1;
 		bool m_showOutliner = false;
 		bool m_showDetails = false;
