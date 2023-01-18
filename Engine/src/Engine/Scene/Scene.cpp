@@ -26,6 +26,7 @@ namespace Engine
 {
 	Scene::Scene()
 	{
+		m_boudingBoxDebug = CreatePtr<BoudingBoxDebug>();
 	}
 
 	Scene::~Scene()
@@ -88,6 +89,9 @@ namespace Engine
 					}
 				});
 
+		// Debug
+		Debug();
+
 		// Draw
 		uint32_t numOfLights = m_registry.view<LightComponent>().size();
 		Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), numOfLights);
@@ -146,6 +150,15 @@ namespace Engine
 							}
 						});
 			});
+	}
+
+	void Scene::Debug()
+	{
+		m_registry.view<TransformComponent, CollisionComponent>()
+			.each([=](TransformComponent& transform, CollisionComponent& component)
+				{
+					m_boudingBoxDebug->Draw(transform, component.boundingBox->GetBoundingValue());
+				});
 	}
 
 	void Scene::OnUpdateRuntime()

@@ -367,6 +367,9 @@ namespace Engine
 					{
 						component->boundingBox = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GetBoundingBox();
 					}
+
+					ImGuiExtension::DrawVec3SubSection("Center", component->boundingBox->GetBoundingValue().center);
+					ImGuiExtension::DrawVec3SubSection("Extents", component->boundingBox->GetBoundingValue().extents);
 				},
 				[&]()
 				{
