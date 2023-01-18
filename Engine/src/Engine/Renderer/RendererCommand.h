@@ -28,6 +28,11 @@ namespace Engine
 			s_rendererAPI->SetDepthFunc(func);
 		}
 
+		inline static PolygonMode GetPolygonMode()
+		{
+			return s_rendererAPI->GetPolygonMode();
+		}
+
 		inline static void SetPolygonMode(PolygonMode mode)
 		{
 			s_rendererAPI->SetPolygonMode(mode);

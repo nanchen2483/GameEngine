@@ -52,6 +52,21 @@ namespace Engine
 			}
 		}
 
+		static inline PolygonMode FromGLPolygonMode(int mode)
+		{
+			switch (mode)
+			{
+			case GL_POINT:
+				return PolygonMode::POINT;
+			case GL_LINE:
+				return PolygonMode::LINE;
+			case GL_FILL:
+				return PolygonMode::FILL;
+			default:
+				ENGINE_CORE_ASSERT(false, "Invalid polygonMode type");
+			}
+		}
+
 		static inline int ToGL(PolygonMode mode)
 		{
 			switch (mode)
