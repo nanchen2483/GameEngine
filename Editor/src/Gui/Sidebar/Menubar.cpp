@@ -72,6 +72,8 @@ namespace Engine
 			if (ImGui::BeginMenu("Debug"))
 			{
 				ImGui::MenuItem("ShadowMap", nullptr, &m_showShadowMap);
+				ImGui::MenuItem("BoudingBox", nullptr, &m_showBoudingBox);
+
 				if (ImGui::BeginMenu("PolygonMode"))
 				{
 					static std::array<std::string, 3> s_polygonModes = { "Point", "Line", "Fill" };
@@ -95,7 +97,7 @@ namespace Engine
 
 		if (m_showShadowMap)
 		{
-			if (ImGui::Begin("Debug", &m_showShadowMap))
+			if (ImGui::Begin("Shadow map", &m_showShadowMap))
 			{
 				m_shadowDebug.Draw();
 
@@ -106,6 +108,15 @@ namespace Engine
 			}
 
 			ImGui::End();
+		}
+
+		if (m_showBoudingBox)
+		{
+			Configuration::GetInstance()->SetShowBoudingBox(true);
+		}
+		else
+		{
+			Configuration::GetInstance()->SetShowBoudingBox(false);
 		}
 
 		m_hierachyPanel->OnImGuiRender();

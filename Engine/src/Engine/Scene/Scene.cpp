@@ -12,6 +12,7 @@
 #include "Component/TerrainComponent.h"
 
 #include "Entity.h"
+#include "Engine/Configuration/Configuration.h"
 #include "Engine/Core/Window/Input.h"
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/Renderer3D.h"
@@ -154,11 +155,14 @@ namespace Engine
 
 	void Scene::Debug()
 	{
-		m_registry.view<TransformComponent, CollisionComponent>()
-			.each([=](TransformComponent& transform, CollisionComponent& component)
-				{
-					m_boudingBoxDebug->Draw(transform, component.boundingBox->GetBoundingValue());
-				});
+		if (Configuration::GetInstance()->ShowBoudingBox())
+		{
+			m_registry.view<TransformComponent, CollisionComponent>()
+				.each([=](TransformComponent& transform, CollisionComponent& component)
+					{
+						m_boudingBoxDebug->Draw(transform, component.boundingBox->GetBoundingValue());
+					});
+		}
 	}
 
 	void Scene::OnUpdateRuntime()
