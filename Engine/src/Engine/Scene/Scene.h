@@ -35,7 +35,6 @@ namespace Engine
 		
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
-		Ptr<BoundingBoxDebug> m_boundingBoxDebug;
 
 		friend class Entity;
 		friend class SceneSerializer;

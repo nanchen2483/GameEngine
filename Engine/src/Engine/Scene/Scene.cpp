@@ -27,7 +27,6 @@ namespace Engine
 {
 	Scene::Scene()
 	{
-		m_boundingBoxDebug = CreatePtr<BoundingBoxDebug>();
 	}
 
 	Scene::~Scene()
@@ -160,7 +159,7 @@ namespace Engine
 			m_registry.view<TransformComponent, CollisionComponent>()
 				.each([=](TransformComponent& transform, CollisionComponent& component)
 					{
-						m_boundingBoxDebug->Draw(transform, component.boundingBox->GetBoundingValue());
+						CollisionSystem::DrawBoudingBox(transform, component.boundingBox);
 					});
 		}
 	}
