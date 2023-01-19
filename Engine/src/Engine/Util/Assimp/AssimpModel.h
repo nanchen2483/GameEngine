@@ -20,7 +20,7 @@ namespace Engine
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
 		virtual std::vector<Ptr<Mesh>> GetMeshes() const override { return m_meshes; }
 		virtual std::vector<Ptr<Animation>> GetAnimations() const override { return m_animations; }
-		virtual Ptr<BoundingBox> GetBoundingBox() const override { return m_boundingBox; }
+		virtual Ptr<BoundingBox> GenerateBoundingBox() override;
 		
 		virtual Uid GetUid() const override { return m_uid; }
 	private:
@@ -39,7 +39,6 @@ namespace Engine
 		std::vector<Ptr<Mesh>> m_meshes;
 
 		// Bounding volume
-		Ptr<BoundingBox> m_boundingBox;
 		glm::vec3 m_minAABB = glm::vec3(std::numeric_limits<float>::max());
 		glm::vec3 m_maxAABB = glm::vec3(std::numeric_limits<float>::min());
 

@@ -22,6 +22,11 @@ namespace Engine
 		m_boundingValue.extents = glm::vec3(extentX, extentY, extentZ);
 	}
 
+	void AABB::SetBoundingValue(const BoundingValue& value)
+	{
+		m_boundingValue = value;
+	}
+
 	bool AABB::IsOnFrustum(const Frustum& frustum, const Transform& transform) const
 	{
 		// Convert center to world space

@@ -365,11 +365,13 @@ namespace Engine
 					CollisionComponent* component = &entity.GetComponent<CollisionComponent>();
 					if (component->boundingBox == nullptr)
 					{
-						component->boundingBox = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GetBoundingBox();
+						component->boundingBox = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GenerateBoundingBox();
 					}
 
-					ImGuiExtension::DrawVec3SubSection("Center", component->boundingBox->GetBoundingValue().center);
-					ImGuiExtension::DrawVec3SubSection("Extents", component->boundingBox->GetBoundingValue().extents);
+					BoundingValue value = component->boundingBox->GetBoundingValue();
+					ImGuiExtension::DrawVec3SubSection("Center", value.center);
+					ImGuiExtension::DrawVec3SubSection("Extents", value.extents);
+					component->boundingBox->SetBoundingValue(value);
 				},
 				[&]()
 				{

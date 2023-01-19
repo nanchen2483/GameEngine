@@ -391,7 +391,7 @@ namespace Engine {
 					{
 						CollisionComponent& deserializedCollision = deserializedEntity.AddComponent<CollisionComponent>();
 
-						deserializedCollision.boundingBox = model->GetBoundingBox();
+						deserializedCollision.boundingBox = model->GenerateBoundingBox();
 					}
 				}
 
