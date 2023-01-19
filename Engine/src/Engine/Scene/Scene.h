@@ -2,6 +2,7 @@
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Shadow/ShadowBox.h"
 #include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Physics/BoundingBox/Debug/BoundingBoxDebug.h"
 #include "Component/IComponent.h"
 
 #include <entt/entt.hpp>
@@ -28,6 +29,7 @@ namespace Engine
 		Entity GetPlayerEntity();
 		Entity GetTerrainEntity();
 	private:
+		void Debug();
 		template<class T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
 		void OnComponentAdded(Entity entity, T& component);
 		

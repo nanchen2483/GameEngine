@@ -12,6 +12,7 @@
 #include "Component/TerrainComponent.h"
 
 #include "Entity.h"
+#include "Engine/Configuration/Configuration.h"
 #include "Engine/Core/Window/Input.h"
 #include "Engine/Renderer/Renderer2D.h"
 #include "Engine/Renderer/Renderer3D.h"
@@ -88,6 +89,9 @@ namespace Engine
 					}
 				});
 
+		// Debug
+		Debug();
+
 		// Draw
 		uint32_t numOfLights = m_registry.view<LightComponent>().size();
 		Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), numOfLights);
@@ -146,6 +150,18 @@ namespace Engine
 							}
 						});
 			});
+	}
+
+	void Scene::Debug()
+	{
+		if (Configuration::GetInstance()->ShowBoundingBox())
+		{
+			m_registry.view<TransformComponent, CollisionComponent>()
+				.each([=](TransformComponent& transform, CollisionComponent& component)
+					{
+						CollisionSystem::DrawBoudingBox(transform, component.boundingBox);
+					});
+		}
 	}
 
 	void Scene::OnUpdateRuntime()

@@ -3,7 +3,6 @@
 #include <chrono>
 #include <functional>
 #include <type_traits>
-#include <format>
 
 namespace Engine
 {

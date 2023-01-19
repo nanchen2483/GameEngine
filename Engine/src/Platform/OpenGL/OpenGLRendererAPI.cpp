@@ -34,6 +34,14 @@ namespace Engine
 		glDepthFunc(OpenGLUtil::ToGL(func));
 	}
 
+	PolygonMode OpenGLRendererAPI::GetPolygonMode()
+	{
+		int polygonMode[2];
+		glGetIntegerv(GL_POLYGON_MODE, polygonMode);
+
+		return OpenGLUtil::FromGLPolygonMode(polygonMode[0]);
+	}
+
 	void OpenGLRendererAPI::SetPolygonMode(PolygonMode mode)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, OpenGLUtil::ToGL(mode));

@@ -3,7 +3,13 @@
 
 namespace Engine
 {
-	Uniq<Collision> CollisionSystem::s_collision = Collision::Create(CollisionType::GJK_EPA_3D);
+	CollisionSystem* CollisionSystem::s_instance = nullptr;
+	CollisionSystem::CollisionSystem()
+	{
+		m_collision = Collision::Create(CollisionType::GJK_EPA_3D);
+		m_debug = CreateUniq<BoundingBoxDebug>();
+	}
+
 	void CollisionSystem::OnUpdate(Transform& transformA, Transform& transformB, Ptr<BoundingBox> boundingBoxA, Ptr<BoundingBox> boundingBoxB)
 	{
 		if (boundingBoxA == nullptr || boundingBoxB == nullptr)
@@ -11,16 +17,31 @@ namespace Engine
 			return;
 		}
 
-		s_collision->Detect(
+		GetInstance()->m_collision->Detect(
 			transformA,
 			transformB,
 			boundingBoxA->GetBoundingValue(),
 			boundingBoxB->GetBoundingValue());
-		if (s_collision->IsCollided())
+		if (GetInstance()->m_collision->IsCollided())
 		{
-			glm::vec3 halfDistance = s_collision->GetDirectionFromAToB() / 2.0f;
+			glm::vec3 halfDistance = GetInstance()->m_collision->GetDirectionFromAToB() / 2.0f;
 			transformA.translation += halfDistance;
 			transformB.translation -= halfDistance;
 		}
+	}
+
+	void CollisionSystem::DrawBoudingBox(Transform& transform, Ptr<BoundingBox> boundingBox)
+	{
+		GetInstance()->m_debug->Draw(transform, boundingBox->GetBoundingValue());
+	}
+
+	CollisionSystem* CollisionSystem::GetInstance()
+	{
+		if (!s_instance)
+		{
+			s_instance = new CollisionSystem();
+		}
+
+		return s_instance;
 	}
 }
