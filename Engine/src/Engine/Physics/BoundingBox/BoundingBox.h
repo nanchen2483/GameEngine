@@ -27,6 +27,7 @@ namespace Engine
 		~BoundingBox() = default;
 
 		virtual BoundingValue GetBoundingValue() const = 0;
+		virtual void SetBoundingValue(const BoundingValue& value) = 0;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const = 0;
 		virtual bool IsOnForwardPlan(const Plan& plan) const = 0;
 		virtual glm::vec3 GetSupportPoint(glm::vec3 direction) const = 0;

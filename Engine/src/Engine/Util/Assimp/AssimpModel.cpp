@@ -26,6 +26,11 @@ namespace Engine
 		Load(path);
 	}
 
+	Ptr<BoundingBox> AssimpModel::GenerateBoundingBox()
+	{
+		return BoundingBox::Create(BoundingBoxType::AABB, m_minAABB, m_maxAABB);
+	}
+
 	void AssimpModel::Load(std::string const& path)
 	{
 		// read file via ASSIMP
@@ -48,8 +53,6 @@ namespace Engine
 
 		LoadMeshes(scene);
 		LoadAnimations(scene);
-
-		m_boundingBox = BoundingBox::Create(BoundingBoxType::AABB, m_minAABB, m_maxAABB);
 	}
 
 	void AssimpModel::LoadMeshes(const aiScene* scene)
