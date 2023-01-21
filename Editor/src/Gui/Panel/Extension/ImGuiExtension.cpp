@@ -65,10 +65,10 @@ namespace Engine
 		ImGui::Text("Loading...");
 	}
 
-	void ImGuiExtension::DrawSection(const std::string& label, int treeNodeFlags, std::function<void(void)> InlineCode, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
+	void ImGuiExtension::DrawSection(uint32_t id, const std::string& label, int treeNodeFlags, std::function<void(void)> InlineCode, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-		bool isOpen = ImGui::TreeNodeEx((void*)std::hash<std::string>()(label), (ImGuiTreeNodeFlags)treeNodeFlags | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth, label.c_str());
+		bool isOpen = ImGui::TreeNodeEx((void*)id, (ImGuiTreeNodeFlags)treeNodeFlags | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth, label.c_str());
 		InlineCode();
 		ImGui::PopStyleVar();
 
@@ -103,10 +103,10 @@ namespace Engine
 		}
 	}
 
-	void ImGuiExtension::DrawEntitySection(const std::string& label, bool isSelected, std::function<void(void)> OnSelect, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
+	void ImGuiExtension::DrawEntitySection(uint32_t id, const std::string& label, bool isSelected, std::function<void(void)> OnSelect, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
 		ImGuiTreeNodeFlags treeNodeFlags = (isSelected ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
-		DrawSection(label, treeNodeFlags,
+		DrawSection(id, label, treeNodeFlags,
 			[&]()
 			{
 				if (ImGui::IsItemClicked())
@@ -118,10 +118,10 @@ namespace Engine
 			[&]() { OnRemove(); });
 	}
 
-	void ImGuiExtension::DrawPropertySection(const std::string& label, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
+	void ImGuiExtension::DrawPropertySection(uint32_t id, const std::string& label, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
 		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_NoAutoOpenOnLog;
-		DrawSection(label, treeNodeFlags,
+		DrawSection(id, label, treeNodeFlags,
 			[&]()
 			{
 				ImGui::SameLine(ImGui::GetWindowContentRegionWidth() - 8.0f);
