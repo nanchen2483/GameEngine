@@ -9,7 +9,7 @@ namespace Engine
 	glm::vec2 System::s_mousePosition = glm::vec2(0.0f);
 	glm::vec2 System::s_deltaMousePosition = glm::vec2(0.0f);
 	float System::s_mouseVelocity = 0.003f;
-
+	float System::s_gravitationalAcceleration = 9.8f;
 	void System::OnUpdate()
 	{
 		OnTimeUpdate();
