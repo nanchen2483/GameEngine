@@ -17,6 +17,11 @@ namespace Engine
 			return;
 		}
 
+		if (physicsA->isStatic && physicsB->isStatic)
+		{
+			return;
+		}
+
 		GetInstance()->m_collision->Detect(
 			transformA,
 			transformB,
@@ -24,14 +29,26 @@ namespace Engine
 			physicsB->boundingBox->GetBoundingValue());
 		if (GetInstance()->m_collision->IsCollided())
 		{
-			float weightA = physicsA->weight;
-			float weightB = physicsB->weight;
-			float weightARatio = weightB / (weightA + weightB);
-			float weightBRatio = weightA / (weightA + weightB);
-			glm::vec3 distanceA = GetInstance()->m_collision->GetDirectionFromAToB() * weightARatio;
-			glm::vec3 distanceB = GetInstance()->m_collision->GetDirectionFromAToB() * weightBRatio;
-			transformA.translation += distanceA;
-			transformB.translation -= distanceB;
+			glm::vec3 distanceAtoB = GetInstance()->m_collision->GetDirectionFromAToB();
+			if (physicsA->isStatic)
+			{
+				transformB.translation -= distanceAtoB;
+			}
+			else if (physicsB->isStatic)
+			{
+				transformA.translation += distanceAtoB;
+			}
+			else
+			{
+				float weightA = physicsA->weight;
+				float weightB = physicsB->weight;
+				float weightARatio = weightB / (weightA + weightB);
+				float weightBRatio = weightA / (weightA + weightB);
+				glm::vec3 distanceA = distanceAtoB * weightARatio;
+				glm::vec3 distanceB = distanceAtoB * weightBRatio;
+				transformA.translation += distanceA;
+				transformB.translation -= distanceB;
+			}
 		}
 	}
 

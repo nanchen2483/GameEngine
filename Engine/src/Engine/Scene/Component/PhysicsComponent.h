@@ -7,7 +7,8 @@ namespace Engine
 	struct PhysicsComponent : public IComponent
 	{
 		float weight = 1.0f;
-		Ptr<BoundingBox> boundingBox;
+		bool isStatic = false;
+		Ptr<BoundingBox> boundingBox = nullptr;
 
 		operator Ptr<BoundingBox>() { return boundingBox; }
 	};
