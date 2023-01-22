@@ -370,6 +370,7 @@ namespace Engine
 					BoundingValue value = component->boundingBox->GetBoundingValue();
 					ImGuiExtension::DrawVec3SubSection("Center", value.center);
 					ImGuiExtension::DrawVec3SubSection("Extents", value.extents);
+					ImGuiExtension::DrawFloatSubSection("Weight", component->weight);
 					component->boundingBox->SetBoundingValue(value);
 				},
 				[&]()
