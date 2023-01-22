@@ -1,16 +1,16 @@
 #include "enginepch.h"
-#include "CollisionSystem.h"
+#include "PhysicsSystem.h"
 
 namespace Engine
 {
-	CollisionSystem* CollisionSystem::s_instance = nullptr;
-	CollisionSystem::CollisionSystem()
+	PhysicsSystem* PhysicsSystem::s_instance = nullptr;
+	PhysicsSystem::PhysicsSystem()
 	{
 		m_collision = Collision::Create(CollisionType::GJK_EPA_3D);
 		m_debug = CreateUniq<BoundingBoxDebug>();
 	}
 
-	void CollisionSystem::OnUpdate(Transform& transformA, Transform& transformB, PhysicsComponent *physicsA, PhysicsComponent *physicsB)
+	void PhysicsSystem::OnUpdate(Transform& transformA, Transform& transformB, PhysicsComponent *physicsA, PhysicsComponent *physicsB)
 	{
 		if (physicsA == nullptr || physicsB == nullptr)
 		{
@@ -52,16 +52,16 @@ namespace Engine
 		}
 	}
 
-	void CollisionSystem::DrawBoudingBox(Transform& transform, Ptr<BoundingBox> boundingBox)
+	void PhysicsSystem::DrawBoudingBox(Transform& transform, Ptr<BoundingBox> boundingBox)
 	{
 		GetInstance()->m_debug->Draw(transform, boundingBox->GetBoundingValue());
 	}
 
-	CollisionSystem* CollisionSystem::GetInstance()
+	PhysicsSystem* PhysicsSystem::GetInstance()
 	{
 		if (!s_instance)
 		{
-			s_instance = new CollisionSystem();
+			s_instance = new PhysicsSystem();
 		}
 
 		return s_instance;

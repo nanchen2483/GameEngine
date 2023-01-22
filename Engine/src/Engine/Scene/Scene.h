@@ -2,7 +2,6 @@
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Shadow/ShadowBox.h"
 #include "Engine/Renderer/Texture/Texture.h"
-#include "Engine/Physics/BoundingBox/Debug/BoundingBoxDebug.h"
 #include "Component/IComponent.h"
 
 #include <entt/entt.hpp>

@@ -19,7 +19,7 @@
 
 #include "System/AnimationSystem.h"
 #include "System/CameraSystem.h"
-#include "System/CollisionSystem.h"
+#include "System/PhysicsSystem.h"
 #include "System/MeshSystem.h"
 #include "System/ShadowSystem.h"
 
@@ -148,7 +148,7 @@ namespace Engine
 			m_registry.view<TransformComponent, PhysicsComponent>()
 				.each([=](TransformComponent& transform, PhysicsComponent& component)
 					{
-						CollisionSystem::DrawBoudingBox(transform, component.boundingBox);
+						PhysicsSystem::DrawBoudingBox(transform, component.boundingBox);
 					});
 		}
 	}
@@ -207,7 +207,7 @@ namespace Engine
 					MeshSystem::OnUpdate(meshComponent, thisTransform, thisComponent, frustum, terrain);
 					meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, PhysicsComponent& thatComponent)
 						{
-							CollisionSystem::OnUpdate(thisTransform, thatTransform, &thisComponent, &thatComponent);
+							PhysicsSystem::OnUpdate(thisTransform, thatTransform, &thisComponent, &thatComponent);
 						});
 				});
 
