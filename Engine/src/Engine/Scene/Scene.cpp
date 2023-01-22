@@ -74,7 +74,7 @@ namespace Engine
 			{
 				meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, PhysicsComponent& thatComponent)
 					{
-						CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
+						CollisionSystem::OnUpdate(thisTransform, thatTransform, &thisComponent, &thatComponent);
 					});
 					
 				MeshSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);
@@ -217,7 +217,7 @@ namespace Engine
 				{
 					meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, PhysicsComponent& thatComponent)
 						{
-							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
+							CollisionSystem::OnUpdate(thisTransform, thatTransform, &thisComponent, &thatComponent);
 						});
 					
 					MeshSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);

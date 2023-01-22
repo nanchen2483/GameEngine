@@ -10,9 +10,9 @@ namespace Engine
 		m_debug = CreateUniq<BoundingBoxDebug>();
 	}
 
-	void CollisionSystem::OnUpdate(Transform& transformA, Transform& transformB, Ptr<BoundingBox> boundingBoxA, Ptr<BoundingBox> boundingBoxB)
+	void CollisionSystem::OnUpdate(Transform& transformA, Transform& transformB, PhysicsComponent *physicsA, PhysicsComponent *physicsB)
 	{
-		if (boundingBoxA == nullptr || boundingBoxB == nullptr)
+		if (physicsA == nullptr || physicsB == nullptr)
 		{
 			return;
 		}
@@ -20,13 +20,18 @@ namespace Engine
 		GetInstance()->m_collision->Detect(
 			transformA,
 			transformB,
-			boundingBoxA->GetBoundingValue(),
-			boundingBoxB->GetBoundingValue());
+			physicsA->boundingBox->GetBoundingValue(),
+			physicsB->boundingBox->GetBoundingValue());
 		if (GetInstance()->m_collision->IsCollided())
 		{
-			glm::vec3 halfDistance = GetInstance()->m_collision->GetDirectionFromAToB() / 2.0f;
-			transformA.translation += halfDistance;
-			transformB.translation -= halfDistance;
+			float weightA = physicsA->weight;
+			float weightB = physicsB->weight;
+			float weightARatio = weightB / (weightA + weightB);
+			float weightBRatio = weightA / (weightA + weightB);
+			glm::vec3 distanceA = GetInstance()->m_collision->GetDirectionFromAToB() * weightARatio;
+			glm::vec3 distanceB = GetInstance()->m_collision->GetDirectionFromAToB() * weightBRatio;
+			transformA.translation += distanceA;
+			transformB.translation -= distanceB;
 		}
 	}
 
