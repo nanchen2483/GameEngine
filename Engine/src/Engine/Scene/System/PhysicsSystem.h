@@ -8,17 +8,17 @@
 
 namespace Engine
 {
-	class CollisionSystem : public ISystem
+	class PhysicsSystem : public ISystem
 	{
 	public:
 		static void OnUpdate(Transform& transformA, Transform& transformB, PhysicsComponent *physicsA, PhysicsComponent *physicsB);
 		static void DrawBoudingBox(Transform& transform, Ptr<BoundingBox> boundingBox);
 	private:
-		CollisionSystem();
-		static CollisionSystem* GetInstance();
+		PhysicsSystem();
+		static PhysicsSystem* GetInstance();
 
 		Uniq<BoundingBoxDebug> m_debug;
 		Uniq<Collision> m_collision;
-		static CollisionSystem* s_instance;
+		static PhysicsSystem* s_instance;
 	};
 }

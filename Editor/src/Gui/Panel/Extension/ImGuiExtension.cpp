@@ -68,7 +68,7 @@ namespace Engine
 	void ImGuiExtension::DrawSection(uint32_t id, const std::string& label, int treeNodeFlags, std::function<void(void)> InlineCode, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-		bool isOpen = ImGui::TreeNodeEx((void*)id, (ImGuiTreeNodeFlags)treeNodeFlags | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth, label.c_str());
+		bool isOpen = ImGui::TreeNodeEx((void*)std::hash<std::string>()((std::to_string(id) + label)), (ImGuiTreeNodeFlags)treeNodeFlags | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth, label.c_str());
 		InlineCode();
 		ImGui::PopStyleVar();
 

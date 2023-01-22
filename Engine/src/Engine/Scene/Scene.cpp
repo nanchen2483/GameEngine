@@ -19,7 +19,7 @@
 
 #include "System/AnimationSystem.h"
 #include "System/CameraSystem.h"
-#include "System/CollisionSystem.h"
+#include "System/PhysicsSystem.h"
 #include "System/MeshSystem.h"
 #include "System/ShadowSystem.h"
 
@@ -68,17 +68,6 @@ namespace Engine
 				terrain->OnUpdate(camera.GetPosition());
 			}
 		}
-
-		auto meshView = m_registry.view<TransformComponent, MeshComponent, PhysicsComponent>();
-		meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, PhysicsComponent& thisComponent)
-			{
-				meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, PhysicsComponent& thatComponent)
-					{
-						CollisionSystem::OnUpdate(thisTransform, thatTransform, &thisComponent, &thatComponent);
-					});
-					
-				MeshSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);
-			});
 
 		m_registry.view<AnimationComponent>()
 			.each([=](AnimationComponent& component)
@@ -159,7 +148,7 @@ namespace Engine
 			m_registry.view<TransformComponent, PhysicsComponent>()
 				.each([=](TransformComponent& transform, PhysicsComponent& component)
 					{
-						CollisionSystem::DrawBoudingBox(transform, component.boundingBox);
+						PhysicsSystem::DrawBoudingBox(transform, component.boundingBox);
 					});
 		}
 	}
@@ -215,18 +204,20 @@ namespace Engine
 			auto meshView = m_registry.view<TransformComponent, MeshComponent, PhysicsComponent>();
 			meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, PhysicsComponent& thisComponent)
 				{
+					MeshSystem::OnUpdate(meshComponent, thisTransform, thisComponent, frustum, terrain);
 					meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, PhysicsComponent& thatComponent)
 						{
-							CollisionSystem::OnUpdate(thisTransform, thatTransform, &thisComponent, &thatComponent);
+							PhysicsSystem::OnUpdate(thisTransform, thatTransform, &thisComponent, &thatComponent);
 						});
-					
-					MeshSystem::OnUpdate(meshComponent, thisComponent, thisTransform, frustum, terrain);
 				});
 
 			m_registry.view<AnimationComponent>()
 				.each([](AnimationComponent& component)
 					{
-						AnimationSystem::UpdateAnimation(component);
+						if (component.isEnabled)
+						{
+							AnimationSystem::UpdateAnimation(component);
+						}
 					});
 
 			// Draw
