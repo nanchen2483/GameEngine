@@ -2,7 +2,7 @@
 #include "SceneSerializer.h"
 #include "Component/AnimationComponent.h"
 #include "Component/CameraComponent.h"
-#include "Component/CollisionComponent.h"
+#include "Component/PhysicsComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/MeshComponent.h"
 #include "Component/SkyboxComponent.h"
@@ -207,9 +207,9 @@ namespace Engine {
 			out << YAML::EndMap;
 		}
 
-		if (entity.HasComponent<CollisionComponent>())
+		if (entity.HasComponent<PhysicsComponent>())
 		{
-			out << YAML::Key << "CollisionComponent";
+			out << YAML::Key << "PhysicsComponent";
 			out << YAML::BeginMap;
 			out << YAML::EndMap;
 		}
@@ -386,12 +386,12 @@ namespace Engine {
 						deserializeAnimation.animations = model->GetAnimations();
 					}
 
-					YAML::Node collisionComponent = entity["CollisionComponent"];
-					if (collisionComponent)
+					YAML::Node physicsComponent = entity["PhysicsComponent"];
+					if (physicsComponent)
 					{
-						CollisionComponent& deserializedCollision = deserializedEntity.AddComponent<CollisionComponent>();
+						PhysicsComponent& deserializedPhysics = deserializedEntity.AddComponent<PhysicsComponent>();
 
-						deserializedCollision.boundingBox = model->GenerateBoundingBox();
+						deserializedPhysics.boundingBox = model->GenerateBoundingBox();
 					}
 				}
 

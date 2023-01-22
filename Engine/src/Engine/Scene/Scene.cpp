@@ -3,7 +3,7 @@
 
 #include "Component/AnimationComponent.h"
 #include "Component/CameraComponent.h"
-#include "Component/CollisionComponent.h"
+#include "Component/PhysicsComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/NativeScriptComponent.h"
 #include "Component/SkyboxComponent.h"
@@ -69,10 +69,10 @@ namespace Engine
 			}
 		}
 
-		auto meshView = m_registry.view<TransformComponent, MeshComponent, CollisionComponent>();
-		meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, CollisionComponent& thisComponent)
+		auto meshView = m_registry.view<TransformComponent, MeshComponent, PhysicsComponent>();
+		meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, PhysicsComponent& thisComponent)
 			{
-				meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, CollisionComponent& thatComponent)
+				meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, PhysicsComponent& thatComponent)
 					{
 						CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
 					});
@@ -156,8 +156,8 @@ namespace Engine
 	{
 		if (Configuration::GetInstance()->ShowBoundingBox())
 		{
-			m_registry.view<TransformComponent, CollisionComponent>()
-				.each([=](TransformComponent& transform, CollisionComponent& component)
+			m_registry.view<TransformComponent, PhysicsComponent>()
+				.each([=](TransformComponent& transform, PhysicsComponent& component)
 					{
 						CollisionSystem::DrawBoudingBox(transform, component.boundingBox);
 					});
@@ -212,10 +212,10 @@ namespace Engine
 				}
 			}
 
-			auto meshView = m_registry.view<TransformComponent, MeshComponent, CollisionComponent>();
-			meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, CollisionComponent& thisComponent)
+			auto meshView = m_registry.view<TransformComponent, MeshComponent, PhysicsComponent>();
+			meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, PhysicsComponent& thisComponent)
 				{
-					meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, CollisionComponent& thatComponent)
+					meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, PhysicsComponent& thatComponent)
 						{
 							CollisionSystem::OnUpdate(thisTransform, thatTransform, thisComponent, thatComponent);
 						});
@@ -394,7 +394,7 @@ namespace Engine
 	}
 
 	template<>
-	void Scene::OnComponentAdded<CollisionComponent>(Entity entity, CollisionComponent& component)
+	void Scene::OnComponentAdded<PhysicsComponent>(Entity entity, PhysicsComponent& component)
 	{
 	}
 
