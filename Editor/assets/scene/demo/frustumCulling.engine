@@ -13,7 +13,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -28,7 +28,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -43,7 +43,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -58,7 +58,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -73,7 +73,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -88,7 +88,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -103,7 +103,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -118,7 +118,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -133,7 +133,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -148,7 +148,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -163,7 +163,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -178,7 +178,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -193,7 +193,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -208,7 +208,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -223,7 +223,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -238,7 +238,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -253,7 +253,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -268,7 +268,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -283,7 +283,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -298,7 +298,7 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}
   - Entity: 123
     TagComponent:
@@ -313,5 +313,5 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    CollisionComponent:
+    PhysicsComponent:
       {}

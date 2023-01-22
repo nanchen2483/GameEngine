@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	struct CollisionComponent : public IComponent
+	struct PhysicsComponent : public IComponent
 	{
 		Ptr<BoundingBox> boundingBox;
 

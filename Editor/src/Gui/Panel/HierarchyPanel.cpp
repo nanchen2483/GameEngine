@@ -155,9 +155,9 @@ namespace Engine
 							ImGui::CloseCurrentPopup();
 						}
 
-						if (!m_selectionContext.HasComponent<CollisionComponent>() && ImGui::MenuItem("Collision"))
+						if (!m_selectionContext.HasComponent<PhysicsComponent>() && ImGui::MenuItem("Physics"))
 						{
-							m_selectionContext.AddComponent<CollisionComponent>();
+							m_selectionContext.AddComponent<PhysicsComponent>();
 							ImGui::CloseCurrentPopup();
 						}
 					}
@@ -356,12 +356,12 @@ namespace Engine
 				});
 		}
 
-		if (entity.HasComponent<CollisionComponent>())
+		if (entity.HasComponent<PhysicsComponent>())
 		{
-			ImGuiExtension::DrawPropertySection(entity, "Collision",
+			ImGuiExtension::DrawPropertySection(entity, "Physics",
 				[&]()
 				{
-					CollisionComponent* component = &entity.GetComponent<CollisionComponent>();
+					PhysicsComponent* component = &entity.GetComponent<PhysicsComponent>();
 					if (component->boundingBox == nullptr)
 					{
 						component->boundingBox = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GenerateBoundingBox();
@@ -374,7 +374,7 @@ namespace Engine
 				},
 				[&]()
 				{
-					m_selectionContext.RemoveComponent<CollisionComponent>();
+					m_selectionContext.RemoveComponent<PhysicsComponent>();
 				});
 		}
 
