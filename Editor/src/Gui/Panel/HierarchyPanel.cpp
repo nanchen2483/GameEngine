@@ -27,17 +27,11 @@ namespace Engine
 		{
 			if (ImGui::Begin(ICON_FA_SITEMAP " Outliner", &m_openOutliner))
 			{
-				m_context->m_registry.each([&](entt::entity entityId) {
-					Entity entity = Entity{ entityId, m_context.get() };
-					DrawEntityNode(entity);
-				});
-
 				if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 				{
 					m_selectionContext = {};
 				}
 
-				// Right-click on blank space
 				if (ImGui::BeginPopupContextWindow())
 				{
 					if (ImGui::MenuItem("Create Empty Entity"))
@@ -47,6 +41,11 @@ namespace Engine
 
 					ImGui::EndPopup();
 				}
+
+				m_context->m_registry.each([&](entt::entity entityId) {
+					Entity entity = Entity{ entityId, m_context.get() };
+					DrawEntityNode(entity);
+				});
 			}
 			ImGui::End();
 		}
@@ -73,7 +72,7 @@ namespace Engine
 	{
 		std::string& tag = entity.GetComponent<TagComponent>().tag;
 		bool isSelected = m_selectionContext == entity;;
-		ImGuiExtension::DrawEntitySection(tag, isSelected,
+		ImGuiExtension::DrawEntitySection(entity, tag, isSelected,
 			[&]()
 			{
 				m_selectionContext = entity;
@@ -181,7 +180,7 @@ namespace Engine
 
 		if (entity.HasComponent<TransformComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Transform",
+			ImGuiExtension::DrawPropertySection(entity, "Transform",
 				[&]()
 				{
 					Transform& transform = entity.GetComponent<TransformComponent>();
@@ -199,7 +198,7 @@ namespace Engine
 
 		if (entity.HasComponent<CameraComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Camera",
+			ImGuiExtension::DrawPropertySection(entity, "Camera",
 				[&]()
 				{
 					CameraComponent& cameraComponent = entity.GetComponent<CameraComponent>();
@@ -269,7 +268,7 @@ namespace Engine
 
 		if (entity.HasComponent<LightComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Light",
+			ImGuiExtension::DrawPropertySection(entity, "Light",
 				[&]()
 				{
 					LightComponent& component = entity.GetComponent<LightComponent>();
@@ -289,7 +288,7 @@ namespace Engine
 
 		if (entity.HasComponent<SpriteRendererComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Sprite Renderer",
+			ImGuiExtension::DrawPropertySection(entity, "Sprite Renderer",
 				[&]()
 				{
 					SpriteRendererComponent& component = entity.GetComponent<SpriteRendererComponent>();
@@ -304,7 +303,7 @@ namespace Engine
 
 		if (entity.HasComponent<MeshComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Mesh",
+			ImGuiExtension::DrawPropertySection(entity, "Mesh",
 				[&]()
 				{
 					MeshComponent* component = &entity.GetComponent<MeshComponent>();
@@ -336,7 +335,7 @@ namespace Engine
 
 		if (entity.HasComponent<AnimationComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Animation",
+			ImGuiExtension::DrawPropertySection(entity, "Animation",
 				[&]()
 				{
 					AnimationComponent* component = &entity.GetComponent<AnimationComponent>();
@@ -359,7 +358,7 @@ namespace Engine
 
 		if (entity.HasComponent<CollisionComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Collision",
+			ImGuiExtension::DrawPropertySection(entity, "Collision",
 				[&]()
 				{
 					CollisionComponent* component = &entity.GetComponent<CollisionComponent>();
@@ -381,7 +380,7 @@ namespace Engine
 
 		if (entity.HasComponent<SkyboxComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Skybox",
+			ImGuiExtension::DrawPropertySection(entity, "Skybox",
 				[&]()
 				{
 					static const TextureOrientationType layout[10]
@@ -457,7 +456,7 @@ namespace Engine
 
 		if (entity.HasComponent<TerrainComponent>())
 		{
-			ImGuiExtension::DrawPropertySection("Terrian",
+			ImGuiExtension::DrawPropertySection(entity, "Terrian",
 				[&]()
 				{
 					TerrainComponent& component = entity.GetComponent<TerrainComponent>();
