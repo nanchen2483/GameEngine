@@ -64,6 +64,7 @@ namespace Engine
 				return PolygonMode::FILL;
 			default:
 				ENGINE_CORE_ASSERT(false, "Invalid polygonMode type");
+				return (PolygonMode)-1;
 			}
 		}
 
