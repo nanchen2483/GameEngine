@@ -49,6 +49,9 @@ namespace Engine
 				transformA.translation += distanceA;
 				transformB.translation -= distanceB;
 			}
+
+			physicsA->fallingTime = 0.0f;
+			physicsB->fallingTime = 0.0f;
 		}
 	}
 
