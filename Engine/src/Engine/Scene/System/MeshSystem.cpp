@@ -10,7 +10,8 @@ namespace Engine
 		{
 			if (!physics.isStatic)
 			{
-				transform.translation.y -= System::GetFallVelocity();
+				physics.fallingTime += System::GetDeltaTime();
+				transform.translation.y -= System::GetFreeFallVelocity(physics.fallingTime);
 			}
 
 			if (terrain != nullptr)

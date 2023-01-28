@@ -8,6 +8,7 @@ namespace Engine
 	{
 		float weight = 1.0f;
 		bool isStatic = false;
+		float fallingTime = 0.0f;
 		Ptr<BoundingBox> boundingBox = nullptr;
 
 		operator Ptr<BoundingBox>() { return boundingBox; }
