@@ -19,7 +19,10 @@ namespace Engine
 				transform.translation.y = terrain->GetHeight(transform.translation.x, transform.translation.z);
 			}
 
-			meshComponent.isOnViewFrustum = physics.boundingBox->IsOnFrustum(frustum, transform);
+			if (physics.boundingBox != nullptr)
+			{
+				meshComponent.isOnViewFrustum = physics.boundingBox->IsOnFrustum(frustum, transform);
+			}
 		}
 	}
 }

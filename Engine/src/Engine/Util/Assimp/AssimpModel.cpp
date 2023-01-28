@@ -85,7 +85,12 @@ namespace Engine
 				vertex.normal = AssimpUtil::ToGlm(mesh->mNormals[i]);
 				vertex.color = glm::vec4(1.0f);
 				vertex.material = material.GetTextureSlotIndices();
-				vertex.texCoord = mesh->HasTextureCoords(0) ? AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]) : glm::vec2(0.0f);
+				vertex.texCoord = glm::vec2(0.0f);
+				if (mesh->HasTextureCoords(0))
+				{
+					vertex.texCoord = AssimpUtil::ToGlm(mesh->mTextureCoords[0][i]);
+				}
+
 				vertices.push_back(vertex);
 
 				UpdateBoundingValues(vertex.position);

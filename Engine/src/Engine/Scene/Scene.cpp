@@ -129,14 +129,13 @@ namespace Engine
 				m_registry.view<TransformComponent, MeshComponent>()
 					.each([=](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 						{
+							Ptr<Animation> animation = nullptr;
 							if (m_registry.all_of<AnimationComponent>(entity))
 							{
-								Renderer3D::Draw(transform, mesh, m_registry.get<AnimationComponent>(entity), ShadowSystem::GetShader());
+								animation = m_registry.get<AnimationComponent>(entity);
 							}
-							else
-							{
-								Renderer3D::Draw(transform, mesh, nullptr, ShadowSystem::GetShader());
-							}
+							
+							Renderer3D::Draw(transform, mesh, animation, ShadowSystem::GetShader());
 						});
 			});
 	}
@@ -242,13 +241,15 @@ namespace Engine
 			m_registry.view<TransformComponent, MeshComponent>()
 				.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 					{
-						if (m_registry.all_of<AnimationComponent>(entity))
+						if (mesh.isOnViewFrustum)
 						{
-							Renderer3D::Draw(transform, mesh, m_registry.get<AnimationComponent>(entity));
-						}
-						else
-						{
-							Renderer3D::Draw(transform, mesh);
+							Ptr<Animation> animation = nullptr;
+							if (m_registry.all_of<AnimationComponent>(entity))
+							{
+								animation = m_registry.get<AnimationComponent>(entity);
+							}
+
+							Renderer3D::Draw(transform, mesh, animation);
 						}
 					});
 
@@ -270,13 +271,15 @@ namespace Engine
 					m_registry.view<TransformComponent, MeshComponent>()
 						.each([=](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 							{
-								if (m_registry.all_of<AnimationComponent>(entity))
+								if (mesh.isOnViewFrustum)
 								{
-									Renderer3D::Draw(transform, mesh, m_registry.get<AnimationComponent>(entity), ShadowSystem::GetShader());
-								}
-								else
-								{
-									Renderer3D::Draw(transform, mesh, nullptr, ShadowSystem::GetShader());
+									Ptr<Animation> animation = nullptr;
+									if (m_registry.all_of<AnimationComponent>(entity))
+									{
+										animation = m_registry.get<AnimationComponent>(entity);
+									}
+
+									Renderer3D::Draw(transform, mesh, animation, ShadowSystem::GetShader());
 								}
 							});
 				});
