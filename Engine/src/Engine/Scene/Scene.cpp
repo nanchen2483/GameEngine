@@ -56,7 +56,7 @@ namespace Engine
 
 		Renderer3D::ResetStates();
 		Frustum frustum = camera.GetFrustum();
-			
+		
 		// Update
 		Entity terrainEntity = GetTerrainEntity();
 		static Ptr<Terrain> terrain;
@@ -165,11 +165,11 @@ namespace Engine
 		{
 			CameraComponent &primaryCamera = cameraEntity.GetComponent<CameraComponent>();
 			TransformComponent &playerTransform = playerEntity.GetComponent<TransformComponent>();
-			Frustum frustum = primaryCamera.camera.GetFrustum(playerTransform);
+			Frustum frustum = CameraSystem::GetFrustum(playerTransform.transform, primaryCamera.camera);
 
 			if (!Input::IsCursorVisible())
 			{
-				CameraSystem::OnUpdate(&playerTransform.transform, &primaryCamera.camera);
+				CameraSystem::OnUpdate(playerTransform.transform, primaryCamera.camera);
 			}
 
 			// Script
