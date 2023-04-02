@@ -199,7 +199,7 @@ namespace Engine
 		dispacther.Dispatch<MouseScrolledEvent>(ENGINE_BIND_FN(EditorCamera::OnMouseScroll));
 	}
 
-	Frustum EditorCamera::GetFrustum(const Transform& transform) const
+	Frustum EditorCamera::GetFrustum() const
 	{
 		return Frustum(m_position, m_rotation, m_FOV, m_nearClip, m_farClip, m_aspectRatio);
 	}

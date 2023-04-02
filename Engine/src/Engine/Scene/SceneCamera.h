@@ -14,7 +14,6 @@ namespace Engine
 		virtual const glm::mat4& GetProjection() const { return m_projection; }
 		virtual const float GetFOV() const override { return m_FOV; }
 		virtual const float GetAspectRatio() const override { return m_aspectRatio; }
-		virtual Frustum GetFrustum(const Transform& transform) const override;
 		virtual void SetViewportSize(uint32_t width, uint32_t height) override;
 
 		void SetOrthographic(uint32_t size, float nearClip, float farClip);

@@ -101,7 +101,7 @@ namespace Engine
 		}
 		center /= frustumCorners.size();
 
-		const glm::mat4 lightView = glm::lookAt(center + m_lightDirection, center, m_up);
+		const glm::mat4 lightView = glm::lookAt(center + LIGHT_DIRECTION, center, m_up);
 
 		float minX = std::numeric_limits<float>::max();
 		float maxX = std::numeric_limits<float>::min();

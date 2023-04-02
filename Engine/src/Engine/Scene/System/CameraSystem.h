@@ -8,7 +8,8 @@ namespace Engine
 	class CameraSystem : public ISystem
 	{
 	public:
-		static void OnUpdate(Transform *transform, SceneCamera *camera);
+		static void OnUpdate(Transform& transform, SceneCamera& camera);
 		static glm::mat4 GetViewMatrix(const Transform& transform) { return glm::inverse((glm::mat4)transform); }
+		static Frustum GetFrustum(const Transform& transform, const SceneCamera& camera);
 	};
 }

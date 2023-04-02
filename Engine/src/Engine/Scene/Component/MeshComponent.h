@@ -11,6 +11,7 @@ namespace Engine
 		bool isLoading = false;
 		bool isPlayer = false;
 		bool isOnViewFrustum = false;
+		bool isOnLightViewFrustum = false;
 		std::string filePath;
 		std::vector<Ptr<Mesh>> meshes;
 

@@ -56,7 +56,7 @@ namespace Engine
 
 		Renderer3D::ResetStates();
 		Frustum frustum = camera.GetFrustum();
-			
+		
 		// Update
 		Entity terrainEntity = GetTerrainEntity();
 		static Ptr<Terrain> terrain;
@@ -165,11 +165,12 @@ namespace Engine
 		{
 			CameraComponent &primaryCamera = cameraEntity.GetComponent<CameraComponent>();
 			TransformComponent &playerTransform = playerEntity.GetComponent<TransformComponent>();
-			Frustum frustum = primaryCamera.camera.GetFrustum(playerTransform);
+			Frustum frustum = CameraSystem::GetFrustum(playerTransform.transform, primaryCamera.camera);
+			Frustum lightFrustum = frustum.GetLightViewFrustum(LIGHT_DIRECTION);
 
 			if (!Input::IsCursorVisible())
 			{
-				CameraSystem::OnUpdate(&playerTransform.transform, &primaryCamera.camera);
+				CameraSystem::OnUpdate(playerTransform.transform, primaryCamera.camera);
 			}
 
 			// Script
@@ -203,7 +204,7 @@ namespace Engine
 			auto meshView = m_registry.view<TransformComponent, MeshComponent, PhysicsComponent>();
 			meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, PhysicsComponent& thisComponent)
 				{
-					MeshSystem::OnUpdate(meshComponent, thisTransform, thisComponent, frustum, terrain);
+					MeshSystem::OnUpdate(meshComponent, thisTransform, thisComponent, frustum, lightFrustum, terrain);
 					meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, PhysicsComponent& thatComponent)
 						{
 							PhysicsSystem::OnUpdate(thisTransform, thatTransform, &thisComponent, &thatComponent);
@@ -269,9 +270,9 @@ namespace Engine
 				[=]()
 				{
 					m_registry.view<TransformComponent, MeshComponent>()
-						.each([=](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
+						.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 							{
-								if (mesh.isOnViewFrustum)
+								if (mesh.isOnLightViewFrustum)
 								{
 									Ptr<Animation> animation = nullptr;
 									if (m_registry.all_of<AnimationComponent>(entity))

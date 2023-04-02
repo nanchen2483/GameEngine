@@ -31,11 +31,6 @@ namespace Engine
 	{
 	}
 
-	Frustum SceneCamera::GetFrustum(const Transform& transform) const
-	{
-		return Frustum(transform.translation, transform.rotation, m_FOV, m_perspectiveNearClip, m_perspectiveFarClip, m_aspectRatio);
-	}
-
 	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
 	{
 		ENGINE_CORE_ASSERT(height > 0, "Viewport height cannot be less or equal to 0");

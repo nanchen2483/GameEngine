@@ -56,15 +56,15 @@ namespace Engine
 
 		const AABB worldAABB(worldCenter, newExtentX, newExtentY, newExtentZ);
 
-		return (worldAABB.IsOnForwardPlan(frustum.leftFace) &&
-				worldAABB.IsOnForwardPlan(frustum.rightFace) &&
-				worldAABB.IsOnForwardPlan(frustum.topFace) &&
-				worldAABB.IsOnForwardPlan(frustum.bottomFace) &&
-				worldAABB.IsOnForwardPlan(frustum.nearFace) &&
-				worldAABB.IsOnForwardPlan(frustum.farFace));
+		return (worldAABB.IsOnForwardPlane(frustum.leftFace) &&
+				worldAABB.IsOnForwardPlane(frustum.rightFace) &&
+				worldAABB.IsOnForwardPlane(frustum.topFace) &&
+				worldAABB.IsOnForwardPlane(frustum.bottomFace) &&
+				worldAABB.IsOnForwardPlane(frustum.nearFace) &&
+				worldAABB.IsOnForwardPlane(frustum.farFace));
 	}
 
-	bool AABB::IsOnForwardPlan(const Plan& plan) const
+	bool AABB::IsOnForwardPlane(const Plane& plan) const
 	{
 		const float r = m_boundingValue.extents.x * std::abs(plan.normal.x) +
 						m_boundingValue.extents.y * std::abs(plan.normal.y) +
@@ -75,7 +75,7 @@ namespace Engine
 	
 	glm::vec3 AABB::GetSupportPoint(glm::vec3 direction) const
 	{
-		glm::vec3 result;
+		glm::vec3 result{};
 		result.x = Math::Sign(direction.x);
 		result.y = Math::Sign(direction.y);
 		result.z = Math::Sign(direction.z);
