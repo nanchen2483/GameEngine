@@ -9,6 +9,6 @@ namespace Engine
 	class MeshSystem : public ISystem
 	{
 	public:
-		static void OnUpdate(MeshComponent& meshComponent, Transform& transform, PhysicsComponent physics, const Frustum& frustum, const Ptr<Terrain>& terrain);
+		static void OnUpdate(MeshComponent& meshComponent, Transform& transform, PhysicsComponent physics, const Frustum& frustum, const Frustum& lightViewFrustum, const Ptr<Terrain>& terrain);
 	};
 }

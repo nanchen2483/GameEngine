@@ -6,6 +6,8 @@
 
 namespace Engine
 {
+	static const glm::vec3 LIGHT_DIRECTION = glm::normalize(glm::vec3(0.2f, 1.0f, 0.3f));
+
 	struct ShadowBoxInfo
 	{
 		const uint32_t depthTextureSlot = 40;
@@ -39,7 +41,6 @@ namespace Engine
 		float m_aspectRatio;
 
 		// Light properties
-		const glm::vec3 m_lightDirection = glm::normalize(glm::vec3(0.2f, 1.0f, 0.3f));
 		const uint32_t m_depthMapResolution = 4096;
 		const ShadowBoxInfo m_shadowInfo;
 		const glm::vec3 m_up = { 0.0f, 1.0f, 0.0f };

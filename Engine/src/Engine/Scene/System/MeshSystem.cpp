@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	void MeshSystem::OnUpdate(MeshComponent& meshComponent, Transform& transform, PhysicsComponent physics, const Frustum& frustum, const Ptr<Terrain>& terrain)
+	void MeshSystem::OnUpdate(MeshComponent& meshComponent, Transform& transform, PhysicsComponent physics, const Frustum& frustum, const Frustum& lightViewFrustum, const Ptr<Terrain>& terrain)
 	{
 		if (!meshComponent.meshes.empty())
 		{
@@ -22,6 +22,7 @@ namespace Engine
 			if (physics.boundingBox != nullptr)
 			{
 				meshComponent.isOnViewFrustum = physics.boundingBox->IsOnFrustum(frustum, transform);
+				meshComponent.isOnLightViewFrustum = physics.boundingBox->IsOnFrustum(lightViewFrustum, transform);
 			}
 		}
 	}

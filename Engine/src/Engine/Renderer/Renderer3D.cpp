@@ -167,13 +167,6 @@ namespace Engine
 				}
 			});
 
-		s_data.dirLightUniformBuffer->SetData({
-			glm::value_ptr(glm::normalize(glm::vec3(0.2f, 1.0f, 0.3f))),
-			glm::value_ptr(glm::vec3(0.05f)),
-			glm::value_ptr(glm::vec3(0.4f)),
-			glm::value_ptr(glm::vec3(0.5f)),
-		});
-
 		s_data.pointLightUniformBuffer = UniformBuffer::Create(2, {
 				BufferLayoutType::Std140,
 				{
@@ -186,6 +179,14 @@ namespace Engine
 					{ ShaderDataType::Float3 },
 				}
 			});
+
+		s_data.dirLightUniformBuffer->SetData({
+			glm::value_ptr(LIGHT_DIRECTION),
+			glm::value_ptr(glm::vec3(0.05f)),
+			glm::value_ptr(glm::vec3(0.4f)),
+			glm::value_ptr(glm::vec3(0.5f)),
+		});
+
 	}
 	
 	void Renderer3D::Shutdown()
