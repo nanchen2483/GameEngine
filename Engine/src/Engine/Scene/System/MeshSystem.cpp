@@ -8,11 +8,12 @@ namespace Engine
 	{
 		if (!meshComponent.meshes.empty())
 		{
-			if (!physics.isStatic)
-			{
-				physics.fallingTime += System::GetDeltaTime();
-				transform.translation.y -= System::GetFreeFallVelocity(physics.fallingTime);
-			}
+			// TODO: optimize gravity and terrain collision
+			//if (!physics.isStatic)
+			//{
+			//	physics.fallingTime += System::GetDeltaTime();
+			//	transform.translation.y -= System::GetFreeFallVelocity(physics.fallingTime);
+			//}
 
 			if (terrain != nullptr)
 			{
