@@ -12,7 +12,7 @@ namespace Engine
 		virtual BoundingValue GetBoundingValue() const override { return m_boundingValue; }
 		virtual void SetBoundingValue(const BoundingValue& value) override;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const override;
-		virtual bool IsOnForwardPlan(const Plan& plan) const override;
+		virtual bool IsOnForwardPlane(const Plane& plan) const override;
 		virtual glm::vec3 GetSupportPoint(glm::vec3 direction) const override;
 	private:
 		BoundingValue m_boundingValue;

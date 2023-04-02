@@ -29,7 +29,7 @@ namespace Engine
 		virtual BoundingValue GetBoundingValue() const = 0;
 		virtual void SetBoundingValue(const BoundingValue& value) = 0;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const = 0;
-		virtual bool IsOnForwardPlan(const Plan& plan) const = 0;
+		virtual bool IsOnForwardPlane(const Plane& plan) const = 0;
 		virtual glm::vec3 GetSupportPoint(glm::vec3 direction) const = 0;
 
 		static Ptr<BoundingBox> Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max);
