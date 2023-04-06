@@ -26,8 +26,8 @@ namespace Engine
 		glm::dvec3 m_positionB = {};
 		glm::dmat3 m_orientationA = {};
 		glm::dmat3 m_orientationB = {};
-		glm::dvec3 m_transformA = {};
-		glm::dvec3 m_transformB = {};
+		glm::dmat4 m_transformA = {};
+		glm::dmat4 m_transformB = {};
 		BoundingValue m_boundingValueA = {};
 		BoundingValue m_boundingValueB = {};
 

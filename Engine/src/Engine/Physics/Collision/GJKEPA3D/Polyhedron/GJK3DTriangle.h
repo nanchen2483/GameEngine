@@ -10,7 +10,7 @@ namespace Engine
 	///    c --- b		R: right triangle
 	///     \ B /		B: bottom triangle
 	///      \ /
-	///       d
+	///       d			Points: a, b, c, d
 	/// </summary>
 	class GJK3DTriangle : public Triangle3D
 	{

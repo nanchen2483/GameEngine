@@ -20,8 +20,10 @@ namespace Engine
 		m_positionB = transformB.translation;
 		m_orientationA = glm::toMat3(glm::quat(transformA.rotation));
 		m_orientationB = glm::toMat3(glm::quat(transformB.rotation));
-		m_transformA = boundingValueA.extents * transformA.scale * m_orientationA;
-		m_transformB = boundingValueB.extents * transformB.scale * m_orientationB;
+		m_transformA = glm::toMat4(glm::quat(transformA.rotation)) *
+					   glm::scale(glm::mat4(1.0f), transformA.scale * boundingValueA.extents);
+		m_transformB = glm::toMat4(glm::quat(transformB.rotation)) *
+					   glm::scale(glm::mat4(1.0f), transformB.scale * boundingValueB.extents);
 		m_boundingValueA = boundingValueA;
 		m_boundingValueB = boundingValueB;
 
@@ -122,7 +124,7 @@ namespace Engine
 	{
 		glm::dvec3 supportPointDirection = direction * glm::transpose(m_orientationA);
 		glm::dvec3 point = m_boundingValueA.GetSupportPoint(supportPointDirection);
-		point = point * m_transformA;
+		point = glm::vec3(glm::vec4(point, 1.0) * m_transformA);
 		point += m_positionA;
 		
 		return point;
@@ -132,7 +134,7 @@ namespace Engine
 	{
 		glm::dvec3 supportPointDirection = direction * glm::transpose(m_orientationB);
 		glm::dvec3 point = m_boundingValueB.GetSupportPoint(supportPointDirection);
-		point = point * m_transformB;
+		point = glm::vec3(glm::vec4(point, 1.0) * m_transformB);
 		point += m_positionB;
 
 		return point;
