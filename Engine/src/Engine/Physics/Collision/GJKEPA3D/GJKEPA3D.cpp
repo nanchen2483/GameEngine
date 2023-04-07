@@ -9,18 +9,18 @@ namespace Engine
 		m_distanceBetweenAToB = 0;
 		m_directionFromAToB = {};
 
-		m_positionA = transformA.translation;
-		m_positionB = transformB.translation;
-		m_orientationA = glm::toMat3(glm::quat(transformA.rotation));
-		m_orientationB = glm::toMat3(glm::quat(transformB.rotation));
-		m_transformA = glm::toMat4(glm::quat(transformA.rotation)) *
+		m_objectA.position = transformA.translation;
+		m_objectB.position = transformB.translation;
+		m_objectA.orientation = glm::toMat3(glm::quat(transformA.rotation));
+		m_objectB.orientation = glm::toMat3(glm::quat(transformB.rotation));
+		m_objectA.transform = glm::toMat4(glm::quat(transformA.rotation)) *
 					   glm::scale(glm::mat4(1.0f), transformA.scale * boundingValueA.extents);
-		m_transformB = glm::toMat4(glm::quat(transformB.rotation)) *
+		m_objectB.transform = glm::toMat4(glm::quat(transformB.rotation)) *
 					   glm::scale(glm::mat4(1.0f), transformB.scale * boundingValueB.extents);
-		m_boundingValueA = boundingValueA;
-		m_boundingValueB = boundingValueB;
+		m_objectA.boundingValue = boundingValueA;
+		m_objectB.boundingValue = boundingValueB;
 
-		glm::dvec3 center = m_positionA - m_positionB;
+		glm::dvec3 center = m_objectA.position - m_objectB.position;
 		glm::dvec3 pointA = V0 + center;
 		glm::dvec3 pointB = V1 + center;
 		glm::dvec3 pointC = V2 + center;
@@ -88,17 +88,17 @@ namespace Engine
 		glm::dvec3 pointB = GetSupportPointOnB(direction);
 		Vertex3D supportPoint = m_deltahedron->AddSupportPoint(pointA - pointB);
 		
-		m_pointOnAMap[supportPoint.id] = pointA;
-		m_pointOnBMap[supportPoint.id] = pointB;
+		m_objectA.pointMap[supportPoint.id] = pointA;
+		m_objectB.pointMap[supportPoint.id] = pointB;
 		
 		return supportPoint;
 	}
 	
 	glm::dvec3 GJKEPA3D::CalcPointA(const GJK3DTriangle* triangle, glm::dvec3 baryCentric)
 	{
-		glm::dvec3 a = m_pointOnAMap[triangle->GetA().id];
-		glm::dvec3 b = m_pointOnAMap[triangle->GetB().id];
-		glm::dvec3 c = m_pointOnAMap[triangle->GetC().id];
+		glm::dvec3 a = m_objectA.pointMap[triangle->GetA().id];
+		glm::dvec3 b = m_objectA.pointMap[triangle->GetB().id];
+		glm::dvec3 c = m_objectA.pointMap[triangle->GetC().id];
 
 		glm::mat3 matrix(a, b, c);
 
@@ -107,9 +107,9 @@ namespace Engine
 
 	glm::dvec3 GJKEPA3D::CalcPointB(const GJK3DTriangle* triangle, glm::dvec3 baryCentric)
 	{
-		glm::dvec3 a = m_pointOnBMap[triangle->GetA().id];
-		glm::dvec3 b = m_pointOnBMap[triangle->GetB().id];
-		glm::dvec3 c = m_pointOnBMap[triangle->GetC().id];
+		glm::dvec3 a = m_objectB.pointMap[triangle->GetA().id];
+		glm::dvec3 b = m_objectB.pointMap[triangle->GetB().id];
+		glm::dvec3 c = m_objectB.pointMap[triangle->GetC().id];
 
 		glm::mat3 matrix(a, b, c);
 
@@ -118,20 +118,20 @@ namespace Engine
 	
 	glm::dvec3 GJKEPA3D::GetSupportPointOnA(glm::dvec3 direction)
 	{
-		glm::dvec3 supportPointDirection = direction * glm::transpose(m_orientationA);
-		glm::dvec3 point = m_boundingValueA.GetSupportPoint(supportPointDirection);
-		point = glm::vec3(glm::vec4(point, 1.0) * m_transformA);
-		point += m_positionA;
+		glm::dvec3 supportPointDirection = direction * glm::transpose(m_objectA.orientation);
+		glm::dvec3 point = m_objectA.boundingValue.GetSupportPoint(supportPointDirection);
+		point = glm::vec3(glm::vec4(point, 1.0) * m_objectA.transform);
+		point += m_objectA.position;
 		
 		return point;
 	}
 	
 	glm::dvec3 GJKEPA3D::GetSupportPointOnB(glm::dvec3 direction)
 	{
-		glm::dvec3 supportPointDirection = direction * glm::transpose(m_orientationB);
-		glm::dvec3 point = m_boundingValueB.GetSupportPoint(supportPointDirection);
-		point = glm::vec3(glm::vec4(point, 1.0) * m_transformB);
-		point += m_positionB;
+		glm::dvec3 supportPointDirection = direction * glm::transpose(m_objectB.orientation);
+		glm::dvec3 point = m_objectB.boundingValue.GetSupportPoint(supportPointDirection);
+		point = glm::vec3(glm::vec4(point, 1.0) * m_objectB.transform);
+		point += m_objectB.position;
 
 		return point;
 	}

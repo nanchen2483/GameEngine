@@ -4,6 +4,15 @@
 
 namespace Engine
 {
+	struct ObjectInfo
+	{
+		glm::dvec3 position = {};
+		glm::dmat3 orientation = {};
+		glm::dmat4 transform = {};
+		BoundingValue boundingValue = {};
+		std::unordered_map<int32_t, glm::dvec3> pointMap = {};
+	};
+
 	class GJKEPA3D : public Collision
 	{
 	public:
@@ -21,17 +30,7 @@ namespace Engine
 		glm::dvec3 GetSupportPointOnA(glm::dvec3 direction);
 		glm::dvec3 GetSupportPointOnB(glm::dvec3 direction);
 
-		glm::dvec3 m_positionA = {};
-		glm::dvec3 m_positionB = {};
-		glm::dmat3 m_orientationA = {};
-		glm::dmat3 m_orientationB = {};
-		glm::dmat4 m_transformA = {};
-		glm::dmat4 m_transformB = {};
-		BoundingValue m_boundingValueA = {};
-		BoundingValue m_boundingValueB = {};
-
-		std::unordered_map<int32_t, glm::dvec3> m_pointOnAMap = {};
-		std::unordered_map<int32_t, glm::dvec3> m_pointOnBMap = {};
+		ObjectInfo m_objectA, m_objectB;
 
 		float m_distanceBetweenAToB = 0;
 		glm::vec3 m_directionFromAToB = {};

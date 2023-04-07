@@ -14,7 +14,6 @@ namespace Engine
 		float GetClosestDistanceToOrigin();
 		glm::dvec3 GetBarycentric();
 
-		bool IsValidSupportPoint(const Vertex3D& newSupportPoint);
 		GJK3DTriangle* GetTriangleToBeReplaced(const Vertex3D& newSupportPoint);
 
 		glm::dvec3 GetSearchDirection();
@@ -24,6 +23,7 @@ namespace Engine
 		GJK3DTriangle* CreateTriangle(const Vertex3D& pointA, const Vertex3D& pointB, const Vertex3D& pointC);
 		void SortTriangleByDistanceToOrigin(GJK3DTriangle* triangle);
 		bool AlreadyExists(const Vertex3D& newSupportPoint);
+		bool IsValidSupportPoint(const Vertex3D& newSupportPoint);
 		
 		/// <summary>
 		/// Remove a triangle from this deltahedron and add 3 new triangles based on the new point
