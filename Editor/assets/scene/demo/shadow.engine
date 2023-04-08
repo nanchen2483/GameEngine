@@ -2,7 +2,7 @@ Scene: Untitled
 Entities:
   - Entity: 123
     TagComponent:
-      Tag: Plan
+      Tag: Floor
     TransformComponent:
       Translation: [0.0500002392, -0.0500000678, 7.15255737e-07]
       Rotation: [0, 0, 0]

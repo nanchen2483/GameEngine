@@ -9,18 +9,18 @@ namespace Engine
 		m_distanceBetweenAToB = 0;
 		m_directionFromAToB = {};
 
-		m_objectA.position = transformA.translation;
-		m_objectB.position = transformB.translation;
-		m_objectA.orientation = glm::toMat3(glm::quat(transformA.rotation));
-		m_objectB.orientation = glm::toMat3(glm::quat(transformB.rotation));
-		m_objectA.transform = glm::toMat4(glm::quat(transformA.rotation)) *
+		m_convexA.position = transformA.translation;
+		m_convexB.position = transformB.translation;
+		m_convexA.orientation = glm::toMat3(glm::quat(transformA.rotation));
+		m_convexB.orientation = glm::toMat3(glm::quat(transformB.rotation));
+		m_convexA.transform = glm::toMat4(glm::quat(transformA.rotation)) *
 					   glm::scale(glm::mat4(1.0f), transformA.scale * boundingValueA.extents);
-		m_objectB.transform = glm::toMat4(glm::quat(transformB.rotation)) *
+		m_convexB.transform = glm::toMat4(glm::quat(transformB.rotation)) *
 					   glm::scale(glm::mat4(1.0f), transformB.scale * boundingValueB.extents);
-		m_objectA.boundingValue = boundingValueA;
-		m_objectB.boundingValue = boundingValueB;
+		m_convexA.boundingValue = boundingValueA;
+		m_convexB.boundingValue = boundingValueB;
 
-		glm::dvec3 center = m_objectA.position - m_objectB.position;
+		glm::dvec3 center = m_convexA.position - m_convexB.position;
 		glm::dvec3 pointA = V0 + center;
 		glm::dvec3 pointB = V1 + center;
 		glm::dvec3 pointC = V2 + center;
@@ -88,17 +88,17 @@ namespace Engine
 		glm::dvec3 pointB = GetSupportPointOnB(direction);
 		Vertex3D supportPoint = m_deltahedron->AddSupportPoint(pointA - pointB);
 		
-		m_objectA.pointMap[supportPoint.id] = pointA;
-		m_objectB.pointMap[supportPoint.id] = pointB;
+		m_convexA.pointMap[supportPoint.id] = pointA;
+		m_convexB.pointMap[supportPoint.id] = pointB;
 		
 		return supportPoint;
 	}
 	
 	glm::dvec3 GJKEPA3D::CalcPointA(const GJK3DTriangle* triangle, glm::dvec3 baryCentric)
 	{
-		glm::dvec3 a = m_objectA.pointMap[triangle->GetA().id];
-		glm::dvec3 b = m_objectA.pointMap[triangle->GetB().id];
-		glm::dvec3 c = m_objectA.pointMap[triangle->GetC().id];
+		glm::dvec3 a = m_convexA.pointMap[triangle->GetA().id];
+		glm::dvec3 b = m_convexA.pointMap[triangle->GetB().id];
+		glm::dvec3 c = m_convexA.pointMap[triangle->GetC().id];
 
 		glm::mat3 matrix(a, b, c);
 
@@ -107,9 +107,9 @@ namespace Engine
 
 	glm::dvec3 GJKEPA3D::CalcPointB(const GJK3DTriangle* triangle, glm::dvec3 baryCentric)
 	{
-		glm::dvec3 a = m_objectB.pointMap[triangle->GetA().id];
-		glm::dvec3 b = m_objectB.pointMap[triangle->GetB().id];
-		glm::dvec3 c = m_objectB.pointMap[triangle->GetC().id];
+		glm::dvec3 a = m_convexB.pointMap[triangle->GetA().id];
+		glm::dvec3 b = m_convexB.pointMap[triangle->GetB().id];
+		glm::dvec3 c = m_convexB.pointMap[triangle->GetC().id];
 
 		glm::mat3 matrix(a, b, c);
 
@@ -118,20 +118,20 @@ namespace Engine
 	
 	glm::dvec3 GJKEPA3D::GetSupportPointOnA(glm::dvec3 direction)
 	{
-		glm::dvec3 supportPointDirection = direction * glm::transpose(m_objectA.orientation);
-		glm::dvec3 point = m_objectA.boundingValue.GetSupportPoint(supportPointDirection);
-		point = glm::vec3(glm::vec4(point, 1.0) * m_objectA.transform);
-		point += m_objectA.position;
+		glm::dvec3 supportPointDirection = direction * glm::transpose(m_convexA.orientation);
+		glm::dvec3 point = m_convexA.boundingValue.GetSupportPoint(supportPointDirection);
+		point = glm::vec3(glm::vec4(point, 1.0) * m_convexA.transform);
+		point += m_convexA.position;
 		
 		return point;
 	}
 	
 	glm::dvec3 GJKEPA3D::GetSupportPointOnB(glm::dvec3 direction)
 	{
-		glm::dvec3 supportPointDirection = direction * glm::transpose(m_objectB.orientation);
-		glm::dvec3 point = m_objectB.boundingValue.GetSupportPoint(supportPointDirection);
-		point = glm::vec3(glm::vec4(point, 1.0) * m_objectB.transform);
-		point += m_objectB.position;
+		glm::dvec3 supportPointDirection = direction * glm::transpose(m_convexB.orientation);
+		glm::dvec3 point = m_convexB.boundingValue.GetSupportPoint(supportPointDirection);
+		point = glm::vec3(glm::vec4(point, 1.0) * m_convexB.transform);
+		point += m_convexB.position;
 
 		return point;
 	}

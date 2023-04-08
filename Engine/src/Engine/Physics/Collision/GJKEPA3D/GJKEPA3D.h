@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	struct ObjectInfo
+	struct ConvexInfo
 	{
 		glm::dvec3 position = {};
 		glm::dmat3 orientation = {};
@@ -30,7 +30,7 @@ namespace Engine
 		glm::dvec3 GetSupportPointOnA(glm::dvec3 direction);
 		glm::dvec3 GetSupportPointOnB(glm::dvec3 direction);
 
-		ObjectInfo m_objectA, m_objectB;
+		ConvexInfo m_convexA, m_convexB;
 
 		float m_distanceBetweenAToB = 0;
 		glm::vec3 m_directionFromAToB = {};
