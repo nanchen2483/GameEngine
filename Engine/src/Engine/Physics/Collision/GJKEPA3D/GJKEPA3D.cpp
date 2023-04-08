@@ -4,13 +4,6 @@
 
 namespace Engine
 {
-	GJKEPA3D::GJKEPA3D()
-	{
-		m_deltahedron = CreateUniq<GJK3DDeltahedron>();
-		m_pointOnAMap[-1] = glm::dvec3(0.0);
-		m_pointOnBMap[-1] = glm::dvec3(0.0);
-	}
-
 	bool GJKEPA3D::Detect(Transform transformA, Transform transformB, BoundingValue boundingValueA, BoundingValue boundingValueB)
 	{
 		m_distanceBetweenAToB = 0;
@@ -27,12 +20,12 @@ namespace Engine
 		m_boundingValueA = boundingValueA;
 		m_boundingValueB = boundingValueB;
 
-		glm::dvec3 center = SupportCenter();
-		glm::dvec3 a = V0 + center;
-		glm::dvec3 b = V1 + center;
-		glm::dvec3 c = V2 + center;
-		glm::dvec3 d = V3 + center;
-		m_deltahedron->CreateTetrahedron(a, b, c, d);
+		glm::dvec3 center = m_positionA - m_positionB;
+		glm::dvec3 pointA = V0 + center;
+		glm::dvec3 pointB = V1 + center;
+		glm::dvec3 pointC = V2 + center;
+		glm::dvec3 pointD = V3 + center;
+		m_deltahedron = CreateUniq<GJK3DDeltahedron>(pointA, pointB, pointC, pointD);
 
 		return Solve();
 	}
@@ -42,24 +35,32 @@ namespace Engine
 		uint32_t iteration = 0;
 		while (++iteration < MAX_ITERATION)
 		{
-			glm::dvec3 direction = m_deltahedron->GetSearchDirection();
-			const Vertex3D mewSupportPoint = CreateNewSupportPoint(direction);
-			bool isValidPoint = m_deltahedron->IsValidSupportPoint(mewSupportPoint);
-			int32_t removeTriangleIndex = m_deltahedron->GetTriangleShouldBeReplaced(mewSupportPoint);
-
-			if (removeTriangleIndex == -1 || !isValidPoint)
+			const Vertex3D newSupportPoint = CreateNewSupportPoint();
+			GJK3DTriangle* triangleToBeReplaced = m_deltahedron->GetTriangleToBeReplaced(newSupportPoint);
+			if (triangleToBeReplaced != nullptr)
 			{
-				m_distanceBetweenAToB = m_deltahedron->GetClosestDistanceToOrigin();
-				
-				const Uniq<GJK3DTriangle>& closestTriangle = m_deltahedron->GetClosestTriangleToOrigin();
+				// Not overlap
+				bool expanded = m_deltahedron->ExpandDeltahedron(triangleToBeReplaced, newSupportPoint);
+				if (!expanded)
+				{
+					return false;
+				}
+			}
+			else
+			{
+				// Overlap
+				const GJK3DTriangle* closestTriangle = m_deltahedron->GetClosestTriangleToOrigin();
 				glm::dvec3 barycentric = m_deltahedron->GetBarycentric();
 				glm::dvec3 closestPointOnA = CalcPointA(closestTriangle, barycentric);
 				glm::dvec3 closestPointOnB = CalcPointB(closestTriangle, barycentric);
 				m_directionFromAToB = glm::vec3(closestPointOnB - closestPointOnA);
+
+				// Shapes completely overlap
 				if (m_directionFromAToB == glm::vec3(0.0f))
 				{
-					// Shapes completely overlap
-					glm::vec3 result;
+					glm::dvec3 direction = m_deltahedron->GetSearchDirection();
+
+					glm::vec3 result{};
 					result.x = Math::Sign(direction.x);
 					result.y = Math::Sign(direction.y);
 					result.z = Math::Sign(direction.z);
@@ -67,38 +68,33 @@ namespace Engine
 					m_distanceBetweenAToB = -0.1f;
 					m_directionFromAToB = result * m_distanceBetweenAToB;
 				}
+				else
+				{
+					m_distanceBetweenAToB = m_deltahedron->GetClosestDistanceToOrigin();
+				}
 
 				return true;
-			}
-
-			bool expanded = m_deltahedron->ExpandDeltahedron(removeTriangleIndex, mewSupportPoint);
-			if (!expanded)
-			{
-				return false;
 			}
 		}
 
 		return false;
 	}
 
-	glm::dvec3 GJKEPA3D::SupportCenter()
+	Vertex3D GJKEPA3D::CreateNewSupportPoint()
 	{
-		return m_positionA - m_positionB;
-	}
-	
-	Vertex3D GJKEPA3D::CreateNewSupportPoint(glm::dvec3 direction)
-	{
-		glm::dvec3 vertexA = GetSupportPointOnA(-direction);
-		glm::dvec3 vertexB = GetSupportPointOnB(direction);
-		Vertex3D supportPoint = m_deltahedron->AddSupportPoint(vertexA - vertexB);
+		glm::dvec3 direction = m_deltahedron->GetSearchDirection();
+
+		glm::dvec3 pointA = GetSupportPointOnA(-direction);
+		glm::dvec3 pointB = GetSupportPointOnB(direction);
+		Vertex3D supportPoint = m_deltahedron->AddSupportPoint(pointA - pointB);
 		
-		m_pointOnAMap[supportPoint.id] = vertexA;
-		m_pointOnBMap[supportPoint.id] = vertexB;
+		m_pointOnAMap[supportPoint.id] = pointA;
+		m_pointOnBMap[supportPoint.id] = pointB;
 		
 		return supportPoint;
 	}
 	
-	glm::dvec3 GJKEPA3D::CalcPointA(const Uniq<GJK3DTriangle>& triangle, glm::dvec3 baryCentric)
+	glm::dvec3 GJKEPA3D::CalcPointA(const GJK3DTriangle* triangle, glm::dvec3 baryCentric)
 	{
 		glm::dvec3 a = m_pointOnAMap[triangle->GetA().id];
 		glm::dvec3 b = m_pointOnAMap[triangle->GetB().id];
@@ -109,7 +105,7 @@ namespace Engine
 		return matrix * baryCentric;
 	}
 
-	glm::dvec3 GJKEPA3D::CalcPointB(const Uniq<GJK3DTriangle>& triangle, glm::dvec3 baryCentric)
+	glm::dvec3 GJKEPA3D::CalcPointB(const GJK3DTriangle* triangle, glm::dvec3 baryCentric)
 	{
 		glm::dvec3 a = m_pointOnBMap[triangle->GetA().id];
 		glm::dvec3 b = m_pointOnBMap[triangle->GetB().id];

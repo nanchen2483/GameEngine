@@ -7,7 +7,7 @@ namespace Engine
 	class GJKEPA3D : public Collision
 	{
 	public:
-		GJKEPA3D();
+		GJKEPA3D() = default;
 
 		virtual bool Detect(Transform transformA, Transform transformB, BoundingValue boundingValueA, BoundingValue boundingValueB) override;
 		virtual bool IsCollided() const override { return m_distanceBetweenAToB < 0.0f; }
@@ -15,10 +15,9 @@ namespace Engine
 		virtual glm::vec3 GetDirectionFromAToB() const override { return m_directionFromAToB; }
 	private:
 		bool Solve();
-		glm::dvec3 SupportCenter();
-		Vertex3D CreateNewSupportPoint(glm::dvec3 direction);
-		glm::dvec3 CalcPointA(const Uniq<GJK3DTriangle>& triangle, glm::dvec3 baryCentric);
-		glm::dvec3 CalcPointB(const Uniq<GJK3DTriangle>& triangle, glm::dvec3 baryCentric);
+		Vertex3D CreateNewSupportPoint();
+		glm::dvec3 CalcPointA(const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
+		glm::dvec3 CalcPointB(const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
 		glm::dvec3 GetSupportPointOnA(glm::dvec3 direction);
 		glm::dvec3 GetSupportPointOnB(glm::dvec3 direction);
 
