@@ -27,17 +27,6 @@ namespace Engine
 		}
 	}
 
-	glm::dvec3 GJK3DDeltahedron::GetSearchDirection()
-	{
-		glm::dvec3 searchDirection = m_triangleHead->GetClosestPointToOrigin();
-		if (m_originEnclosed)
-		{
-			return -searchDirection;
-		}
-
-		return searchDirection;
-	}
-
 	float GJK3DDeltahedron::GetClosestDistanceToOrigin()
 	{
 		float distance = m_triangleHead->GetClosestDistanceToOrigin();
@@ -49,71 +38,20 @@ namespace Engine
 		return distance;
 	}
 
-	GJK3DTriangle* GJK3DDeltahedron::GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint)
-	{
-		if (!IsValidSupportPoint(newSupportPoint))
-		{
-			return nullptr;
-		}
-
-		AddSupportPoint(newSupportPoint);
-
-		for (GJK3DTriangle* triangle = m_triangleHead; triangle != nullptr; triangle = triangle->GetNextTriangle())
-		{
-			if (InTheSameDirection(triangle, newSupportPoint))
-			{
-				return triangle;
-			}
-		}
-
-		return nullptr;
-	}
-
-	bool GJK3DDeltahedron::IsValidSupportPoint(const glm::dvec3& newSupportPoint)
-	{
-		if (AlreadyExists(newSupportPoint))
-		{
-			return false;
-		}
-
-		GJK3DTriangle* closestTriangle = m_triangleHead;
-		double deltaDistance = closestTriangle->GetClosestDistanceToOriginSquare() - glm::dot((glm::dvec3)newSupportPoint, closestTriangle->GetClosestPointToOrigin());
-		bool isCloseEnough = deltaDistance * deltaDistance < COLLIDE_EPSILON * COLLIDE_EPSILON* closestTriangle->GetClosestDistanceToOriginSquare();
-		if (isCloseEnough)
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	bool GJK3DDeltahedron::AlreadyExists(const glm::dvec3& newSupportPoint)
-	{
-		for (uint32_t i = 0; i < m_numOfSupportPoint; ++i)
-		{
-			const glm::dvec3& currentSupportPoint = m_supportPoints[i];
-			if (std::abs(currentSupportPoint.x - newSupportPoint.x) > NUMERIC_EPSILON) continue;
-			if (std::abs(currentSupportPoint.y - newSupportPoint.y) > NUMERIC_EPSILON) continue;
-			if (std::abs(currentSupportPoint.z - newSupportPoint.z) > NUMERIC_EPSILON) continue;
-
-			return true;
-		}
-
-		return false;
-	}
-
-	glm::dvec3 GJK3DDeltahedron::GetBarycentric()
+	const glm::dvec3& GJK3DDeltahedron::GetBarycentric()
 	{
 		return m_triangleHead->GetBarycentric(m_originEnclosed);
 	}
 
-	const glm::dvec3& GJK3DDeltahedron::AddSupportPoint(glm::dvec3 newSupportPoint)
+	const glm::dvec3& GJK3DDeltahedron::GetSearchDirection()
 	{
-		const int32_t index = m_numOfSupportPoint;
-		m_supportPoints[index] = newSupportPoint;
-		m_numOfSupportPoint += 1;
+		glm::dvec3 searchDirection = m_triangleHead->GetClosestPointToOrigin();
+		if (m_originEnclosed)
+		{
+			return -searchDirection;
+		}
 
-		return m_supportPoints[index];
+		return searchDirection;
 	}
 	
 	GJK3DTriangle* GJK3DDeltahedron::CreateTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC)
@@ -162,16 +100,99 @@ namespace Engine
 		}
 	}
 
-	bool GJK3DDeltahedron::ExpandDeltahedron(GJK3DTriangle* removeTriangle, const glm::dvec3& newPoint)
+	GJK3DStatus GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint)
 	{
-		ExpandWithNewPoint(removeTriangle, newPoint);
+		if (!IsValidSupportPoint(newPoint))
+		{
+			return GJK3DStatus::OVERLAP;
+		}
+
+		AddSupportPoint(newPoint);
+		GJK3DTriangle* removeTriangle = GetTriangleToBeReplaced(newPoint);
+		if (removeTriangle == nullptr)
+		{
+			return GJK3DStatus::OVERLAP;
+		}
+
+		ExpandWithNewPoint(newPoint, removeTriangle);
 		UpdateOriginEnclosed(removeTriangle);
 		delete removeTriangle;
 
 		return UpdateNeighbors();
 	}
 
-	void GJK3DDeltahedron::ExpandWithNewPoint(GJK3DTriangle* removeTriangle, const glm::dvec3& newPoint)
+	void GJK3DDeltahedron::AddSupportPoint(glm::dvec3 newSupportPoint)
+	{
+		const int32_t index = m_numOfSupportPoint;
+		m_supportPoints[index] = newSupportPoint;
+		m_numOfSupportPoint += 1;
+	}
+
+	GJK3DTriangle* GJK3DDeltahedron::GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint)
+	{
+		for (GJK3DTriangle* triangle = m_triangleHead; triangle != nullptr; triangle = triangle->GetNextTriangle())
+		{
+			if (InTheSameDirection(triangle, newSupportPoint))
+			{
+				return triangle;
+			}
+		}
+
+		return nullptr;
+	}
+
+	bool GJK3DDeltahedron::IsValidSupportPoint(const glm::dvec3& newSupportPoint)
+	{
+		if (AlreadyExists(newSupportPoint))
+		{
+			return false;
+		}
+
+		GJK3DTriangle* closestTriangle = m_triangleHead;
+		double deltaDistance = closestTriangle->GetClosestDistanceToOriginSquare() - glm::dot(newSupportPoint, closestTriangle->GetClosestPointToOrigin());
+		bool isCloseEnough = deltaDistance * deltaDistance < COLLIDE_EPSILON * COLLIDE_EPSILON * closestTriangle->GetClosestDistanceToOriginSquare();
+		if (isCloseEnough)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	bool GJK3DDeltahedron::AlreadyExists(const glm::dvec3& newSupportPoint)
+	{
+		for (uint32_t i = 0; i < m_numOfSupportPoint; ++i)
+		{
+			const glm::dvec3& currentSupportPoint = m_supportPoints[i];
+			if (std::abs(currentSupportPoint.x - newSupportPoint.x) > NUMERIC_EPSILON) continue;
+			if (std::abs(currentSupportPoint.y - newSupportPoint.y) > NUMERIC_EPSILON) continue;
+			if (std::abs(currentSupportPoint.z - newSupportPoint.z) > NUMERIC_EPSILON) continue;
+
+			return true;
+		}
+
+		return false;
+	}
+
+	void GJK3DDeltahedron::UpdateOriginEnclosed(const GJK3DTriangle* removeTriangle)
+	{
+		if (!m_originEnclosed)
+		{
+			for (uint32_t i = 0; i < m_numOfExpandedTriagnles; ++i)
+			{
+				const GJK3DTriangle* triangle = m_expandedTriangles[i];
+				bool originNotEnclosed = glm::dot(triangle->GetNormalVector(), triangle->GetA()) < 0.0;
+				if (originNotEnclosed)
+				{
+					return;
+				}
+			}
+
+			m_originEnclosed = glm::dot(removeTriangle->GetNormalVector(), removeTriangle->GetA()) < 0.0;
+		}
+	}
+
+	void GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* removeTriangle)
 	{
 		if (removeTriangle->IsDeleted())
 		{
@@ -249,17 +270,17 @@ namespace Engine
 
 		if (leftTriangleShouldBeRemoved)
 		{
-			ExpandWithNewPoint(leftTriangle, newPoint);
+			ExpandWithNewPoint(newPoint, leftTriangle);
 		}
 
 		if (rightTriangleShouldBeRemoved)
 		{
-			ExpandWithNewPoint(rightTriangle, newPoint);
+			ExpandWithNewPoint(newPoint, rightTriangle);
 		}
 
 		if (bottomTriangleShouldBeRemoved)
 		{
-			ExpandWithNewPoint(bottomTriangle, newPoint);
+			ExpandWithNewPoint(newPoint, bottomTriangle);
 		}
 	}
 
@@ -291,25 +312,7 @@ namespace Engine
 		return glm::dot(direction, triangle->GetNormalVector()) > 0;
 	}
 	
-	void GJK3DDeltahedron::UpdateOriginEnclosed(const GJK3DTriangle* removeTriangle)
-	{
-		if (!m_originEnclosed)
-		{
-			for (uint32_t i = 0; i < m_numOfExpandedTriagnles; ++i)
-			{
-				const GJK3DTriangle* triangle = m_expandedTriangles[i];
-				bool originNotEnclosed = glm::dot(triangle->GetNormalVector(), (glm::dvec3)triangle->GetA()) < 0.0;
-				if (originNotEnclosed)
-				{
-					return;
-				}
-			}
-
-			m_originEnclosed = glm::dot(removeTriangle->GetNormalVector(), (glm::dvec3)removeTriangle->GetA()) < 0.0;
-		}
-	}
-	
-	bool GJK3DDeltahedron::UpdateNeighbors()
+	GJK3DStatus GJK3DDeltahedron::UpdateNeighbors()
 	{
 		GJK3DTriangle* firstTriangle = m_expandedTriangles[0];
 		GJK3DTriangle* lastTriangle = firstTriangle;
@@ -330,7 +333,7 @@ namespace Engine
 
 			if (foundTriangleIndex == -1)
 			{
-				return false;
+				return GJK3DStatus::NOT_OVERLAP;
 			}
 
 			lastTriangle->SetBottomTriangle(m_expandedTriangles[foundTriangleIndex]);
@@ -343,6 +346,6 @@ namespace Engine
 		firstTriangle->SetLeftTriangle(lastTriangle);
 		lastTriangle->SetBottomTriangle(firstTriangle);
 
-		return true;
+		return GJK3DStatus::NOT_FINISHED;
 	}
 }

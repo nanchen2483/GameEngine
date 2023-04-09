@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-	struct ConvexInfo
+	struct ShapeInfo
 	{
 		glm::dvec3 position = {};
 		glm::dmat3 orientation = {};
@@ -26,12 +26,11 @@ namespace Engine
 	private:
 		bool Solve();
 		glm::dvec3 CreateNewSupportPoint();
-		glm::dvec3 CalcPointA(const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
-		glm::dvec3 CalcPointB(const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
-		glm::dvec3 GetSupportPointOnA(glm::dvec3 direction);
-		glm::dvec3 GetSupportPointOnB(glm::dvec3 direction);
+		glm::dvec3 GetDistanceBetweenShapes();
+		glm::dvec3 GetPointFromShape(ShapeInfo& shape, const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
+		glm::dvec3 GetPointFromShape(const ShapeInfo& shape, glm::dvec3 direction);
 
-		ConvexInfo m_convexA, m_convexB;
+		ShapeInfo m_shapeA, m_shapeB;
 
 		float m_distanceBetweenAToB = 0;
 		glm::vec3 m_directionFromAToB = {};

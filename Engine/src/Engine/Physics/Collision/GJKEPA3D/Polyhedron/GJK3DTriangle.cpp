@@ -3,8 +3,8 @@
 
 namespace Engine
 {
-	GJK3DTriangle::GJK3DTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC)
-		: Triangle3D(pointA, pointB, pointC)
+	GJK3DTriangle::GJK3DTriangle(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC)
+		: Triangle3D(vectorA, vectorB, vectorC)
 	{
 	}
 

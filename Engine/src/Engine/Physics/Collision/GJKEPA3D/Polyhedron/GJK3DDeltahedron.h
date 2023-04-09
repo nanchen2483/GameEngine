@@ -4,6 +4,13 @@
 
 namespace Engine
 {
+	enum GJK3DStatus
+	{
+		OVERLAP = 1,
+		NOT_OVERLAP = 2,
+		NOT_FINISHED = 3,
+	};
+
 	class GJK3DDeltahedron
 	{
 	public:
@@ -12,29 +19,22 @@ namespace Engine
 
 		const GJK3DTriangle* GetClosestTriangleToOrigin() { return m_triangleHead; }
 		float GetClosestDistanceToOrigin();
-		glm::dvec3 GetBarycentric();
+		const glm::dvec3& GetBarycentric();
+		const glm::dvec3& GetSearchDirection();
 
-		GJK3DTriangle* GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint);
-
-		glm::dvec3 GetSearchDirection();
-		bool ExpandDeltahedron(GJK3DTriangle* removeTriangle, const glm::dvec3& newSupportPoint);
+		GJK3DStatus ExpandWithNewPoint(const glm::dvec3& newSupportPoint);
 	private:
 		GJK3DTriangle* CreateTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC);
 		void SortTriangleByDistanceToOrigin(GJK3DTriangle* triangle);
-		bool AlreadyExists(const glm::dvec3& newSupportPoint);
+		void AddSupportPoint(glm::dvec3 newSupportPoint);
 		bool IsValidSupportPoint(const glm::dvec3& newSupportPoint);
-		const glm::dvec3& AddSupportPoint(glm::dvec3 newSupportPoint);
-		
-		/// <summary>
-		/// Remove a triangle from this deltahedron and add 3 new triangles based on the new point
-		/// </summary>
-		/// <param name="removeTriangle">The triangle to be removed</param>
-		/// <param name="newPoint">The new point</param>
-		void ExpandWithNewPoint(GJK3DTriangle* removeTriangle, const glm::dvec3& newPoint);
+		bool AlreadyExists(const glm::dvec3& newSupportPoint);
+		GJK3DTriangle* GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint);
+		void UpdateOriginEnclosed(const GJK3DTriangle* removeTriangle);
+		void ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* removeTriangle);
 		void RemoveTriangle(GJK3DTriangle* removeTriangle);
 		bool InTheSameDirection(const GJK3DTriangle* triangle, glm::dvec3 point);
-		void UpdateOriginEnclosed(const GJK3DTriangle* removeTriangle);
-		bool UpdateNeighbors();
+		GJK3DStatus UpdateNeighbors();
 
 		GJK3DTriangle* m_triangleHead;
 
