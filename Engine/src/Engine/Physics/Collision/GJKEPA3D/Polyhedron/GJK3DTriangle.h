@@ -15,7 +15,7 @@ namespace Engine
 	class GJK3DTriangle : public Triangle3D
 	{
 	public:
-		GJK3DTriangle(const Vertex3D& a, const Vertex3D& b, const Vertex3D& c);
+		GJK3DTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC);
 
 		double GetClosestDistanceToOrigin() { return glm::length(m_closestPointToOrigin); }
 		double GetClosestDistanceToOriginSquare() { return glm::length2(m_closestPointToOrigin); }

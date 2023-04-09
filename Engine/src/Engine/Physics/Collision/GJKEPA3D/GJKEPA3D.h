@@ -25,7 +25,7 @@ namespace Engine
 		virtual glm::vec3 GetDirectionFromAToB() const override { return m_directionFromAToB; }
 	private:
 		bool Solve();
-		Vertex3D CreateNewSupportPoint();
+		glm::dvec3 CreateNewSupportPoint();
 		glm::dvec3 CalcPointA(const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
 		glm::dvec3 CalcPointB(const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
 		glm::dvec3 GetSupportPointOnA(glm::dvec3 direction);

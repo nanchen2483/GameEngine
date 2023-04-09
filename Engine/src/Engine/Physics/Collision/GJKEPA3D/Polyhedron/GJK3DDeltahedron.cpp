@@ -6,15 +6,10 @@ namespace Engine
 	GJK3DDeltahedron::GJK3DDeltahedron(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC, const glm::dvec3& pointD)
 		: m_triangleHead(nullptr), m_numOfSupportPoint(0), m_numOfExpandedTriagnles(0), m_originEnclosed(false)
 	{
-		const Vertex3D vertexA = { -1, pointA };
-		const Vertex3D vertexB = { -1, pointB };
-		const Vertex3D vertexC = { -1, pointC };
-		const Vertex3D vertexD = { -1, pointD };
-		
-		GJK3DTriangle* frontTriangle = CreateTriangle(vertexA, vertexC, vertexB);
-		GJK3DTriangle* leftTriangle = CreateTriangle(vertexA, vertexB, vertexD);
-		GJK3DTriangle* rightTriangle = CreateTriangle(vertexA, vertexD, vertexC);
-		GJK3DTriangle* bottomTriangle = CreateTriangle(vertexB, vertexC, vertexD);
+		GJK3DTriangle* frontTriangle = CreateTriangle(pointA, pointC, pointB);
+		GJK3DTriangle* leftTriangle = CreateTriangle(pointA, pointB, pointD);
+		GJK3DTriangle* rightTriangle = CreateTriangle(pointA, pointD, pointC);
+		GJK3DTriangle* bottomTriangle = CreateTriangle(pointB, pointC, pointD);
 
 		frontTriangle->SetNeighbors(leftTriangle, rightTriangle, bottomTriangle);
 		leftTriangle->SetNeighbors(rightTriangle, frontTriangle, bottomTriangle);
@@ -54,12 +49,14 @@ namespace Engine
 		return distance;
 	}
 
-	GJK3DTriangle* GJK3DDeltahedron::GetTriangleToBeReplaced(const Vertex3D& newSupportPoint)
+	GJK3DTriangle* GJK3DDeltahedron::GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint)
 	{
 		if (!IsValidSupportPoint(newSupportPoint))
 		{
 			return nullptr;
 		}
+
+		AddSupportPoint(newSupportPoint);
 
 		for (GJK3DTriangle* triangle = m_triangleHead; triangle != nullptr; triangle = triangle->GetNextTriangle())
 		{
@@ -72,7 +69,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	bool GJK3DDeltahedron::IsValidSupportPoint(const Vertex3D& newSupportPoint)
+	bool GJK3DDeltahedron::IsValidSupportPoint(const glm::dvec3& newSupportPoint)
 	{
 		if (AlreadyExists(newSupportPoint))
 		{
@@ -90,19 +87,16 @@ namespace Engine
 		return true;
 	}
 
-	bool GJK3DDeltahedron::AlreadyExists(const Vertex3D& newSupportPoint)
+	bool GJK3DDeltahedron::AlreadyExists(const glm::dvec3& newSupportPoint)
 	{
 		for (uint32_t i = 0; i < m_numOfSupportPoint; ++i)
 		{
-			if (newSupportPoint.id != i)
-			{
-				const Vertex3D& currentSupportPoint = m_supportPoints[i];
-				if (std::abs(currentSupportPoint.x() - newSupportPoint.x()) > NUMERIC_EPSILON) continue;
-				if (std::abs(currentSupportPoint.y() - newSupportPoint.y()) > NUMERIC_EPSILON) continue;
-				if (std::abs(currentSupportPoint.z() - newSupportPoint.z()) > NUMERIC_EPSILON) continue;
+			const glm::dvec3& currentSupportPoint = m_supportPoints[i];
+			if (std::abs(currentSupportPoint.x - newSupportPoint.x) > NUMERIC_EPSILON) continue;
+			if (std::abs(currentSupportPoint.y - newSupportPoint.y) > NUMERIC_EPSILON) continue;
+			if (std::abs(currentSupportPoint.z - newSupportPoint.z) > NUMERIC_EPSILON) continue;
 
-				return true;
-			}
+			return true;
 		}
 
 		return false;
@@ -113,16 +107,16 @@ namespace Engine
 		return m_triangleHead->GetBarycentric(m_originEnclosed);
 	}
 
-	const Vertex3D& GJK3DDeltahedron::AddSupportPoint(glm::dvec3 newSupportPoint)
+	const glm::dvec3& GJK3DDeltahedron::AddSupportPoint(glm::dvec3 newSupportPoint)
 	{
 		const int32_t index = m_numOfSupportPoint;
-		m_supportPoints[index] = Vertex3D{ index, newSupportPoint };
+		m_supportPoints[index] = newSupportPoint;
 		m_numOfSupportPoint += 1;
 
 		return m_supportPoints[index];
 	}
 	
-	GJK3DTriangle* GJK3DDeltahedron::CreateTriangle(const Vertex3D& pointA, const Vertex3D& pointB, const Vertex3D& pointC)
+	GJK3DTriangle* GJK3DDeltahedron::CreateTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC)
 	{
 		GJK3DTriangle* currentTriangle = new GJK3DTriangle(pointA, pointB, pointC);
 		currentTriangle->SetClosestPointToOrigin(m_originEnclosed);
@@ -168,7 +162,7 @@ namespace Engine
 		}
 	}
 
-	bool GJK3DDeltahedron::ExpandDeltahedron(GJK3DTriangle* removeTriangle, const Vertex3D& newPoint)
+	bool GJK3DDeltahedron::ExpandDeltahedron(GJK3DTriangle* removeTriangle, const glm::dvec3& newPoint)
 	{
 		ExpandWithNewPoint(removeTriangle, newPoint);
 		UpdateOriginEnclosed(removeTriangle);
@@ -177,7 +171,7 @@ namespace Engine
 		return UpdateNeighbors();
 	}
 
-	void GJK3DDeltahedron::ExpandWithNewPoint(GJK3DTriangle* removeTriangle, const Vertex3D& newPoint)
+	void GJK3DDeltahedron::ExpandWithNewPoint(GJK3DTriangle* removeTriangle, const glm::dvec3& newPoint)
 	{
 		if (removeTriangle->IsDeleted())
 		{
@@ -291,7 +285,7 @@ namespace Engine
 		removeTriangle->MarkAsDeleted();
 	}
 	
-	bool GJK3DDeltahedron::InTheSameDirection(const GJK3DTriangle* triangle, Vertex3D point)
+	bool GJK3DDeltahedron::InTheSameDirection(const GJK3DTriangle* triangle, glm::dvec3 point)
 	{
 		glm::dvec3 direction = point - triangle->GetA();
 		return glm::dot(direction, triangle->GetNormalVector()) > 0;
@@ -327,7 +321,7 @@ namespace Engine
 			int32_t foundTriangleIndex = -1;
 			for (int32_t i = 0; i < m_numOfExpandedTriagnles; i++)
 			{
-				if (m_expandedTriangles[i]->GetA().value == lastTriangle->GetB().value)
+				if (m_expandedTriangles[i]->GetA() == lastTriangle->GetB())
 				{
 					foundTriangleIndex = i;
 					break;

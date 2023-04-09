@@ -35,7 +35,7 @@ namespace Engine
 		uint32_t iteration = 0;
 		while (++iteration < MAX_ITERATION)
 		{
-			const Vertex3D newSupportPoint = CreateNewSupportPoint();
+			const glm::dvec3 newSupportPoint = CreateNewSupportPoint();
 			GJK3DTriangle* triangleToBeReplaced = m_deltahedron->GetTriangleToBeReplaced(newSupportPoint);
 			if (triangleToBeReplaced != nullptr)
 			{
@@ -80,13 +80,13 @@ namespace Engine
 		return false;
 	}
 
-	Vertex3D GJKEPA3D::CreateNewSupportPoint()
+	glm::dvec3 GJKEPA3D::CreateNewSupportPoint()
 	{
 		glm::dvec3 direction = m_deltahedron->GetSearchDirection();
 
 		glm::dvec3 pointA = GetSupportPointOnA(-direction);
 		glm::dvec3 pointB = GetSupportPointOnB(direction);
-		Vertex3D supportPoint = m_deltahedron->AddSupportPoint(pointA - pointB);
+		glm::dvec3 supportPoint = pointA - pointB;
 		
 		m_convexA.pointMap[supportPoint] = pointA;
 		m_convexB.pointMap[supportPoint] = pointB;

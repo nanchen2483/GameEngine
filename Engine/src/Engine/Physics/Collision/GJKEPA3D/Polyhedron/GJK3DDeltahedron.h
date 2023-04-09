@@ -14,32 +14,32 @@ namespace Engine
 		float GetClosestDistanceToOrigin();
 		glm::dvec3 GetBarycentric();
 
-		GJK3DTriangle* GetTriangleToBeReplaced(const Vertex3D& newSupportPoint);
+		GJK3DTriangle* GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint);
 
 		glm::dvec3 GetSearchDirection();
-		const Vertex3D& AddSupportPoint(glm::dvec3 newSupportPoint);
-		bool ExpandDeltahedron(GJK3DTriangle* removeTriangle, const Vertex3D& newSupportPoint);
+		bool ExpandDeltahedron(GJK3DTriangle* removeTriangle, const glm::dvec3& newSupportPoint);
 	private:
-		GJK3DTriangle* CreateTriangle(const Vertex3D& pointA, const Vertex3D& pointB, const Vertex3D& pointC);
+		GJK3DTriangle* CreateTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC);
 		void SortTriangleByDistanceToOrigin(GJK3DTriangle* triangle);
-		bool AlreadyExists(const Vertex3D& newSupportPoint);
-		bool IsValidSupportPoint(const Vertex3D& newSupportPoint);
+		bool AlreadyExists(const glm::dvec3& newSupportPoint);
+		bool IsValidSupportPoint(const glm::dvec3& newSupportPoint);
+		const glm::dvec3& AddSupportPoint(glm::dvec3 newSupportPoint);
 		
 		/// <summary>
 		/// Remove a triangle from this deltahedron and add 3 new triangles based on the new point
 		/// </summary>
 		/// <param name="removeTriangle">The triangle to be removed</param>
 		/// <param name="newPoint">The new point</param>
-		void ExpandWithNewPoint(GJK3DTriangle* removeTriangle, const Vertex3D& newPoint);
+		void ExpandWithNewPoint(GJK3DTriangle* removeTriangle, const glm::dvec3& newPoint);
 		void RemoveTriangle(GJK3DTriangle* removeTriangle);
-		bool InTheSameDirection(const GJK3DTriangle* triangle, Vertex3D point);
+		bool InTheSameDirection(const GJK3DTriangle* triangle, glm::dvec3 point);
 		void UpdateOriginEnclosed(const GJK3DTriangle* removeTriangle);
 		bool UpdateNeighbors();
 
 		GJK3DTriangle* m_triangleHead;
 
 		uint32_t m_numOfSupportPoint;
-		Vertex3D m_supportPoints[512];
+		glm::dvec3 m_supportPoints[512];
 
 		uint32_t m_numOfExpandedTriagnles;
 		GJK3DTriangle* m_expandedTriangles[1024];
