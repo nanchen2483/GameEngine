@@ -1,40 +1,30 @@
 #pragma once
 #include "Engine/Physics/Collision/Collision.h"
-#include "Engine/Util/Vector3DHash.h"
 #include "Polyhedron/GJK3DDeltahedron.h"
 
 namespace Engine
 {
-	struct ConvexInfo
-	{
-		glm::dvec3 position = {};
-		glm::dmat3 orientation = {};
-		glm::dmat4 transform = {};
-		BoundingValue boundingValue = {};
-		std::unordered_map<glm::dvec3, glm::dvec3, Vector3DHash> pointMap = {};
-	};
-
 	class GJKEPA3D : public Collision
 	{
 	public:
 		GJKEPA3D() = default;
 
-		virtual bool Detect(Transform transformA, Transform transformB, BoundingValue boundingValueA, BoundingValue boundingValueB) override;
-		virtual bool IsCollided() const override { return m_distanceBetweenAToB < 0.0f; }
+		virtual bool Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB) override;
+		virtual bool IsCollided() const override { return m_isCollided; }
 		virtual float GetDistanceBetweenAAndB() const override { return m_distanceBetweenAToB; }
 		virtual glm::vec3 GetDirectionFromAToB() const override { return m_directionFromAToB; }
 	private:
 		bool Solve();
 		glm::dvec3 CreateNewSupportPoint();
-		glm::dvec3 CalcPointA(const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
-		glm::dvec3 CalcPointB(const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
-		glm::dvec3 GetSupportPointOnA(glm::dvec3 direction);
-		glm::dvec3 GetSupportPointOnB(glm::dvec3 direction);
+		glm::dvec3 GetDistanceBetweenShapes();
+		glm::dvec3 GetPointFromShape(ShapeInfo& shape, const GJK3DTriangle* triangle, glm::dvec3 baryCentric);
+		glm::dvec3 GetPointFromShape(const ShapeInfo& shape, glm::dvec3 direction);
 
-		ConvexInfo m_convexA, m_convexB;
+		ShapeInfo m_shapeA, m_shapeB;
 
-		float m_distanceBetweenAToB = 0;
-		glm::vec3 m_directionFromAToB = {};
+		bool m_isCollided;
+		double m_distanceBetweenAToB;
+		glm::dvec3 m_directionFromAToB;
 
 		Uniq<GJK3DDeltahedron> m_deltahedron = nullptr;
 
