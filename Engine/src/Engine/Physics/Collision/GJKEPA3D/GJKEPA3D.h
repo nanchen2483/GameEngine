@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Physics/Collision/Collision.h"
+#include "Engine/Util/Vector3DHash.h"
 #include "Polyhedron/GJK3DDeltahedron.h"
 
 namespace Engine
@@ -10,7 +11,7 @@ namespace Engine
 		glm::dmat3 orientation = {};
 		glm::dmat4 transform = {};
 		BoundingValue boundingValue = {};
-		std::unordered_map<int32_t, glm::dvec3> pointMap = {};
+		std::unordered_map<glm::dvec3, glm::dvec3, Vector3DHash> pointMap = {};
 	};
 
 	class GJKEPA3D : public Collision

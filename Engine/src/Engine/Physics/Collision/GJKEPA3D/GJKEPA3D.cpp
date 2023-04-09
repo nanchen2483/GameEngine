@@ -88,17 +88,17 @@ namespace Engine
 		glm::dvec3 pointB = GetSupportPointOnB(direction);
 		Vertex3D supportPoint = m_deltahedron->AddSupportPoint(pointA - pointB);
 		
-		m_convexA.pointMap[supportPoint.id] = pointA;
-		m_convexB.pointMap[supportPoint.id] = pointB;
+		m_convexA.pointMap[supportPoint] = pointA;
+		m_convexB.pointMap[supportPoint] = pointB;
 		
 		return supportPoint;
 	}
 	
 	glm::dvec3 GJKEPA3D::CalcPointA(const GJK3DTriangle* triangle, glm::dvec3 baryCentric)
 	{
-		glm::dvec3 a = m_convexA.pointMap[triangle->GetA().id];
-		glm::dvec3 b = m_convexA.pointMap[triangle->GetB().id];
-		glm::dvec3 c = m_convexA.pointMap[triangle->GetC().id];
+		glm::dvec3 a = m_convexA.pointMap[triangle->GetA()];
+		glm::dvec3 b = m_convexA.pointMap[triangle->GetB()];
+		glm::dvec3 c = m_convexA.pointMap[triangle->GetC()];
 
 		glm::mat3 matrix(a, b, c);
 
@@ -107,9 +107,9 @@ namespace Engine
 
 	glm::dvec3 GJKEPA3D::CalcPointB(const GJK3DTriangle* triangle, glm::dvec3 baryCentric)
 	{
-		glm::dvec3 a = m_convexB.pointMap[triangle->GetA().id];
-		glm::dvec3 b = m_convexB.pointMap[triangle->GetB().id];
-		glm::dvec3 c = m_convexB.pointMap[triangle->GetC().id];
+		glm::dvec3 a = m_convexB.pointMap[triangle->GetA()];
+		glm::dvec3 b = m_convexB.pointMap[triangle->GetB()];
+		glm::dvec3 c = m_convexB.pointMap[triangle->GetC()];
 
 		glm::mat3 matrix(a, b, c);
 
