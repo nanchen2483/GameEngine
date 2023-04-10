@@ -1,6 +1,4 @@
 #pragma once
-#include "Vertex3D.h"
-
 #include <glm/gtx/quaternion.hpp>
 
 namespace Engine
@@ -13,19 +11,19 @@ namespace Engine
 	class Triangle3D
 	{
 	public:
-		Triangle3D(const Vertex3D& a, const Vertex3D& b, const Vertex3D& c);
+		Triangle3D(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC);
 
-		Vertex3D GetA() const { return m_a; };
-		Vertex3D GetB() const { return m_b; };
-		Vertex3D GetC() const { return m_c; };
+		const glm::dvec3& GetA() const { return m_vectorA; };
+		const glm::dvec3& GetB() const { return m_vectorB; };
+		const glm::dvec3& GetC() const { return m_vectorC; };
 
-		Vertex3D GetTopVertex() const { return m_a; };
-		Vertex3D GetLeftBottomVertex() const { return m_b; };
-		Vertex3D GetRighBottomtVertex() const { return m_c; };
+		const glm::dvec3& GetTopVertex() const { return m_vectorA; };
+		const glm::dvec3& GetLeftBottomVertex() const { return m_vectorB; };
+		const glm::dvec3& GetRighBottomtVertex() const { return m_vectorC; };
 
-		glm::dvec3 GetNormalVector() const { return m_normal; }
-		glm::dvec3 GetClosestPointToOrigin() const { return m_closestPointToOrigin; }
-		glm::dvec3 GetBarycentric(bool originEnclosed);
+		const glm::dvec3& GetNormalVector() const { return m_normal; }
+		const glm::dvec3& GetClosestPointToOrigin() const { return m_closestPointToOrigin; }
+		const glm::dvec3& GetBarycentric(bool originEnclosed);
 		
 		void SetClosestPointToOrigin(bool originEnclosed);
 	private:
@@ -33,7 +31,7 @@ namespace Engine
 		glm::dvec3 CalcBarycentric(bool originEnclosed);
 		glm::dvec3 CalcPoint(glm::dvec3 barycentric);
 	protected:
-		Vertex3D m_a, m_b, m_c;
+		glm::dvec3 m_vectorA, m_vectorB, m_vectorC;
 		glm::dvec3 m_normal;
 		glm::dvec3 m_closestPointToOrigin;
 

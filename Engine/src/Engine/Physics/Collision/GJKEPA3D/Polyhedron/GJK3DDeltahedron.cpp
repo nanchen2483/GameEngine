@@ -3,49 +3,33 @@
 
 namespace Engine
 {
-	void GJK3DDeltahedron::CreateTetrahedron(const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c, const glm::dvec3& d)
+	GJK3DDeltahedron::GJK3DDeltahedron(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC, const glm::dvec3& pointD)
+		: m_triangleHead(nullptr), m_numOfSupportPoint(0), m_numOfExpandedTriagnles(0), m_originEnclosed(false)
 	{
-		m_triangleHeadIndex = -1;
-		m_numOfSupportPoint = 0;
-		m_numOfTriagnles = 0;
-		m_numOfExpandedTriagnles = 0;
-		m_originEnclosed = false;
+		GJK3DTriangle* frontTriangle = CreateTriangle(pointA, pointC, pointB);
+		GJK3DTriangle* leftTriangle = CreateTriangle(pointA, pointB, pointD);
+		GJK3DTriangle* rightTriangle = CreateTriangle(pointA, pointD, pointC);
+		GJK3DTriangle* bottomTriangle = CreateTriangle(pointB, pointC, pointD);
 
-		const Vertex3D vertexA = { -1, a };
-		const Vertex3D vertexB = { -1, b };
-		const Vertex3D vertexC = { -1, c };
-		const Vertex3D vertexD = { -1, d };
-		
-		const uint32_t frontTriangleIndex = CreateTriangle(vertexA, vertexC, vertexB);
-		const uint32_t leftTriangleIndex = CreateTriangle(vertexA, vertexB, vertexD);
-		const uint32_t rightTriangleIndex = CreateTriangle(vertexA, vertexD, vertexC);
-		const uint32_t bottomTriangleIndex = CreateTriangle(vertexB, vertexC, vertexD);
-
-		m_triangles[frontTriangleIndex]->SetNeighbors(leftTriangleIndex, rightTriangleIndex, bottomTriangleIndex);
-		m_triangles[leftTriangleIndex]->SetNeighbors(rightTriangleIndex, frontTriangleIndex, bottomTriangleIndex);
-		m_triangles[rightTriangleIndex]->SetNeighbors(frontTriangleIndex, leftTriangleIndex, bottomTriangleIndex);
-		m_triangles[bottomTriangleIndex]->SetNeighbors(leftTriangleIndex, frontTriangleIndex, rightTriangleIndex);
+		frontTriangle->SetNeighbors(leftTriangle, rightTriangle, bottomTriangle);
+		leftTriangle->SetNeighbors(rightTriangle, frontTriangle, bottomTriangle);
+		rightTriangle->SetNeighbors(frontTriangle, leftTriangle, bottomTriangle);
+		bottomTriangle->SetNeighbors(leftTriangle, frontTriangle, rightTriangle);
 	}
 
-	glm::dvec3 GJK3DDeltahedron::GetSearchDirection()
+	GJK3DDeltahedron::~GJK3DDeltahedron()
 	{
-		glm::dvec3 searchDirection = m_triangles[m_triangleHeadIndex]->GetClosestPointToOrigin();
-		if (m_originEnclosed)
+		while (m_triangleHead != nullptr)
 		{
-			return -searchDirection;
+			GJK3DTriangle* nextTriangle = m_triangleHead->GetNextTriangle();
+			delete m_triangleHead;
+			m_triangleHead = nextTriangle;
 		}
-
-		return searchDirection;
-	}
-
-	const Uniq<GJK3DTriangle>& GJK3DDeltahedron::GetClosestTriangleToOrigin()
-	{
-		return m_triangles[m_triangleHeadIndex];
 	}
 
 	float GJK3DDeltahedron::GetClosestDistanceToOrigin()
 	{
-		float distance = m_triangles[m_triangleHeadIndex]->GetClosestDistanceToOrigin();
+		float distance = m_triangleHead->GetClosestDistanceToOrigin();
 		if (m_originEnclosed)
 		{
 			return -distance;
@@ -54,29 +38,119 @@ namespace Engine
 		return distance;
 	}
 
-	int32_t GJK3DDeltahedron::GetTriangleShouldBeReplaced(const Vertex3D& newSupportPoint)
+	const glm::dvec3& GJK3DDeltahedron::GetBarycentric()
 	{
-		for (int32_t triangleIndex = m_triangleHeadIndex; triangleIndex != -1; triangleIndex = m_triangles[triangleIndex]->GetNextTriangle())
+		return m_triangleHead->GetBarycentric(m_originEnclosed);
+	}
+
+	const glm::dvec3& GJK3DDeltahedron::GetSearchDirection()
+	{
+		glm::dvec3 searchDirection = m_triangleHead->GetClosestPointToOrigin();
+		if (m_originEnclosed)
 		{
-			if (InTheSameDirection(triangleIndex, newSupportPoint))
+			return -searchDirection;
+		}
+
+		return searchDirection;
+	}
+	
+	GJK3DTriangle* GJK3DDeltahedron::CreateTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC)
+	{
+		GJK3DTriangle* currentTriangle = new GJK3DTriangle(pointA, pointB, pointC);
+		currentTriangle->SetClosestPointToOrigin(m_originEnclosed);
+
+		SortTriangleByDistanceToOrigin(currentTriangle);
+
+		return currentTriangle;
+	}
+
+	void GJK3DDeltahedron::SortTriangleByDistanceToOrigin(GJK3DTriangle* triangle)
+	{
+		GJK3DTriangle* currentTriangle = nullptr;
+		for (GJK3DTriangle* nextTriangle = m_triangleHead; nextTriangle != nullptr; nextTriangle = currentTriangle->GetNextTriangle())
+		{
+			currentTriangle = nextTriangle;
+			if (triangle->GetClosestDistanceToOriginSquare() < currentTriangle->GetClosestDistanceToOriginSquare())
 			{
-				return triangleIndex;
+				GJK3DTriangle* previousTraingle = currentTriangle->GetPreviousTriangle();
+				triangle->SetNextTriangle(currentTriangle);
+				triangle->SetPreviousTriangle(previousTraingle);
+				currentTriangle->SetPreviousTriangle(triangle);
+				if (previousTraingle != nullptr)
+				{
+					previousTraingle->SetNextTriangle(triangle);
+				}
+				else
+				{
+					m_triangleHead = triangle;
+				}
+
+				return;
 			}
 		}
 
-		return -1;
+		triangle->SetPreviousTriangle(currentTriangle);
+		if (currentTriangle != nullptr)
+		{
+			currentTriangle->SetNextTriangle(triangle);
+		}
+		else
+		{
+			m_triangleHead = triangle;
+		}
 	}
 
-	bool GJK3DDeltahedron::IsValidSupportPoint(const Vertex3D& newSupportPoint)
+	GJK3DStatus GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint)
+	{
+		if (!IsValidSupportPoint(newPoint))
+		{
+			return GJK3DStatus::OVERLAP;
+		}
+
+		AddSupportPoint(newPoint);
+		GJK3DTriangle* removeTriangle = GetTriangleToBeReplaced(newPoint);
+		if (removeTriangle == nullptr)
+		{
+			return GJK3DStatus::OVERLAP;
+		}
+
+		ExpandWithNewPoint(newPoint, removeTriangle);
+		UpdateOriginEnclosed(removeTriangle);
+		delete removeTriangle;
+
+		return UpdateNeighbors();
+	}
+
+	void GJK3DDeltahedron::AddSupportPoint(glm::dvec3 newSupportPoint)
+	{
+		const int32_t index = m_numOfSupportPoint;
+		m_supportPoints[index] = newSupportPoint;
+		m_numOfSupportPoint += 1;
+	}
+
+	GJK3DTriangle* GJK3DDeltahedron::GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint)
+	{
+		for (GJK3DTriangle* triangle = m_triangleHead; triangle != nullptr; triangle = triangle->GetNextTriangle())
+		{
+			if (InTheSameDirection(triangle, newSupportPoint))
+			{
+				return triangle;
+			}
+		}
+
+		return nullptr;
+	}
+
+	bool GJK3DDeltahedron::IsValidSupportPoint(const glm::dvec3& newSupportPoint)
 	{
 		if (AlreadyExists(newSupportPoint))
 		{
 			return false;
 		}
 
-		const Uniq<GJK3DTriangle>& closestTriangle = m_triangles[m_triangleHeadIndex];
-		double deltaDistance = closestTriangle->GetClosestDistanceToOriginSquare() - glm::dot((glm::dvec3)newSupportPoint, closestTriangle->GetClosestPointToOrigin());
-		bool isCloseEnough = deltaDistance * deltaDistance < COLLIDE_EPSILON * COLLIDE_EPSILON* closestTriangle->GetClosestDistanceToOriginSquare();
+		GJK3DTriangle* closestTriangle = m_triangleHead;
+		double deltaDistance = closestTriangle->GetClosestDistanceToOriginSquare() - glm::dot(newSupportPoint, closestTriangle->GetClosestPointToOrigin());
+		bool isCloseEnough = deltaDistance * deltaDistance < COLLIDE_EPSILON * COLLIDE_EPSILON * closestTriangle->GetClosestDistanceToOriginSquare();
 		if (isCloseEnough)
 		{
 			return false;
@@ -85,250 +159,172 @@ namespace Engine
 		return true;
 	}
 
-	bool GJK3DDeltahedron::AlreadyExists(const Vertex3D& vertex)
+	bool GJK3DDeltahedron::AlreadyExists(const glm::dvec3& newSupportPoint)
 	{
-		const Vertex3D newSupportPoint = m_supportPoints[vertex.id];
 		for (uint32_t i = 0; i < m_numOfSupportPoint; ++i)
 		{
-			const Vertex3D currentSupportPoint = m_supportPoints[i];
-			if (vertex.id != i)
-			{
-				if (std::abs(currentSupportPoint.x() - newSupportPoint.x()) > NUMERIC_EPSILON) continue;
-				if (std::abs(currentSupportPoint.y() - newSupportPoint.y()) > NUMERIC_EPSILON) continue;
-				if (std::abs(currentSupportPoint.z() - newSupportPoint.z()) > NUMERIC_EPSILON) continue;
+			const glm::dvec3& currentSupportPoint = m_supportPoints[i];
+			if (std::abs(currentSupportPoint.x - newSupportPoint.x) > NUMERIC_EPSILON) continue;
+			if (std::abs(currentSupportPoint.y - newSupportPoint.y) > NUMERIC_EPSILON) continue;
+			if (std::abs(currentSupportPoint.z - newSupportPoint.z) > NUMERIC_EPSILON) continue;
 
-				return true;
-			}
+			return true;
 		}
 
 		return false;
 	}
 
-	glm::dvec3 GJK3DDeltahedron::GetBarycentric()
-	{
-		return m_triangles[m_triangleHeadIndex]->GetBarycentric(m_originEnclosed);
-	}
-
-	const Vertex3D& GJK3DDeltahedron::AddSupportPoint(glm::dvec3 vertex)
-	{
-		const int32_t index = m_numOfSupportPoint;
-		m_supportPoints[index] = Vertex3D{ index, vertex };
-		m_numOfSupportPoint += 1;
-
-		return m_supportPoints[index];
-	}
-	
-	uint32_t GJK3DDeltahedron::CreateTriangle(const Vertex3D& a, const Vertex3D& b, const Vertex3D& c)
-	{
-		const uint32_t currentTriangleIndex = m_numOfTriagnles;
-		m_triangles[currentTriangleIndex] = CreateUniq<GJK3DTriangle>(a, b, c);
-		m_triangles[currentTriangleIndex]->SetClosestPointToOrigin(m_originEnclosed);
-		m_numOfTriagnles += 1;
-
-		SortTriangleByDistanceToOrigin(currentTriangleIndex);
-
-		return currentTriangleIndex;
-	}
-
-	void GJK3DDeltahedron::SortTriangleByDistanceToOrigin(const int32_t triangleIndex)
-	{
-		int32_t currentTriangleIndex = -1;
-		for (int32_t nextTriangleIndex = m_triangleHeadIndex; nextTriangleIndex != -1; nextTriangleIndex = m_triangles[currentTriangleIndex]->GetNextTriangle())
-		{
-			currentTriangleIndex = nextTriangleIndex;
-			if (m_triangles[triangleIndex]->GetClosestDistanceToOriginSquare() < m_triangles[currentTriangleIndex]->GetClosestDistanceToOriginSquare())
-			{
-				int32_t previousTraingleIndex = m_triangles[currentTriangleIndex]->GetPreviousTriangle();
-				m_triangles[triangleIndex]->SetNextTriangle(currentTriangleIndex);
-				m_triangles[triangleIndex]->SetPreviousTriangle(previousTraingleIndex);
-				m_triangles[currentTriangleIndex]->SetPreviousTriangle(triangleIndex);
-				if (previousTraingleIndex != -1)
-				{
-					m_triangles[previousTraingleIndex]->SetNextTriangle(triangleIndex);
-				}
-				else
-				{
-					m_triangleHeadIndex = triangleIndex;
-				}
-
-				return;
-			}
-		}
-
-		m_triangles[triangleIndex]->SetPreviousTriangle(currentTriangleIndex);
-		if (currentTriangleIndex != -1)
-		{
-			m_triangles[currentTriangleIndex]->SetNextTriangle(triangleIndex);
-		}
-		else
-		{
-			m_triangleHeadIndex = triangleIndex;
-		}
-	}
-
-	bool GJK3DDeltahedron::ExpandDeltahedron(const int32_t removeTriangleIndex, const Vertex3D& newVertex)
-	{
-		ExpandWithNewVertex(removeTriangleIndex, newVertex);
-		UpdateOriginEnclosed(removeTriangleIndex);
-		return UpdateNeighbors();
-	}
-
-	void GJK3DDeltahedron::ExpandWithNewVertex(const int32_t removeTriangleIndex, const Vertex3D& newVertex)
-	{
-		const Uniq<GJK3DTriangle>& removeTriangle = m_triangles[removeTriangleIndex];
-		if (removeTriangle->IsDeleted())
-		{
-			return;
-		}
-
-		RemoveTriangle(removeTriangleIndex);
-
-		bool leftTriangleShouldBeRemoved = InTheSameDirection(removeTriangle->GetLeftTriangle(), newVertex);
-		if (!leftTriangleShouldBeRemoved)
-		{
-			int32_t newTriangleIndex = CreateTriangle(removeTriangle->GetC(), removeTriangle->GetA(), newVertex);
-			m_triangles[newTriangleIndex]->SetRightTriangle(removeTriangle->GetLeftTriangle());
-			m_expandedTriangleIndices[m_numOfExpandedTriagnles++] = newTriangleIndex;
-
-			const Uniq<GJK3DTriangle>& leftTriangle = m_triangles[removeTriangle->GetLeftTriangle()];
-			if (leftTriangle->GetLeftTriangle() == removeTriangleIndex)
-			{
-				leftTriangle->SetLeftTriangle(newTriangleIndex);
-			}
-			else if (leftTriangle->GetRightTriangle() == removeTriangleIndex)
-			{
-				leftTriangle->SetRightTriangle(newTriangleIndex);
-			}
-			else
-			{
-				leftTriangle->SetBottomTriangle(newTriangleIndex);
-			}
-		}
-
-		bool rightTriangleShouldBeRemoved = InTheSameDirection(removeTriangle->GetRightTriangle(), newVertex);
-		if (!rightTriangleShouldBeRemoved)
-		{
-			int32_t newTriangleIndex = CreateTriangle(removeTriangle->GetA(), removeTriangle->GetB(), newVertex);
-			m_triangles[newTriangleIndex]->SetRightTriangle(removeTriangle->GetRightTriangle());
-			m_expandedTriangleIndices[m_numOfExpandedTriagnles++] = newTriangleIndex;
-
-			const Uniq<GJK3DTriangle>& rightTriangle = m_triangles[removeTriangle->GetRightTriangle()];
-			if (rightTriangle->GetLeftTriangle() == removeTriangleIndex)
-			{
-				rightTriangle->SetLeftTriangle(newTriangleIndex);
-			}
-			else if (rightTriangle->GetRightTriangle() == removeTriangleIndex)
-			{
-				rightTriangle->SetRightTriangle(newTriangleIndex);
-			}
-			else
-			{
-				rightTriangle->SetBottomTriangle(newTriangleIndex);
-			}
-		}
-
-		bool bottomTriangleShouldBeRemoved = InTheSameDirection(removeTriangle->GetBottomTriangle(), newVertex);
-		if (!bottomTriangleShouldBeRemoved)
-		{
-			int32_t newTriangleIndex = CreateTriangle(removeTriangle->GetB(), removeTriangle->GetC(), newVertex);
-			m_triangles[newTriangleIndex]->SetRightTriangle(removeTriangle->GetBottomTriangle());
-			m_expandedTriangleIndices[m_numOfExpandedTriagnles++] = newTriangleIndex;
-
-			const Uniq<GJK3DTriangle>& bottomTriangle = m_triangles[removeTriangle->GetBottomTriangle()];
-			if (bottomTriangle->GetLeftTriangle() == removeTriangleIndex)
-			{
-				bottomTriangle->SetLeftTriangle(newTriangleIndex);
-			}
-			else if (bottomTriangle->GetRightTriangle() == removeTriangleIndex)
-			{
-				bottomTriangle->SetRightTriangle(newTriangleIndex);
-			}
-			else
-			{
-				bottomTriangle->SetBottomTriangle(newTriangleIndex);
-			}
-		}
-
-		if (leftTriangleShouldBeRemoved)
-		{
-			ExpandWithNewVertex(removeTriangle->GetLeftTriangle(), newVertex);
-		}
-
-		if (rightTriangleShouldBeRemoved)
-		{
-			ExpandWithNewVertex(removeTriangle->GetRightTriangle(), newVertex);
-		}
-
-		if (bottomTriangleShouldBeRemoved)
-		{
-			ExpandWithNewVertex(removeTriangle->GetBottomTriangle(), newVertex);
-		}
-	}
-
-	void GJK3DDeltahedron::RemoveTriangle(const int32_t removeTriangleIndex)
-	{
-		const Uniq<GJK3DTriangle>& removeTriangle = m_triangles[removeTriangleIndex];
-		const int32_t previousTriangleIndex = removeTriangle->GetPreviousTriangle();
-		const int32_t nextTriangleIndex = removeTriangle->GetNextTriangle();
-
-		if (previousTriangleIndex != -1)
-		{
-			m_triangles[previousTriangleIndex]->SetNextTriangle(nextTriangleIndex);
-		}
-		else
-		{
-			m_triangleHeadIndex = nextTriangleIndex;
-		}
-
-		if (nextTriangleIndex != -1)
-		{
-			m_triangles[nextTriangleIndex]->SetPreviousTriangle(previousTriangleIndex);
-		}
-
-		removeTriangle->MarkAsDeleted();
-	}
-	
-	bool GJK3DDeltahedron::InTheSameDirection(const int32_t triangleIndex, Vertex3D vertex)
-	{
-		const Uniq<GJK3DTriangle>& triangle = m_triangles[triangleIndex];
-		glm::dvec3 direction = vertex - triangle->GetA();
-		return glm::dot(direction, triangle->GetNormalVector()) > 0;
-	}
-	
-	void GJK3DDeltahedron::UpdateOriginEnclosed(const int32_t removeTriangleIndex)
+	void GJK3DDeltahedron::UpdateOriginEnclosed(const GJK3DTriangle* removeTriangle)
 	{
 		if (!m_originEnclosed)
 		{
 			for (uint32_t i = 0; i < m_numOfExpandedTriagnles; ++i)
 			{
-				const Uniq<GJK3DTriangle>& triangle = m_triangles[m_expandedTriangleIndices[i]];
-				bool doNotIncludeOriginPoint = glm::dot(triangle->GetNormalVector(), (glm::dvec3)triangle->GetA()) < 0.0;
-				if (doNotIncludeOriginPoint)
+				const GJK3DTriangle* triangle = m_expandedTriangles[i];
+				bool originNotEnclosed = glm::dot(triangle->GetNormalVector(), triangle->GetA()) < 0.0;
+				if (originNotEnclosed)
 				{
 					return;
 				}
 			}
 
-			const Uniq<GJK3DTriangle>& removeTriangle = m_triangles[removeTriangleIndex];
-			bool oldTriangleNotIncludeOriginPoint = glm::dot(removeTriangle->GetNormalVector(), (glm::dvec3)removeTriangle->GetA()) < 0.0;
-
-			m_originEnclosed = oldTriangleNotIncludeOriginPoint;
+			m_originEnclosed = glm::dot(removeTriangle->GetNormalVector(), removeTriangle->GetA()) < 0.0;
 		}
 	}
-	
-	bool GJK3DDeltahedron::UpdateNeighbors()
-	{
-		const int32_t firstTriangleIndex = m_expandedTriangleIndices[0];
-		int32_t lastTriangleIndex = firstTriangleIndex;
 
-		m_expandedTriangleIndices[0] = m_expandedTriangleIndices[--m_numOfExpandedTriagnles];
+	void GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* removeTriangle)
+	{
+		if (removeTriangle->IsDeleted())
+		{
+			return;
+		}
+
+		// Soft-delete
+		RemoveTriangle(removeTriangle);
+
+		GJK3DTriangle* leftTriangle = removeTriangle->GetLeftTriangle();
+		bool leftTriangleShouldBeRemoved = InTheSameDirection(leftTriangle, newPoint);
+		if (!leftTriangleShouldBeRemoved)
+		{
+			GJK3DTriangle* newTriangle = CreateTriangle(removeTriangle->GetC(), removeTriangle->GetA(), newPoint);
+			newTriangle->SetRightTriangle(leftTriangle);
+			m_expandedTriangles[m_numOfExpandedTriagnles++] = newTriangle;
+
+			if (leftTriangle->GetLeftTriangle() == removeTriangle)
+			{
+				leftTriangle->SetLeftTriangle(newTriangle);
+			}
+			else if (leftTriangle->GetRightTriangle() == removeTriangle)
+			{
+				leftTriangle->SetRightTriangle(newTriangle);
+			}
+			else
+			{
+				leftTriangle->SetBottomTriangle(newTriangle);
+			}
+		}
+
+		GJK3DTriangle* rightTriangle = removeTriangle->GetRightTriangle();
+		bool rightTriangleShouldBeRemoved = InTheSameDirection(rightTriangle, newPoint);
+		if (!rightTriangleShouldBeRemoved)
+		{
+			GJK3DTriangle* newTriangle = CreateTriangle(removeTriangle->GetA(), removeTriangle->GetB(), newPoint);
+			newTriangle->SetRightTriangle(rightTriangle);
+			m_expandedTriangles[m_numOfExpandedTriagnles++] = newTriangle;
+
+			if (rightTriangle->GetLeftTriangle() == removeTriangle)
+			{
+				rightTriangle->SetLeftTriangle(newTriangle);
+			}
+			else if (rightTriangle->GetRightTriangle() == removeTriangle)
+			{
+				rightTriangle->SetRightTriangle(newTriangle);
+			}
+			else
+			{
+				rightTriangle->SetBottomTriangle(newTriangle);
+			}
+		}
+
+		GJK3DTriangle* bottomTriangle = removeTriangle->GetBottomTriangle();
+		bool bottomTriangleShouldBeRemoved = InTheSameDirection(bottomTriangle, newPoint);
+		if (!bottomTriangleShouldBeRemoved)
+		{
+			GJK3DTriangle* newTriangle = CreateTriangle(removeTriangle->GetB(), removeTriangle->GetC(), newPoint);
+			newTriangle->SetRightTriangle(bottomTriangle);
+			m_expandedTriangles[m_numOfExpandedTriagnles++] = newTriangle;
+
+			if (bottomTriangle->GetLeftTriangle() == removeTriangle)
+			{
+				bottomTriangle->SetLeftTriangle(newTriangle);
+			}
+			else if (bottomTriangle->GetRightTriangle() == removeTriangle)
+			{
+				bottomTriangle->SetRightTriangle(newTriangle);
+			}
+			else
+			{
+				bottomTriangle->SetBottomTriangle(newTriangle);
+			}
+		}
+
+		if (leftTriangleShouldBeRemoved)
+		{
+			ExpandWithNewPoint(newPoint, leftTriangle);
+		}
+
+		if (rightTriangleShouldBeRemoved)
+		{
+			ExpandWithNewPoint(newPoint, rightTriangle);
+		}
+
+		if (bottomTriangleShouldBeRemoved)
+		{
+			ExpandWithNewPoint(newPoint, bottomTriangle);
+		}
+	}
+
+	void GJK3DDeltahedron::RemoveTriangle(GJK3DTriangle* removeTriangle)
+	{
+		GJK3DTriangle* previousTriangle = removeTriangle->GetPreviousTriangle();
+		GJK3DTriangle* nextTriangle = removeTriangle->GetNextTriangle();
+
+		if (previousTriangle != nullptr)
+		{
+			previousTriangle->SetNextTriangle(nextTriangle);
+		}
+		else
+		{
+			m_triangleHead = nextTriangle;
+		}
+
+		if (nextTriangle != nullptr)
+		{
+			nextTriangle->SetPreviousTriangle(previousTriangle);
+		}
+
+		removeTriangle->MarkAsDeleted();
+	}
+	
+	bool GJK3DDeltahedron::InTheSameDirection(const GJK3DTriangle* triangle, glm::dvec3 point)
+	{
+		glm::dvec3 direction = point - triangle->GetA();
+		return glm::dot(direction, triangle->GetNormalVector()) > 0;
+	}
+	
+	GJK3DStatus GJK3DDeltahedron::UpdateNeighbors()
+	{
+		GJK3DTriangle* firstTriangle = m_expandedTriangles[0];
+		GJK3DTriangle* lastTriangle = firstTriangle;
+
+		m_expandedTriangles[0] = m_expandedTriangles[--m_numOfExpandedTriagnles];
 
 		while (m_numOfExpandedTriagnles > 0)
 		{
 			int32_t foundTriangleIndex = -1;
 			for (int32_t i = 0; i < m_numOfExpandedTriagnles; i++)
 			{
-				if (m_triangles[m_expandedTriangleIndices[i]]->GetA().value == m_triangles[lastTriangleIndex]->GetB().value)
+				if (m_expandedTriangles[i]->GetA() == lastTriangle->GetB())
 				{
 					foundTriangleIndex = i;
 					break;
@@ -337,19 +333,19 @@ namespace Engine
 
 			if (foundTriangleIndex == -1)
 			{
-				return false;
+				return GJK3DStatus::NOT_OVERLAP;
 			}
 
-			m_triangles[lastTriangleIndex]->SetBottomTriangle(m_expandedTriangleIndices[foundTriangleIndex]);
-			m_triangles[m_expandedTriangleIndices[foundTriangleIndex]]->SetLeftTriangle(lastTriangleIndex);
+			lastTriangle->SetBottomTriangle(m_expandedTriangles[foundTriangleIndex]);
+			m_expandedTriangles[foundTriangleIndex]->SetLeftTriangle(lastTriangle);
 
-			lastTriangleIndex = m_expandedTriangleIndices[foundTriangleIndex];
-			m_expandedTriangleIndices[foundTriangleIndex] = m_expandedTriangleIndices[--m_numOfExpandedTriagnles];
+			lastTriangle = m_expandedTriangles[foundTriangleIndex];
+			m_expandedTriangles[foundTriangleIndex] = m_expandedTriangles[--m_numOfExpandedTriagnles];
 		}
 
-		m_triangles[firstTriangleIndex]->SetLeftTriangle(lastTriangleIndex);
-		m_triangles[lastTriangleIndex]->SetBottomTriangle(firstTriangleIndex);
+		firstTriangle->SetLeftTriangle(lastTriangle);
+		lastTriangle->SetBottomTriangle(firstTriangle);
 
-		return true;
+		return GJK3DStatus::NOT_FINISHED;
 	}
 }

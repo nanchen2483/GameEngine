@@ -320,7 +320,7 @@ Entities:
       {}
   - Entity: 123
     TagComponent:
-      Tag: Plan
+      Tag: Floor
     TransformComponent:
       Translation: [-0.049996186, -0.237500072, 0.0500020273]
       Rotation: [0, 0, 0]

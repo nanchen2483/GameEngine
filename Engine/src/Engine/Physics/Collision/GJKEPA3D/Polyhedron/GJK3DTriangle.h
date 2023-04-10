@@ -10,38 +10,38 @@ namespace Engine
 	///    c --- b		R: right triangle
 	///     \ B /		B: bottom triangle
 	///      \ /
-	///       d
+	///       d			Points: a, b, c, d
 	/// </summary>
 	class GJK3DTriangle : public Triangle3D
 	{
 	public:
-		GJK3DTriangle(const Vertex3D& a, const Vertex3D& b, const Vertex3D& c);
+		GJK3DTriangle(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC);
 
 		double GetClosestDistanceToOrigin() { return glm::length(m_closestPointToOrigin); }
 		double GetClosestDistanceToOriginSquare() { return glm::length2(m_closestPointToOrigin); }
 
-		int32_t GetLeftTriangle() const { return m_leftTriangle; }
-		int32_t GetRightTriangle() const { return m_rightTriangle; }
-		int32_t GetBottomTriangle() const { return m_bottomTriangle; }
-		int32_t GetPreviousTriangle() const { return m_previousTriangle; }
-		int32_t GetNextTriangle() const { return m_nextTriangle; }
+		GJK3DTriangle* GetLeftTriangle() const { return m_leftTriangle; }
+		GJK3DTriangle* GetRightTriangle() const { return m_rightTriangle; }
+		GJK3DTriangle* GetBottomTriangle() const { return m_bottomTriangle; }
+		GJK3DTriangle* GetPreviousTriangle() const { return m_previousTriangle; }
+		GJK3DTriangle* GetNextTriangle() const { return m_nextTriangle; }
 
-		void SetLeftTriangle(const uint32_t leftTriangle);
-		void SetRightTriangle(const uint32_t rightTriangle);
-		void SetBottomTriangle(const uint32_t bottomTriangle);
-		void SetNeighbors(const uint32_t leftTriangle, const uint32_t rightTriangle, const uint32_t bottomTriangle);
-		void SetPreviousTriangle(const uint32_t previousTriangle);
-		void SetNextTriangle(const uint32_t nextTriangle);
+		void SetLeftTriangle(GJK3DTriangle* leftTriangle);
+		void SetRightTriangle(GJK3DTriangle* rightTriangle);
+		void SetBottomTriangle(GJK3DTriangle* bottomTriangle);
+		void SetNeighbors(GJK3DTriangle* leftTriangle, GJK3DTriangle* rightTriangle, GJK3DTriangle* bottomTriangle);
+		void SetPreviousTriangle(GJK3DTriangle* previousTriangle);
+		void SetNextTriangle(GJK3DTriangle* nextTriangle);
 		
 		bool IsDeleted() const { return m_isDeleted; };
 		void MarkAsDeleted();
 	private:
-		int32_t m_leftTriangle = -1;
-		int32_t m_rightTriangle = -1;
-		int32_t m_bottomTriangle = -1;
-		
-		int32_t m_previousTriangle = -1;
-		int32_t m_nextTriangle = -1;
+		GJK3DTriangle* m_leftTriangle = nullptr;
+		GJK3DTriangle* m_rightTriangle = nullptr;
+		GJK3DTriangle* m_bottomTriangle = nullptr;
+
+		GJK3DTriangle* m_previousTriangle = nullptr;
+		GJK3DTriangle* m_nextTriangle = nullptr;
 
 		bool m_isDeleted = false;
 	};

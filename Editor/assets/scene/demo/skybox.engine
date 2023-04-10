@@ -70,7 +70,7 @@ Entities:
       FixedAspectRatio: false
   - Entity: 123
     TagComponent:
-      Tag: Plan
+      Tag: Floor
     TransformComponent:
       Translation: [0, -4.23649549, 4.04193997e-06]
       Rotation: [0, 0, 0]

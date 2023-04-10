@@ -3,20 +3,20 @@
 
 namespace Engine
 {
-	Triangle3D::Triangle3D(const Vertex3D& a, const Vertex3D& b, const Vertex3D& c)
-		: m_a(a), m_b(b), m_c(c)
+	Triangle3D::Triangle3D(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC)
+		: m_vectorA(vectorA), m_vectorB(vectorB), m_vectorC(vectorC)
 	{
 		InitNormalVector();
 	}
 
 	void Triangle3D::InitNormalVector()
 	{
-		glm::dvec3 u = m_a - m_b;
-		glm::dvec3 v = m_a - m_c;
+		glm::dvec3 u = m_vectorA - m_vectorB;
+		glm::dvec3 v = m_vectorA - m_vectorC;
 		m_normal = glm::cross(u, v);
 	}
 
-	glm::dvec3 Triangle3D::GetBarycentric(bool originEnclosed)
+	const glm::dvec3& Triangle3D::GetBarycentric(bool originEnclosed)
 	{
 		return CalcBarycentric(originEnclosed);
 	}
@@ -28,7 +28,7 @@ namespace Engine
 		{
 			if (originEnclosed)
 			{
-				double delta = glm::dot(m_normal, (glm::dvec3)m_a);
+				double delta = glm::dot(m_normal, (glm::dvec3)m_vectorA);
 				m_closestPointToOrigin = m_normal * (delta / glm::length2(m_normal));
 			}
 			else
@@ -40,13 +40,13 @@ namespace Engine
 
 	glm::dvec3 Triangle3D::CalcBarycentric(bool originEnclosed)
 	{
-		glm::dvec3 u = m_a - m_b;
-		glm::dvec3 v = m_a - m_c;
+		glm::dvec3 u = m_vectorA - m_vectorB;
+		glm::dvec3 v = m_vectorA - m_vectorC;
 
 		double t = glm::length2(m_normal);
-		glm::dvec3 direction = glm::cross(u, (glm::dvec3)m_a);
+		glm::dvec3 direction = glm::cross(u, (glm::dvec3)m_vectorA);
 		double gamma = glm::dot(direction, m_normal) / t;
-		direction = glm::cross((glm::dvec3)m_a, v);
+		direction = glm::cross((glm::dvec3)m_vectorA, v);
 		double beta = glm::dot(direction, m_normal) / t;
 		double alpha = 1.0 - gamma - beta;
 
@@ -54,7 +54,7 @@ namespace Engine
 		{
 			if (alpha >= 0.0 && beta < 0.0)
 			{
-				t = glm::dot((glm::dvec3)m_a, u);
+				t = glm::dot((glm::dvec3)m_vectorA, u);
 				if ((gamma < 0.0) && (t > 0.0))
 				{
 					beta = std::min(1.0, t / glm::length2(u));
@@ -63,15 +63,15 @@ namespace Engine
 				}
 				else
 				{
-					gamma = std::min(1.0, std::max(0.0, glm::dot((glm::dvec3)m_a, v) / glm::length2(v)));
+					gamma = std::min(1.0, std::max(0.0, glm::dot((glm::dvec3)m_vectorA, v) / glm::length2(v)));
 					alpha = 1.0 - gamma;
 					beta = 0.0;
 				}
 			}
 			else if ((beta >= 0.0) && (gamma < 0.0))
 			{
-				glm::dvec3 w = m_b - m_c;
-				t = glm::dot((glm::dvec3)m_b, w);
+				glm::dvec3 w = m_vectorB - m_vectorC;
+				t = glm::dot((glm::dvec3)m_vectorB, w);
 				if ((alpha < 0.0) && (t > 0.0))
 				{
 					gamma = std::min(1.0, t / glm::length2(w));
@@ -80,15 +80,15 @@ namespace Engine
 				}
 				else
 				{
-					alpha = std::min(1.0, std::max(0.0, -glm::dot((glm::dvec3)m_b, u) / glm::length2(u)));
+					alpha = std::min(1.0, std::max(0.0, -glm::dot((glm::dvec3)m_vectorB, u) / glm::length2(u)));
 					beta = 1.0 - alpha;
 					gamma = 0.0;
 				}
 			}
 			else if ((gamma >= 0.0) && (alpha < 0.0))
 			{
-				glm::dvec3 w = m_b - m_c;
-				t = -glm::dot((glm::dvec3)m_c, v);
+				glm::dvec3 w = m_vectorB - m_vectorC;
+				t = -glm::dot((glm::dvec3)m_vectorC, v);
 				if ((beta < 0.0) && (t > 0.0))
 				{
 					alpha = std::min(1.0, t / glm::length2(v));
@@ -97,7 +97,7 @@ namespace Engine
 				}
 				else
 				{
-					beta = std::min(1.0, std::max(0.0, -glm::dot((glm::dvec3)m_c, w) / glm::length2(w)));
+					beta = std::min(1.0, std::max(0.0, -glm::dot((glm::dvec3)m_vectorC, w) / glm::length2(w)));
 					gamma = 1.0 - beta;
 					alpha = 0.0;
 				}
@@ -109,7 +109,7 @@ namespace Engine
 
 	glm::dvec3 Triangle3D::CalcPoint(glm::dvec3 barycentric)
 	{
-		glm::dmat3 matrix(m_a, m_b, m_c);
+		glm::dmat3 matrix(m_vectorA, m_vectorB, m_vectorC);
 
 		return matrix * barycentric;
 	}
