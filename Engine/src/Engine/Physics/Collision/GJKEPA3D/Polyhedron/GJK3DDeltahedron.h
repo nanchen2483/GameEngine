@@ -1,6 +1,6 @@
 #pragma once
 #include "GJK3DTriangle.h"
-#include "Engine/Util/LinkedList.h"
+#include "Engine/Util/OrderedLinkedList.h"
 
 namespace Engine
 {
@@ -32,7 +32,7 @@ namespace Engine
 		void ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* removeTriangle);
 		GJK3DStatus UpdateNeighbors();
 
-		LinkedList<GJK3DTriangle*, void> m_triangles;
+		OrderedLinkedList<GJK3DTriangle*, void> m_triangles;
 
 		uint32_t m_numOfSupportPoint;
 		glm::dvec3 m_supportPoints[512];

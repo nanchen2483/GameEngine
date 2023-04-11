@@ -2,16 +2,16 @@
 #include "Engine/Core/System/Object/IComparable.h"
 
 #include <type_traits>
-#include <vector>
+#include <unordered_map>
 
 namespace Engine
 {
 	template<typename T, typename Enable = std::enable_if_t<std::is_base_of_v<IComparable<T>, T>>>
-	class LinkedList
+	class OrderedLinkedList
 	{
 	public:
-		LinkedList();
-		~LinkedList();
+		OrderedLinkedList();
+		~OrderedLinkedList();
 
 		const T& GetHeadValue() const;
 		const T& GetTailValue() const;
@@ -27,7 +27,9 @@ namespace Engine
 		struct Node;
 		Node* m_head;
 		Node* m_tail;
-		std::vector<Node*> m_deleted;
+
+		uint32_t m_sizeOfMap;
+		std::unordered_map<uint32_t, Node*> m_lazyDelete;
 
 		struct Node
 		{
@@ -67,14 +69,16 @@ namespace Engine
 namespace Engine
 {
 	template<typename T, typename _>
-	LinkedList<T, _>::LinkedList()
+	OrderedLinkedList<T, _>::OrderedLinkedList()
 	{
 		m_head = nullptr;
 		m_tail = nullptr;
+		m_lazyDelete = {};
+		m_sizeOfMap = 0;
 	}
 
 	template<typename T, typename _>
-	LinkedList<T, _>::~LinkedList()
+	OrderedLinkedList<T, _>::~OrderedLinkedList()
 	{
 		Node* current = m_head;
 		while (current != nullptr)
@@ -84,28 +88,28 @@ namespace Engine
 			current = next;
 		}
 
-		for (uint32_t i = 0; i < m_deleted.size(); ++i)
+		for (uint32_t i = 0; i < m_sizeOfMap; ++i)
 		{
-			delete m_deleted[i];
+			delete m_lazyDelete[i];
 		}
 	}
 
 	template<typename T, typename _>
-	const T& LinkedList<T, _>::GetHeadValue() const
+	const T& OrderedLinkedList<T, _>::GetHeadValue() const
 	{
 		ENGINE_CORE_ASSERT(m_head != nullptr, "Linked list is empty.");
 		return m_head->data;
 	}
 
 	template<typename T, typename _>
-	const T& LinkedList<T, _>::GetTailValue() const
+	const T& OrderedLinkedList<T, _>::GetTailValue() const
 	{
 		ENGINE_CORE_ASSERT(m_tail != nullptr, "Linked list is empty.");
 		return m_tail->data;
 	}
 
 	template<typename T, typename _>
-	void LinkedList<T, _>::Add(const T& data)
+	void OrderedLinkedList<T, _>::Add(const T& data)
 	{
 		Node* newNode = new Node(data);
 		if (m_head == nullptr)
@@ -144,13 +148,13 @@ namespace Engine
 	}
 
 	template<typename T, typename _>
-	void LinkedList<T, _>::Delete(const T& data)
+	void OrderedLinkedList<T, _>::Delete(const T& data)
 	{
 		Delete(data, false);
 	}
 
 	template<typename T, typename _>
-	void LinkedList<T, _>::Delete(const T& data, bool lazy)
+	void OrderedLinkedList<T, _>::Delete(const T& data, bool lazy)
 	{
 		Node* current = m_head;
 		while (current != nullptr && *current != data)
@@ -187,7 +191,7 @@ namespace Engine
 
 		if (lazy)
 		{
-			m_deleted.push_back(current);
+			m_lazyDelete[m_sizeOfMap++] = current;
 		}
 		else
 		{
@@ -203,7 +207,7 @@ namespace Engine
 namespace Engine
 {
 	template<typename T, typename _>
-	LinkedList<T, _>::Node::Node(T data)
+	OrderedLinkedList<T, _>::Node::Node(T data)
 		: data(data)
 	{
 		prev = nullptr;
@@ -211,7 +215,7 @@ namespace Engine
 	}
 
 	template<typename T, typename _>
-	LinkedList<T, _>::Node::~Node()
+	OrderedLinkedList<T, _>::Node::~Node()
 	{
 		if constexpr (std::is_pointer_v<T>)
 		{
@@ -220,7 +224,7 @@ namespace Engine
 	}
 
 	template<typename T, typename _>
-	bool LinkedList<T, _>::Node::operator<(const T& other) const
+	bool OrderedLinkedList<T, _>::Node::operator<(const T& other) const
 	{
 		if constexpr (std::is_pointer_v<T>)
 		{
@@ -233,7 +237,7 @@ namespace Engine
 	}
 
 	template<typename T, typename _>
-	bool LinkedList<T, _>::Node::operator!=(const T& other) const
+	bool OrderedLinkedList<T, _>::Node::operator!=(const T& other) const
 	{
 		if constexpr (std::is_pointer_v<T>)
 		{
