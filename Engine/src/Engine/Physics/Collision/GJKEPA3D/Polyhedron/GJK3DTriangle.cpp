@@ -30,18 +30,38 @@ namespace Engine
 		m_bottomTriangle = bottomTriangle;
 	}
 	
-	void GJK3DTriangle::SetPreviousTriangle(GJK3DTriangle* previousTriangle)
-	{
-		m_previousTriangle = previousTriangle;
-	}
-	
-	void GJK3DTriangle::SetNextTriangle(GJK3DTriangle* nextTriangle)
-	{
-		m_nextTriangle = nextTriangle;
-	}
-	
 	void GJK3DTriangle::MarkAsDeleted()
 	{
 		m_isDeleted = true;
+	}
+
+	bool GJK3DTriangle::operator==(const GJK3DTriangle& other) const
+	{
+		return this->GetClosestDistanceToOriginSquare() == other.GetClosestDistanceToOriginSquare();
+	}
+
+	bool GJK3DTriangle::operator!=(const GJK3DTriangle& other) const
+	{
+		return this->GetClosestDistanceToOriginSquare() != other.GetClosestDistanceToOriginSquare();
+	}
+
+	bool GJK3DTriangle::operator<(const GJK3DTriangle& other) const
+	{
+		return this->GetClosestDistanceToOriginSquare() < other.GetClosestDistanceToOriginSquare();
+	}
+
+	bool GJK3DTriangle::operator<=(const GJK3DTriangle& other) const
+	{
+		return this->GetClosestDistanceToOriginSquare() <= other.GetClosestDistanceToOriginSquare();
+	}
+
+	bool GJK3DTriangle::operator>(const GJK3DTriangle& other) const
+	{
+		return  this->GetClosestDistanceToOriginSquare() > other.GetClosestDistanceToOriginSquare();
+	}
+
+	bool GJK3DTriangle::operator>=(const GJK3DTriangle& other) const
+	{
+		return  this->GetClosestDistanceToOriginSquare() >= other.GetClosestDistanceToOriginSquare();
 	}
 }

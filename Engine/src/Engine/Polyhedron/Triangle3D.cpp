@@ -6,6 +6,10 @@ namespace Engine
 	Triangle3D::Triangle3D(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC)
 		: m_vectorA(vectorA), m_vectorB(vectorB), m_vectorC(vectorC)
 	{
+		m_closestPointToOrigin = {};
+		m_closestDistanceToOrigin = 0.0;
+		m_closestDistanceToOriginSquare = 0.0;
+
 		InitNormalVector();
 	}
 
@@ -16,7 +20,7 @@ namespace Engine
 		m_normal = glm::cross(u, v);
 	}
 
-	const glm::dvec3& Triangle3D::GetBarycentric(bool originEnclosed)
+	const glm::dvec3 Triangle3D::GetBarycentric(bool originEnclosed)
 	{
 		return CalcBarycentric(originEnclosed);
 	}
@@ -36,6 +40,9 @@ namespace Engine
 				m_closestPointToOrigin = CalcPoint(barycentric);
 			}
 		}
+
+		m_closestDistanceToOrigin = glm::length(m_closestPointToOrigin);
+		m_closestDistanceToOriginSquare = glm::length2(m_closestPointToOrigin);
 	}
 
 	glm::dvec3 Triangle3D::CalcBarycentric(bool originEnclosed)
