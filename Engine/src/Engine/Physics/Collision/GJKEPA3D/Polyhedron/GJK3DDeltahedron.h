@@ -1,6 +1,6 @@
 #pragma once
 #include "GJK3DTriangle.h"
-#include "Engine/Util/Algorithm/LinkedList.h"
+#include "Engine/Util/LinkedList.h"
 
 namespace Engine
 {
@@ -27,10 +27,9 @@ namespace Engine
 		void AddSupportPoint(glm::dvec3 newSupportPoint);
 		bool IsValidSupportPoint(const glm::dvec3& newSupportPoint);
 		bool AlreadyExists(const glm::dvec3& newSupportPoint);
-		GJK3DTriangle* GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint);
+		GJK3DTriangle* GetTriangleToBeExpanded(const glm::dvec3& newSupportPoint);
 		void UpdateOriginEnclosed(const GJK3DTriangle* removeTriangle);
 		void ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* removeTriangle);
-		bool InTheSameDirection(const GJK3DTriangle* triangle, glm::dvec3 point);
 		GJK3DStatus UpdateNeighbors();
 
 		LinkedList<GJK3DTriangle*> m_triangles;

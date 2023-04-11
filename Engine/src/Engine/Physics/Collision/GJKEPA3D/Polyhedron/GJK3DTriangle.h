@@ -27,6 +27,7 @@ namespace Engine
 		void SetBottomTriangle(GJK3DTriangle* bottomTriangle);
 		void SetNeighbors(GJK3DTriangle* leftTriangle, GJK3DTriangle* rightTriangle, GJK3DTriangle* bottomTriangle);
 		
+		bool IsExpandable(const glm::dvec3& point) const;
 		bool IsDeleted() const { return m_isDeleted; };
 		void MarkAsDeleted();
 

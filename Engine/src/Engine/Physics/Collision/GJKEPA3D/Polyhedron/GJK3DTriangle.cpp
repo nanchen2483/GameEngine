@@ -29,6 +29,13 @@ namespace Engine
 		m_rightTriangle = rightTriangle;
 		m_bottomTriangle = bottomTriangle;
 	}
+
+	bool GJK3DTriangle::IsExpandable(const glm::dvec3& point) const
+	{
+		glm::dvec3 direction = point - m_vectorA;
+
+		return glm::dot(direction, m_normal) > 0;
+	}
 	
 	void GJK3DTriangle::MarkAsDeleted()
 	{

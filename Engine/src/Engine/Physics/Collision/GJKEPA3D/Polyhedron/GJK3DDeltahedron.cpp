@@ -61,14 +61,14 @@ namespace Engine
 		}
 
 		AddSupportPoint(newPoint);
-		GJK3DTriangle* removeTriangle = GetTriangleToBeReplaced(newPoint);
-		if (removeTriangle == nullptr)
+		GJK3DTriangle* expandTriangle = GetTriangleToBeExpanded(newPoint);
+		if (expandTriangle == nullptr)
 		{
 			return GJK3DStatus::FINISHED;
 		}
 
-		ExpandWithNewPoint(newPoint, removeTriangle);
-		UpdateOriginEnclosed(removeTriangle);
+		ExpandWithNewPoint(newPoint, expandTriangle);
+		UpdateOriginEnclosed(expandTriangle);
 
 		return UpdateNeighbors();
 	}
@@ -80,11 +80,11 @@ namespace Engine
 		m_numOfSupportPoint += 1;
 	}
 
-	GJK3DTriangle* GJK3DDeltahedron::GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint)
+	GJK3DTriangle* GJK3DDeltahedron::GetTriangleToBeExpanded(const glm::dvec3& newSupportPoint)
 	{
 		for (GJK3DTriangle *triangle : m_triangles)
 		{
-			if (InTheSameDirection(triangle, newSupportPoint))
+			if (triangle->IsExpandable(newSupportPoint))
 			{
 				return triangle;
 			}
@@ -144,30 +144,30 @@ namespace Engine
 		}
 	}
 
-	void GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* removeTriangle)
+	void GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* expandTriangle)
 	{
-		if (removeTriangle->IsDeleted())
+		if (expandTriangle->IsDeleted())
 		{
 			return;
 		}
 
 		// Soft-delete
-		m_triangles.Delete(removeTriangle, true);
-		removeTriangle->MarkAsDeleted();
+		m_triangles.Delete(expandTriangle, true);
+		expandTriangle->MarkAsDeleted();
 
-		GJK3DTriangle* leftTriangle = removeTriangle->GetLeftTriangle();
-		bool leftTriangleShouldBeRemoved = InTheSameDirection(leftTriangle, newPoint);
-		if (!leftTriangleShouldBeRemoved)
+		GJK3DTriangle* leftTriangle = expandTriangle->GetLeftTriangle();
+		bool leftTriangleShouldBeExpanded = leftTriangle->IsExpandable(newPoint);
+		if (!leftTriangleShouldBeExpanded)
 		{
-			GJK3DTriangle* newTriangle = CreateTriangle(removeTriangle->GetC(), removeTriangle->GetA(), newPoint);
+			GJK3DTriangle* newTriangle = CreateTriangle(expandTriangle->GetC(), expandTriangle->GetA(), newPoint);
 			newTriangle->SetRightTriangle(leftTriangle);
 			m_expandedTriangles[m_numOfExpandedTriagnles++] = newTriangle;
 
-			if (leftTriangle->GetLeftTriangle() == removeTriangle)
+			if (leftTriangle->GetLeftTriangle() == expandTriangle)
 			{
 				leftTriangle->SetLeftTriangle(newTriangle);
 			}
-			else if (leftTriangle->GetRightTriangle() == removeTriangle)
+			else if (leftTriangle->GetRightTriangle() == expandTriangle)
 			{
 				leftTriangle->SetRightTriangle(newTriangle);
 			}
@@ -177,19 +177,19 @@ namespace Engine
 			}
 		}
 
-		GJK3DTriangle* rightTriangle = removeTriangle->GetRightTriangle();
-		bool rightTriangleShouldBeRemoved = InTheSameDirection(rightTriangle, newPoint);
-		if (!rightTriangleShouldBeRemoved)
+		GJK3DTriangle* rightTriangle = expandTriangle->GetRightTriangle();
+		bool rightTriangleShouldBeExpanded = rightTriangle->IsExpandable(newPoint);
+		if (!rightTriangleShouldBeExpanded)
 		{
-			GJK3DTriangle* newTriangle = CreateTriangle(removeTriangle->GetA(), removeTriangle->GetB(), newPoint);
+			GJK3DTriangle* newTriangle = CreateTriangle(expandTriangle->GetA(), expandTriangle->GetB(), newPoint);
 			newTriangle->SetRightTriangle(rightTriangle);
 			m_expandedTriangles[m_numOfExpandedTriagnles++] = newTriangle;
 
-			if (rightTriangle->GetLeftTriangle() == removeTriangle)
+			if (rightTriangle->GetLeftTriangle() == expandTriangle)
 			{
 				rightTriangle->SetLeftTriangle(newTriangle);
 			}
-			else if (rightTriangle->GetRightTriangle() == removeTriangle)
+			else if (rightTriangle->GetRightTriangle() == expandTriangle)
 			{
 				rightTriangle->SetRightTriangle(newTriangle);
 			}
@@ -199,19 +199,19 @@ namespace Engine
 			}
 		}
 
-		GJK3DTriangle* bottomTriangle = removeTriangle->GetBottomTriangle();
-		bool bottomTriangleShouldBeRemoved = InTheSameDirection(bottomTriangle, newPoint);
-		if (!bottomTriangleShouldBeRemoved)
+		GJK3DTriangle* bottomTriangle = expandTriangle->GetBottomTriangle();
+		bool bottomTriangleShouldBeExpanded = bottomTriangle->IsExpandable(newPoint);
+		if (!bottomTriangleShouldBeExpanded)
 		{
-			GJK3DTriangle* newTriangle = CreateTriangle(removeTriangle->GetB(), removeTriangle->GetC(), newPoint);
+			GJK3DTriangle* newTriangle = CreateTriangle(expandTriangle->GetB(), expandTriangle->GetC(), newPoint);
 			newTriangle->SetRightTriangle(bottomTriangle);
 			m_expandedTriangles[m_numOfExpandedTriagnles++] = newTriangle;
 
-			if (bottomTriangle->GetLeftTriangle() == removeTriangle)
+			if (bottomTriangle->GetLeftTriangle() == expandTriangle)
 			{
 				bottomTriangle->SetLeftTriangle(newTriangle);
 			}
-			else if (bottomTriangle->GetRightTriangle() == removeTriangle)
+			else if (bottomTriangle->GetRightTriangle() == expandTriangle)
 			{
 				bottomTriangle->SetRightTriangle(newTriangle);
 			}
@@ -221,26 +221,20 @@ namespace Engine
 			}
 		}
 
-		if (leftTriangleShouldBeRemoved)
+		if (leftTriangleShouldBeExpanded)
 		{
 			ExpandWithNewPoint(newPoint, leftTriangle);
 		}
 
-		if (rightTriangleShouldBeRemoved)
+		if (rightTriangleShouldBeExpanded)
 		{
 			ExpandWithNewPoint(newPoint, rightTriangle);
 		}
 
-		if (bottomTriangleShouldBeRemoved)
+		if (bottomTriangleShouldBeExpanded)
 		{
 			ExpandWithNewPoint(newPoint, bottomTriangle);
 		}
-	}
-	
-	bool GJK3DDeltahedron::InTheSameDirection(const GJK3DTriangle* triangle, glm::dvec3 point)
-	{
-		glm::dvec3 direction = point - triangle->GetA();
-		return glm::dot(direction, triangle->GetNormalVector()) > 0;
 	}
 	
 	GJK3DStatus GJK3DDeltahedron::UpdateNeighbors()

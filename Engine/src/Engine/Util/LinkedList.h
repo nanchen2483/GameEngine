@@ -1,6 +1,4 @@
 #pragma once
-#include "Engine/Core/System/Object/IComparable.h"
-
 #include <vector>
 
 namespace Engine
