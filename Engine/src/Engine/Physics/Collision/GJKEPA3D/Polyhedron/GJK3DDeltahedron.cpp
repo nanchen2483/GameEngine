@@ -4,7 +4,7 @@
 namespace Engine
 {
 	GJK3DDeltahedron::GJK3DDeltahedron(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC, const glm::dvec3& pointD)
-		: m_closestTriangleToOrigin(nullptr), m_numOfSupportPoint(0), m_numOfExpandedTriagnles(0), m_originEnclosed(false)
+		: m_numOfSupportPoint(0), m_numOfExpandedTriagnles(0), m_originEnclosed(false)
 	{
 		GJK3DTriangle* frontTriangle = CreateTriangle(pointA, pointC, pointB);
 		GJK3DTriangle* leftTriangle = CreateTriangle(pointA, pointB, pointD);
@@ -17,19 +17,9 @@ namespace Engine
 		bottomTriangle->SetNeighbors(leftTriangle, frontTriangle, rightTriangle);
 	}
 
-	GJK3DDeltahedron::~GJK3DDeltahedron()
-	{
-		while (m_closestTriangleToOrigin != nullptr)
-		{
-			GJK3DTriangle* nextTriangle = m_closestTriangleToOrigin->GetNextTriangle();
-			delete m_closestTriangleToOrigin;
-			m_closestTriangleToOrigin = nextTriangle;
-		}
-	}
-
 	float GJK3DDeltahedron::GetClosestDistanceToOrigin()
 	{
-		float distance = m_closestTriangleToOrigin->GetClosestDistanceToOrigin();
+		float distance = m_triangles.GetHeadValue()->GetClosestDistanceToOrigin();
 		if (m_originEnclosed)
 		{
 			return -distance;
@@ -38,14 +28,14 @@ namespace Engine
 		return distance;
 	}
 
-	const glm::dvec3& GJK3DDeltahedron::GetBarycentric()
+	const glm::dvec3 GJK3DDeltahedron::GetBarycentric()
 	{
-		return m_closestTriangleToOrigin->GetBarycentric(m_originEnclosed);
+		return m_triangles.GetHeadValue()->GetBarycentric(m_originEnclosed);
 	}
 
-	const glm::dvec3& GJK3DDeltahedron::GetSearchDirection()
+	const glm::dvec3 GJK3DDeltahedron::GetSearchDirection()
 	{
-		glm::dvec3 searchDirection = m_closestTriangleToOrigin->GetClosestPointToOrigin();
+		glm::dvec3 searchDirection = m_triangles.GetHeadValue()->GetClosestPointToOrigin();
 		if (m_originEnclosed)
 		{
 			return -searchDirection;
@@ -58,46 +48,9 @@ namespace Engine
 	{
 		GJK3DTriangle* newTriangle = new GJK3DTriangle(vectorA, vectorB, vectorC);
 		newTriangle->SetClosestPointToOrigin(m_originEnclosed);
-
-		SortTriangleByDistanceToOrigin(newTriangle);
+		m_triangles.Add(newTriangle);
 
 		return newTriangle;
-	}
-
-	void GJK3DDeltahedron::SortTriangleByDistanceToOrigin(GJK3DTriangle* triangle)
-	{
-		GJK3DTriangle* currentTriangle = nullptr;
-		for (GJK3DTriangle* nextTriangle = m_closestTriangleToOrigin; nextTriangle != nullptr; nextTriangle = currentTriangle->GetNextTriangle())
-		{
-			currentTriangle = nextTriangle;
-			if (triangle->GetClosestDistanceToOriginSquare() < currentTriangle->GetClosestDistanceToOriginSquare())
-			{
-				GJK3DTriangle* previousTraingle = currentTriangle->GetPreviousTriangle();
-				triangle->SetNextTriangle(currentTriangle);
-				triangle->SetPreviousTriangle(previousTraingle);
-				currentTriangle->SetPreviousTriangle(triangle);
-				if (previousTraingle != nullptr)
-				{
-					previousTraingle->SetNextTriangle(triangle);
-				}
-				else
-				{
-					m_closestTriangleToOrigin = triangle;
-				}
-
-				return;
-			}
-		}
-
-		triangle->SetPreviousTriangle(currentTriangle);
-		if (currentTriangle != nullptr)
-		{
-			currentTriangle->SetNextTriangle(triangle);
-		}
-		else
-		{
-			m_closestTriangleToOrigin = triangle;
-		}
 	}
 
 	GJK3DStatus GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint)
@@ -116,7 +69,6 @@ namespace Engine
 
 		ExpandWithNewPoint(newPoint, removeTriangle);
 		UpdateOriginEnclosed(removeTriangle);
-		delete removeTriangle;
 
 		return UpdateNeighbors();
 	}
@@ -130,7 +82,7 @@ namespace Engine
 
 	GJK3DTriangle* GJK3DDeltahedron::GetTriangleToBeReplaced(const glm::dvec3& newSupportPoint)
 	{
-		for (GJK3DTriangle* triangle = m_closestTriangleToOrigin; triangle != nullptr; triangle = triangle->GetNextTriangle())
+		for (GJK3DTriangle *triangle : m_triangles)
 		{
 			if (InTheSameDirection(triangle, newSupportPoint))
 			{
@@ -148,7 +100,7 @@ namespace Engine
 			return false;
 		}
 
-		GJK3DTriangle* closestTriangle = m_closestTriangleToOrigin;
+		GJK3DTriangle* closestTriangle = m_triangles.GetHeadValue();
 		double deltaDistance = closestTriangle->GetClosestDistanceToOriginSquare() - glm::dot(newSupportPoint, closestTriangle->GetClosestPointToOrigin());
 		bool isCloseEnough = deltaDistance * deltaDistance < COLLIDE_EPSILON * COLLIDE_EPSILON * closestTriangle->GetClosestDistanceToOriginSquare();
 		if (isCloseEnough)
@@ -200,7 +152,8 @@ namespace Engine
 		}
 
 		// Soft-delete
-		RemoveTriangle(removeTriangle);
+		m_triangles.Delete(removeTriangle, true);
+		removeTriangle->MarkAsDeleted();
 
 		GJK3DTriangle* leftTriangle = removeTriangle->GetLeftTriangle();
 		bool leftTriangleShouldBeRemoved = InTheSameDirection(leftTriangle, newPoint);
@@ -282,28 +235,6 @@ namespace Engine
 		{
 			ExpandWithNewPoint(newPoint, bottomTriangle);
 		}
-	}
-
-	void GJK3DDeltahedron::RemoveTriangle(GJK3DTriangle* removeTriangle)
-	{
-		GJK3DTriangle* previousTriangle = removeTriangle->GetPreviousTriangle();
-		GJK3DTriangle* nextTriangle = removeTriangle->GetNextTriangle();
-
-		if (previousTriangle != nullptr)
-		{
-			previousTriangle->SetNextTriangle(nextTriangle);
-		}
-		else
-		{
-			m_closestTriangleToOrigin = nextTriangle;
-		}
-
-		if (nextTriangle != nullptr)
-		{
-			nextTriangle->SetPreviousTriangle(previousTriangle);
-		}
-
-		removeTriangle->MarkAsDeleted();
 	}
 	
 	bool GJK3DDeltahedron::InTheSameDirection(const GJK3DTriangle* triangle, glm::dvec3 point)
