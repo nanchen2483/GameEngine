@@ -32,7 +32,7 @@ namespace Engine
 		void ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* removeTriangle);
 		GJK3DStatus UpdateNeighbors();
 
-		LinkedList<GJK3DTriangle*> m_triangles;
+		LinkedList<GJK3DTriangle*, void> m_triangles;
 
 		uint32_t m_numOfSupportPoint;
 		glm::dvec3 m_supportPoints[512];
