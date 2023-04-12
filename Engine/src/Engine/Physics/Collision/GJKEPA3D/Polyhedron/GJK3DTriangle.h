@@ -22,10 +22,10 @@ namespace Engine
 		GJK3DTriangle* GetRightTriangle() const { return m_rightTriangle; }
 		GJK3DTriangle* GetBottomTriangle() const { return m_bottomTriangle; }
 
-		void SetLeftTriangle(GJK3DTriangle* leftTriangle);
-		void SetRightTriangle(GJK3DTriangle* rightTriangle);
-		void SetBottomTriangle(GJK3DTriangle* bottomTriangle);
-		void SetNeighbors(GJK3DTriangle* leftTriangle, GJK3DTriangle* rightTriangle, GJK3DTriangle* bottomTriangle);
+		void SetLeftTriangle(GJK3DTriangle* const& leftTriangle);
+		void SetRightTriangle(GJK3DTriangle* const& rightTriangle);
+		void SetBottomTriangle(GJK3DTriangle* const& bottomTriangle);
+		void SetNeighbors(GJK3DTriangle* const& leftTriangle, GJK3DTriangle* const& rightTriangle, GJK3DTriangle* const& bottomTriangle);
 		
 		bool IsExpandable(const glm::dvec3& point) const;
 		bool IsDeleted() const { return m_isDeleted; };
@@ -39,10 +39,10 @@ namespace Engine
 		virtual bool operator>(const GJK3DTriangle& other) const override;
 		virtual bool operator>=(const GJK3DTriangle& other) const override;
 	private:
-		GJK3DTriangle* m_leftTriangle = nullptr;
-		GJK3DTriangle* m_rightTriangle = nullptr;
-		GJK3DTriangle* m_bottomTriangle = nullptr;
+		GJK3DTriangle* m_leftTriangle;
+		GJK3DTriangle* m_rightTriangle;
+		GJK3DTriangle* m_bottomTriangle;
 
-		bool m_isDeleted = false;
+		bool m_isDeleted;
 	};
 }

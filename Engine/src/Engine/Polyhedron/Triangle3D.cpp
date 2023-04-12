@@ -114,7 +114,7 @@ namespace Engine
 		return glm::dvec3(alpha, beta, gamma);
 	}
 
-	glm::dvec3 Triangle3D::CalcPoint(glm::dvec3 barycentric)
+	glm::dvec3 Triangle3D::CalcPoint(const glm::dvec3& barycentric)
 	{
 		glm::dmat3 matrix(m_vectorA, m_vectorB, m_vectorC);
 

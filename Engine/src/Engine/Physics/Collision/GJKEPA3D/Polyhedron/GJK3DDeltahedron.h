@@ -17,14 +17,14 @@ namespace Engine
 		GJK3DDeltahedron(const glm::dvec3& pointA, const glm::dvec3& poiuntB, const glm::dvec3& pointC, const glm::dvec3& pointD);
 
 		const GJK3DTriangle* GetClosestTriangleToOrigin() const { return m_triangles.GetHeadValue(); }
-		float GetClosestDistanceToOrigin();
+		double GetClosestDistanceToOrigin();
 		const glm::dvec3 GetBarycentric();
 		const glm::dvec3 GetSearchDirection();
 
 		GJK3DStatus ExpandWithNewPoint(const glm::dvec3& newSupportPoint);
 	private:
 		GJK3DTriangle* CreateTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC);
-		void AddSupportPoint(glm::dvec3 newSupportPoint);
+		void AddSupportPoint(const glm::dvec3& newSupportPoint);
 		bool IsValidSupportPoint(const glm::dvec3& newSupportPoint);
 		bool AlreadyExists(const glm::dvec3& newSupportPoint);
 		GJK3DTriangle* GetTriangleToBeExpanded(const glm::dvec3& newSupportPoint);

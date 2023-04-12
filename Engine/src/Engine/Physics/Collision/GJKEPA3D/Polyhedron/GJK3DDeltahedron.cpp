@@ -17,9 +17,9 @@ namespace Engine
 		bottomTriangle->SetNeighbors(leftTriangle, frontTriangle, rightTriangle);
 	}
 
-	float GJK3DDeltahedron::GetClosestDistanceToOrigin()
+	double GJK3DDeltahedron::GetClosestDistanceToOrigin()
 	{
-		float distance = m_triangles.GetHeadValue()->GetClosestDistanceToOrigin();
+		double distance = m_triangles.GetHeadValue()->GetClosestDistanceToOrigin();
 		if (m_originEnclosed)
 		{
 			return -distance;
@@ -73,9 +73,9 @@ namespace Engine
 		return UpdateNeighbors();
 	}
 
-	void GJK3DDeltahedron::AddSupportPoint(glm::dvec3 newSupportPoint)
+	void GJK3DDeltahedron::AddSupportPoint(const glm::dvec3& newSupportPoint)
 	{
-		const int32_t index = m_numOfSupportPoint;
+		uint32_t index = m_numOfSupportPoint;
 		m_supportPoints[index] = newSupportPoint;
 		m_numOfSupportPoint += 1;
 	}

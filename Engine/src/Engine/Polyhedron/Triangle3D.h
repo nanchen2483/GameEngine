@@ -31,7 +31,7 @@ namespace Engine
 	private:
 		void InitNormalVector();
 		glm::dvec3 CalcBarycentric(bool originEnclosed);
-		glm::dvec3 CalcPoint(glm::dvec3 barycentric);
+		glm::dvec3 CalcPoint(const glm::dvec3& barycentric);
 	protected:
 		glm::dvec3 m_vectorA, m_vectorB, m_vectorC;
 		glm::dvec3 m_normal;
