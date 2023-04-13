@@ -46,8 +46,7 @@ namespace Engine
 	
 	GJK3DTriangle* GJK3DDeltahedron::CreateTriangle(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC)
 	{
-		GJK3DTriangle* newTriangle = new GJK3DTriangle(vectorA, vectorB, vectorC);
-		newTriangle->SetClosestPointToOrigin(m_originEnclosed);
+		GJK3DTriangle* newTriangle = new GJK3DTriangle(vectorA, vectorB, vectorC, m_originEnclosed);
 		m_triangles.Add(newTriangle);
 
 		return newTriangle;

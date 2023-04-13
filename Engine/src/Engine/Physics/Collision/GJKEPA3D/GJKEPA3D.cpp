@@ -19,7 +19,6 @@ namespace Engine
 		glm::dvec3 pointC = V2 + center;
 		glm::dvec3 pointD = V3 + center;
 		m_deltahedron = CreateUniq<GJK3DDeltahedron>(pointA, pointB, pointC, pointD);
-
 		m_isCollided = Solve();
 
 		return m_isCollided;

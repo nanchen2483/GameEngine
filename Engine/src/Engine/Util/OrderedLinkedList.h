@@ -164,6 +164,7 @@ namespace Engine
 
 		if (current == nullptr)
 		{
+			ENGINE_CORE_ERROR("Data not found!");
 			return;
 		}
 		else if (current == m_head)

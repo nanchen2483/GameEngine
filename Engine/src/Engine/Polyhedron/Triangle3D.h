@@ -22,23 +22,10 @@ namespace Engine
 		const glm::dvec3& GetRighBottomtVertex() const { return m_vectorC; };
 
 		const glm::dvec3& GetNormalVector() const { return m_normal; }
-		const glm::dvec3& GetClosestPointToOrigin() const { return m_closestPointToOrigin; }
-		const double GetClosestDistanceToOrigin() const { return m_closestDistanceToOrigin; }
-		const double GetClosestDistanceToOriginSquare() const { return m_closestDistanceToOriginSquare; }
-		const glm::dvec3 GetBarycentric(bool originEnclosed);
-		
-		void SetClosestPointToOrigin(bool originEnclosed);
-	private:
-		void InitNormalVector();
-		glm::dvec3 CalcBarycentric(bool originEnclosed);
-		glm::dvec3 CalcPoint(const glm::dvec3& barycentric);
 	protected:
 		glm::dvec3 m_vectorA, m_vectorB, m_vectorC;
-		glm::dvec3 m_normal;
-		glm::dvec3 m_closestPointToOrigin;
-		double m_closestDistanceToOrigin;
-		double m_closestDistanceToOriginSquare;
 
-		const double NUMERIC_EPSILON = 1e-12;
+		glm::dvec3 m_normal;
+		double m_normalLengthSquare;
 	};
 }
