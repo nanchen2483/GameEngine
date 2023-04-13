@@ -4,26 +4,13 @@
 
 namespace Engine
 {
-	bool GJKEPA3D::Detect(Transform transformA, Transform transformB, BoundingValue boundingValueA, BoundingValue boundingValueB)
+	bool GJKEPA3D::Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB)
 	{
 		m_distanceBetweenAToB = 0;
 		m_directionFromAToB = {};
 
-		// Convex A
-		m_shapeA.position = transformA.translation;
-		m_shapeA.orientation = glm::toMat3(glm::quat(transformA.rotation));
-		m_shapeA.transform = glm::toMat4(glm::quat(transformA.rotation)) *
-					   glm::scale(glm::mat4(1.0f), transformA.scale * boundingValueA.extents);
-		m_shapeA.boundingValue = boundingValueA;
-		m_shapeA.pointMap.clear();
-
-		// Convex B
-		m_shapeB.position = transformB.translation;
-		m_shapeB.orientation = glm::toMat3(glm::quat(transformB.rotation));
-		m_shapeB.transform = glm::toMat4(glm::quat(transformB.rotation)) *
-					   glm::scale(glm::mat4(1.0f), transformB.scale * boundingValueB.extents);
-		m_shapeB.boundingValue = boundingValueB;
-		m_shapeB.pointMap.clear();
+		m_shapeA = shapeA;
+		m_shapeB = shapeB;
 
 		// Create Deltahedron
 		glm::dvec3 center = m_shapeA.position - m_shapeB.position;
@@ -32,8 +19,9 @@ namespace Engine
 		glm::dvec3 pointC = V2 + center;
 		glm::dvec3 pointD = V3 + center;
 		m_deltahedron = CreateUniq<GJK3DDeltahedron>(pointA, pointB, pointC, pointD);
+		m_isCollided = Solve();
 
-		return Solve();
+		return m_isCollided;
 	}
 	
 	bool GJKEPA3D::Solve()
@@ -43,15 +31,15 @@ namespace Engine
 		{
 			const glm::dvec3 newSupportPoint = CreateNewSupportPoint();
 			GJK3DStatus status = m_deltahedron->ExpandWithNewPoint(newSupportPoint);
-			if (status == GJK3DStatus::OVERLAP)
+			if (status == GJK3DStatus::FINISHED)
 			{
 				m_directionFromAToB = GetDistanceBetweenShapes();
 
 				// Shapes completely overlap
-				if (m_directionFromAToB == glm::vec3(0.0f))
+				if (m_directionFromAToB == glm::dvec3(0.0f))
 				{
 					const glm::dvec3& direction = m_deltahedron->GetSearchDirection();
-					glm::vec3 result
+					glm::dvec3 result
 					{
 						Math::Sign(direction.x),
 						Math::Sign(direction.y),
@@ -66,7 +54,7 @@ namespace Engine
 					m_distanceBetweenAToB = m_deltahedron->GetClosestDistanceToOrigin();
 				}
 
-				return true;
+				return m_distanceBetweenAToB <= 0.0f;
 			}
 
 			if (status == NOT_OVERLAP)
@@ -116,9 +104,9 @@ namespace Engine
 	
 	glm::dvec3 GJKEPA3D::GetPointFromShape(const ShapeInfo& shape, glm::dvec3 direction)
 	{
-		glm::dvec3 supportPointDirection = direction * glm::transpose(shape.orientation);
+		glm::dvec3 supportPointDirection = glm::dvec3(glm::dvec4(direction, 1.0) * glm::transpose(shape.orientation));
 		glm::dvec3 point = shape.boundingValue.GetSupportPoint(supportPointDirection);
-		point = glm::vec3(glm::vec4(point, 1.0) * shape.transform);
+		point = glm::dvec3(glm::dvec4(point, 1.0) * shape.orientation * shape.scale);
 		point += shape.position;
 		
 		return point;

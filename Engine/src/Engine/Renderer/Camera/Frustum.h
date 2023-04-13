@@ -17,7 +17,9 @@ namespace Engine
 
 		Plane() = default;
 		Plane(const glm::vec3& position, const glm::vec3& norm)
-			: normal(glm::normalize(norm)), distance(glm::dot(normal, position)) {}
+			: normal(glm::normalize(norm)), distance(glm::dot(normal, position))
+		{
+		}
 
 		float GetSignedDistanceToPlan(const glm::vec3& point) const
 		{

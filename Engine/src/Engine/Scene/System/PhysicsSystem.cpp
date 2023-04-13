@@ -22,11 +22,10 @@ namespace Engine
 			return;
 		}
 
-		GetInstance()->m_collision->Detect(
-			transformA,
-			transformB,
-			physicsA->boundingBox->GetBoundingValue(),
-			physicsB->boundingBox->GetBoundingValue());
+		ShapeInfo shapeA(transformA, physicsA->boundingBox->GetBoundingValue());
+		ShapeInfo shapeB(transformB, physicsB->boundingBox->GetBoundingValue());
+
+		GetInstance()->m_collision->Detect(shapeA, shapeB);
 		if (GetInstance()->m_collision->IsCollided())
 		{
 			glm::vec3 distanceAtoB = GetInstance()->m_collision->GetDirectionFromAToB();
