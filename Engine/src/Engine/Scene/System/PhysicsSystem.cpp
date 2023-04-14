@@ -28,7 +28,7 @@ namespace Engine
 		GetInstance()->m_collision->Detect(shapeA, shapeB);
 		if (GetInstance()->m_collision->IsCollided())
 		{
-			glm::vec3 distanceAtoB = GetInstance()->m_collision->GetDirectionFromAToB();
+			glm::vec3 distanceAtoB = GetInstance()->m_collision->GetDirection();
 			if (physicsA->isStatic)
 			{
 				transformB.translation -= distanceAtoB;

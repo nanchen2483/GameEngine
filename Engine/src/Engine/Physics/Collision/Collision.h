@@ -34,8 +34,8 @@ namespace Engine
 
 		virtual bool Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB) = 0;
 		virtual bool IsCollided() const = 0;
-		virtual float GetDistanceBetweenAAndB() const = 0;
-		virtual glm::vec3 GetDirectionFromAToB() const = 0;
+		virtual float GetDistance() const = 0;
+		virtual glm::vec3 GetDirection() const = 0;
 
 		static Uniq<Collision> Create(CollisionType type);
 	};

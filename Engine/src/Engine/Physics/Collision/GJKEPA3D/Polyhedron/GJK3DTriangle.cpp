@@ -41,8 +41,9 @@ namespace Engine
 
 	const glm::dvec3 GJK3DTriangle::GetBarycentric(bool originEnclosed) const
 	{
-		glm::dvec3 u = m_vectorA - m_vectorB;
-		glm::dvec3 v = m_vectorA - m_vectorC;
+		const glm::dvec3 u = m_vectorA - m_vectorB;
+		const glm::dvec3 v = m_vectorA - m_vectorC;
+		const glm::dvec3 w = m_vectorB - m_vectorC;
 
 		double denom = m_normalLengthSquare;
 		double invDenom = 1.0 / denom;
@@ -58,49 +59,41 @@ namespace Engine
 				denom = glm::dot(m_vectorA, u);
 				if ((gamma < 0.0) && (denom > 0.0))
 				{
-					beta = std::min(1.0, denom / glm::length2(u));
-					alpha = 1.0 - beta;
-					gamma = 0.0;
+					const double newBeta = std::min(1.0, denom / glm::length2(u));
+					return glm::dvec3(1.0 - newBeta, newBeta, 0.0);
 				}
 				else
 				{
-					gamma = std::min(1.0, std::max(0.0, glm::dot(m_vectorA, v) / glm::length2(v)));
-					alpha = 1.0 - gamma;
-					beta = 0.0;
+					const double newGamma = glm::clamp(glm::dot(m_vectorA, v) / glm::length2(v), 0.0, 1.0);
+					return glm::dvec3(1.0 - newGamma, 0.0, newGamma);
 				}
 			}
 			else if ((beta >= 0.0) && (gamma < 0.0))
 			{
-				glm::dvec3 w = m_vectorB - m_vectorC;
 				denom = glm::dot(m_vectorB, w);
 				if ((alpha < 0.0) && (denom > 0.0))
 				{
-					gamma = std::min(1.0, denom / glm::length2(w));
-					beta = 1.0 - gamma;
-					alpha = 0.0;
+					const double newGamma = std::min(1.0, denom / glm::length2(w));
+					return glm::dvec3(0.0, 1.0 - newGamma, newGamma);
 				}
 				else
 				{
-					alpha = std::min(1.0, std::max(0.0, -glm::dot(m_vectorB, u) / glm::length2(u)));
-					beta = 1.0 - alpha;
-					gamma = 0.0;
+					const double newAlpha = glm::clamp(-glm::dot(m_vectorB, u) / glm::length2(u), 0.0, 1.0);
+					return glm::dvec3(newAlpha, 1.0 - newAlpha, 0.0);
 				}
 			}
 			else if ((gamma >= 0.0) && (alpha < 0.0))
 			{
-				glm::dvec3 w = m_vectorB - m_vectorC;
 				denom = -glm::dot(m_vectorC, v);
 				if ((beta < 0.0) && (denom > 0.0))
 				{
-					alpha = std::min(1.0, denom / glm::length2(v));
-					gamma = 1.0 - alpha;
-					beta = 0.0;
+					const double newAlpha = std::min(1.0, denom / glm::length2(v));
+					return glm::dvec3(newAlpha, 0.0, 1.0 - newAlpha);
 				}
 				else
 				{
-					beta = std::min(1.0, std::max(0.0, -glm::dot(m_vectorC, w) / glm::length2(w)));
-					gamma = 1.0 - beta;
-					alpha = 0.0;
+					const double newBeta = glm::clamp(-glm::dot(m_vectorC, w) / glm::length2(w), 0.0, 1.0);
+					return glm::dvec3(0.0, newBeta, 1.0 - newBeta);
 				}
 			}
 		}
