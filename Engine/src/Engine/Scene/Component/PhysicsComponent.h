@@ -6,7 +6,8 @@ namespace Engine
 {
 	struct PhysicsComponent : public IComponent
 	{
-		float weight = 1.0f;
+		float mass = 1.0f;
+		float restitution = 0.0f;
 		bool isStatic = false;
 		float fallingTime = 0.0f;
 		Ptr<BoundingBox> boundingBox = nullptr;
