@@ -372,7 +372,7 @@ namespace Engine
 					ImGuiExtension::DrawVec3SubSection("Center", value.center);
 					ImGuiExtension::DrawVec3SubSection("Extents", value.extents);
 					component->boundingBox->SetBoundingValue(value);
-					ImGuiExtension::DrawFloatSubSection("Weight", component->weight);
+					ImGuiExtension::DrawFloatSubSection("Mass", component->mass);
 					ImGuiExtension::DrawCheckboxSubSection("Static", &component->isStatic);
 				},
 				[&]()

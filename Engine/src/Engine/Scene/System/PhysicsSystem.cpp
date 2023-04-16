@@ -25,32 +25,32 @@ namespace Engine
 		ShapeInfo shapeA(transformA, physicsA->boundingBox->GetBoundingValue());
 		ShapeInfo shapeB(transformB, physicsB->boundingBox->GetBoundingValue());
 
-		GetInstance()->m_collision->Detect(shapeA, shapeB);
-		if (GetInstance()->m_collision->IsCollided())
+		const CollisionInfo info = GetInstance()->m_collision->Detect(shapeA, shapeB);
+		if (info.isCollided)
 		{
-			glm::vec3 distanceAtoB = GetInstance()->m_collision->GetDirection();
-			if (physicsA->isStatic)
-			{
-				transformB.translation -= distanceAtoB;
-			}
-			else if (physicsB->isStatic)
-			{
-				transformA.translation += distanceAtoB;
-			}
-			else
-			{
-				float weightA = physicsA->weight;
-				float weightB = physicsB->weight;
-				float weightARatio = weightB / (weightA + weightB);
-				float weightBRatio = weightA / (weightA + weightB);
-				glm::vec3 distanceA = distanceAtoB * weightARatio;
-				glm::vec3 distanceB = distanceAtoB * weightBRatio;
-				transformA.translation += distanceA;
-				transformB.translation -= distanceB;
-			}
+			// Calculate the relative velocity of the two objects
+			glm::dvec3 relativeVelocity = transformB.velocity - transformA.velocity;
 
-			physicsA->fallingTime = 0.0f;
-			physicsB->fallingTime = 0.0f;
+			// Calculate the relative velocity in the direction of the collision normal
+			double velocityAlongNormal = glm::dot(relativeVelocity, info.collisionNormal);
+
+			// Calculate the restitution (bounciness) of the collision
+			double e = std::min(physicsA->restitution, physicsB->restitution);
+
+			// Calculate the impulse scalar
+			double j = -(1.0 + e) * velocityAlongNormal / (1.0 / physicsA->mass + 1.0 / physicsB->mass);
+
+			// Apply the impulse to the objects
+			glm::dvec3 impulse = j * info.collisionNormal;
+			transformA.velocity -= 1.0 / (double)physicsA->mass * impulse;
+			transformB.velocity += 1.0 / (double)physicsB->mass * impulse;
+
+			// Correct the positions of the objects to avoid overlap
+			const double percent = 0.2; // percentage of overlap to correct
+			const double slop = 0.01; // small value to avoid jitter
+			glm::dvec3 correction = std::max(std::abs(info.separation) - slop, 0.0) / (1.0 / physicsA->mass + 1.0 / physicsB->mass) * percent * info.collisionNormal;
+			transformA.translation += 1.0 / (double)physicsA->mass * correction;
+			transformB.translation -= 1.0 / (double)physicsB->mass * correction;
 		}
 	}
 

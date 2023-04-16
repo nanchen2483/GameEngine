@@ -9,12 +9,12 @@ namespace Engine
 	public:
 		GJKEPA3D() = default;
 
-		virtual bool Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB) override;
+		virtual const CollisionInfo& Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB) override;
 		virtual bool IsCollided() const override { return m_isCollided; }
 		virtual float GetDistance() const override { return m_distance; }
 		virtual glm::vec3 GetDirection() const override { return m_direction; }
 	private:
-		bool Solve();
+		const CollisionInfo& Solve();
 		glm::dvec3 CreateNewSupportPoint();
 		glm::dvec3 GetDirection(const ShapeInfo& from, const ShapeInfo& to);
 		glm::dvec3 GetPointFromShape(const ShapeInfo& shape, const GJK3DTriangle* triangle, const glm::dvec3& barycentric);

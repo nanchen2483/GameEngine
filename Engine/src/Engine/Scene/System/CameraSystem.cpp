@@ -21,6 +21,7 @@ namespace Engine
 		const glm::vec3& forwardDirection = glm::rotate(orientation, glm::vec3(0.0f, 0.0f, -1.0f));
 
 		float velocity = camera.GetMoveSpeed() * System::GetDeltaTime();
+		glm::vec3 previousPosition = transform.translation;
 		if (Input::IsKeyPressed(KeyCode::W))
 		{
 			transform.translation += forwardDirection * velocity;
@@ -50,6 +51,8 @@ namespace Engine
 		{
 			transform.translation -= upDirection * velocity;
 		}
+
+		transform.velocity = (previousPosition - transform.translation) / glm::vec3(System::GetDeltaTime());
 
 		camera.SetUpDirection(upDirection);
 	}
