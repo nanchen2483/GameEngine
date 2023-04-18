@@ -13,7 +13,7 @@ namespace Engine
 	class Scene
 	{
 	public:
-		Scene();
+		Scene(const Ptr<Framebuffer>& framebuffer);
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = "");
@@ -34,6 +34,7 @@ namespace Engine
 		
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
+		Ptr<Framebuffer> m_framebuffer;
 
 		friend class Entity;
 		friend class SceneSerializer;
