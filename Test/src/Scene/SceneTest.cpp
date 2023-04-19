@@ -9,7 +9,7 @@ namespace EngineTest
 
 		SceneTest()
 		{
-			scene = Engine::CreatePtr<Engine::Scene>();
+			scene = Engine::CreatePtr<Engine::Scene>(nullptr);
 		}
 
 		glm::mat4 GetTransform(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale)
