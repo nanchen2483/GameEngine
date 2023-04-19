@@ -25,7 +25,8 @@
 
 namespace Engine
 {
-	Scene::Scene()
+	Scene::Scene(const Ptr<Framebuffer>& framebuffer)
+		: m_framebuffer(framebuffer)
 	{
 	}
 
@@ -78,7 +79,24 @@ namespace Engine
 					}
 				});
 
+		ShadowSystem::OnUpdate(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio(),
+			[=]()
+			{
+				m_registry.view<TransformComponent, MeshComponent>()
+					.each([=](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
+						{
+							Ptr<Animation> animation = nullptr;
+							if (m_registry.all_of<AnimationComponent>(entity))
+							{
+								animation = m_registry.get<AnimationComponent>(entity);
+							}
+
+							Renderer3D::Draw(transform, mesh, animation, ShadowSystem::GetShader());
+						});
+			});
+
 		// Debug
+		m_framebuffer->Bind();
 		Debug();
 
 		// Draw
@@ -122,22 +140,6 @@ namespace Engine
 				{
 					Renderer3D::Draw(component);
 				});
-
-		ShadowSystem::OnUpdate(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio(),
-			[=]()
-			{
-				m_registry.view<TransformComponent, MeshComponent>()
-					.each([=](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
-						{
-							Ptr<Animation> animation = nullptr;
-							if (m_registry.all_of<AnimationComponent>(entity))
-							{
-								animation = m_registry.get<AnimationComponent>(entity);
-							}
-							
-							Renderer3D::Draw(transform, mesh, animation, ShadowSystem::GetShader());
-						});
-			});
 	}
 
 	void Scene::Debug()
@@ -220,8 +222,28 @@ namespace Engine
 						}
 					});
 
-			// Draw
 			glm::mat4 viewMatrix = CameraSystem::GetViewMatrix(playerTransform);
+			ShadowSystem::OnUpdate(viewMatrix, primaryCamera.camera.GetFOV(), primaryCamera.camera.GetAspectRatio(),
+				[=]()
+				{
+					m_registry.view<TransformComponent, MeshComponent>()
+						.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
+							{
+								if (mesh.isOnLightViewFrustum)
+								{
+									Ptr<Animation> animation = nullptr;
+									if (m_registry.all_of<AnimationComponent>(entity))
+									{
+										animation = m_registry.get<AnimationComponent>(entity);
+									}
+
+									Renderer3D::Draw(transform, mesh, animation, ShadowSystem::GetShader());
+								}
+							});
+				});
+
+			// Draw
+			m_framebuffer->Bind();
 			uint32_t numOflights = m_registry.view<LightComponent>().size();
 			Renderer3D::BeginScene(viewMatrix, primaryCamera.camera.GetProjection(), playerTransform.GetTranslation(), numOflights);
 
@@ -265,25 +287,6 @@ namespace Engine
 					{
 						Renderer3D::Draw(component);
 					});
-
-			ShadowSystem::OnUpdate(viewMatrix, primaryCamera.camera.GetFOV(), primaryCamera.camera.GetAspectRatio(),
-				[=]()
-				{
-					m_registry.view<TransformComponent, MeshComponent>()
-						.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
-							{
-								if (mesh.isOnLightViewFrustum)
-								{
-									Ptr<Animation> animation = nullptr;
-									if (m_registry.all_of<AnimationComponent>(entity))
-									{
-										animation = m_registry.get<AnimationComponent>(entity);
-									}
-
-									Renderer3D::Draw(transform, mesh, animation, ShadowSystem::GetShader());
-								}
-							});
-				});
 		}
 	}
 	

@@ -33,7 +33,7 @@ namespace Engine
 		m_framebuffer = Framebuffer::Create(fbSpec);
 
 		// Entity
-		m_activeScene = CreatePtr<Scene>();
+		m_activeScene = CreatePtr<Scene>(m_framebuffer);
 
 		m_editorCamera = EditorCamera(45.0f, m_viewportSize.x, m_viewportSize.y, 0.1f, 10000.0f);
 
@@ -338,7 +338,7 @@ namespace Engine
 
 	void EditorLayer::NewScene()
 	{
-		m_activeScene = CreatePtr<Scene>();
+		m_activeScene = CreatePtr<Scene>(m_framebuffer);
 		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 	}
@@ -355,7 +355,7 @@ namespace Engine
 
 	void EditorLayer::OpenScene(const std::filesystem::path& filepath)
 	{
-		m_activeScene = CreatePtr<Scene>();
+		m_activeScene = CreatePtr<Scene>(m_framebuffer);
 		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 
