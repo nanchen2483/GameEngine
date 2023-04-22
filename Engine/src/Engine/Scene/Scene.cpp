@@ -204,12 +204,16 @@ namespace Engine
 			}
 
 			auto meshView = m_registry.view<TransformComponent, MeshComponent, PhysicsComponent>();
-			meshView.each([&](TransformComponent& thisTransform, MeshComponent& meshComponent, PhysicsComponent& thisComponent)
+			meshView.each([&](entt::entity thisEntity, TransformComponent& thisTransform, MeshComponent& thisMesh, PhysicsComponent& thisPhysics)
 				{
-					MeshSystem::OnUpdate(meshComponent, thisTransform, thisComponent, frustum, lightFrustum, terrain);
-					meshView.each([&](TransformComponent& thatTransform, MeshComponent& meshComponent, PhysicsComponent& thatComponent)
+					MeshSystem::OnUpdate(thisMesh, thisTransform, thisPhysics, frustum, lightFrustum, terrain);
+					meshView.each([&](entt::entity otherOntity, TransformComponent& otherTransform, MeshComponent& otherMesh, PhysicsComponent& otherPhysics)
 						{
-							PhysicsSystem::OnUpdate(thisTransform, thatTransform, &thisComponent, &thatComponent);
+							// Skip self and entities that have already been compared
+							if (thisEntity < otherOntity)
+							{
+								PhysicsSystem::OnUpdate(thisTransform, otherTransform, &thisPhysics, &otherPhysics);
+							}
 						});
 				});
 
