@@ -6,15 +6,23 @@ namespace Engine
 	GJK3DDeltahedron::GJK3DDeltahedron(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC, const glm::dvec3& pointD)
 		: m_numOfSupportPoint(0), m_numOfExpandedTriagnles(0), m_originEnclosed(false)
 	{
-		GJK3DTriangle* frontTriangle = CreateTriangle(pointA, pointC, pointB);
-		GJK3DTriangle* leftTriangle = CreateTriangle(pointA, pointB, pointD);
-		GJK3DTriangle* rightTriangle = CreateTriangle(pointA, pointD, pointC);
-		GJK3DTriangle* bottomTriangle = CreateTriangle(pointB, pointC, pointD);
+		const Ptr<GJK3DTriangle>& frontTriangle = CreateTriangle(pointA, pointC, pointB);
+		const Ptr<GJK3DTriangle>& leftTriangle = CreateTriangle(pointA, pointB, pointD);
+		const Ptr<GJK3DTriangle>& rightTriangle = CreateTriangle(pointA, pointD, pointC);
+		const Ptr<GJK3DTriangle>& bottomTriangle = CreateTriangle(pointB, pointC, pointD);
 
 		frontTriangle->SetNeighbors(leftTriangle, rightTriangle, bottomTriangle);
 		leftTriangle->SetNeighbors(rightTriangle, frontTriangle, bottomTriangle);
 		rightTriangle->SetNeighbors(frontTriangle, leftTriangle, bottomTriangle);
 		bottomTriangle->SetNeighbors(leftTriangle, frontTriangle, rightTriangle);
+	}
+
+	const Ptr<GJK3DTriangle> GJK3DDeltahedron::CreateTriangle(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC)
+	{
+		Ptr<GJK3DTriangle> newTriangle = CreatePtr<GJK3DTriangle>(vectorA, vectorB, vectorC, m_originEnclosed);
+		m_triangles.Add(newTriangle);
+
+		return newTriangle;
 	}
 
 	double GJK3DDeltahedron::GetClosestDistanceToOrigin()
@@ -43,14 +51,6 @@ namespace Engine
 
 		return searchDirection;
 	}
-	
-	GJK3DTriangle* GJK3DDeltahedron::CreateTriangle(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC)
-	{
-		GJK3DTriangle* newTriangle = new GJK3DTriangle(vectorA, vectorB, vectorC, m_originEnclosed);
-		m_triangles.Add(newTriangle);
-
-		return newTriangle;
-	}
 
 	GJK3DStatus GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint)
 	{
@@ -60,7 +60,7 @@ namespace Engine
 		}
 
 		AddSupportPoint(newPoint);
-		GJK3DTriangle* expandTriangle = GetTriangleToBeExpanded(newPoint);
+		const Ptr<GJK3DTriangle> expandTriangle = GetTriangleToBeExpanded(newPoint);
 		if (expandTriangle == nullptr)
 		{
 			return GJK3DStatus::FINISHED;
@@ -79,9 +79,9 @@ namespace Engine
 		m_numOfSupportPoint += 1;
 	}
 
-	GJK3DTriangle* GJK3DDeltahedron::GetTriangleToBeExpanded(const glm::dvec3& newSupportPoint)
+	const Ptr<GJK3DTriangle> GJK3DDeltahedron::GetTriangleToBeExpanded(const glm::dvec3& newSupportPoint)
 	{
-		for (GJK3DTriangle *triangle : m_triangles)
+		for (const Ptr<GJK3DTriangle>& triangle : m_triangles)
 		{
 			if (triangle->IsExpandable(newSupportPoint))
 			{
@@ -99,7 +99,7 @@ namespace Engine
 			return false;
 		}
 
-		GJK3DTriangle* closestTriangle = m_triangles.GetHeadValue();
+		const Ptr<GJK3DTriangle> closestTriangle = m_triangles.GetHeadValue();
 		double deltaDistance = closestTriangle->GetClosestDistanceToOriginSquare() - glm::dot(newSupportPoint, closestTriangle->GetClosestPointToOrigin());
 		bool isCloseEnough = deltaDistance * deltaDistance < COLLIDE_EPSILON * COLLIDE_EPSILON * closestTriangle->GetClosestDistanceToOriginSquare();
 		if (isCloseEnough)
@@ -125,13 +125,13 @@ namespace Engine
 		return false;
 	}
 
-	void GJK3DDeltahedron::UpdateOriginEnclosed(const GJK3DTriangle* removeTriangle)
+	void GJK3DDeltahedron::UpdateOriginEnclosed(const Ptr<GJK3DTriangle>& removeTriangle)
 	{
 		if (!m_originEnclosed)
 		{
 			for (uint32_t i = 0; i < m_numOfExpandedTriagnles; ++i)
 			{
-				const GJK3DTriangle* triangle = m_expandedTriangles[i];
+				const Ptr<GJK3DTriangle> triangle = m_expandedTriangles[i].lock();
 				bool originNotEnclosed = glm::dot(triangle->GetNormalVector(), triangle->GetA()) < 0.0;
 				if (originNotEnclosed)
 				{
@@ -143,7 +143,7 @@ namespace Engine
 		}
 	}
 
-	void GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* expandTriangle)
+	void GJK3DDeltahedron::ExpandWithNewPoint(const glm::dvec3& newPoint, const Ptr<GJK3DTriangle>& expandTriangle)
 	{
 		if (expandTriangle->IsDeleted())
 		{
@@ -151,14 +151,14 @@ namespace Engine
 		}
 
 		// Soft-delete
-		m_triangles.Delete(expandTriangle, true);
+		m_triangles.Delete(expandTriangle);
 		expandTriangle->MarkAsDeleted();
 
-		GJK3DTriangle* leftTriangle = expandTriangle->GetLeftTriangle();
+		const Ptr<GJK3DTriangle>& leftTriangle = expandTriangle->GetLeftTriangle();
 		bool leftTriangleShouldBeExpanded = leftTriangle->IsExpandable(newPoint);
 		if (!leftTriangleShouldBeExpanded)
 		{
-			GJK3DTriangle* newTriangle = CreateTriangle(expandTriangle->GetC(), expandTriangle->GetA(), newPoint);
+			const Ptr<GJK3DTriangle>& newTriangle = CreateTriangle(expandTriangle->GetC(), expandTriangle->GetA(), newPoint);
 			newTriangle->SetRightTriangle(leftTriangle);
 			m_expandedTriangles[m_numOfExpandedTriagnles++] = newTriangle;
 
@@ -176,11 +176,11 @@ namespace Engine
 			}
 		}
 
-		GJK3DTriangle* rightTriangle = expandTriangle->GetRightTriangle();
+		const Ptr<GJK3DTriangle>& rightTriangle = expandTriangle->GetRightTriangle();
 		bool rightTriangleShouldBeExpanded = rightTriangle->IsExpandable(newPoint);
 		if (!rightTriangleShouldBeExpanded)
 		{
-			GJK3DTriangle* newTriangle = CreateTriangle(expandTriangle->GetA(), expandTriangle->GetB(), newPoint);
+			const Ptr<GJK3DTriangle>& newTriangle = CreateTriangle(expandTriangle->GetA(), expandTriangle->GetB(), newPoint);
 			newTriangle->SetRightTriangle(rightTriangle);
 			m_expandedTriangles[m_numOfExpandedTriagnles++] = newTriangle;
 
@@ -198,11 +198,11 @@ namespace Engine
 			}
 		}
 
-		GJK3DTriangle* bottomTriangle = expandTriangle->GetBottomTriangle();
+		const Ptr<GJK3DTriangle>& bottomTriangle = expandTriangle->GetBottomTriangle();
 		bool bottomTriangleShouldBeExpanded = bottomTriangle->IsExpandable(newPoint);
 		if (!bottomTriangleShouldBeExpanded)
 		{
-			GJK3DTriangle* newTriangle = CreateTriangle(expandTriangle->GetB(), expandTriangle->GetC(), newPoint);
+			const Ptr<GJK3DTriangle>& newTriangle = CreateTriangle(expandTriangle->GetB(), expandTriangle->GetC(), newPoint);
 			newTriangle->SetRightTriangle(bottomTriangle);
 			m_expandedTriangles[m_numOfExpandedTriagnles++] = newTriangle;
 
@@ -238,8 +238,8 @@ namespace Engine
 	
 	GJK3DStatus GJK3DDeltahedron::UpdateNeighbors()
 	{
-		GJK3DTriangle* firstTriangle = m_expandedTriangles[0];
-		GJK3DTriangle* lastTriangle = firstTriangle;
+		const Ptr<GJK3DTriangle> firstTriangle = m_expandedTriangles[0].lock();
+		Ptr<GJK3DTriangle> lastTriangle = firstTriangle;
 
 		m_expandedTriangles[0] = m_expandedTriangles[--m_numOfExpandedTriagnles];
 
@@ -248,7 +248,7 @@ namespace Engine
 			int32_t foundTriangleIndex = -1;
 			for (int32_t i = 0; i < m_numOfExpandedTriagnles; i++)
 			{
-				if (m_expandedTriangles[i]->GetA() == lastTriangle->GetB())
+				if (m_expandedTriangles[i].lock()->GetA() == lastTriangle->GetB())
 				{
 					foundTriangleIndex = i;
 					break;
@@ -260,10 +260,11 @@ namespace Engine
 				return GJK3DStatus::NOT_OVERLAP;
 			}
 
-			lastTriangle->SetBottomTriangle(m_expandedTriangles[foundTriangleIndex]);
-			m_expandedTriangles[foundTriangleIndex]->SetLeftTriangle(lastTriangle);
+			const Ptr<GJK3DTriangle> foundTriangle = m_expandedTriangles[foundTriangleIndex].lock();
+			lastTriangle->SetBottomTriangle(foundTriangle);
+			foundTriangle->SetLeftTriangle(lastTriangle);
 
-			lastTriangle = m_expandedTriangles[foundTriangleIndex];
+			lastTriangle = foundTriangle;
 			m_expandedTriangles[foundTriangleIndex] = m_expandedTriangles[--m_numOfExpandedTriagnles];
 		}
 

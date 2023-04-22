@@ -121,9 +121,6 @@ layout (location = 1) out int aEntityId;
 const int MAX_TEXTURES = 32;
 const int MAX_SHADOW_CASCADES = 16;
 
-// The number of samples to use for PCF filtering
-const int PCF_SAMPLE_COUNT = 16;
-
 layout (std140, binding = 0) uniform CameraBlock
 {
 	mat4 view;
@@ -188,6 +185,8 @@ Material SetupMaterial();
 vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir);
 float CalcShadow();
+int GetShadowLayer();
+float CalcShadowBias(int layer);
 
 void main()
 {
@@ -281,22 +280,11 @@ vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir)
 	return ambient + (1.0 - material.shadow) * diffuse;
 }
 
+// Caculate shadow using Percentage-Closer Filtering (PCF)
 float CalcShadow()
 {
 	// Select cascade layer
-	vec4 fragPosViewSpace = uCamera.view * vec4(vertex.fragPos, 1.0);
-	float depthValue = abs(fragPosViewSpace.z);
-
-	int layer = -1;
-	for (int i = 0; i < uCascadeCount; ++i)
-	{
-		if (depthValue < uCascadePlaneDistances[i])
-		{
-			layer = i;
-			break;
-		}
-	}
-
+	const int layer = GetShadowLayer();
 	if (layer == -1)
 	{
 		return 0.0;
@@ -311,32 +299,30 @@ float CalcShadow()
 	projCoords = projCoords * 0.5 + 0.5;
 	
 	// Get depth of current fragment from light's perspective
-	float currentDepth = projCoords.z;
+	const float fragmentDepth = projCoords.z;
 
 	// Keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
-	if (currentDepth > 1.0)
+	if (fragmentDepth > 1.0)
 	{
 		return 0.0;
 	}
 
 	// Calculate bias (based on depth map resolution and slope)
-	vec3 normal = normalize(vertex.normal);
-	float bias = max(0.1 * (1.0 - dot(normal, uDirLight.direction)), 0.01);
-	const float biasModifier = 0.5f;
-	bias *= 1.0 / (uCascadePlaneDistances[layer] * biasModifier);
+	const float bias = CalcShadowBias(layer);
 
-	// Percentage-Closer Filtering
+	// Percentage-Closer Filtering with a 3x3 filter
 	float shadow = 0.0;
 	int sampleCount = 0;
+	const int sampleSize = 1;
 	vec2 texelSize = 1.0 / vec2(textureSize(uShadowMap, 0));
-	for (int x = -PCF_SAMPLE_COUNT / 2; x <= PCF_SAMPLE_COUNT / 2; ++x)
+	for (int x = -sampleSize; x <= sampleSize; ++x)
 	{
-		for (int y = -PCF_SAMPLE_COUNT / 2; y <= PCF_SAMPLE_COUNT / 2; ++y)
+		for (int y = -sampleSize; y <= sampleSize; ++y)
 		{
 			vec2 offset = vec2(x, y) * texelSize;
 			vec3 texCoord = vec3(projCoords.xy + offset, layer);
-			float pcfDepth = texture(uShadowMap, texCoord).r;
-			shadow += pcfDepth < (currentDepth - bias) ? 1.0 : 0.0;
+			float depth = texture(uShadowMap, texCoord).r;
+			shadow += depth < (fragmentDepth - bias) ? 1.0 : 0.0;
 			++sampleCount;
 		}
 	}
@@ -344,4 +330,34 @@ float CalcShadow()
 	shadow /= (sampleCount * 2.0);
 
 	return shadow;
+}
+
+// Get cascade shadow layer for a given fragment, -1 ifthe  depth is greater than cascade plane distances
+int GetShadowLayer()
+{
+	vec4 fragPosViewSpace = uCamera.view * vec4(vertex.fragPos, 1.0);
+	float depthValue = abs(fragPosViewSpace.z);
+
+	int layer = -1;
+	for (int i = 0; i < uCascadeCount; ++i)
+	{
+		if (depthValue < uCascadePlaneDistances[i])
+		{
+			layer = i;
+			break;
+		}
+	}
+
+	return layer;
+}
+
+// Calculate bias (based on depth map resolution and slope)
+float CalcShadowBias(int layer)
+{
+	vec3 normal = normalize(vertex.normal);
+	float bias = max(0.1 * (1.0 - dot(normal, uDirLight.direction)), 0.01);
+	const float biasModifier = 0.5f;
+	bias *= 1.0 / (uCascadePlaneDistances[layer] * biasModifier);
+
+	return bias;
 }

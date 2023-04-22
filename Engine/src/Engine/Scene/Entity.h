@@ -1,28 +1,23 @@
 #pragma once
 #include "Scene.h"
 #include "Component/IComponent.h"
+#include "Engine/Core/System/Object/IComparable.h"
 
 #include <entt/entt.hpp>
+#include <type_traits>
 
 namespace Engine
 {
-	class Entity
+	class Entity : public IComparable<Entity>
 	{
 	public:
-		Entity() = default;
+		Entity();
 		Entity(entt::entity handle, Scene* scene);
 		Entity(const Entity& other) = default;
 
-		template<typename T, typename... Args, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
-		T& AddComponent(Args&&... args)
-		{
-			ENGINE_CORE_ASSERT(!HasComponent<T>(), "Entity already has component!");
-			T& componet = m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
-			m_scene->OnComponentAdded<T>(*this, componet);
-			return componet;
-		}
+		uint32_t GetId() const { return (uint32_t)m_entityHandle; }
 
-		template<typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
+		template<typename T, typename std::enable_if_t<std::is_base_of_v<IComponent, T>>* = nullptr>
 		T& GetComponent()
 		{
 			ENGINE_CORE_ASSERT(HasComponent<T>(), "Entity does not have component!");
@@ -30,13 +25,23 @@ namespace Engine
 			return m_scene->m_registry.get<T>(m_entityHandle);
 		}
 
-		template<typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
+		template<typename T, typename std::enable_if_t<std::is_base_of_v<IComponent, T>>* = nullptr>
 		bool HasComponent()
 		{
 			return m_scene->m_registry.any_of<T>(m_entityHandle);
 		}
 
-		template<typename T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
+		template<typename T, typename... Args, typename std::enable_if_t<std::is_base_of_v<IComponent, T>>* = nullptr>
+		T& AddComponent(Args&&... args)
+		{
+			ENGINE_CORE_ASSERT(!HasComponent<T>(), "Entity already has component!");
+			T& componet = m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
+			OnComponentAdded<T>(componet);
+
+			return componet;
+		}
+
+		template<typename T, typename std::enable_if_t<std::is_base_of_v<IComponent, T>>* = nullptr>
 		void RemoveComponent()
 		{
 			ENGINE_CORE_ASSERT(HasComponent<T>(), "Entity does not have component!");
@@ -48,23 +53,20 @@ namespace Engine
 		operator int32_t() const { return (int32_t)m_entityHandle; }
 		operator uint32_t() const { return (uint32_t)m_entityHandle; }
 		operator uint64_t() const { return (uint64_t)m_entityHandle; }
-		operator bool() const
-		{
-			return m_entityHandle != entt::null && m_scene != nullptr && m_scene->EntityExists(m_entityHandle);
-		}
+		operator bool() const;
 
-		bool operator==(const Entity& other) const
-		{
-			return m_entityHandle == other.m_entityHandle && m_scene == other.m_scene;
-		}
-
-		bool operator!=(const Entity& other) const
-		{
-			return !(*this == other);
-		}
-
+		// Inherited via IComparable
+		virtual bool operator==(const Entity& other) const override;
+		virtual bool operator!=(const Entity& other) const override;
+		virtual bool operator<(const Entity& other) const override;
+		virtual bool operator<=(const Entity& other) const override;
+		virtual bool operator>(const Entity& other) const override;
+		virtual bool operator>=(const Entity& other) const override;
 	private:
-		entt::entity m_entityHandle{ entt::null };
-		Scene* m_scene = nullptr;
+		template<typename T, typename std::enable_if_t<std::is_base_of_v<IComponent, T>>* = nullptr>
+		void OnComponentAdded(T& component);
+
+		entt::entity m_entityHandle;
+		Scene* m_scene;
 	};
 }

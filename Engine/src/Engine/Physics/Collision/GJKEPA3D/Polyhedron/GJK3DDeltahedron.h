@@ -16,29 +16,29 @@ namespace Engine
 	public:
 		GJK3DDeltahedron(const glm::dvec3& pointA, const glm::dvec3& poiuntB, const glm::dvec3& pointC, const glm::dvec3& pointD);
 
-		const GJK3DTriangle* GetClosestTriangleToOrigin() const { return m_triangles.GetHeadValue(); }
+		const Ptr<GJK3DTriangle> GetClosestTriangleToOrigin() const { return m_triangles.GetHeadValue(); }
 		double GetClosestDistanceToOrigin();
 		const glm::dvec3 GetBarycentric();
 		const glm::dvec3 GetSearchDirection();
 
 		GJK3DStatus ExpandWithNewPoint(const glm::dvec3& newSupportPoint);
 	private:
-		GJK3DTriangle* CreateTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC);
+		const Ptr<GJK3DTriangle> CreateTriangle(const glm::dvec3& pointA, const glm::dvec3& pointB, const glm::dvec3& pointC);
 		void AddSupportPoint(const glm::dvec3& newSupportPoint);
 		bool IsValidSupportPoint(const glm::dvec3& newSupportPoint);
 		bool AlreadyExists(const glm::dvec3& newSupportPoint);
-		GJK3DTriangle* GetTriangleToBeExpanded(const glm::dvec3& newSupportPoint);
-		void UpdateOriginEnclosed(const GJK3DTriangle* removeTriangle);
-		void ExpandWithNewPoint(const glm::dvec3& newPoint, GJK3DTriangle* removeTriangle);
+		const Ptr<GJK3DTriangle> GetTriangleToBeExpanded(const glm::dvec3& newSupportPoint);
+		void UpdateOriginEnclosed(const Ptr<GJK3DTriangle>& removeTriangle);
+		void ExpandWithNewPoint(const glm::dvec3& newPoint, const Ptr<GJK3DTriangle>& removeTriangle);
 		GJK3DStatus UpdateNeighbors();
 
-		OrderedLinkedList<GJK3DTriangle*, void> m_triangles;
+		OrderedLinkedList<Ptr<GJK3DTriangle>> m_triangles{ 1024 };
 
 		uint32_t m_numOfSupportPoint;
 		glm::dvec3 m_supportPoints[512];
 
 		uint32_t m_numOfExpandedTriagnles;
-		GJK3DTriangle* m_expandedTriangles[1024];
+		Weak<GJK3DTriangle> m_expandedTriangles[1024];
 		
 		bool m_originEnclosed;
 

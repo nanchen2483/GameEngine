@@ -18,19 +18,19 @@ namespace Engine
 	public:
 		GJK3DTriangle(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC, bool originEnclosed);
 
-		GJK3DTriangle* GetLeftTriangle() const { return m_leftTriangle; }
-		GJK3DTriangle* GetRightTriangle() const { return m_rightTriangle; }
-		GJK3DTriangle* GetBottomTriangle() const { return m_bottomTriangle; }
+		const Ptr<GJK3DTriangle> GetLeftTriangle() const { return m_leftTriangle.lock(); }
+		const Ptr<GJK3DTriangle> GetRightTriangle() const { return m_rightTriangle.lock(); }
+		const Ptr<GJK3DTriangle> GetBottomTriangle() const { return m_bottomTriangle.lock(); }
 
 		const glm::dvec3& GetClosestPointToOrigin() const { return m_closestPointToOrigin; }
 		const double GetClosestDistanceToOrigin() const { return m_closestDistanceToOrigin; }
 		const double GetClosestDistanceToOriginSquare() const { return m_closestDistanceToOriginSquare; }
 		const glm::dvec3 GetBarycentric(bool originEnclosed) const;
 
-		void SetLeftTriangle(GJK3DTriangle* leftTriangle);
-		void SetRightTriangle(GJK3DTriangle* rightTriangle);
-		void SetBottomTriangle(GJK3DTriangle* bottomTriangle);
-		void SetNeighbors(GJK3DTriangle* leftTriangle, GJK3DTriangle* rightTriangle, GJK3DTriangle* bottomTriangle);
+		void SetLeftTriangle(const Ptr<GJK3DTriangle>& leftTriangle);
+		void SetRightTriangle(const Ptr<GJK3DTriangle>& rightTriangle);
+		void SetBottomTriangle(const Ptr<GJK3DTriangle>& bottomTriangle);
+		void SetNeighbors(const Ptr<GJK3DTriangle>& leftTriangle, const Ptr<GJK3DTriangle>& rightTriangle, const Ptr<GJK3DTriangle>& bottomTriangle);
 		
 		bool IsExpandable(const glm::dvec3& point) const;
 		bool IsDeleted() const { return m_isDeleted; };
@@ -46,9 +46,9 @@ namespace Engine
 	private:
 		void InitClosestPointToOrigin(bool originEnclosed);
 
-		GJK3DTriangle* m_leftTriangle;
-		GJK3DTriangle* m_rightTriangle;
-		GJK3DTriangle* m_bottomTriangle;
+		Weak<GJK3DTriangle> m_leftTriangle;
+		Weak<GJK3DTriangle> m_rightTriangle;
+		Weak<GJK3DTriangle> m_bottomTriangle;
 
 		glm::dvec3 m_closestPointToOrigin;
 		double m_closestDistanceToOrigin;

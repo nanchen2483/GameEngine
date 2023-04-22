@@ -49,4 +49,22 @@ namespace Engine
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
+
+	template<typename T>
+	using Weak = std::weak_ptr<T>;
+
+	template<typename T>
+	struct is_smart_pointer : std::false_type {};
+
+	template<typename T>
+	struct is_smart_pointer<Uniq<T>> : std::true_type {};
+
+	template<typename T>
+	struct is_smart_pointer<Ptr<T>> : std::true_type {};
+
+	template<typename T>
+	struct is_smart_pointer<Weak<T>> : std::true_type {};
+
+	template<typename T>
+	inline constexpr bool is_smart_pointer_v = is_smart_pointer<std::remove_cv_t<T>>::value;
 }
