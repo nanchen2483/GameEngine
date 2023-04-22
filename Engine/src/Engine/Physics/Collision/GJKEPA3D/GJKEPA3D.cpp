@@ -4,11 +4,8 @@
 
 namespace Engine
 {
-	const CollisionInfo& GJKEPA3D::Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB)
+	const CollisionInfo GJKEPA3D::Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB)
 	{
-		m_distance = 0;
-		m_direction = {};
-
 		m_shapeA = shapeA;
 		m_shapeB = shapeB;
 
@@ -24,8 +21,9 @@ namespace Engine
 		return Solve();
 	}
 	
-	const CollisionInfo& GJKEPA3D::Solve()
+	const CollisionInfo GJKEPA3D::Solve()
 	{
+		CollisionInfo info;
 		uint32_t iteration = 0;
 		while (++iteration < MAX_ITERATION)
 		{
@@ -33,13 +31,12 @@ namespace Engine
 			GJK3DStatus status = m_deltahedron->ExpandWithNewPoint(newSupportPoint);
 			if (status == GJK3DStatus::FINISHED)
 			{
-				const GJK3DTriangle* closestTriangle = m_deltahedron->GetClosestTriangleToOrigin();
+				const Ptr<GJK3DTriangle>& closestTriangle = m_deltahedron->GetClosestTriangleToOrigin();
 				glm::dvec3 baryCentric = m_deltahedron->GetBarycentric();
 
 				glm::dvec3 closestPointA = GetPointFromShape(m_shapeA, closestTriangle, baryCentric);
 				glm::dvec3 closestPointB = GetPointFromShape(m_shapeB, closestTriangle, baryCentric);
 
-				CollisionInfo info;
 				info.separation = m_deltahedron->GetClosestDistanceToOrigin();
 				info.isCollided = info.separation < 0.0;
 				info.collisionNormal = glm::normalize(closestPointB - closestPointA);
@@ -53,7 +50,7 @@ namespace Engine
 			}
 		}
 
-		return {};
+		return info;
 	}
 
 	glm::dvec3 GJKEPA3D::CreateNewSupportPoint()
@@ -69,19 +66,8 @@ namespace Engine
 		
 		return supportPoint;
 	}
-
-	glm::dvec3 GJKEPA3D::GetDirection(const ShapeInfo& from, const ShapeInfo& to)
-	{
-		const GJK3DTriangle* closestTriangle = m_deltahedron->GetClosestTriangleToOrigin();
-		glm::dvec3 baryCentric = m_deltahedron->GetBarycentric();
-
-		glm::dvec3& closestPointFrom = GetPointFromShape(from, closestTriangle, baryCentric);
-		glm::dvec3& closestPointTo = GetPointFromShape(to, closestTriangle, baryCentric);
-
-		return closestPointTo - closestPointFrom;
-	}
 	
-	glm::dvec3 GJKEPA3D::GetPointFromShape(const ShapeInfo& shape, const GJK3DTriangle* triangle, const glm::dvec3& barycentric)
+	glm::dvec3 GJKEPA3D::GetPointFromShape(const ShapeInfo& shape, const Ptr<GJK3DTriangle>& triangle, const glm::dvec3& barycentric)
 	{
 		glm::dvec3 a = shape.pointMap.at(triangle->GetA());
 		glm::dvec3 b = shape.pointMap.at(triangle->GetB());

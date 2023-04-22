@@ -44,12 +44,7 @@ namespace Engine
 	class Collision
 	{
 	public:
-		~Collision() = default;
-
-		virtual const CollisionInfo& Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB) = 0;
-		virtual bool IsCollided() const = 0;
-		virtual float GetDistance() const = 0;
-		virtual glm::vec3 GetDirection() const = 0;
+		virtual const CollisionInfo Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB) = 0;
 
 		static Uniq<Collision> Create(CollisionType type);
 	};

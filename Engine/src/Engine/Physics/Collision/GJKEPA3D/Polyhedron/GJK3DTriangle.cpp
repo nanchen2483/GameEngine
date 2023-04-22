@@ -10,10 +10,6 @@ namespace Engine
 		, m_closestDistanceToOriginSquare(0.0)
 		, m_isDeleted(false)
 	{
-		m_leftTriangle = nullptr;
-		m_rightTriangle = nullptr;
-		m_bottomTriangle = nullptr;
-
 		InitClosestPointToOrigin(originEnclosed);
 	}
 
@@ -101,22 +97,22 @@ namespace Engine
 		return glm::dvec3(alpha, beta, gamma);
 	}
 
-	void GJK3DTriangle::SetLeftTriangle(GJK3DTriangle* leftTriangle)
+	void GJK3DTriangle::SetLeftTriangle(const Ptr<GJK3DTriangle>& leftTriangle)
 	{
 		m_leftTriangle = leftTriangle;
 	}
 	
-	void GJK3DTriangle::SetRightTriangle(GJK3DTriangle* rightTriangle)
+	void GJK3DTriangle::SetRightTriangle(const Ptr<GJK3DTriangle>& rightTriangle)
 	{
 		m_rightTriangle = rightTriangle;
 	}
 	
-	void GJK3DTriangle::SetBottomTriangle(GJK3DTriangle* bottomTriangle)
+	void GJK3DTriangle::SetBottomTriangle(const Ptr<GJK3DTriangle>& bottomTriangle)
 	{
 		m_bottomTriangle = bottomTriangle;
 	}
 	
-	void GJK3DTriangle::SetNeighbors(GJK3DTriangle* leftTriangle, GJK3DTriangle* rightTriangle, GJK3DTriangle* bottomTriangle)
+	void GJK3DTriangle::SetNeighbors(const Ptr<GJK3DTriangle>& leftTriangle, const Ptr<GJK3DTriangle>& rightTriangle, const Ptr<GJK3DTriangle>& bottomTriangle)
 	{
 		m_leftTriangle = leftTriangle;
 		m_rightTriangle = rightTriangle;

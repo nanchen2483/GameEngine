@@ -24,8 +24,6 @@ namespace Engine
 		{
 		}
 
-		~OrderedLinkedList() = default;
-
 		const T& GetHeadValue() const
 		{
 			ENGINE_CORE_ASSERT(m_head != nullptr, "Linked list is empty.");
@@ -139,7 +137,11 @@ namespace Engine
 
 			~Node()
 			{
-				if constexpr (std::is_pointer_v<T>)
+				if constexpr (is_smart_pointer_v<T>)
+				{
+					data.reset();
+				}
+				else if constexpr (std::is_pointer_v<T>)
 				{
 					delete data;
 				}
@@ -147,7 +149,7 @@ namespace Engine
 
 			bool operator<(const T& other) const
 			{
-				if constexpr (std::is_pointer_v<T>)
+				if constexpr (std::is_pointer_v<T> || is_smart_pointer_v<T>)
 				{
 					return (*data) < (*other);
 				}
@@ -159,7 +161,7 @@ namespace Engine
 
 			bool operator!=(const T& other) const
 			{
-				if constexpr (std::is_pointer_v<T>)
+				if constexpr (std::is_pointer_v<T> || is_smart_pointer_v<T>)
 				{
 					return (*data) != (*other);
 				}
