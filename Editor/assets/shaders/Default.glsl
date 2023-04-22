@@ -81,7 +81,7 @@ vec4 CalcWorldPosition()
 vec4 CalcBonePosition()
 {
 	vec4 bonePosition = vec4(0.0f);
-	for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
+	for (int i = 0; i < MAX_BONE_INFLUENCE; ++i)
 	{
 		int boneId = aBoneIds[i];
 		if (boneId == -1)
@@ -120,6 +120,9 @@ layout (location = 1) out int aEntityId;
 
 const int MAX_TEXTURES = 32;
 const int MAX_SHADOW_CASCADES = 16;
+
+// The number of samples to use for PCF filtering
+const int PCF_SAMPLE_COUNT = 16;
 
 layout (std140, binding = 0) uniform CameraBlock
 {
@@ -236,7 +239,7 @@ vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir)
 	// Diffuse
 	vec3 lightDir = uDirLight.direction;
 	float diff = max(dot(normal, lightDir), 0.0);
-	vec3 diffuse = uDirLight.diffuse * diff * material.diffuse;  
+	vec3 diffuse = uDirLight.diffuse * diff * material.diffuse;
 
 	// Specular
 	if (vertex.material.y != -1)
@@ -255,7 +258,7 @@ vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir)
 {
 	// Attenuation
 	float distance = length(uPointLight.position - vertex.fragPos);
-	float attenuation = 1.0 / (uPointLight.constant + uPointLight.linear * distance + uPointLight.quadratic * (distance * distance));    
+	float attenuation = 1.0 / (uPointLight.constant + uPointLight.linear * distance + uPointLight.quadratic * (distance * distance));
 
 	// Ambient
 	vec3 ambient = uPointLight.ambient * material.diffuse * attenuation;
@@ -285,7 +288,7 @@ float CalcShadow()
 	float depthValue = abs(fragPosViewSpace.z);
 
 	int layer = -1;
-	for (int i = 0; i < uCascadeCount; i++)
+	for (int i = 0; i < uCascadeCount; ++i)
 	{
 		if (depthValue < uCascadePlaneDistances[i])
 		{
@@ -322,19 +325,23 @@ float CalcShadow()
 	const float biasModifier = 0.5f;
 	bias *= 1.0 / (uCascadePlaneDistances[layer] * biasModifier);
 
-	// PCF
+	// Percentage-Closer Filtering
 	float shadow = 0.0;
+	int sampleCount = 0;
 	vec2 texelSize = 1.0 / vec2(textureSize(uShadowMap, 0));
-	for(int x = -1; x <= 1; x++)
+	for (int x = -PCF_SAMPLE_COUNT / 2; x <= PCF_SAMPLE_COUNT / 2; ++x)
 	{
-		for(int y = -1; y <= 1; y++)
+		for (int y = -PCF_SAMPLE_COUNT / 2; y <= PCF_SAMPLE_COUNT / 2; ++y)
 		{
-			float pcfDepth = texture(uShadowMap, vec3(projCoords.xy + vec2(x, y) * texelSize, layer)).r;
-			shadow += (currentDepth - bias) > pcfDepth ? 1.0 : 0.0;        
-		}    
+			vec2 offset = vec2(x, y) * texelSize;
+			vec3 texCoord = vec3(projCoords.xy + offset, layer);
+			float pcfDepth = texture(uShadowMap, texCoord).r;
+			shadow += pcfDepth < (currentDepth - bias) ? 1.0 : 0.0;
+			++sampleCount;
+		}
 	}
 
-	shadow /= 9.0;
+	shadow /= (sampleCount * 2.0);
 
 	return shadow;
 }
