@@ -29,8 +29,6 @@ namespace Engine
 		Entity GetTerrainEntity();
 	private:
 		void Debug();
-		template<class T, typename std::enable_if<std::is_base_of<IComponent, T>::value>::type* = nullptr>
-		void OnComponentAdded(Entity entity, T& component);
 		
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
