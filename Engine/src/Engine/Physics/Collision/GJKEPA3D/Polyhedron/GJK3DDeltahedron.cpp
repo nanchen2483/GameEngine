@@ -151,7 +151,7 @@ namespace Engine
 		}
 
 		// Soft-delete
-		m_triangles.Delete(expandTriangle, true);
+		m_triangles.Delete(expandTriangle);
 		expandTriangle->MarkAsDeleted();
 
 		GJK3DTriangle* leftTriangle = expandTriangle->GetLeftTriangle();
