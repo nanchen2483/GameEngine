@@ -33,10 +33,14 @@ namespace Engine
 		double separation;
 		glm::dvec3 collisionNormal;
 
+		// Test-only
+		uint32_t iterations;
+
 		CollisionInfo()
 			: isCollided(false)
 			, separation(0.0)
 			, collisionNormal()
+			, iterations(0)
 		{
 		}
 	};

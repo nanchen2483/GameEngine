@@ -27,7 +27,8 @@ namespace Engine
 
 	double GJK3DDeltahedron::GetClosestDistanceToOrigin()
 	{
-		double distance = m_triangles.GetHeadValue()->GetClosestDistanceToOrigin();
+		double distanceSquare = m_triangles.GetHeadValue()->GetClosestDistanceToOriginSquare();
+		double distance = glm::sqrt(distanceSquare);
 		if (m_originEnclosed)
 		{
 			return -distance;

@@ -6,7 +6,6 @@ namespace Engine
 	GJK3DTriangle::GJK3DTriangle(const glm::dvec3& vectorA, const glm::dvec3& vectorB, const glm::dvec3& vectorC, bool originEnclosed)
 		: Triangle3D(vectorA, vectorB, vectorC)
 		, m_closestPointToOrigin()
-		, m_closestDistanceToOrigin(0.0)
 		, m_closestDistanceToOriginSquare(0.0)
 		, m_isDeleted(false)
 	{
@@ -25,12 +24,11 @@ namespace Engine
 			else
 			{
 				glm::dmat3 matrix(m_vectorA, m_vectorB, m_vectorC);
-				glm::vec3 barycentric = GetBarycentric(originEnclosed);
+				glm::dvec3 barycentric = GetBarycentric(originEnclosed);
 
 				m_closestPointToOrigin = matrix * barycentric;
 			}
 
-			m_closestDistanceToOrigin = glm::length(m_closestPointToOrigin);
 			m_closestDistanceToOriginSquare = glm::length2(m_closestPointToOrigin);
 		}
 	}
@@ -39,12 +37,10 @@ namespace Engine
 	{
 		const glm::dvec3 u = m_vectorA - m_vectorB;
 		const glm::dvec3 v = m_vectorA - m_vectorC;
-		const glm::dvec3 w = m_vectorB - m_vectorC;
 
 		double denom = m_normalLengthSquare;
-		double invDenom = 1.0 / denom;
-		double gamma = glm::dot(glm::cross(u, m_vectorA), m_normal) * invDenom;
-		double beta = glm::dot(glm::cross(m_vectorA, v), m_normal) * invDenom;
+		double gamma = glm::dot(glm::cross(u, m_vectorA), m_normal) / denom;
+		double beta = glm::dot(glm::cross(m_vectorA, v), m_normal) / denom;
 		double alpha = 1.0 - gamma - beta;
 
 		// Adjust the coordinates to ensure that they are all non-negative
@@ -66,6 +62,7 @@ namespace Engine
 			}
 			else if ((beta >= 0.0) && (gamma < 0.0))
 			{
+				const glm::dvec3 w = m_vectorB - m_vectorC;
 				denom = glm::dot(m_vectorB, w);
 				if ((alpha < 0.0) && (denom > 0.0))
 				{
@@ -88,6 +85,7 @@ namespace Engine
 				}
 				else
 				{
+					const glm::dvec3 w = m_vectorB - m_vectorC;
 					const double newBeta = glm::clamp(-glm::dot(m_vectorC, w) / glm::length2(w), 0.0, 1.0);
 					return glm::dvec3(0.0, newBeta, 1.0 - newBeta);
 				}

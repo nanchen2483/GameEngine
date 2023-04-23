@@ -23,7 +23,6 @@ namespace Engine
 		const Ptr<GJK3DTriangle> GetBottomTriangle() const { return m_bottomTriangle.lock(); }
 
 		const glm::dvec3& GetClosestPointToOrigin() const { return m_closestPointToOrigin; }
-		const double GetClosestDistanceToOrigin() const { return m_closestDistanceToOrigin; }
 		const double GetClosestDistanceToOriginSquare() const { return m_closestDistanceToOriginSquare; }
 		const glm::dvec3 GetBarycentric(bool originEnclosed) const;
 
@@ -51,7 +50,6 @@ namespace Engine
 		Weak<GJK3DTriangle> m_bottomTriangle;
 
 		glm::dvec3 m_closestPointToOrigin;
-		double m_closestDistanceToOrigin;
 		double m_closestDistanceToOriginSquare;
 
 		bool m_isDeleted;

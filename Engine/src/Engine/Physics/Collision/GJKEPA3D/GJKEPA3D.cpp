@@ -6,6 +6,17 @@ namespace Engine
 {
 	const CollisionInfo GJKEPA3D::Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB)
 	{
+		if (shapeA.position == shapeB.position)
+		{
+			CollisionInfo info;
+			info.isCollided = true;
+			info.separation = -0.1;
+			info.collisionNormal = glm::dvec3(1.0, 0.0, 0.0);
+			info.iterations = 0;
+
+			return info;
+		}
+
 		m_shapeA = shapeA;
 		m_shapeB = shapeB;
 
@@ -24,8 +35,8 @@ namespace Engine
 	const CollisionInfo GJKEPA3D::Solve()
 	{
 		CollisionInfo info;
-		uint32_t iteration = 0;
-		while (++iteration < MAX_ITERATION)
+		uint32_t iterations = 0;
+		while (++iterations < MAX_ITERATIONS)
 		{
 			const glm::dvec3 newSupportPoint = CreateNewSupportPoint();
 			GJK3DStatus status = m_deltahedron->ExpandWithNewPoint(newSupportPoint);
@@ -36,10 +47,17 @@ namespace Engine
 
 				glm::dvec3 closestPointA = GetPointFromShape(m_shapeA, closestTriangle, baryCentric);
 				glm::dvec3 closestPointB = GetPointFromShape(m_shapeB, closestTriangle, baryCentric);
+				glm::dvec3 deltaPoint = closestPointB - closestPointA;
+				if (deltaPoint != glm::dvec3(0.0))
+				{
+					info.collisionNormal = glm::normalize(closestPointB - closestPointA);
+				}
 
-				info.separation = m_deltahedron->GetClosestDistanceToOrigin();
-				info.isCollided = info.separation < 0.0;
-				info.collisionNormal = glm::normalize(closestPointB - closestPointA);
+				double separation = m_deltahedron->GetClosestDistanceToOrigin();
+				info.separation = separation;
+				info.isCollided = separation < 0.0;
+				info.iterations = iterations;
+
 
 				return info;
 			}
