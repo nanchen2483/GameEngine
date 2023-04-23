@@ -61,8 +61,8 @@ namespace Engine
 		glm::dvec3& pointB = GetPointFromShape(m_shapeB, direction);
 		glm::dvec3 supportPoint = pointA - pointB;
 		
-		m_shapeA.pointMap[supportPoint] = pointA;
-		m_shapeB.pointMap[supportPoint] = pointB;
+		m_shapeA.pointMap.insert({ supportPoint, pointA });
+		m_shapeB.pointMap.insert({ supportPoint, pointB });
 		
 		return supportPoint;
 	}
