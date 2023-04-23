@@ -19,7 +19,8 @@ namespace Engine
 		}
 
 		OrderedLinkedList()
-			: m_head(nullptr)
+			: m_size(0)
+			, m_head(nullptr)
 			, m_tail(nullptr)
 		{
 		}
@@ -35,6 +36,8 @@ namespace Engine
 			ENGINE_CORE_ASSERT(m_tail != nullptr, "Linked list is empty.");
 			return m_tail->data;
 		}
+
+		const uint32_t GetSize() const { return m_size; }
 
 		void Add(const T& data)
 		{
@@ -74,6 +77,7 @@ namespace Engine
 				}
 			}
 
+			++m_size;
 			m_nodes.emplace_back(std::move(newNode));
 		}
 
@@ -112,6 +116,8 @@ namespace Engine
 				current->prev->next = current->next;
 				current->next->prev = current->prev;
 			}
+
+			--m_size;
 		}
 
 		class Iterator;
@@ -121,6 +127,7 @@ namespace Engine
 		struct Node;
 		Node* m_head;
 		Node* m_tail;
+		uint32_t m_size;
 		std::vector<Uniq<Node>> m_nodes;
 
 		struct Node
