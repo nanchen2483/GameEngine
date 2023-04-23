@@ -11,7 +11,7 @@ namespace Engine
 			CollisionInfo info;
 			info.isCollided = true;
 			info.penetrationDepth = -0.1;
-			info.collisionNormal = glm::dvec3(1.0, 0.0, 0.0);
+			info.collisionNormal = glm::dvec3(-1.0, 0.0, 0.0);
 			info.iterations = 0;
 
 			return info;
@@ -34,8 +34,8 @@ namespace Engine
 	const CollisionInfo GJKEPA3D::Solve()
 	{
 		CollisionInfo info;
-		uint32_t iterations = 0;
-		while (++iterations < MAX_ITERATIONS)
+		info.iterations = 0;
+		while (++info.iterations < MAX_ITERATIONS)
 		{
 			const glm::dvec3 newSupportPoint = CreateNewSupportPoint();
 			GJK3DStatus status = m_deltahedron->ExpandWithNewPoint(newSupportPoint);
@@ -46,12 +46,16 @@ namespace Engine
 				{
 					const Ptr<GJK3DTriangle>& closestTriangle = m_deltahedron->GetClosestTriangleToOrigin();
 					const glm::dvec3& collisionNormal = glm::normalize(closestTriangle->GetNormalVector());
-					info.isCollided = true;
+					info.isCollided = distance < 0.0;
 					info.penetrationDepth = distance;
 					info.collisionNormal = collisionNormal;
 				}
+				else
+				{
+					info.separation = distance;
+				}
 
-				return info;
+				break;
 			}
 
 			if (status == NOT_OVERLAP)
@@ -59,8 +63,6 @@ namespace Engine
 				break;
 			}
 		}
-
-		info.iterations = iterations;
 
 		return info;
 	}
