@@ -18,7 +18,6 @@ namespace Engine
 
 		const Ptr<GJK3DTriangle> GetClosestTriangleToOrigin() const { return m_triangles.GetHeadValue(); }
 		double GetClosestDistanceToOrigin();
-		const glm::dvec3 GetBarycentric();
 		const glm::dvec3 GetSearchDirection();
 
 		GJK3DStatus ExpandWithNewPoint(const glm::dvec3& newSupportPoint);

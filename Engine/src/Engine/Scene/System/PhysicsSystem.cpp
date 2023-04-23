@@ -50,7 +50,7 @@ namespace Engine
 			transformB.velocity -= invMassB * impulse;
 
 			// Correct the positions of the objects to avoid overlap
-			const double percent = 0.2; // percentage of overlap to correct
+			const double percent = 0.5; // percentage of overlap to correct
 			const double slop = 0.01; // small value to avoid jitter
 			double absPenetrationDepth = std::abs(info.penetrationDepth);
 			double penetrationSlop = std::max(absPenetrationDepth - slop, 0.0);
