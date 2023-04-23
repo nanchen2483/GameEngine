@@ -23,7 +23,7 @@ jobs:
         uses: lukka/run-vcpkg@v10
         with:
           vcpkgDirectory: '${{ github.workspace }}/Dependencies/vcpkg'
-          vcpkgJsonGlob: '${{ github.workspace }}/vcpkg.json'
+          vcpkgJsonGlob: '**/vcpkg.json'
       
       - name: Build
         uses: lukka/run-cmake@v10
