@@ -37,11 +37,6 @@ namespace Engine
 		return distance;
 	}
 
-	const glm::dvec3 GJK3DDeltahedron::GetBarycentric()
-	{
-		return m_triangles.GetHeadValue()->GetBarycentric(m_originEnclosed);
-	}
-
 	const glm::dvec3 GJK3DDeltahedron::GetSearchDirection()
 	{
 		glm::dvec3 searchDirection = m_triangles.GetHeadValue()->GetClosestPointToOrigin();
