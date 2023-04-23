@@ -12,7 +12,6 @@ namespace Engine
 	private:
 		const CollisionInfo Solve();
 		glm::dvec3 CreateNewSupportPoint();
-		glm::dvec3 GetPointFromShape(const ShapeInfo& shape, const Ptr<GJK3DTriangle>& triangle, const glm::dvec3& barycentric);
 		glm::dvec3 GetPointFromShape(const ShapeInfo& shape, const glm::dvec3& direction);
 
 		ShapeInfo m_shapeA, m_shapeB;

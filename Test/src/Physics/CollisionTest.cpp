@@ -32,7 +32,7 @@ namespace EngineTest
 
 		// Assert
 		EXPECT_EQ(info.isCollided, true);
-		EXPECT_EQ(info.separation, -0.66999999433755875);
+		EXPECT_EQ(info.penetrationDepth, -0.66999999433755875);
 		EXPECT_EQ(info.collisionNormal, glm::dvec3(-0.99999999999999978, -2.2240538541296450e-08, 0.0));
 		EXPECT_EQ(info.iterations, 8);
 	}
@@ -53,7 +53,7 @@ namespace EngineTest
 
 		// Assert
 		EXPECT_EQ(info.isCollided, false);
-		EXPECT_EQ(info.separation, 0.70000004768371582);
+		EXPECT_EQ(info.penetrationDepth, 0.70000004768371582);
 		EXPECT_EQ(info.collisionNormal, glm::dvec3(0.99999999999999989, 0.0, -2.1287371683980961e-08));
 		EXPECT_EQ(info.iterations, 3);
 	}
@@ -74,7 +74,7 @@ namespace EngineTest
 
 		// Assert
 		EXPECT_EQ(info.isCollided, false);
-		EXPECT_EQ(info.separation, 0.0);
+		EXPECT_EQ(info.penetrationDepth, 0.0);
 		EXPECT_EQ(info.collisionNormal, glm::dvec3(0.0));
 		EXPECT_EQ(info.iterations, 3);
 	}
@@ -93,7 +93,7 @@ namespace EngineTest
 
 		// Assert
 		EXPECT_EQ(info.isCollided, true);
-		EXPECT_EQ(info.separation, -0.1);
+		EXPECT_EQ(info.penetrationDepth, -0.1);
 		EXPECT_EQ(info.collisionNormal, glm::dvec3(1.0, 0.0, 0.0));
 		EXPECT_EQ(info.iterations, 0);
 	}
