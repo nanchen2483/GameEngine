@@ -145,11 +145,7 @@ namespace Engine
 
 			~Node()
 			{
-				if constexpr (is_smart_pointer_v<T>)
-				{
-					data.reset();
-				}
-				else if constexpr (std::is_pointer_v<T>)
+				if constexpr (std::is_pointer_v<T>)
 				{
 					delete data;
 				}
