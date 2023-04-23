@@ -15,11 +15,10 @@ namespace Engine
 		glm::dmat4 orientation;
 		glm::dmat4 scale;
 		BoundingValue boundingValue;
-		std::unordered_map<glm::dvec3, glm::dvec3, Vector3DHash> pointMap;
 
 		ShapeInfo() = default;
 		ShapeInfo(const Transform& transform, const BoundingValue& boundingValue)
-			: boundingValue(boundingValue), pointMap({})
+			: boundingValue(boundingValue)
 		{
 			position = transform.translation;
 			orientation = glm::toMat4(glm::quat(transform.rotation));
@@ -30,13 +29,19 @@ namespace Engine
 	struct CollisionInfo
 	{
 		bool isCollided;
-		double separation;
+		double penetrationDepth;
 		glm::dvec3 collisionNormal;
+
+		// Test-only
+		double separation;
+		uint32_t iterations;
 
 		CollisionInfo()
 			: isCollided(false)
-			, separation(0.0)
+			, penetrationDepth(0.0)
 			, collisionNormal()
+			, separation(0.0)
+			, iterations(0)
 		{
 		}
 	};

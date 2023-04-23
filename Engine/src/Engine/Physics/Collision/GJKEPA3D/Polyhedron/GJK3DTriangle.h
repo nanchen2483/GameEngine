@@ -23,9 +23,7 @@ namespace Engine
 		const Ptr<GJK3DTriangle> GetBottomTriangle() const { return m_bottomTriangle.lock(); }
 
 		const glm::dvec3& GetClosestPointToOrigin() const { return m_closestPointToOrigin; }
-		const double GetClosestDistanceToOrigin() const { return m_closestDistanceToOrigin; }
 		const double GetClosestDistanceToOriginSquare() const { return m_closestDistanceToOriginSquare; }
-		const glm::dvec3 GetBarycentric(bool originEnclosed) const;
 
 		void SetLeftTriangle(const Ptr<GJK3DTriangle>& leftTriangle);
 		void SetRightTriangle(const Ptr<GJK3DTriangle>& rightTriangle);
@@ -44,14 +42,14 @@ namespace Engine
 		virtual bool operator>(const GJK3DTriangle& other) const override;
 		virtual bool operator>=(const GJK3DTriangle& other) const override;
 	private:
-		void InitClosestPointToOrigin(bool originEnclosed);
+		const glm::dvec3 GetClosestPointToOrigin(bool originEnclosed) const;
+		const glm::dvec3 GetBarycentric() const;
 
 		Weak<GJK3DTriangle> m_leftTriangle;
 		Weak<GJK3DTriangle> m_rightTriangle;
 		Weak<GJK3DTriangle> m_bottomTriangle;
 
 		glm::dvec3 m_closestPointToOrigin;
-		double m_closestDistanceToOrigin;
 		double m_closestDistanceToOriginSquare;
 
 		bool m_isDeleted;

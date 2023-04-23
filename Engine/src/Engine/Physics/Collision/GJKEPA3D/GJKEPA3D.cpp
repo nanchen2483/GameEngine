@@ -6,6 +6,17 @@ namespace Engine
 {
 	const CollisionInfo GJKEPA3D::Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB)
 	{
+		if (shapeA.position == shapeB.position)
+		{
+			CollisionInfo info;
+			info.isCollided = true;
+			info.penetrationDepth = -0.1;
+			info.collisionNormal = glm::dvec3(-1.0, 0.0, 0.0);
+			info.iterations = 0;
+
+			return info;
+		}
+
 		m_shapeA = shapeA;
 		m_shapeB = shapeB;
 
@@ -15,7 +26,6 @@ namespace Engine
 		glm::dvec3 pointB = V1 + center;
 		glm::dvec3 pointC = V2 + center;
 		glm::dvec3 pointD = V3 + center;
-		m_shapeA.pointMap = m_shapeB.pointMap = { {pointA, {}}, {pointB, {}}, {pointC, {}}, {pointD, {}} };
 		m_deltahedron = CreateUniq<GJK3DDeltahedron>(pointA, pointB, pointC, pointD);
 
 		return Solve();
@@ -24,24 +34,28 @@ namespace Engine
 	const CollisionInfo GJKEPA3D::Solve()
 	{
 		CollisionInfo info;
-		uint32_t iteration = 0;
-		while (++iteration < MAX_ITERATION)
+		info.iterations = 0;
+		while (++info.iterations < MAX_ITERATIONS)
 		{
 			const glm::dvec3 newSupportPoint = CreateNewSupportPoint();
 			GJK3DStatus status = m_deltahedron->ExpandWithNewPoint(newSupportPoint);
 			if (status == GJK3DStatus::FINISHED)
 			{
-				const Ptr<GJK3DTriangle>& closestTriangle = m_deltahedron->GetClosestTriangleToOrigin();
-				glm::dvec3 baryCentric = m_deltahedron->GetBarycentric();
+				const double& distance = m_deltahedron->GetClosestDistanceToOrigin();
+				if (distance < 0.0)
+				{
+					const Ptr<GJK3DTriangle>& closestTriangle = m_deltahedron->GetClosestTriangleToOrigin();
+					const glm::dvec3& collisionNormal = glm::normalize(closestTriangle->GetNormalVector());
+					info.isCollided = distance < 0.0;
+					info.penetrationDepth = distance;
+					info.collisionNormal = collisionNormal;
+				}
+				else
+				{
+					info.separation = distance;
+				}
 
-				glm::dvec3 closestPointA = GetPointFromShape(m_shapeA, closestTriangle, baryCentric);
-				glm::dvec3 closestPointB = GetPointFromShape(m_shapeB, closestTriangle, baryCentric);
-
-				info.separation = m_deltahedron->GetClosestDistanceToOrigin();
-				info.isCollided = info.separation < 0.0;
-				info.collisionNormal = glm::normalize(closestPointB - closestPointA);
-
-				return info;
+				break;
 			}
 
 			if (status == NOT_OVERLAP)
@@ -61,21 +75,7 @@ namespace Engine
 		glm::dvec3& pointB = GetPointFromShape(m_shapeB, direction);
 		glm::dvec3 supportPoint = pointA - pointB;
 		
-		m_shapeA.pointMap[supportPoint] = pointA;
-		m_shapeB.pointMap[supportPoint] = pointB;
-		
 		return supportPoint;
-	}
-	
-	glm::dvec3 GJKEPA3D::GetPointFromShape(const ShapeInfo& shape, const Ptr<GJK3DTriangle>& triangle, const glm::dvec3& barycentric)
-	{
-		glm::dvec3 a = shape.pointMap.at(triangle->GetA());
-		glm::dvec3 b = shape.pointMap.at(triangle->GetB());
-		glm::dvec3 c = shape.pointMap.at(triangle->GetC());
-
-		glm::mat3 matrix(a, b, c);
-
-		return matrix * barycentric;
 	}
 	
 	glm::dvec3 GJKEPA3D::GetPointFromShape(const ShapeInfo& shape, const glm::dvec3& direction)
