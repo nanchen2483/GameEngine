@@ -46,8 +46,9 @@ namespace Engine
 			}
 			else
 			{
+				// Stable sort
 				Node* current = m_head;
-				while (current != nullptr && *current < data)
+				while (current != nullptr && *current <= data)
 				{
 					current = current->next;
 				}
@@ -147,15 +148,15 @@ namespace Engine
 				}
 			}
 
-			bool operator<(const T& other) const
+			bool operator<=(const T& other) const
 			{
 				if constexpr (std::is_pointer_v<T> || is_smart_pointer_v<T>)
 				{
-					return (*data) < (*other);
+					return (*data) <= (*other);
 				}
 				else
 				{
-					return data < other;
+					return data <= other;
 				}
 			}
 
