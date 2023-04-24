@@ -6,15 +6,18 @@
 #include "Engine/Scene/Component/PhysicsComponent.h"
 #include "Engine/Scene/Component/TransformComponent.h"
 
+#include <entt/entt.hpp>
+
 namespace Engine
 {
 	class PhysicsSystem : public ISystem
 	{
 	public:
-		static void OnUpdate(Transform& transformA, Transform& transformB, PhysicsComponent *physicsA, PhysicsComponent *physicsB);
-		static void DrawBoudingBox(Transform& transform, Ptr<BoundingBox> boundingBox);
+		static void OnUpdate(entt::registry& registry);
+		static void DrawBoudingBox(entt::registry& registry);
 	private:
 		PhysicsSystem();
+		static void Update(Transform& transformA, Transform& transformB, PhysicsComponent* physicsA, PhysicsComponent* physicsB);
 		static PhysicsSystem* GetInstance();
 
 		Uniq<BoundingBoxDebug> m_debug;

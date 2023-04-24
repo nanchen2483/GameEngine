@@ -1,10 +1,23 @@
 #include "enginepch.h"
 #include "AnimationSystem.h"
 #include "Engine/Core/System/System.h"
+#include "Engine/Scene/Component/AnimationComponent.h"
 
 namespace Engine
 {
-	void AnimationSystem::UpdateAnimation(Ptr<Animation> animation)
+	void AnimationSystem::OnUpdate(entt::registry& registry)
+	{
+		registry.view<AnimationComponent>()
+			.each([&](AnimationComponent& component)
+				{
+					if (component.isEnabled)
+					{
+						UpdateAnimation(component);
+					}
+				});
+	}
+
+	void AnimationSystem::UpdateAnimation(const Ptr<Animation>& animation)
 	{
 		Ptr<float> animationTime = animation->GetTime();
 		*animationTime += animation->GetTicketPerSecond() * System::GetDeltaTime();
@@ -13,7 +26,7 @@ namespace Engine
 		CalculateBoneTransform(animation, animation->GetRootNode(), glm::mat4(1.0f));
 	}
 
-	void AnimationSystem::CalculateBoneTransform(Ptr<Animation> animation, const Ptr<Node> node, glm::mat4 globalTransformation)
+	void AnimationSystem::CalculateBoneTransform(const Ptr<Animation>& animation, const Ptr<Node>& node, glm::mat4 globalTransformation)
 	{
 		globalTransformation *= node->GetTransform(*animation->GetTime());
 		if (node->AnyBones())

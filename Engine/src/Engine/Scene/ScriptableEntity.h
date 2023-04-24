@@ -19,6 +19,6 @@ namespace Engine
 		virtual void OnUpdate() {};
 	private:
 		Entity m_entity;
-		friend class Scene;
+		friend class ScriptSystem;
 	};
 }
