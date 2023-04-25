@@ -10,7 +10,23 @@ namespace Engine
 		m_debug = CreateUniq<BoundingBoxDebug>();
 	}
 
-	void PhysicsSystem::OnUpdate(Transform& transformA, Transform& transformB, PhysicsComponent *physicsA, PhysicsComponent *physicsB)
+	void PhysicsSystem::OnUpdate(entt::registry& registry)
+	{
+		auto meshView = registry.view<TransformComponent, PhysicsComponent>();
+		meshView.each([&](entt::entity thisEntity, TransformComponent& thisTransform, PhysicsComponent& thisPhysics)
+			{
+				meshView.each([&](entt::entity otherOntity, TransformComponent& otherTransform, PhysicsComponent& otherPhysics)
+					{
+						// Skip self and entities that have already been compared
+						if (thisEntity < otherOntity)
+						{
+							Update(thisTransform, otherTransform, &thisPhysics, &otherPhysics);
+						}
+					});
+			});
+	}
+
+	void PhysicsSystem::Update(Transform& transformA, Transform& transformB, PhysicsComponent* physicsA, PhysicsComponent* physicsB)
 	{
 		if (physicsA == nullptr || physicsB == nullptr)
 		{
@@ -25,7 +41,7 @@ namespace Engine
 		ShapeInfo shapeA(transformA, physicsA->boundingBox->GetBoundingValue());
 		ShapeInfo shapeB(transformB, physicsB->boundingBox->GetBoundingValue());
 
-		const CollisionInfo info = GetInstance()->m_collision->Detect(shapeA, shapeB);
+		const CollisionInfo& info = GetInstance()->m_collision->Detect(shapeA, shapeB);
 		if (info.isCollided)
 		{
 			// Calculate the relative velocity of the two objects
@@ -61,9 +77,13 @@ namespace Engine
 		}
 	}
 
-	void PhysicsSystem::DrawBoudingBox(Transform& transform, Ptr<BoundingBox> boundingBox)
+	void PhysicsSystem::DrawBoudingBox(entt::registry& registry)
 	{
-		GetInstance()->m_debug->Draw(transform, boundingBox->GetBoundingValue());
+		registry.view<TransformComponent, PhysicsComponent>()
+			.each([=](TransformComponent& transform, PhysicsComponent& component)
+				{
+					GetInstance()->m_debug->Draw(transform, component.boundingBox->GetBoundingValue());
+				});
 	}
 
 	PhysicsSystem* PhysicsSystem::GetInstance()

@@ -1,15 +1,9 @@
 #include "enginepch.h"
 #include "Scene.h"
 
-#include "Component/AnimationComponent.h"
 #include "Component/CameraComponent.h"
-#include "Component/PhysicsComponent.h"
-#include "Component/LightComponent.h"
-#include "Component/NativeScriptComponent.h"
-#include "Component/SkyboxComponent.h"
-#include "Component/SpriteRendererComponent.h"
+#include "Component/MeshComponent.h"
 #include "Component/TagComponent.h"
-#include "Component/TerrainComponent.h"
 
 #include "Entity.h"
 #include "Engine/Configuration/Configuration.h"
@@ -20,7 +14,9 @@
 #include "System/AnimationSystem.h"
 #include "System/CameraSystem.h"
 #include "System/PhysicsSystem.h"
+#include "System/RendererSystem.h"
 #include "System/MeshSystem.h"
+#include "System/ScriptSystem.h"
 #include "System/ShadowSystem.h"
 
 namespace Engine
@@ -70,87 +66,30 @@ namespace Engine
 			}
 		}
 
-		m_registry.view<AnimationComponent>()
-			.each([=](AnimationComponent& component)
-				{
-					if (component.isEnabled)
-					{
-						AnimationSystem::UpdateAnimation(component);
-					}
-				});
-
-		ShadowSystem::OnUpdate(camera.GetViewMatrix(), camera.GetFOV(), camera.GetAspectRatio(),
-			[=]()
-			{
-				m_registry.view<TransformComponent, MeshComponent>()
-					.each([=](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
-						{
-							Ptr<Animation> animation = nullptr;
-							if (m_registry.all_of<AnimationComponent>(entity))
-							{
-								animation = m_registry.get<AnimationComponent>(entity);
-							}
-
-							Renderer3D::Draw(transform, mesh, animation, ShadowSystem::GetShader());
-						});
-			});
+		ScriptSystem::OnUpdate(m_registry, this);
+		AnimationSystem::OnUpdate(m_registry);
+		ShadowSystem::OnUpdate(m_registry,
+			camera.GetViewMatrix(),
+			camera.GetFOV(),
+			camera.GetAspectRatio());
 
 		// Debug
 		m_framebuffer->Bind();
 		Debug();
 
 		// Draw
-		uint32_t numOfLights = m_registry.view<LightComponent>().size();
-		Renderer3D::BeginScene(camera.GetViewMatrix(), camera.GetProjection(), camera.GetPosition(), numOfLights);
-
-		m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
-			.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& component)
-				{
-					Renderer3D::Draw(transform, component, (int)entity);
-				});
-
-		m_registry.view<TransformComponent, LightComponent>()
-			.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
-				{
-					Renderer3D::Draw(transform, component, (int)entity);
-				});
-
-		Renderer3D::EndScene();
-
-		m_registry.view<TransformComponent, MeshComponent>()
-			.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
-				{
-					Ptr<Animation> animation = nullptr;
-					if (m_registry.all_of<AnimationComponent>(entity))
-					{
-						animation = m_registry.get<AnimationComponent>(entity);
-					}
-
-					Renderer3D::Draw(transform, mesh, animation, nullptr, (int)entity);
-				});
-
-		m_registry.view<TransformComponent, TerrainComponent>()
-			.each([&](TransformComponent& transform, TerrainComponent& component)
-				{
-					Renderer3D::Draw(transform, component, frustum);
-				});
-
-		m_registry.view<SkyboxComponent>()
-			.each([](SkyboxComponent& component)
-				{
-					Renderer3D::Draw(component);
-				});
+		RendererSystem::OnUpdate(m_registry,
+			camera.GetViewMatrix(),
+			camera.GetProjection(),
+			camera.GetPosition(), 
+			frustum);
 	}
 
 	void Scene::Debug()
 	{
 		if (Configuration::GetInstance()->ShowBoundingBox())
 		{
-			m_registry.view<TransformComponent, PhysicsComponent>()
-				.each([=](TransformComponent& transform, PhysicsComponent& component)
-					{
-						PhysicsSystem::DrawBoudingBox(transform, component.boundingBox);
-					});
+			PhysicsSystem::DrawBoudingBox(m_registry);
 		}
 	}
 
@@ -175,22 +114,6 @@ namespace Engine
 				CameraSystem::OnUpdate(playerTransform.transform, primaryCamera.camera);
 			}
 
-			// Script
-			{
-				m_registry.view<NativeScriptComponent>()
-					.each([=](entt::entity entity, NativeScriptComponent& nsc)
-						{
-							if (!nsc.instance)
-							{
-								nsc.instance = nsc.InstantiateScript();
-								nsc.instance->m_entity = Entity{ entity, this };
-								nsc.instance->OnCreate();
-							}
-
-							nsc.instance->OnUpdate();
-						});
-			}
-
 			// Update
 			Entity terrainEntity = GetTerrainEntity();
 			static Ptr<Terrain> terrain;
@@ -203,94 +126,23 @@ namespace Engine
 				}
 			}
 
-			auto meshView = m_registry.view<TransformComponent, MeshComponent, PhysicsComponent>();
-			meshView.each([&](entt::entity thisEntity, TransformComponent& thisTransform, MeshComponent& thisMesh, PhysicsComponent& thisPhysics)
-				{
-					MeshSystem::OnUpdate(thisMesh, thisTransform, thisPhysics, frustum, lightFrustum, terrain);
-					meshView.each([&](entt::entity otherOntity, TransformComponent& otherTransform, MeshComponent& otherMesh, PhysicsComponent& otherPhysics)
-						{
-							// Skip self and entities that have already been compared
-							if (thisEntity < otherOntity)
-							{
-								PhysicsSystem::OnUpdate(thisTransform, otherTransform, &thisPhysics, &otherPhysics);
-							}
-						});
-				});
-
-			m_registry.view<AnimationComponent>()
-				.each([](AnimationComponent& component)
-					{
-						if (component.isEnabled)
-						{
-							AnimationSystem::UpdateAnimation(component);
-						}
-					});
-
-			glm::mat4 viewMatrix = CameraSystem::GetViewMatrix(playerTransform);
-			ShadowSystem::OnUpdate(viewMatrix, primaryCamera.camera.GetFOV(), primaryCamera.camera.GetAspectRatio(),
-				[=]()
-				{
-					m_registry.view<TransformComponent, MeshComponent>()
-						.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
-							{
-								if (mesh.isOnLightViewFrustum)
-								{
-									Ptr<Animation> animation = nullptr;
-									if (m_registry.all_of<AnimationComponent>(entity))
-									{
-										animation = m_registry.get<AnimationComponent>(entity);
-									}
-
-									Renderer3D::Draw(transform, mesh, animation, ShadowSystem::GetShader());
-								}
-							});
-				});
+			const glm::mat4& viewMatrix = CameraSystem::GetViewMatrix(playerTransform);
+			ScriptSystem::OnUpdate(m_registry, this);
+			MeshSystem::OnUpdate(m_registry, frustum, lightFrustum, terrain);
+			PhysicsSystem::OnUpdate(m_registry);
+			AnimationSystem::OnUpdate(m_registry);
+			ShadowSystem::OnUpdate(m_registry,
+				viewMatrix,
+				primaryCamera.camera.GetFOV(),
+				primaryCamera.camera.GetAspectRatio());
 
 			// Draw
 			m_framebuffer->Bind();
-			uint32_t numOflights = m_registry.view<LightComponent>().size();
-			Renderer3D::BeginScene(viewMatrix, primaryCamera.camera.GetProjection(), playerTransform.GetTranslation(), numOflights);
-
-			m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
-				.each([](TransformComponent& transform, SpriteRendererComponent& component)
-					{
-						Renderer3D::Draw(transform, component);
-					});
-
-			m_registry.view<TransformComponent, LightComponent>()
-				.each([](TransformComponent& transform, LightComponent& component)
-					{
-						Renderer3D::Draw(transform, component);
-					});
-
-			Renderer3D::EndScene();
-
-			m_registry.view<TransformComponent, MeshComponent>()
-				.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
-					{
-						if (mesh.isOnViewFrustum)
-						{
-							Ptr<Animation> animation = nullptr;
-							if (m_registry.all_of<AnimationComponent>(entity))
-							{
-								animation = m_registry.get<AnimationComponent>(entity);
-							}
-
-							Renderer3D::Draw(transform, mesh, animation);
-						}
-					});
-
-			m_registry.view<TransformComponent, TerrainComponent>()
-				.each([&](TransformComponent& transform, TerrainComponent& component)
-					{
-						Renderer3D::Draw(transform, component, frustum);
-					});
-
-			m_registry.view<SkyboxComponent>()
-				.each([](SkyboxComponent& component)
-					{
-						Renderer3D::Draw(component);
-					});
+			RendererSystem::OnUpdate(m_registry,
+				viewMatrix,
+				primaryCamera.camera.GetProjection(),
+				playerTransform.GetTranslation(),
+				frustum);
 		}
 	}
 	
