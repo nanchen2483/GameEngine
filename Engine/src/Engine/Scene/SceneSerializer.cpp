@@ -5,6 +5,7 @@
 #include "Component/PhysicsComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/MeshComponent.h"
+#include "Component/NativeScriptComponent.h"
 #include "Component/SkyboxComponent.h"
 #include "Component/SpriteRendererComponent.h"
 #include "Component/TagComponent.h"
@@ -12,11 +13,12 @@
 #include "Component/TransformComponent.h"
 #include "Engine/Library/ModelLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
-#include "Entity.h"
+#include "Entity/Entity.h"
 
 #include <yaml-cpp/yaml.h>
 
-namespace YAML {
+namespace YAML
+{
 	template<>
 	struct convert<glm::vec3>
 	{
@@ -211,6 +213,12 @@ namespace Engine {
 		{
 			out << YAML::Key << "PhysicsComponent";
 			out << YAML::BeginMap;
+
+			PhysicsComponent& physicsComponent = entity.GetComponent<PhysicsComponent>();
+
+			out << YAML::Key << "Mass" << YAML::Value << physicsComponent.mass;
+			out << YAML::Key << "Restitution" << YAML::Value << physicsComponent.restitution;
+			out << YAML::Key << "IsStatic" << YAML::Value << physicsComponent.isStatic;
 			out << YAML::EndMap;
 		}
 
@@ -423,7 +431,7 @@ namespace Engine {
 		return true;
 	}
 
-	bool SceneSerializer::DeserializeRuntime(const std::string& filkepath)
+	bool SceneSerializer::DeserializeRuntime(const std::string& filepath)
 	{
 		ENGINE_CORE_ASSERT("Not implemented", false);
 		return false;
