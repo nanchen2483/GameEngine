@@ -18,7 +18,7 @@ namespace Engine
 		uint32_t GetId() const { return (uint32_t)m_entityHandle; }
 
 		template<typename T, typename std::enable_if_t<std::is_base_of_v<IComponent, T>>* = nullptr>
-		T& GetComponent()
+		T& GetComponent() const
 		{
 			ENGINE_CORE_ASSERT(HasComponent<T>(), "Entity does not have component!");
 
@@ -26,7 +26,7 @@ namespace Engine
 		}
 
 		template<typename T, typename std::enable_if_t<std::is_base_of_v<IComponent, T>>* = nullptr>
-		bool HasComponent()
+		bool HasComponent() const
 		{
 			return m_scene->m_registry.any_of<T>(m_entityHandle);
 		}

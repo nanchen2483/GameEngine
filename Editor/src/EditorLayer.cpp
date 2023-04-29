@@ -359,8 +359,7 @@ namespace Engine
 		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 
-		SceneSerializer serializer(m_activeScene);
-		serializer.Deserialize(filepath.string());
+		m_activeScene->Deserialize(filepath.string());
 	}
 	
 	void EditorLayer::SaveSceneAs()
@@ -375,8 +374,7 @@ namespace Engine
 				filepath += ".engine";
 			}
 
-			SceneSerializer serializer(m_activeScene);
-			serializer.Serialize(filepath);
+			m_activeScene->Serialize(filepath);
 		}
 	}
 }

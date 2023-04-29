@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "SceneSerializer.h"
+
 #include "Component/AnimationComponent.h"
 #include "Component/CameraComponent.h"
 #include "Component/PhysicsComponent.h"
@@ -11,92 +12,20 @@
 #include "Component/TagComponent.h"
 #include "Component/TerrainComponent.h"
 #include "Component/TransformComponent.h"
+
+#include "Entity/Entity.h"
 #include "Engine/Library/ModelLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
-#include "Entity/Entity.h"
+#include "Engine/Util/YAML.h"
 
-#include <yaml-cpp/yaml.h>
-
-namespace YAML
+namespace Engine
 {
-	template<>
-	struct convert<glm::vec3>
-	{
-		static Node encode(const glm::vec3& rhs)
-		{
-			Node node;
-			node.push_back(rhs.x);
-			node.push_back(rhs.y);
-			node.push_back(rhs.z);
-			return node;
-		}
-
-		static bool decode(const Node& node, glm::vec3& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 3)
-			{
-				return false;
-			}
-
-			rhs.x = node[0].as<float>();
-			rhs.y = node[1].as<float>();
-			rhs.z = node[2].as<float>();
-			return true;
-		}
-	};
-
-	template<>
-	struct convert<glm::vec4>
-	{
-		static Node encode(const glm::vec4& rhs)
-		{
-			Node node;
-			node.push_back(rhs.x);
-			node.push_back(rhs.y);
-			node.push_back(rhs.z);
-			node.push_back(rhs.w);
-			return node;
-		}
-
-		static bool decode(const Node& node, glm::vec4& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 4)
-			{
-				return false;
-			}
-
-			rhs.x = node[0].as<float>();
-			rhs.y = node[1].as<float>();
-			rhs.z = node[2].as<float>();
-			rhs.w = node[3].as<float>();
-
-			return true;
-		}
-	};
-}
-
-namespace Engine {
-
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& vector)
-	{
-		out << YAML::Flow;
-		out << YAML::BeginSeq << vector.x << vector.y << vector.z << YAML::EndSeq;
-		return out;
-	}
-
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec4& vector)
-	{
-		out << YAML::Flow;
-		out << YAML::BeginSeq << vector.x << vector.y << vector.z << vector.w << YAML::EndSeq;
-		return out;
-	}
-
-	SceneSerializer::SceneSerializer(const Ptr<Scene>& scene)
+	SceneSerializer::SceneSerializer(Scene* scene)
 		: m_scene(scene)
 	{
 	}
 
-	void static SerializeEntity(YAML::Emitter& out, Entity& entity)
+	void static SerializeEntity(YAML::Emitter& out, const Entity& entity)
 	{
 		out << YAML::BeginMap;
 		out << YAML::Key << "Entity" << YAML::Value << 123;
@@ -263,7 +192,7 @@ namespace Engine {
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_scene->m_registry.each([&](entt::entity entityId)
 			{
-				Entity entity = { entityId, m_scene.get() };
+				Entity entity = { entityId, m_scene };
 				if (!entity)
 				{
 					return;

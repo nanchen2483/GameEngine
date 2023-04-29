@@ -26,7 +26,6 @@
 
 // Scene
 #include "Engine/Scene/Entity/Entity.h"
-#include "Engine/Scene/Entity/ScriptableEntity.h"
 #include "Engine/Scene/Scene.h"
 #include "Engine/Scene/SceneSerializer.h"
 
