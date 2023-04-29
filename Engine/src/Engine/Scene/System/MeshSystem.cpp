@@ -15,10 +15,10 @@ namespace Engine
 					if (!meshComponent.meshes.empty())
 					{
 						// TODO: optimize gravity and terrain collision
-						//if (!physics.isStatic)
+						//if (!physicsComponent.isStatic)
 						//{
-						//	physics.fallingTime += System::GetDeltaTime();
-						//	transform.translation.y -= System::GetFreeFallVelocity(physics.fallingTime);
+						//	physicsComponent.fallingTime += System::GetDeltaTime();
+						//	transformComponent.transform.translation.y -= System::GetFreeFallVelocity(physicsComponent.fallingTime);
 						//}
 
 						if (terrain != nullptr)

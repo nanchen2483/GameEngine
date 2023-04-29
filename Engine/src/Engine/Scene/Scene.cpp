@@ -5,7 +5,7 @@
 #include "Component/MeshComponent.h"
 #include "Component/TagComponent.h"
 
-#include "Entity.h"
+#include "Entity/Entity.h"
 #include "Engine/Configuration/Configuration.h"
 #include "Engine/Core/Window/Input.h"
 #include "Engine/Renderer/Renderer2D.h"

@@ -25,10 +25,10 @@
 #include "Engine/Renderer/RendererCommand.h"
 
 // Scene
-#include "Engine/Scene/Entity.h"
+#include "Engine/Scene/Entity/Entity.h"
+#include "Engine/Scene/Entity/ScriptableEntity.h"
 #include "Engine/Scene/Scene.h"
 #include "Engine/Scene/SceneSerializer.h"
-#include "Engine/Scene/ScriptableEntity.h"
 
 // Component
 #include "Engine/Scene/Component/AnimationComponent.h"

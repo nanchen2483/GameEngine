@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "ScriptSystem.h"
 #include "Engine/Scene/Component/NativeScriptComponent.h"
-#include "Engine/Scene/Entity.h"
+#include "Engine/Scene/Entity/Entity.h"
 
 namespace Engine
 {

@@ -1,7 +1,7 @@
 #pragma once
-#include "Scene.h"
-#include "Component/IComponent.h"
 #include "Engine/Core/System/Object/IComparable.h"
+#include "Engine/Scene/Component/IComponent.h"
+#include "Engine/Scene/Scene.h"
 
 #include <entt/entt.hpp>
 #include <type_traits>
