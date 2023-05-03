@@ -6,6 +6,7 @@
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Layer/Layer.h"
 #include "Engine/Core/Log/Log.h"
+#include "Engine/Core/System/System.h"
 #include "Engine/Core/Window/Input.h"
 #include "Engine/Configuration/Configuration.h"
 

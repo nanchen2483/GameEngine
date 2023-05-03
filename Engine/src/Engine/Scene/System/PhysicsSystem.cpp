@@ -52,13 +52,12 @@ namespace Engine
 
 			// Calculate the restitution (bounciness) of the collision
 			double e = std::min(physicsA->restitution, physicsB->restitution);
-			double ePlusOne = 1.0 + e;
 
 			// Calculate the impulse scalar
 			double invMassA = 1.0 / (double)physicsA->mass;
 			double invMassB = 1.0 / (double)physicsB->mass;
 			double invMassSum = invMassA + invMassB;
-			double j = -ePlusOne * velocityAlongNormal / invMassSum;
+			double j = -(1.0 + e) * velocityAlongNormal / invMassSum;
 			glm::dvec3 impulse = j * info.collisionNormal;
 
 			// Correct the positions of the objects to avoid overlap
@@ -70,19 +69,18 @@ namespace Engine
 			glm::dvec3 correction = correctionMagnitude * info.collisionNormal;
 			if (physicsA->isStatic)
 			{
-				transformB.velocity -= invMassSum * impulse;
+				transformB.velocity += invMassSum * impulse;
 				transformB.translation += invMassSum * correction;
 			}
 			else if (physicsB->isStatic)
 			{
-				transformA.velocity += invMassSum * impulse;
+				transformA.velocity -= invMassSum * impulse;
 				transformA.translation -= invMassSum * correction;
 			}
 			else
 			{
-				transformA.velocity += invMassA * impulse;
-				transformB.velocity -= invMassB * impulse;
-
+				transformA.velocity -= invMassA * impulse;
+				transformB.velocity += invMassB * impulse;
 				transformA.translation -= invMassA * correction;
 				transformB.translation += invMassB * correction;
 			}

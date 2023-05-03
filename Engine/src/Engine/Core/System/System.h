@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	class System
+	class ENGINE_API System
 	{
 	public:
 		static double GetDeltaTime() { return s_deltaTime; }
