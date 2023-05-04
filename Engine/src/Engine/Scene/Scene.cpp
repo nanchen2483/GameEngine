@@ -1,11 +1,12 @@
 #include "enginepch.h"
 #include "Scene.h"
+#include "SceneSerializer.h"
 
 #include "Component/CameraComponent.h"
 #include "Component/MeshComponent.h"
 #include "Component/TagComponent.h"
 
-#include "Entity.h"
+#include "Entity/Entity.h"
 #include "Engine/Configuration/Configuration.h"
 #include "Engine/Core/Window/Input.h"
 #include "Engine/Renderer/Renderer2D.h"
@@ -24,12 +25,9 @@ namespace Engine
 	Scene::Scene(const Ptr<Framebuffer>& framebuffer)
 		: m_framebuffer(framebuffer)
 	{
+		m_serializer = CreateUniq<SceneSerializer>(this);
 	}
 
-	Scene::~Scene()
-	{
-	}
-	
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity(m_registry.create(), this);
@@ -44,7 +42,7 @@ namespace Engine
 		m_registry.destroy(entity);
 	}
 
-	void Scene::OnUpdateEditor(EditorCamera& camera)
+	void Scene::OnUpdateEditor(const EditorCamera& camera)
 	{
 		if (m_registry.empty())
 		{
@@ -53,7 +51,7 @@ namespace Engine
 
 		Renderer3D::ResetStates();
 		Frustum frustum = camera.GetFrustum();
-		
+
 		// Update
 		Entity terrainEntity = GetTerrainEntity();
 		static Ptr<Terrain> terrain;
@@ -81,7 +79,7 @@ namespace Engine
 		RendererSystem::OnUpdate(m_registry,
 			camera.GetViewMatrix(),
 			camera.GetProjection(),
-			camera.GetPosition(), 
+			camera.GetPosition(),
 			frustum);
 	}
 
@@ -104,8 +102,8 @@ namespace Engine
 		Entity playerEntity = GetPlayerEntity();
 		if (cameraEntity && playerEntity)
 		{
-			CameraComponent &primaryCamera = cameraEntity.GetComponent<CameraComponent>();
-			TransformComponent &playerTransform = playerEntity.GetComponent<TransformComponent>();
+			CameraComponent& primaryCamera = cameraEntity.GetComponent<CameraComponent>();
+			TransformComponent& playerTransform = playerEntity.GetComponent<TransformComponent>();
 			Frustum frustum = CameraSystem::GetFrustum(playerTransform.transform, primaryCamera.camera);
 			Frustum lightFrustum = frustum.GetLightViewFrustum(LIGHT_DIRECTION);
 
@@ -145,7 +143,7 @@ namespace Engine
 				frustum);
 		}
 	}
-	
+
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
 		m_viewportWidth = width;
@@ -203,5 +201,25 @@ namespace Engine
 			return Entity(entity, this);
 		}
 		return {};
+	}
+
+	void Scene::Serialize(const std::string& filepath)
+	{
+		m_serializer->Serialize(filepath);
+	}
+
+	void Scene::SerializeRuntime(const std::string& filepath)
+	{
+		m_serializer->SerializeRuntime(filepath);
+	}
+
+	void Scene::Deserialize(const std::string& filepath)
+	{
+		m_serializer->Deserialize(filepath);
+	}
+
+	void Scene::DeserializeRuntime(const std::string& filepath)
+	{
+		m_serializer->DeserializeRuntime(filepath);
 	}
 }

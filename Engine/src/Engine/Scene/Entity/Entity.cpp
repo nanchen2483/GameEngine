@@ -1,17 +1,17 @@
 #include "enginepch.h"
 #include "Entity.h"
 
-#include "Component/AnimationComponent.h"
-#include "Component/CameraComponent.h"
-#include "Component/LightComponent.h"
-#include "Component/MeshComponent.h"
-#include "Component/NativeScriptComponent.h"
-#include "Component/PhysicsComponent.h"
-#include "Component/SkyboxComponent.h"
-#include "Component/SpriteRendererComponent.h"
-#include "Component/TransformComponent.h"
-#include "Component/TagComponent.h"
-#include "Component/TerrainComponent.h"
+#include "Engine/Scene/Component/AnimationComponent.h"
+#include "Engine/Scene/Component/CameraComponent.h"
+#include "Engine/Scene/Component/LightComponent.h"
+#include "Engine/Scene/Component/MeshComponent.h"
+#include "Engine/Scene/Component/NativeScriptComponent.h"
+#include "Engine/Scene/Component/PhysicsComponent.h"
+#include "Engine/Scene/Component/SkyboxComponent.h"
+#include "Engine/Scene/Component/SpriteRendererComponent.h"
+#include "Engine/Scene/Component/TransformComponent.h"
+#include "Engine/Scene/Component/TagComponent.h"
+#include "Engine/Scene/Component/TerrainComponent.h"
 
 namespace Engine
 {

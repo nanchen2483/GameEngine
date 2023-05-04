@@ -6,6 +6,7 @@
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Layer/Layer.h"
 #include "Engine/Core/Log/Log.h"
+#include "Engine/Core/System/System.h"
 #include "Engine/Core/Window/Input.h"
 #include "Engine/Configuration/Configuration.h"
 
@@ -25,10 +26,9 @@
 #include "Engine/Renderer/RendererCommand.h"
 
 // Scene
-#include "Engine/Scene/Entity.h"
+#include "Engine/Scene/Entity/Entity.h"
 #include "Engine/Scene/Scene.h"
 #include "Engine/Scene/SceneSerializer.h"
-#include "Engine/Scene/ScriptableEntity.h"
 
 // Component
 #include "Engine/Scene/Component/AnimationComponent.h"

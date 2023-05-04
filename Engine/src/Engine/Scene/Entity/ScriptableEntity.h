@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.h"
+#include "Engine/Scene/Entity/Entity.h"
 
 namespace Engine
 {

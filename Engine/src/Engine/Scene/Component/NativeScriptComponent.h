@@ -1,6 +1,6 @@
 #pragma once
 #include "IComponent.h"
-#include "Engine/Scene/ScriptableEntity.h"
+#include "Engine/Scene/Entity/ScriptableEntity.h"
 
 namespace Engine
 {

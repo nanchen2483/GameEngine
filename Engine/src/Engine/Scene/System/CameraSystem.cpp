@@ -52,7 +52,7 @@ namespace Engine
 			transform.translation -= upDirection * velocity;
 		}
 
-		transform.velocity = (previousPosition - transform.translation) / glm::vec3(System::GetDeltaTime());
+		transform.velocity = (transform.translation - previousPosition) / (float)System::GetDeltaTime();
 
 		camera.SetUpDirection(upDirection);
 	}

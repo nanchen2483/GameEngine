@@ -52,28 +52,38 @@ namespace Engine
 
 			// Calculate the restitution (bounciness) of the collision
 			double e = std::min(physicsA->restitution, physicsB->restitution);
-			double ePlusOne = 1.0 + e;
 
 			// Calculate the impulse scalar
 			double invMassA = 1.0 / (double)physicsA->mass;
 			double invMassB = 1.0 / (double)physicsB->mass;
 			double invMassSum = invMassA + invMassB;
-			double j = -ePlusOne * velocityAlongNormal / invMassSum;
-
-			// Apply the impulse to the objects
+			double j = -(1.0 + e) * velocityAlongNormal / invMassSum;
 			glm::dvec3 impulse = j * info.collisionNormal;
-			transformA.velocity += invMassA * impulse;
-			transformB.velocity -= invMassB * impulse;
 
 			// Correct the positions of the objects to avoid overlap
-			const double percent = 0.5; // percentage of overlap to correct
+			const double percent = 1.0; // percentage of overlap to correct
 			const double slop = 0.01; // small value to avoid jitter
 			double absPenetrationDepth = std::abs(info.penetrationDepth);
 			double penetrationSlop = std::max(absPenetrationDepth - slop, 0.0);
 			double correctionMagnitude = (penetrationSlop / invMassSum) * percent;
 			glm::dvec3 correction = correctionMagnitude * info.collisionNormal;
-			transformA.translation -= invMassA * correction;
-			transformB.translation += invMassB * correction;
+			if (physicsA->isStatic)
+			{
+				transformB.velocity += invMassSum * impulse;
+				transformB.translation += invMassSum * correction;
+			}
+			else if (physicsB->isStatic)
+			{
+				transformA.velocity -= invMassSum * impulse;
+				transformA.translation -= invMassSum * correction;
+			}
+			else
+			{
+				transformA.velocity -= invMassA * impulse;
+				transformB.velocity += invMassB * impulse;
+				transformA.translation -= invMassA * correction;
+				transformB.translation += invMassB * correction;
+			}
 		}
 	}
 
