@@ -329,7 +329,7 @@ namespace Engine
 						PhysicsComponent& deserializedPhysics = deserializedEntity.AddComponent<PhysicsComponent>();
 
 						deserializedPhysics.mass = physicsComponent["Mass"].as<float>();
-						deserializedPhysics.isStatic = physicsComponent["Restitution"].as<float>();
+						deserializedPhysics.restitution = physicsComponent["Restitution"].as<float>();
 						deserializedPhysics.isStatic = physicsComponent["IsStatic"].as<bool>();
 						deserializedPhysics.boundingBox = model->GenerateBoundingBox();
 					}
