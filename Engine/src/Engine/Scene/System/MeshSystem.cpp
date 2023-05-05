@@ -16,17 +16,16 @@ namespace Engine
 				{
 					if (!meshComponent.meshes.empty())
 					{
-						// TODO: optimize gravity and terrain collision
-						//if (!physicsComponent.isStatic)
-						//{
-						//	physicsComponent.fallingTime += System::GetDeltaTime();
-						//	transformComponent.transform.translation.y -= System::GetFreeFallVelocity(physicsComponent.fallingTime);
-						//}
-
 						if (!meshComponent.isPlayer && transformComponent.transform.velocity != glm::vec3(0.0))
 						{
 							transformComponent.transform.translation += (transformComponent.transform.velocity * deltaTime);
 							transformComponent.transform.velocity *= dampingFactor;
+						}
+
+						if (!meshComponent.isPlayer && !physicsComponent.isStatic)
+						{
+							physicsComponent.fallingTime += deltaTime;
+							transformComponent.transform.velocity.y -= System::GetFreeFallVelocity(physicsComponent.fallingTime);
 						}
 
 						if (terrain != nullptr)

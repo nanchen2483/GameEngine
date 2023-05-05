@@ -184,7 +184,11 @@ namespace Engine
 				[&]()
 				{
 					Transform& transform = entity.GetComponent<TransformComponent>();
+
+					glm::vec3 previousPosition = transform.translation;
 					ImGuiExtension::DrawVec3SubSection("Location", transform.translation);
+					transform.velocity = (transform.translation - previousPosition) / (float)System::GetDeltaTime();
+
 					glm::vec3 rotation = glm::degrees(transform.rotation);
 					ImGuiExtension::DrawVec3SubSection("Rotation", rotation);
 					transform.rotation = glm::radians(rotation);

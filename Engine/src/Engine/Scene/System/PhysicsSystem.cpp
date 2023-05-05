@@ -71,18 +71,22 @@ namespace Engine
 			{
 				transformB.velocity += invMassSum * impulse;
 				transformB.translation += invMassSum * correction;
+				physicsB->fallingTime = 0.0f;
 			}
 			else if (physicsB->isStatic)
 			{
 				transformA.velocity -= invMassSum * impulse;
 				transformA.translation -= invMassSum * correction;
+				physicsA->fallingTime = 0.0f;
 			}
 			else
 			{
 				transformA.velocity -= invMassA * impulse;
 				transformB.velocity += invMassB * impulse;
+				physicsA->fallingTime = 0.0f;
 				transformA.translation -= invMassA * correction;
 				transformB.translation += invMassB * correction;
+				physicsB->fallingTime = 0.0f;
 			}
 		}
 	}
