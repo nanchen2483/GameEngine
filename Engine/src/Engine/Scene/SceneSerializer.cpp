@@ -28,7 +28,7 @@ namespace Engine
 	void static SerializeEntity(YAML::Emitter& out, const Entity& entity)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "Entity" << YAML::Value << 123;
+		out << YAML::Key << "Entity" << YAML::Value << entity.GetId();
 		
 		if (entity.HasComponent<TagComponent>())
 		{
@@ -328,6 +328,9 @@ namespace Engine
 					{
 						PhysicsComponent& deserializedPhysics = deserializedEntity.AddComponent<PhysicsComponent>();
 
+						deserializedPhysics.mass = physicsComponent["Mass"].as<float>();
+						deserializedPhysics.isStatic = physicsComponent["Restitution"].as<float>();
+						deserializedPhysics.isStatic = physicsComponent["IsStatic"].as<bool>();
 						deserializedPhysics.boundingBox = model->GenerateBoundingBox();
 					}
 				}
