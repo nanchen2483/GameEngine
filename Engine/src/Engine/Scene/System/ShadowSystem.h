@@ -12,9 +12,8 @@ namespace Engine
 		static void OnUpdate(entt::registry& registry, const glm::mat4& viewMatrix, float FOV, float aspectRatio);
 	protected:
 		ShadowSystem();
-		static ShadowSystem* GetInstance();
+		static ShadowSystem& GetInstance();
 
 		Uniq<ShadowBox> m_shadowBox;
-		static ShadowSystem* s_instance;
 	};
 }

@@ -7,7 +7,7 @@
 namespace Engine
 {
 	TessellationTerrain::TessellationTerrain(std::string filePath, int32_t entityId)
-		: TessellationTerrain(TextureLibrary::GetInstance()->Load(filePath, TextureType::Height, false), entityId)
+		: TessellationTerrain(TextureLibrary::Load(filePath, TextureType::Height, false), entityId)
 	{
 	}
 
@@ -27,7 +27,7 @@ namespace Engine
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetNumOfPatchVertices(m_numOfVerticesPerPatch);
 
-		m_shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Terrian.glsl");
+		m_shader = ShaderLibrary::Load("assets/shaders/Terrian.glsl");
 		m_shader->Bind();
 		m_shader->SetInt("uHeightMap", 0);
 	}

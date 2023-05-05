@@ -3,18 +3,18 @@
 
 namespace Engine
 {
-	ModelLibrary* ModelLibrary::s_instance = nullptr;
-
 	Ptr<Model> ModelLibrary::Load(const std::filesystem::path& filePath)
 	{
+		ModelLibrary& instance = GetInstance();
+
 		const Uid uid = Uid::NewUid(filePath.string());
-		if (Exists(uid))
+		if (instance.Exists(uid))
 		{
-			return Get(uid);
+			return instance.Get(uid);
 		}
 
 		Ptr<Model> model = Model::Create(filePath.string());
-		Add(model);
+		instance.Add(model);
 
 		return model;
 	}
@@ -23,7 +23,7 @@ namespace Engine
 	{
 		const Uid& uid = data->GetUid();
 		ENGINE_CORE_ASSERT(!Exists(uid), "Model already exists!");
-		m_models.insert({ uid, data });
+		m_models.emplace(uid, data);
 	}
 
 	Ptr<Model> ModelLibrary::Get(const Uid& key) const
@@ -37,13 +37,9 @@ namespace Engine
 		return m_models.find(key) != m_models.end();
 	}
 
-	ModelLibrary* ModelLibrary::GetInstance()
+	ModelLibrary& ModelLibrary::GetInstance()
 	{
-		if (!s_instance)
-		{
-			s_instance = new ModelLibrary();
-		}
-
-		return s_instance;
+		static ModelLibrary instance;
+		return instance;
 	}
 }

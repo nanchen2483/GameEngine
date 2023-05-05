@@ -290,7 +290,7 @@ namespace Engine
 					{
 						const wchar_t* filepath = (const wchar_t*)payload->Data;
 						const std::filesystem::path path = filepath;
-						texture = TextureLibrary::GetInstance()->Load(path.string(), type);
+						texture = TextureLibrary::Load(path.string(), type);
 						if (OnDrop != nullptr)
 						{
 							OnDrop();
