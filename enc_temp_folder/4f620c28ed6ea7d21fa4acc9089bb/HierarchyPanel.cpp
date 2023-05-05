@@ -184,7 +184,11 @@ namespace Engine
 				[&]()
 				{
 					Transform& transform = entity.GetComponent<TransformComponent>();
+
+					glm::vec3 previousPosition = transform.translation;
 					ImGuiExtension::DrawVec3SubSection("Location", transform.translation);
+					transform.velocity = (transform.translation - previousPosition) / (float)System::GetDeltaTime();
+
 					glm::vec3 rotation = glm::degrees(transform.rotation);
 					ImGuiExtension::DrawVec3SubSection("Rotation", rotation);
 					transform.rotation = glm::radians(rotation);
@@ -321,7 +325,7 @@ namespace Engine
 									{
 										component->isLoading = true;
 										component->filePath = filePath;
-										Ptr<Model> model = ModelLibrary::GetInstance()->Load(filePath);
+										Ptr<Model> model = ModelLibrary::Load(filePath);
 										component->meshes = model->GetMeshes();
 										component->isLoading = false;
 									}).detach();
@@ -342,7 +346,7 @@ namespace Engine
 					AnimationComponent* component = &entity.GetComponent<AnimationComponent>();
 					if (component->animations.empty())
 					{
-						component->animations = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GetAnimations();
+						component->animations = ModelLibrary::Load(entity.GetComponent<MeshComponent>().filePath)->GetAnimations();
 					}
 
 					ImGuiExtension::DrawAnimationSubSection(component->animations, component->selectedAnimationIndex, component->isEnabled,
@@ -365,7 +369,7 @@ namespace Engine
 					PhysicsComponent* component = &entity.GetComponent<PhysicsComponent>();
 					if (component->boundingBox == nullptr)
 					{
-						component->boundingBox = ModelLibrary::GetInstance()->Load(entity.GetComponent<MeshComponent>().filePath)->GenerateBoundingBox();
+						component->boundingBox = ModelLibrary::Load(entity.GetComponent<MeshComponent>().filePath)->GenerateBoundingBox();
 					}
 
 					BoundingValue value = component->boundingBox->GetBoundingValue();
@@ -419,7 +423,7 @@ namespace Engine
 							}
 							else
 							{
-								Ptr<Texture> texture = TextureLibrary::GetInstance()->Load(image, TextureType::Skybox);
+								Ptr<Texture> texture = TextureLibrary::Load(image, TextureType::Skybox);
 								ImGui::ImageButton((ImTextureID)(uint64_t)texture->GetRendererId(), ImVec2(64, 64), ImVec2(1.0f, 0.0f), ImVec2(0.0f, 1.0f));
 							}
 
