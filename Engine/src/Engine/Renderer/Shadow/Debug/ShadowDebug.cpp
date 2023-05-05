@@ -27,7 +27,7 @@ namespace Engine
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(ShadowDebugData::indices), ShadowDebugData::numOfIndices));
 
-		m_shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Debug/ShadowDebug.glsl");
+		m_shader = ShaderLibrary::Load("assets/shaders/Debug/ShadowDebug.glsl");
 		m_shader->Bind();
 		m_shader->SetInt("uDepthMap", m_shadowInfo.depthTextureSlot);
 		m_shader->SetInt("uLayer", 0);

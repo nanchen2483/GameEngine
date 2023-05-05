@@ -299,7 +299,7 @@ namespace Engine
 					YAML::Node& filePathNode = spriteRendererComponent["TextureFilePath"];
 					if (filePathNode)
 					{
-						deserializedSRC.texture = TextureLibrary::GetInstance()->Load(filePathNode.as<std::string>());
+						deserializedSRC.texture = TextureLibrary::Load(filePathNode.as<std::string>());
 					}
 				}
 
@@ -310,7 +310,7 @@ namespace Engine
 
 					deserializedMesh.filePath = meshComponent["Path"].as<std::string>();
 					deserializedMesh.isPlayer = meshComponent["IsPlayer"].as<bool>();
-					Ptr<Model> model = ModelLibrary::GetInstance()->Load(deserializedMesh.filePath);
+					Ptr<Model> model = ModelLibrary::Load(deserializedMesh.filePath);
 					deserializedMesh.meshes = model->GetMeshes();
 
 					YAML::Node animationComponent = entity["AnimationComponent"];
@@ -351,7 +351,7 @@ namespace Engine
 				if (terrainComponent)
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
-					deserializedSkybox.texture = TextureLibrary::GetInstance()->Load(terrainComponent["Path"].as<std::string>(), TextureType::Height);
+					deserializedSkybox.texture = TextureLibrary::Load(terrainComponent["Path"].as<std::string>(), TextureType::Height);
 					deserializedSkybox.terrain = Terrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}

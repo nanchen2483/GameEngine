@@ -5,7 +5,7 @@
 namespace Engine
 {
 	QuadtreeTerrain::QuadtreeTerrain(std::string filePath, int32_t entityId)
-		: QuadtreeTerrain(TextureLibrary::GetInstance()->Load(filePath, TextureType::Height, false), entityId)
+		: QuadtreeTerrain(TextureLibrary::Load(filePath, TextureType::Height, false), entityId)
 	{
 	}
 

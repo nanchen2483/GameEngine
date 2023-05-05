@@ -65,7 +65,7 @@ namespace Engine
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
-		s_data.whiteTexture = TextureLibrary::GetInstance()->Load(1, 1);
+		s_data.whiteTexture = TextureLibrary::Load(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
 		s_data.whiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
 
@@ -75,7 +75,7 @@ namespace Engine
 			samplers[i] = i;
 		}
 
-		s_data.shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Default.glsl");
+		s_data.shader = ShaderLibrary::Load("assets/shaders/Default.glsl");
 		s_data.shader->Bind();
 		s_data.shader->SetIntArray("uTextures", samplers, s_data.maxTextureSlots);
 		s_data.textureSlots[0] = s_data.whiteTexture;

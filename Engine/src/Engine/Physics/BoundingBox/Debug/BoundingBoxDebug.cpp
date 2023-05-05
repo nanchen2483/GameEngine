@@ -17,7 +17,7 @@ namespace Engine
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(BoundingBoxDebugData::indices), BoundingBoxDebugData::numOfIndices));
 
-		m_shader = ShaderLibrary::GetInstance()->Load("assets/shaders/BoundingBox.glsl");
+		m_shader = ShaderLibrary::Load("assets/shaders/BoundingBox.glsl");
 	}
 
 	void BoundingBoxDebug::Draw(Transform& transform, BoundingValue boundingValue)

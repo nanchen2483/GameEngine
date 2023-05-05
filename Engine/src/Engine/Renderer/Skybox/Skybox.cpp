@@ -24,7 +24,7 @@ namespace Engine
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(SkyboxData::indices), SkyboxData::numOfIndices));
 
-		m_shader = ShaderLibrary::GetInstance()->Load("assets/shaders/Skybox.glsl");
+		m_shader = ShaderLibrary::Load("assets/shaders/Skybox.glsl");
 	}
 	
 	void Skybox::Draw()

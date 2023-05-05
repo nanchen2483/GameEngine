@@ -3,18 +3,18 @@
 
 namespace Engine
 {
-	ShaderLibrary* ShaderLibrary::s_instance = nullptr;
-
 	Ptr<Shader> ShaderLibrary::Load(const std::filesystem::path& filePath)
 	{
+		ShaderLibrary& instance = GetInstance();
+
 		Uid uid = Uid::NewUid(filePath.string());
-		if (Exists(uid))
+		if (instance.Exists(uid))
 		{
-			return Get(uid);
+			return instance.Get(uid);
 		}
 
 		Ptr<Shader> shader = Shader::Create(filePath.string());
-		Add(shader);
+		instance.Add(shader);
 
 		return shader;
 	}
@@ -29,7 +29,7 @@ namespace Engine
 	{
 		const Uid& uid = data->GetUid();
 		ENGINE_CORE_ASSERT(!Exists(uid), "Shader already exists!");
-		m_shaders.insert({ uid, data });
+		m_shaders.emplace(uid, data);
 	}
 
 	bool ShaderLibrary::Exists(const Uid& uid) const
@@ -37,13 +37,9 @@ namespace Engine
 		return m_shaders.find(uid) != m_shaders.end();
 	}
 
-	ShaderLibrary* ShaderLibrary::GetInstance()
+	ShaderLibrary& ShaderLibrary::GetInstance()
 	{
-		if (!s_instance)
-		{
-			s_instance = new ShaderLibrary();
-		}
-
-		return s_instance;
+		static ShaderLibrary instance;
+		return instance;
 	}
 }
