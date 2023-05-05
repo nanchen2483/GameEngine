@@ -18,10 +18,9 @@ namespace Engine
 	private:
 		PhysicsSystem();
 		static void Update(Transform& transformA, Transform& transformB, PhysicsComponent* physicsA, PhysicsComponent* physicsB);
-		static PhysicsSystem* GetInstance();
+		static PhysicsSystem& GetInstance();
 
 		Uniq<BoundingBoxDebug> m_debug;
 		Uniq<Collision> m_collision;
-		static PhysicsSystem* s_instance;
 	};
 }

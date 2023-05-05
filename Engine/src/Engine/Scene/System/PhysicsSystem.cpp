@@ -3,7 +3,6 @@
 
 namespace Engine
 {
-	PhysicsSystem* PhysicsSystem::s_instance = nullptr;
 	PhysicsSystem::PhysicsSystem()
 	{
 		m_collision = Collision::Create(CollisionType::GJK_EPA_3D);
@@ -28,6 +27,7 @@ namespace Engine
 
 	void PhysicsSystem::Update(Transform& transformA, Transform& transformB, PhysicsComponent* physicsA, PhysicsComponent* physicsB)
 	{
+		const PhysicsSystem& instance = GetInstance();
 		if (physicsA == nullptr || physicsB == nullptr)
 		{
 			return;
@@ -41,7 +41,7 @@ namespace Engine
 		ShapeInfo shapeA(transformA, physicsA->boundingBox->GetBoundingValue());
 		ShapeInfo shapeB(transformB, physicsB->boundingBox->GetBoundingValue());
 
-		const CollisionInfo& info = GetInstance()->m_collision->Detect(shapeA, shapeB);
+		const CollisionInfo& info = instance.m_collision->Detect(shapeA, shapeB);
 		if (info.isCollided)
 		{
 			// Calculate the relative velocity of the two objects
@@ -89,20 +89,17 @@ namespace Engine
 
 	void PhysicsSystem::DrawBoudingBox(entt::registry& registry)
 	{
+		const PhysicsSystem& instance = GetInstance();
 		registry.view<TransformComponent, PhysicsComponent>()
-			.each([=](TransformComponent& transform, PhysicsComponent& component)
+			.each([&](TransformComponent& transform, PhysicsComponent& component)
 				{
-					GetInstance()->m_debug->Draw(transform, component.boundingBox->GetBoundingValue());
+					instance.m_debug->Draw(transform, component.boundingBox->GetBoundingValue());
 				});
 	}
 
-	PhysicsSystem* PhysicsSystem::GetInstance()
+	PhysicsSystem& PhysicsSystem::GetInstance()
 	{
-		if (!s_instance)
-		{
-			s_instance = new PhysicsSystem();
-		}
-
-		return s_instance;
+		static PhysicsSystem instance;
+		return instance;
 	}
 }

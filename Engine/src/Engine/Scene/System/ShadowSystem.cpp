@@ -7,7 +7,6 @@
 
 namespace Engine
 {
-	ShadowSystem* ShadowSystem::s_instance = nullptr;
 	ShadowSystem::ShadowSystem()
 	{
 		m_shadowBox = CreateUniq<ShadowBox>();
@@ -15,7 +14,9 @@ namespace Engine
 
 	void ShadowSystem::OnUpdate(entt::registry& registry, const glm::mat4& viewMatrix, float FOV, float aspectRatio)
 	{
-		const Uniq<ShadowBox>& shadowBox = GetInstance()->m_shadowBox;
+		ShadowSystem& instance = GetInstance();
+
+		const Uniq<ShadowBox>& shadowBox = instance.m_shadowBox;
 		shadowBox->Update(viewMatrix, FOV, aspectRatio);
 		shadowBox->Bind();
 		registry.view<TransformComponent, MeshComponent>()
@@ -33,13 +34,9 @@ namespace Engine
 		shadowBox->BindTexture();
 	}
 
-	ShadowSystem* ShadowSystem::GetInstance()
+	ShadowSystem& ShadowSystem::GetInstance()
 	{
-		if (!s_instance)
-		{
-			s_instance = new ShadowSystem();
-		}
-
-		return s_instance;
+		static ShadowSystem instance;
+		return instance;
 	}
 }
