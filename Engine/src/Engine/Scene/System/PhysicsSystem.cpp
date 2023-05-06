@@ -60,33 +60,41 @@ namespace Engine
 			double j = -(1.0 + e) * velocityAlongNormal / invMassSum;
 			glm::dvec3 impulse = j * info.collisionNormal;
 
-			// Correct the positions of the objects to avoid overlap
+			// Calculate the correction of the objects
 			const double percent = 1.0; // percentage of overlap to correct
 			const double slop = 0.01; // small value to avoid jitter
 			double absPenetrationDepth = std::abs(info.penetrationDepth);
 			double penetrationSlop = std::max(absPenetrationDepth - slop, 0.0);
 			double correctionMagnitude = (penetrationSlop / invMassSum) * percent;
 			glm::dvec3 correction = correctionMagnitude * info.collisionNormal;
+
+			// Correct the positions and impulses to avoid overlap
 			if (physicsA->isStatic)
 			{
 				transformB.velocity += invMassSum * impulse;
 				transformB.translation += invMassSum * correction;
-				physicsB->fallingTime = 0.0f;
 			}
 			else if (physicsB->isStatic)
 			{
 				transformA.velocity -= invMassSum * impulse;
 				transformA.translation -= invMassSum * correction;
-				physicsA->fallingTime = 0.0f;
 			}
 			else
 			{
 				transformA.velocity -= invMassA * impulse;
 				transformB.velocity += invMassB * impulse;
-				physicsA->fallingTime = 0.0f;
 				transformA.translation -= invMassA * correction;
 				transformB.translation += invMassB * correction;
+			}
+
+			// Reset the falling time
+			if (info.collisionNormal.y > 0.95)
+			{
 				physicsB->fallingTime = 0.0f;
+			}
+			else if (info.collisionNormal.y < -0.95)
+			{
+				physicsA->fallingTime = 0.0f;
 			}
 		}
 	}
