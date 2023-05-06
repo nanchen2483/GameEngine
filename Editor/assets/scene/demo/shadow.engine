@@ -13,8 +13,6 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    PhysicsComponent:
-      {}
   - Entity: 123
     TagComponent:
       Tag: Cube 1
@@ -28,8 +26,6 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    PhysicsComponent:
-      {}
   - Entity: 123
     TagComponent:
       Tag: Cube 2
@@ -43,8 +39,6 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    PhysicsComponent:
-      {}
   - Entity: 123
     TagComponent:
       Tag: Cube 3
@@ -58,8 +52,6 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    PhysicsComponent:
-      {}
   - Entity: 123
     TagComponent:
       Tag: Cube 4
@@ -73,8 +65,6 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    PhysicsComponent:
-      {}
   - Entity: 123
     TagComponent:
       Tag: Cube 5
@@ -88,8 +78,6 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    PhysicsComponent:
-      {}
   - Entity: 123
     TagComponent:
       Tag: Cube 6
@@ -103,5 +91,3 @@ Entities:
     AnimationComponent:
       IsEnabled: false
       SelectedAnimationIndex: 0
-    PhysicsComponent:
-      {}
