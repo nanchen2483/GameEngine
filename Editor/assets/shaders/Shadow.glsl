@@ -6,7 +6,7 @@ layout (location = 7) in ivec4 aBoneIds;
 layout (location = 8) in vec4 aWeights;
 layout (location = 9) in int aIsWorldPos;
 
-const int MAX_BONES = 100;
+const int MAX_BONES = 200;
 const int MAX_BONE_INFLUENCE = 4;
 
 uniform mat4 uModel;
