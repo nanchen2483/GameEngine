@@ -2,60 +2,20 @@ Scene: Untitled
 Entities:
   - Entity: 4
     TagComponent:
-      Tag: Lotus lord of the luscious woods
+      Tag: Scene
     TransformComponent:
-      Translation: [0, -16.7000008, 0]
+      Translation: [0, -26.7000008, -126.199997]
       Rotation: [0, 0, 0]
-      Scale: [0.00999999978, 0.00999999978, 0.00999999978]
+      Scale: [10, 10, 10]
     MeshComponent:
-      Path: assets\models\lotus-lord-of-the-luscious-woods\endboss_JefVanLoon_FIN.fbx
+      Path: assets\models\free-low-poly-game-assets\GameLevel_present.obj
       IsPlayer: false
-    AnimationComponent:
-      IsEnabled: true
-      SelectedAnimationIndex: 0
   - Entity: 3
-    TagComponent:
-      Tag: Light
-    TransformComponent:
-      Translation: [-1.10000002, 16.7999992, 1.10000002]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    LightComponent:
-      Constant: 1
-      Linear: 0.100000001
-      Quadratic: 0.0299999993
-      Ambient: [1, 1, 1]
-      Diffuse: [1, 1, 1]
-      Specular: [1, 1, 1]
-  - Entity: 2
-    TagComponent:
-      Tag: Floor
-    TransformComponent:
-      Translation: [0, -17.2000008, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1000, 1, 1000]
-    MeshComponent:
-      Path: assets\models\cube\cube.obj
-      IsPlayer: false
-  - Entity: 1
-    TagComponent:
-      Tag: Phoenix bird
-    TransformComponent:
-      Translation: [-16.5, 4.5999999, 0]
-      Rotation: [0, -3.16777253, 0]
-      Scale: [0.00999999978, 0.00999999978, 0.00999999978]
-    MeshComponent:
-      Path: assets\models\phoenix-bird\fly.fbx
-      IsPlayer: false
-    AnimationComponent:
-      IsEnabled: true
-      SelectedAnimationIndex: 0
-  - Entity: 0
     TagComponent:
       Tag: Camera
     TransformComponent:
-      Translation: [4.75081301, 18.4180889, 56.476223]
-      Rotation: [-0.309599936, -0.0144000892, 0]
+      Translation: [-1.74091434, 1.64287186, 17.6023769]
+      Rotation: [-0.095998913, 9.49949026e-07, 0]
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
@@ -71,3 +31,43 @@ Entities:
     MeshComponent:
       Path: assets\models\cube\cube.obj
       IsPlayer: true
+  - Entity: 2
+    TagComponent:
+      Tag: Phoenix bird
+    TransformComponent:
+      Translation: [-16.5, 3.0999999, -21.3999996]
+      Rotation: [0, -1.88844621, 0]
+      Scale: [0.00999999978, 0.00999999978, 0.00999999978]
+    MeshComponent:
+      Path: assets\models\phoenix-bird\fly.fbx
+      IsPlayer: false
+    AnimationComponent:
+      IsEnabled: true
+      SelectedAnimationIndex: 0
+  - Entity: 1
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Translation: [11.3000002, 73, 2.29999995]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Constant: 1
+      Linear: 0.0799999982
+      Quadratic: 0.00999999978
+      Ambient: [50, 50, 50]
+      Diffuse: [50, 50, 50]
+      Specular: [50, 50, 50]
+  - Entity: 0
+    TagComponent:
+      Tag: Lotus
+    TransformComponent:
+      Translation: [-6.4000001, -17, -40.5999985]
+      Rotation: [0, 0, 0]
+      Scale: [0.00999999978, 0.00999999978, 0.00999999978]
+    MeshComponent:
+      Path: assets\models\lotus-lord-of-the-luscious-woods\endboss_JefVanLoon_FIN.fbx
+      IsPlayer: false
+    AnimationComponent:
+      IsEnabled: true
+      SelectedAnimationIndex: 0
