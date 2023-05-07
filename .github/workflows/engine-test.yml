@@ -20,7 +20,7 @@ jobs:
         uses: lukka/get-cmake@latest
       
       - name: Restore artifacts
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@v11
         with:
           vcpkgDirectory: '${{ github.workspace }}/Dependencies/vcpkg'
           vcpkgJsonGlob: '**/vcpkg.json'
