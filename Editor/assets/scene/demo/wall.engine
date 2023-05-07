@@ -8,7 +8,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.29999995, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 5
@@ -22,7 +22,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.39999998, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 6
@@ -36,7 +36,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [2.20000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 7
@@ -50,7 +50,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.29999995, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 6
@@ -64,7 +64,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.60000002, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 6
@@ -78,7 +78,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.60000002, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 6
@@ -92,7 +92,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.39999998, 1, 1.10000002]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -106,7 +106,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.70000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 7
@@ -120,7 +120,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.20000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 6
@@ -134,7 +134,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.60000002, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -148,7 +148,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [0.899999976, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 2
@@ -162,7 +162,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1.89999998, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 15
@@ -176,7 +176,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.29999995, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -190,7 +190,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.70000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 7
@@ -204,7 +204,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [2.0999999, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 12
@@ -218,7 +218,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.70000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 10
@@ -232,7 +232,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.70000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 10
@@ -246,7 +246,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.70000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -260,7 +260,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [2.20000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 10
@@ -274,7 +274,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.70000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 10
@@ -288,7 +288,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.89999998, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 10
@@ -302,7 +302,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.89999998, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 10
@@ -316,7 +316,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.79999995, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 10
@@ -344,7 +344,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 2.29999995]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 12
@@ -358,7 +358,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.60000002, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 5
@@ -372,7 +372,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 3.4000001, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 20
@@ -386,7 +386,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [6.80000019, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 20
@@ -400,7 +400,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.70000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -414,7 +414,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 5
@@ -428,7 +428,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [2, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -442,7 +442,7 @@ Entities:
       Rotation: [-0.194399267, -25.0608368, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: true
     PhysicsComponent:
       Mass: 1
@@ -474,7 +474,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.39999998, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 5
@@ -488,7 +488,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.39999998, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 10
@@ -502,7 +502,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 5
@@ -516,7 +516,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [100, 10, 100]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -530,7 +530,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.29999995, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 5
@@ -544,7 +544,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.20000005, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 5
@@ -558,7 +558,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1.5, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 5
@@ -586,7 +586,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [55.4000015, 6.5, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1

@@ -33,11 +33,13 @@ namespace Engine
 			const std::string Dae = ".dae";
 			const std::string Obj = ".obj";
 			const std::string Blend = ".blend";
+			const std::string Fbx = ".fbx";
 			const std::set<std::string> All
 			{
 				Dae,
 				Obj,
-				Blend
+				Blend,
+				Fbx
 			};
 		};
 	}

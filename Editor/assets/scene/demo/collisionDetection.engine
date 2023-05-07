@@ -8,7 +8,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [9.60000038, 1.60000002, 6.19999981]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -22,7 +22,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -36,7 +36,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -50,7 +50,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -64,7 +64,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1

@@ -8,7 +8,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: true
     PhysicsComponent:
       Mass: 1
@@ -22,7 +22,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [20, 1, 20]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
@@ -54,7 +54,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      Path: assets\models\cube\cube.dae
+      Path: assets\models\cube\cube.obj
       IsPlayer: false
     PhysicsComponent:
       Mass: 1
