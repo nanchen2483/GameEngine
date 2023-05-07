@@ -10,9 +10,6 @@ Entities:
     MeshComponent:
       Path: assets\models\cube\cube.obj
       IsPlayer: false
-    AnimationComponent:
-      IsEnabled: false
-      SelectedAnimationIndex: 0
   - Entity: 123
     TagComponent:
       Tag: Cube 1
@@ -23,9 +20,6 @@ Entities:
     MeshComponent:
       Path: assets\models\cube\cube.obj
       IsPlayer: false
-    AnimationComponent:
-      IsEnabled: false
-      SelectedAnimationIndex: 0
   - Entity: 123
     TagComponent:
       Tag: Cube 2
@@ -36,9 +30,6 @@ Entities:
     MeshComponent:
       Path: assets\models\cube\cube.obj
       IsPlayer: false
-    AnimationComponent:
-      IsEnabled: false
-      SelectedAnimationIndex: 0
   - Entity: 123
     TagComponent:
       Tag: Cube 3
@@ -49,9 +40,6 @@ Entities:
     MeshComponent:
       Path: assets\models\cube\cube.obj
       IsPlayer: false
-    AnimationComponent:
-      IsEnabled: false
-      SelectedAnimationIndex: 0
   - Entity: 123
     TagComponent:
       Tag: Cube 4
@@ -62,9 +50,6 @@ Entities:
     MeshComponent:
       Path: assets\models\cube\cube.obj
       IsPlayer: false
-    AnimationComponent:
-      IsEnabled: false
-      SelectedAnimationIndex: 0
   - Entity: 123
     TagComponent:
       Tag: Cube 5
@@ -75,9 +60,6 @@ Entities:
     MeshComponent:
       Path: assets\models\cube\cube.obj
       IsPlayer: false
-    AnimationComponent:
-      IsEnabled: false
-      SelectedAnimationIndex: 0
   - Entity: 123
     TagComponent:
       Tag: Cube 6
@@ -88,6 +70,3 @@ Entities:
     MeshComponent:
       Path: assets\models\cube\cube.obj
       IsPlayer: false
-    AnimationComponent:
-      IsEnabled: false
-      SelectedAnimationIndex: 0

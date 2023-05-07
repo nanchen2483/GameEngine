@@ -9,7 +9,7 @@ Entities:
       Scale: [1, 1, 1]
     MeshComponent:
       Path: assets\models\cube\cube.obj
-      IsPlayer: true
+      IsPlayer: false
     PhysicsComponent:
       Mass: 1
       Restitution: 0
@@ -32,7 +32,7 @@ Entities:
     TagComponent:
       Tag: Camera
     TransformComponent:
-      Translation: [0, 0, 0]
+      Translation: [-7.19999981, 1.70000005, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
@@ -46,6 +46,9 @@ Entities:
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: false
+    MeshComponent:
+      Path: assets\models\cube\cube.obj
+      IsPlayer: true
   - Entity: 0
     TagComponent:
       Tag: Cube2
