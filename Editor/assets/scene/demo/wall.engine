@@ -1,0 +1,594 @@
+Scene: Untitled
+Entities:
+  - Entity: 41
+    TagComponent:
+      Tag: Cube 35
+    TransformComponent:
+      Translation: [10.3000002, 1.48000002, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.29999995, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 5
+      Restitution: 0
+      IsStatic: false
+  - Entity: 40
+    TagComponent:
+      Tag: Cube 34
+    TransformComponent:
+      Translation: [9.80000019, 2.47631574, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.39999998, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 6
+      Restitution: 0
+      IsStatic: false
+  - Entity: 39
+    TagComponent:
+      Tag: Cube 33
+    TransformComponent:
+      Translation: [7.4000001, 4.45631552, 0]
+      Rotation: [0, 0, 0]
+      Scale: [2.20000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 7
+      Restitution: 0
+      IsStatic: false
+  - Entity: 38
+    TagComponent:
+      Tag: Cube 32
+    TransformComponent:
+      Translation: [8.69999981, 3.46631551, -0.100000001]
+      Rotation: [0, 0, 0]
+      Scale: [1.29999995, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 6
+      Restitution: 0
+      IsStatic: false
+  - Entity: 37
+    TagComponent:
+      Tag: Cube 31
+    TransformComponent:
+      Translation: [7.0999999, 3.45999956, -0.100000001]
+      Rotation: [0, 0, 0]
+      Scale: [1.60000002, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 6
+      Restitution: 0
+      IsStatic: false
+  - Entity: 36
+    TagComponent:
+      Tag: Cube 30
+    TransformComponent:
+      Translation: [8.10000038, 2.46999979, -0.300000012]
+      Rotation: [0, 0, 0]
+      Scale: [1.60000002, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 6
+      Restitution: 0
+      IsStatic: false
+  - Entity: 35
+    TagComponent:
+      Tag: Cube 29
+    TransformComponent:
+      Translation: [6.5, 2.46999979, -0.200000003]
+      Rotation: [0, 0, 0]
+      Scale: [1.39999998, 1, 1.10000002]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: false
+  - Entity: 34
+    TagComponent:
+      Tag: Cube 28
+    TransformComponent:
+      Translation: [8.60000038, 1.4799999, -0.100000001]
+      Rotation: [0, 0, 0]
+      Scale: [1.70000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 7
+      Restitution: 0
+      IsStatic: false
+  - Entity: 33
+    TagComponent:
+      Tag: Cube 27
+    TransformComponent:
+      Translation: [9.5, 0.49000001, -0.100000001]
+      Rotation: [0, 0, 0]
+      Scale: [1.20000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 6
+      Restitution: 0
+      IsStatic: false
+  - Entity: 32
+    TagComponent:
+      Tag: Cube 24
+    TransformComponent:
+      Translation: [-2.29999995, 3.45999789, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.60000002, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: false
+  - Entity: 31
+    TagComponent:
+      Tag: Cube 23
+    TransformComponent:
+      Translation: [2.5999999, 3.45999837, 0]
+      Rotation: [0, 0, 0]
+      Scale: [0.899999976, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 2
+      Restitution: 0
+      IsStatic: false
+  - Entity: 30
+    TagComponent:
+      Tag: Cube 22
+    TransformComponent:
+      Translation: [3.90666699, 2.91999793, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1.89999998, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 15
+      Restitution: 0
+      IsStatic: false
+  - Entity: 29
+    TagComponent:
+      Tag: Cube 21
+    TransformComponent:
+      Translation: [3.79999995, 1.47999978, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.29999995, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: false
+  - Entity: 28
+    TagComponent:
+      Tag: Cube 20
+    TransformComponent:
+      Translation: [3.72000003, 0.49000001, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.70000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 7
+      Restitution: 0
+      IsStatic: false
+  - Entity: 27
+    TagComponent:
+      Tag: Cube 19
+    TransformComponent:
+      Translation: [-6.19999981, 3.45999956, 0]
+      Rotation: [0, 0, 0]
+      Scale: [2.0999999, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 12
+      Restitution: 0
+      IsStatic: false
+  - Entity: 26
+    TagComponent:
+      Tag: Cube 18
+    TransformComponent:
+      Translation: [-7, 2.46999979, -0.100000001]
+      Rotation: [0, 0, 0]
+      Scale: [1.70000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 10
+      Restitution: 0
+      IsStatic: false
+  - Entity: 25
+    TagComponent:
+      Tag: Cube 17
+    TransformComponent:
+      Translation: [-7.69999981, 1.47999978, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.70000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 10
+      Restitution: 0
+      IsStatic: false
+  - Entity: 24
+    TagComponent:
+      Tag: Cube 16
+    TransformComponent:
+      Translation: [-4.22333336, 3.4599998, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.70000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: false
+  - Entity: 23
+    TagComponent:
+      Tag: Cube 15
+    TransformComponent:
+      Translation: [-4.9000001, 2.46999955, 0]
+      Rotation: [0, 0, 0]
+      Scale: [2.20000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 10
+      Restitution: 0
+      IsStatic: false
+  - Entity: 22
+    TagComponent:
+      Tag: Cube 14
+    TransformComponent:
+      Translation: [-5.9000001, 1.4799999, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.70000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 10
+      Restitution: 0
+      IsStatic: false
+  - Entity: 21
+    TagComponent:
+      Tag: Cube 13
+    TransformComponent:
+      Translation: [-6.5999999, 0.49000001, 0.200000003]
+      Rotation: [0, 0, 0]
+      Scale: [1.89999998, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 10
+      Restitution: 0
+      IsStatic: false
+  - Entity: 20
+    TagComponent:
+      Tag: Cube 12
+    TransformComponent:
+      Translation: [-4, 1.47999954, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.89999998, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 10
+      Restitution: 0
+      IsStatic: false
+  - Entity: 19
+    TagComponent:
+      Tag: Cube 11
+    TransformComponent:
+      Translation: [-4.69999981, 0.49000001, -0.100000001]
+      Rotation: [0, 0, 0]
+      Scale: [1.79999995, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 10
+      Restitution: 0
+      IsStatic: false
+  - Entity: 18
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Translation: [0, 21.1000004, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Constant: 1
+      Linear: 0.100000001
+      Quadratic: 0.0299999993
+      Ambient: [1, 1, 1]
+      Diffuse: [1, 1, 1]
+      Specular: [1, 1, 1]
+  - Entity: 17
+    TagComponent:
+      Tag: Cube 10
+    TransformComponent:
+      Translation: [5.19999981, 4.86999941, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 2.29999995]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 12
+      Restitution: 0
+      IsStatic: false
+  - Entity: 16
+    TagComponent:
+      Tag: Cube 9
+    TransformComponent:
+      Translation: [5.30000019, 3.88000011, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.60000002, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 5
+      Restitution: 0
+      IsStatic: false
+  - Entity: 15
+    TagComponent:
+      Tag: Cube 8
+    TransformComponent:
+      Translation: [5.30000019, 1.69000006, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 3.4000001, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 20
+      Restitution: 0
+      IsStatic: false
+  - Entity: 14
+    TagComponent:
+      Tag: Cube 7
+    TransformComponent:
+      Translation: [0.0166667886, 4.44999647, 0]
+      Rotation: [0, 0, 0]
+      Scale: [6.80000019, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 20
+      Restitution: 0
+      IsStatic: false
+  - Entity: 13
+    TagComponent:
+      Tag: Cube 6
+    TransformComponent:
+      Translation: [-2.70000005, 2.46999955, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.70000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: false
+  - Entity: 12
+    TagComponent:
+      Tag: Cube 5
+    TransformComponent:
+      Translation: [-2.4000001, 1.4799993, 0.100000001]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 5
+      Restitution: 0
+      IsStatic: false
+  - Entity: 11
+    TagComponent:
+      Tag: Cube 4
+    TransformComponent:
+      Translation: [-2.70000005, 0.49000001, 0]
+      Rotation: [0, 0, 0]
+      Scale: [2, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: false
+  - Entity: 10
+    TagComponent:
+      Tag: Player
+    TransformComponent:
+      Translation: [3.06945276, 6.36703396, 21.314436]
+      Rotation: [-0.194399267, -25.0608368, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: true
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: false
+  - Entity: 9
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 45
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 8
+    TagComponent:
+      Tag: Cube 3
+    TransformComponent:
+      Translation: [2.20000005, 2.46999907, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.39999998, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 5
+      Restitution: 0
+      IsStatic: false
+  - Entity: 7
+    TagComponent:
+      Tag: Cube 2
+    TransformComponent:
+      Translation: [2.4000001, 1.47999942, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.39999998, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 10
+      Restitution: 0
+      IsStatic: false
+  - Entity: 6
+    TagComponent:
+      Tag: Cube 1
+    TransformComponent:
+      Translation: [2.38000011, 0.49000001, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 5
+      Restitution: 0
+      IsStatic: false
+  - Entity: 5
+    TagComponent:
+      Tag: Floor
+    TransformComponent:
+      Translation: [0, -5, 0]
+      Rotation: [0, 0, 0]
+      Scale: [100, 10, 100]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: true
+  - Entity: 4
+    TagComponent:
+      Tag: Cube 25
+    TransformComponent:
+      Translation: [6.5999999, 0.48999989, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.29999995, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 5
+      Restitution: 0
+      IsStatic: false
+  - Entity: 3
+    TagComponent:
+      Tag: Cube 26
+    TransformComponent:
+      Translation: [8.10000038, 0.48999995, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.20000005, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 5
+      Restitution: 0
+      IsStatic: false
+  - Entity: 2
+    TagComponent:
+      Tag: Cube 27
+    TransformComponent:
+      Translation: [7, 1.4799999, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.5, 1, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 5
+      Restitution: 0
+      IsStatic: false
+  - Entity: 1
+    TagComponent:
+      Tag: Skybox
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SkyboxComponent:
+      RightFilePath: assets\textures\skybox\right.jpg
+      LeftFilePath: assets\textures\skybox\left.jpg
+      TopFilePath: assets\textures\skybox\top.jpg
+      BottomFilePath: assets\textures\skybox\bottom.jpg
+      BackFilePath: assets\textures\skybox\back.jpg
+      FrontFilePath: assets\textures\skybox\front.jpg
+  - Entity: 0
+    TagComponent:
+      Tag: Cube 36
+    TransformComponent:
+      Translation: [0, 3.24000001, -28.8899994]
+      Rotation: [0, 0, 0]
+      Scale: [55.4000015, 6.5, 1]
+    MeshComponent:
+      Path: assets\models\cube\cube.dae
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: false

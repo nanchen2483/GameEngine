@@ -363,15 +363,25 @@ namespace Engine
 				[&]()
 				{
 					PhysicsComponent* component = &entity.GetComponent<PhysicsComponent>();
-					if (component->boundingBox == nullptr)
+					BoundingValue value{};
+					bool emptyFilePath = entity.GetComponent<MeshComponent>().filePath.empty();
+					if (!emptyFilePath)
 					{
-						component->boundingBox = ModelLibrary::Load(entity.GetComponent<MeshComponent>().filePath)->GenerateBoundingBox();
+						if (component->boundingBox == nullptr)
+						{
+							component->boundingBox = ModelLibrary::Load(entity.GetComponent<MeshComponent>().filePath)->GenerateBoundingBox();
+						}
+
+						value = component->boundingBox->GetBoundingValue();
 					}
 
-					BoundingValue value = component->boundingBox->GetBoundingValue();
 					ImGuiExtension::DrawVec3SubSection("Center", value.center);
 					ImGuiExtension::DrawVec3SubSection("Extents", value.extents);
-					component->boundingBox->SetBoundingValue(value);
+					if (!emptyFilePath)
+					{
+						component->boundingBox->SetBoundingValue(value);
+					}
+
 					ImGuiExtension::DrawFloatSubSection("Mass", component->mass);
 					ImGuiExtension::DrawCheckboxSubSection("Static", &component->isStatic);
 				},

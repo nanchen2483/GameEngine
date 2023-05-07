@@ -24,8 +24,15 @@ namespace Engine
 
 						if (!meshComponent.isPlayer && !physicsComponent.isStatic)
 						{
-							physicsComponent.fallingTime += deltaTime;
-							transformComponent.transform.velocity.y -= System::GetFreeFallVelocity(physicsComponent.fallingTime);
+							if (physicsComponent.fallingTime == 0.0f)
+							{
+								physicsComponent.fallingTime = 0.01f;
+							}
+							else
+							{
+								physicsComponent.fallingTime += deltaTime;
+								transformComponent.transform.velocity.y -= System::GetFreeFallVelocity(physicsComponent.fallingTime);
+							}
 						}
 
 						if (terrain != nullptr)
