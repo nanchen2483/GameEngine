@@ -7,21 +7,21 @@ namespace Engine
 	class AssimpHelper
 	{
 	public:
-		static Ptr<Node> ConvertToAssimpNode(const aiAnimation* animation, const aiNode* rootNode, const Dictionary<std::string, glm::mat4> boneOffsets)
+		static Ptr<Node> ConvertToAssimpNode(const aiAnimation* animation, const aiNode* rootNode, Dictionary<std::string, glm::mat4> boneOffsets)
 		{
 			auto boneMap = CreateBoneMap(animation, boneOffsets);
 			return CreateNodes(rootNode, boneMap);
 		}
 
 	private:
-		static std::map<std::string, AssimpBone> CreateBoneMap(const aiAnimation* animation, const Dictionary<std::string, glm::mat4> boneOffsets)
+		static std::map<std::string, AssimpBone> CreateBoneMap(const aiAnimation* animation, Dictionary<std::string, glm::mat4> boneOffsets)
 		{
 			std::map<std::string, AssimpBone> boneMap;
 			for (uint32_t i = 0; i < animation->mNumChannels; i++)
 			{
 				const aiNodeAnim* channel = animation->mChannels[i];
 				std::string boneName = channel->mNodeName.data;
-				const auto& boneInfo = boneOffsets.Get(boneName);
+				const auto& boneInfo = boneOffsets.SafeAdd(boneName, glm::mat4(1.0));
 				boneMap[boneName] = AssimpBone(boneInfo.id, boneInfo.value, channel);
 			}
 

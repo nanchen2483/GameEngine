@@ -151,32 +151,32 @@ namespace Engine
 		s_data.cameraUniformBuffer = UniformBuffer::Create(0, {
 				BufferLayoutType::Std140,
 				{
-					{ ShaderDataType::Mat4 },
-					{ ShaderDataType::Mat4 },
-					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Mat4 },				// Camera view matrix
+					{ ShaderDataType::Mat4 },				// Camera projection matrix
+					{ ShaderDataType::Float3 },				// Camera position
 				}
 			});
 
 		s_data.dirLightUniformBuffer = UniformBuffer::Create(1, {
 				BufferLayoutType::Std140,
 				{
-					{ ShaderDataType::Float3 },
-					{ ShaderDataType::Float3 },
-					{ ShaderDataType::Float3 },
-					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },				// Directional light direction
+					{ ShaderDataType::Float3 },				// Directional light ambient
+					{ ShaderDataType::Float3 },				// Directional light diffuse
+					{ ShaderDataType::Float3 },				// Directional light specular
 				}
 			});
 
 		s_data.pointLightUniformBuffer = UniformBuffer::Create(2, {
 				BufferLayoutType::Std140,
 				{
-					{ ShaderDataType::Float3 },
-					{ ShaderDataType::Float },
-					{ ShaderDataType::Float },
-					{ ShaderDataType::Float },
-					{ ShaderDataType::Float3 },
-					{ ShaderDataType::Float3 },
-					{ ShaderDataType::Float3 },
+					{ ShaderDataType::Float3 },				// Point light position
+					{ ShaderDataType::Float },				// Point light constant
+					{ ShaderDataType::Float },				// Point light linear
+					{ ShaderDataType::Float },				// Point light quadratic
+					{ ShaderDataType::Float3 },				// Point light ambient
+					{ ShaderDataType::Float3 },				// Point light diffuse
+					{ ShaderDataType::Float3 },				// Point light specular
 				}
 			});
 

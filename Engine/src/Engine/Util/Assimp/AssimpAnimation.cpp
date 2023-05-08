@@ -12,10 +12,15 @@ namespace Engine
 			m_ticksPerSecond((float)animation->mTicksPerSecond),
 			m_rootNode(rootNode)
 	{
-		m_boneTransforms.reserve(100);
-		for (uint32_t i = 0; i < 100; i++)
+		m_boneTransforms.reserve(200);
+		for (uint32_t i = 0; i < 200; i++)
 		{
 			m_boneTransforms.push_back(glm::mat4(1.0f));
 		}
+	}
+
+	void AssimpAnimation::UpdateBoneTransforms(uint32_t boneId, glm::mat4 updatedTransform)
+	{
+		m_boneTransforms[boneId] = updatedTransform;
 	}
 }

@@ -15,7 +15,8 @@ namespace Engine
 		virtual const float GetTicketPerSecond() const override { return m_ticksPerSecond; }
 		virtual const Ptr<Node> GetRootNode() const { return m_rootNode; }
 		virtual std::vector<glm::mat4> GetBoneTransforms() const override { return m_boneTransforms; };
-		virtual void UpdateBoneTransforms(uint32_t boneId, glm::mat4 updatedTransform) override { m_boneTransforms[boneId] = updatedTransform; };
+
+		virtual void UpdateBoneTransforms(uint32_t boneId, glm::mat4 updatedTransform) override;
 	private:
 		const std::string m_name;
 		Ptr<float> m_animationTime;

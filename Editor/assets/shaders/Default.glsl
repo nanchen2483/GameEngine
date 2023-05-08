@@ -13,7 +13,7 @@ layout (location = 8) in vec4 aWeights;
 layout (location = 9) in int aIsWorldPos;
 layout (location = 10) in int aEntityId;
 
-const int MAX_BONES = 100;
+const int MAX_BONES = 200;
 const int MAX_BONE_INFLUENCE = 4;
 
 layout (std140, binding = 0) uniform CameraBlock
