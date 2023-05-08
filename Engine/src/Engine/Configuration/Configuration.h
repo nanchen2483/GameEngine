@@ -5,12 +5,11 @@ namespace Engine
 	class Configuration
 	{
 	public:
-		bool ShowBoundingBox() { return m_showBoundingBox; }
-		void SetShowBoundingBox(bool show);
-
-		static Configuration* GetInstance();
+		static bool ShowBoundingBox() { return GetInstance().m_showBoundingBox; }
+		static void SetShowBoundingBox(bool show);
 	private:
+		static Configuration& GetInstance();
+
 		bool m_showBoundingBox = false;
-		static Configuration* s_instance;
 	};
 }
