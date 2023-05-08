@@ -4,7 +4,7 @@ Entities:
     TagComponent:
       Tag: Cube-model 3
     TransformComponent:
-      Translation: [-19.0000019, 11.5999928, -83.3599396]
+      Translation: [-19.0000019, 11.6899996, -83.3599396]
       Rotation: [0, 0, 0]
       Scale: [5, 5, 5]
     MeshComponent:
@@ -18,7 +18,7 @@ Entities:
     TagComponent:
       Tag: Cube-model 2
     TransformComponent:
-      Translation: [-12.4000015, 3.799999, -49.9799728]
+      Translation: [-12.4000015, 7.78999996, -49.9799728]
       Rotation: [0, 0, 0]
       Scale: [5, 5, 5]
     MeshComponent:
@@ -32,7 +32,7 @@ Entities:
     TagComponent:
       Tag: Cube-model 1
     TransformComponent:
-      Translation: [-8.79999733, 9.79999352, -31.0399818]
+      Translation: [-8.79999733, 14.8900003, -31.0399818]
       Rotation: [0, 0, 0]
       Scale: [5, 5, 5]
     MeshComponent:
@@ -60,7 +60,7 @@ Entities:
     TagComponent:
       Tag: Backpack-model
     TransformComponent:
-      Translation: [-3.99998689, 1.50000179, -14.5371828]
+      Translation: [3.9000001, 3.79999995, -2.44000006]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
@@ -92,7 +92,7 @@ Entities:
     TagComponent:
       Tag: Camera entity
     TransformComponent:
-      Translation: [0, 0, 0]
+      Translation: [0, 5.69999981, 13]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
@@ -106,6 +106,9 @@ Entities:
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: false
+    MeshComponent:
+      Path: assets\models\cube\cube.obj
+      IsPlayer: true
   - Entity: 3
     TagComponent:
       Tag: Second camera entity
@@ -128,21 +131,25 @@ Entities:
     TagComponent:
       Tag: Floor
     TransformComponent:
-      Translation: [0, -0.600000024, 4.04193997e-06]
+      Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
-      Scale: [500, 1, 500]
-    SpriteRendererComponent:
-      Color: [0.813725471, 0.813717306, 0.813717306, 1]
-      TextureFilePath: assets\textures\blocks.png
+      Scale: [1000, 1, 1000]
+    MeshComponent:
+      Path: assets\models\cube\cube.obj
+      IsPlayer: false
+    PhysicsComponent:
+      Mass: 1
+      Restitution: 0
+      IsStatic: true
   - Entity: 1
     TagComponent:
-      Tag: Vampire-model
+      Tag: Lotus
     TransformComponent:
-      Translation: [5.99998665, 1.28149986e-05, 135.117065]
+      Translation: [-10.6999998, 0, 0]
       Rotation: [0, 0, 0]
-      Scale: [4.36239958, 4.36239958, 4.36239958]
+      Scale: [0.00999999978, 0.00999999978, 0.00999999978]
     MeshComponent:
-      Path: assets\models\vampire\dancing_vampire.dae
+      Path: assets\models\lotus-lord-of-the-luscious-woods\endboss_JefVanLoon_FIN.fbx
       IsPlayer: false
     AnimationComponent:
       IsEnabled: true
@@ -155,13 +162,13 @@ Entities:
     TagComponent:
       Tag: Light
     TransformComponent:
-      Translation: [3.5, 10.3999996, 0]
+      Translation: [3.5, 23.1000004, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     LightComponent:
       Constant: 1
       Linear: 0.100000001
-      Quadratic: 0.0299999993
-      Ambient: [1, 1, 1]
+      Quadratic: 0.0199999996
+      Ambient: [5, 5, 5]
       Diffuse: [1, 1, 1]
       Specular: [1, 1, 1]
