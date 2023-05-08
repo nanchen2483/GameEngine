@@ -85,7 +85,7 @@ namespace Engine
 
 	void Scene::Debug()
 	{
-		if (Configuration::GetInstance()->ShowBoundingBox())
+		if (Configuration::ShowBoundingBox())
 		{
 			PhysicsSystem::DrawBoudingBox(m_registry);
 		}

@@ -112,11 +112,11 @@ namespace Engine
 
 		if (m_showBoundingBox)
 		{
-			Configuration::GetInstance()->SetShowBoundingBox(true);
+			Configuration::SetShowBoundingBox(true);
 		}
 		else
 		{
-			Configuration::GetInstance()->SetShowBoundingBox(false);
+			Configuration::SetShowBoundingBox(false);
 		}
 
 		m_hierachyPanel->OnImGuiRender();
