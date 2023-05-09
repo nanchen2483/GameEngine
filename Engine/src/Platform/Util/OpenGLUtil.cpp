@@ -67,51 +67,51 @@ namespace Engine
 		TextureFormat format;
 		switch (type)
 		{
-		case Engine::TextureFormatType::RED:
+		case TextureFormatType::RED:
 			format.internalFormat = GL_RED;
 			format.dataFormat = GL_RED;
 			break;
-		case Engine::TextureFormatType::R16:
+		case TextureFormatType::R16:
 			format.internalFormat = GL_R16F;
 			format.dataFormat = GL_RED;
 			break;
-		case Engine::TextureFormatType::R32:
+		case TextureFormatType::R32:
 			format.internalFormat = GL_R32F;
 			format.dataFormat = GL_RED;
 			break;
-		case Engine::TextureFormatType::RG8:
+		case TextureFormatType::RG8:
 			format.internalFormat = GL_RG8;
 			format.dataFormat = GL_RG;
 			break;
-		case Engine::TextureFormatType::RG16:
+		case TextureFormatType::RG16:
 			format.internalFormat = GL_RG16F;
 			format.dataFormat = GL_RG;
 			break;
-		case Engine::TextureFormatType::RG32:
+		case TextureFormatType::RG32:
 			format.internalFormat = GL_RG32F;
 			format.dataFormat = GL_RG;
 			break;
-		case Engine::TextureFormatType::RGB8:
+		case TextureFormatType::RGB8:
 			format.internalFormat = GL_RGB8;
 			format.dataFormat = GL_RGB;
 			break;
-		case Engine::TextureFormatType::RGB16:
+		case TextureFormatType::RGB16:
 			format.internalFormat = GL_RGB16F;
 			format.dataFormat = GL_RGB;
 			break;
-		case Engine::TextureFormatType::RGB32:
+		case TextureFormatType::RGB32:
 			format.internalFormat = GL_RGB32F;
 			format.dataFormat = GL_RGB;
 			break;
-		case Engine::TextureFormatType::RGBA8:
+		case TextureFormatType::RGBA8:
 			format.internalFormat = GL_RGBA8;
 			format.dataFormat = GL_RGBA;
 			break;
-		case Engine::TextureFormatType::RGBA16:
+		case TextureFormatType::RGBA16:
 			format.internalFormat = GL_RGBA16F;
 			format.dataFormat = GL_RGBA;
 			break;
-		case Engine::TextureFormatType::RGBA32:
+		case TextureFormatType::RGBA32:
 			format.internalFormat = GL_RGBA32F;
 			format.dataFormat = GL_RGBA;
 			break;

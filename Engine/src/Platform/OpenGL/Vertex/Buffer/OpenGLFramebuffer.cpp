@@ -9,28 +9,24 @@ namespace Engine
 {
 	static const uint32_t MAX_FAMEBUFFER_SIZE = 8192;
 
-	namespace Utils {
-
-		static GLenum TextureTarget(bool multisampled, bool isTextureArray)
+	namespace Utils
+	{
+		constexpr GLenum TextureTarget(bool multisampled, bool isTextureArray)
 		{
-			if (multisampled)
-			{
-				return isTextureArray ? GL_TEXTURE_2D_MULTISAMPLE_ARRAY : GL_TEXTURE_2D_MULTISAMPLE;
-			}
-			else
-			{
-				return isTextureArray ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
-			}
+			return multisampled ? (isTextureArray ? GL_TEXTURE_2D_MULTISAMPLE_ARRAY : GL_TEXTURE_2D_MULTISAMPLE)
+								: (isTextureArray ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D);
 		}
 
 		static void CreateTextures(bool multisampled, bool isTextureArray, uint32_t* outId, uint32_t count)
 		{
-			glCreateTextures(TextureTarget(multisampled, isTextureArray), count, outId);
+			GLenum textureTarget = TextureTarget(multisampled, isTextureArray);
+			glCreateTextures(textureTarget, count, outId);
 		}
 
 		static void BindTexture(bool multisampled, bool isTextureArray, uint32_t id)
 		{
-			glBindTexture(TextureTarget(multisampled, isTextureArray), id);
+			GLenum textureTarget = TextureTarget(multisampled, isTextureArray);
+			glBindTexture(textureTarget, id);
 		}
 
 		static void AttachColorTexture(uint32_t id, int samples, int arraysize, GLenum internalFormat, GLenum format, uint32_t width, uint32_t height, int index)
@@ -126,13 +122,17 @@ namespace Engine
 		{
 			switch (format)
 			{
-			case Engine::FramebufferTextureFormat::RGBA8: return GL_RGBA8;
-			case Engine::FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
-			case Engine::FramebufferTextureFormat::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
+			case FramebufferTextureFormat::RGBA8:
+				return GL_RGBA8;
+			case FramebufferTextureFormat::RED_INTEGER:
+				return GL_RED_INTEGER;
+			case FramebufferTextureFormat::DEPTH24STENCIL8:
+				return GL_DEPTH24_STENCIL8;
+			default:
+				ENGINE_CORE_ASSERT(false, "Invalid framebuffer texture format");
+				return -1;
 			}
 			
-			ENGINE_CORE_ASSERT(false, "Invalid framebuffer texture format");
-			return -1;
 		}
 	}
 
