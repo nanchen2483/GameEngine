@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	struct TerrainComponent : public IComponent
+	struct ENGINE_API TerrainComponent : public IComponent
 	{
 		Ptr<Terrain> terrain = nullptr;
 		Ptr<Texture2D> texture = nullptr;

@@ -16,7 +16,7 @@ namespace Engine
 		uint32_t channels;
 	};
 
-	class Texture : public IUniqueObject
+	class ENGINE_API Texture : public IUniqueObject
 	{
 	public:
 		virtual ~Texture() = default;
@@ -30,7 +30,7 @@ namespace Engine
 		virtual bool operator==(const Texture& other) const = 0;
 	};
 
-	class Texture2D : public Texture
+	class ENGINE_API Texture2D : public Texture
 	{
 	public:
 		virtual std::string GetFilePath() const = 0;
@@ -46,7 +46,7 @@ namespace Engine
 		friend class TextureLibrary;
 	};
 
-	class Texture3D : public Texture
+	class ENGINE_API Texture3D : public Texture
 	{
 	public:
 		virtual std::string GetFilePath(TextureOrientationType type) const = 0;

@@ -1,7 +1,9 @@
 #pragma once
+#include "Engine/Core/Base.h"
+
 namespace Engine
 {
-	struct IComponent
+	struct ENGINE_API IComponent
 	{
 	};
 }

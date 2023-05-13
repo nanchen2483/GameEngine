@@ -1,16 +1,19 @@
 #pragma once
+#include "Engine/Core/Base.h"
+
 #include <glm/glm.hpp>
 
 namespace Engine
 {
-	namespace Math
+	class ENGINE_API Math
 	{
-		bool DecomposeTransform(const glm::mat4 transform, glm::vec3& outTranslation, glm::vec3& outRotation, glm::vec3& outScale);
+	public:
+		static bool DecomposeTransform(const glm::mat4 transform, glm::vec3& outTranslation, glm::vec3& outRotation, glm::vec3& outScale);
 
 		template <typename T>
-		int Sign(T value)
+		static int32_t Sign(T value)
 		{
 			return (T(0) < value) - (value < T(0));
 		}
-	}
+	};
 }

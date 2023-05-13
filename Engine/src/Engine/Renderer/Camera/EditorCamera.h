@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	class EditorCamera : public Camera
+	class ENGINE_API EditorCamera : public Camera
 	{
 	public:
 		EditorCamera();

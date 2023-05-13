@@ -4,9 +4,10 @@
 #define GLM_ENABLE_EXPREIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 
-namespace Engine::Math {
+namespace Engine
+{
 	// Copy from glm::decompose in matrix_decompose.ini
-    bool DecomposeTransform(const glm::mat4 transform, glm::vec3& outTranslation, glm::vec3& outRotation, glm::vec3& outScale)
+    bool Math::DecomposeTransform(const glm::mat4 transform, glm::vec3& outTranslation, glm::vec3& outRotation, glm::vec3& outScale)
     {
 		using namespace glm;
 		using T = float;

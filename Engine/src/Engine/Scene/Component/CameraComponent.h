@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	struct CameraComponent : public IComponent
+	struct ENGINE_API CameraComponent : public IComponent
 	{
 		bool primary = false;
 		bool fixedAspectRatio = false;

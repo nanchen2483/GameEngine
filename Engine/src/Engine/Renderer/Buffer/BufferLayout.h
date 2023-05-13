@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	class BufferLayout
+	class ENGINE_API BufferLayout
 	{
 	public:
 		BufferLayout() = default;

@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	class ShadowDebug
+	class ENGINE_API ShadowDebug
 	{
 	public:
 		ShadowDebug();

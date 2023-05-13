@@ -1,35 +1,21 @@
 #pragma once
+#include "Engine/Core/Base.h"
+
 #include <chrono>
-#include <cstdint>
 
 namespace Engine
 {
-	class FPSCalculator
+	class ENGINE_API FPSCalculator
 	{
 	public:
-		void Update()
-		{
-			m_currentTime = std::chrono::system_clock::now();
-			m_frameCount++;
-			std::chrono::duration<double> elapsedSeconds = m_currentTime - m_previousTime;
-			if (elapsedSeconds.count() >= 1.0f)
-			{
-				m_FPS = (float)m_frameCount / (float)elapsedSeconds.count();
-				m_frameCount = 0;
-				m_previousTime = m_currentTime;
-			}
-		}
+		FPSCalculator();
 
-		float GetFPS()
-		{
-			return m_FPS;
-		}
-
+		void Update();
+		float GetFPS() const { return m_FPS; }
 	private:
-		std::chrono::system_clock::time_point m_previousTime = std::chrono::system_clock::now();
+		float m_FPS;
+		uint32_t m_frameCount;
+		std::chrono::system_clock::time_point m_previousTime;
 		std::chrono::system_clock::time_point m_currentTime;
-		uint32_t m_frameCount = 0;
-
-		float m_FPS = 0;
 	};
 }

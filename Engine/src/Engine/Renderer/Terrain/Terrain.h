@@ -11,7 +11,7 @@ namespace Engine
 		Quadtree = 2,
 	};
 
-	class Terrain
+	class ENGINE_API Terrain
 	{
 	public:
 		virtual std::string GetFilePath() const = 0;

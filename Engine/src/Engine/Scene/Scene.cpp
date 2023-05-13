@@ -25,7 +25,6 @@ namespace Engine
 	Scene::Scene(const Ptr<Framebuffer>& framebuffer)
 		: m_framebuffer(framebuffer)
 	{
-		m_serializer = CreateUniq<SceneSerializer>(this);
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -205,21 +204,21 @@ namespace Engine
 
 	void Scene::Serialize(const std::string& filepath)
 	{
-		m_serializer->Serialize(filepath);
+		SceneSerializer::Serialize(this, filepath);
 	}
 
 	void Scene::SerializeRuntime(const std::string& filepath)
 	{
-		m_serializer->SerializeRuntime(filepath);
+		SceneSerializer::SerializeRuntime(this, filepath);
 	}
 
 	void Scene::Deserialize(const std::string& filepath)
 	{
-		m_serializer->Deserialize(filepath);
+		SceneSerializer::Deserialize(this, filepath);
 	}
 
 	void Scene::DeserializeRuntime(const std::string& filepath)
 	{
-		m_serializer->DeserializeRuntime(filepath);
+		SceneSerializer::DeserializeRuntime(this, filepath);
 	}
 }

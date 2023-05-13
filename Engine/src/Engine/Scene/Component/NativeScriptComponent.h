@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	struct NativeScriptComponent : public IComponent
+	struct ENGINE_API NativeScriptComponent : public IComponent
 	{
 		ScriptableEntity* instance = nullptr;
 

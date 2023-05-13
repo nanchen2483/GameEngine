@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class Image
+	class ENGINE_API Image
 	{
 	public:
 		Image(const std::string& filePath);

@@ -12,6 +12,7 @@
 
 // File
 #include "Engine/File/File.h"
+#include "Engine/File/FileExtension.h"
 #include "Engine/File/FileType.h"
 
 // Debug
@@ -21,14 +22,11 @@
 // Renderer
 #include "Engine/Renderer/Buffer/Framebuffer.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
-#include "Engine/Renderer/Camera/OrthographicCamera.h"
-#include "Engine/Renderer/Camera/OrthographicCameraController.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 // Scene
 #include "Engine/Scene/Entity/Entity.h"
 #include "Engine/Scene/Scene.h"
-#include "Engine/Scene/SceneSerializer.h"
 
 // Component
 #include "Engine/Scene/Component/AnimationComponent.h"

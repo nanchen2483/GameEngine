@@ -1,5 +1,4 @@
 #pragma once
-#include "Component/IComponent.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/Buffer/Framebuffer.h"
 
@@ -10,7 +9,7 @@ namespace Engine
 	class Entity;
 	class SceneSerializer;
 
-	class Scene
+	class ENGINE_API Scene
 	{
 	public:
 		Scene(const Ptr<Framebuffer>& framebuffer);
@@ -37,7 +36,6 @@ namespace Engine
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
 		Ptr<Framebuffer> m_framebuffer;
-		Uniq<SceneSerializer> m_serializer;
 
 		friend class Entity;
 		friend class SceneSerializer;
