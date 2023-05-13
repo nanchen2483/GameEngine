@@ -39,7 +39,7 @@ namespace Engine
 		{
 			const glm::dvec3 newSupportPoint = CreateNewSupportPoint();
 			GJK3DStatus status = m_deltahedron->ExpandWithNewPoint(newSupportPoint);
-			if (status == GJK3DStatus::FINISHED)
+			if (status == GJK3DStatus::Finished)
 			{
 				const double& distance = m_deltahedron->GetClosestDistanceToOrigin();
 				if (distance < 0.0)
@@ -58,7 +58,7 @@ namespace Engine
 				break;
 			}
 
-			if (status == NOT_OVERLAP)
+			if (status == GJK3DStatus::NotOverlap)
 			{
 				break;
 			}

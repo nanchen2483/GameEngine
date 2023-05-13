@@ -25,12 +25,22 @@ namespace Engine
 		fbSpec.attachments = FramebufferAttachmentSpecification(
 			{
 				FramebufferTextureFormat::RGBA8, // Main framebuffer
-				FramebufferTextureFormat::RED_INTEGER, // EntityId
-				FramebufferTextureFormat::DEPTH24STENCIL8
+				FramebufferTextureFormat::RedInteger, // EntityId
+				FramebufferTextureFormat::Depth24Stencil8
 			});
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
 		m_framebuffer = Framebuffer::Create(fbSpec);
+
+		FramebufferSpecification fbSpec2;
+		fbSpec2.attachments = FramebufferAttachmentSpecification(
+			{
+				FramebufferTextureFormat::RGBA8,
+				FramebufferTextureFormat::RGBA8,
+			});
+		fbSpec2.width = 1280;
+		fbSpec2.height = 720;
+		auto framebuffer = Framebuffer::Create(fbSpec2);
 
 		// Entity
 		m_activeScene = CreatePtr<Scene>(m_framebuffer);
@@ -189,7 +199,7 @@ namespace Engine
 							glm::mat4 transformMatrix = transform;
 
 							// Snapping
-							bool snap = Input::IsKeyPressed(KeyCode::LEFT_CONTROL);
+							bool snap = Input::IsKeyPressed(KeyCode::LeftControl);
 							float snapValue = 0.5f; // 0.5 meter for translation/scale
 							if (m_guizmoType == ImGuizmo::OPERATION::ROTATE)
 							{
@@ -245,8 +255,8 @@ namespace Engine
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& event)
 	{
-		bool control = Input::IsKeyPressed(KeyCode::LEFT_CONTROL) || Input::IsKeyPressed(KeyCode::RIGHT_CONTROL);
-		bool shift = Input::IsKeyPressed(KeyCode::LEFT_SHIFT) || Input::IsKeyPressed(KeyCode::RIGHT_SHIFT);
+		bool control = Input::IsKeyPressed(KeyCode::LeftControl) || Input::IsKeyPressed(KeyCode::RightControl);
+		bool shift = Input::IsKeyPressed(KeyCode::LeftShift) || Input::IsKeyPressed(KeyCode::RightShift);
 		bool inEditMode = m_toolbar.OnEditMode();
 		bool manipulatable = !m_editorCamera.InUse() && inEditMode;
 		if (manipulatable)
@@ -305,7 +315,7 @@ namespace Engine
 				m_editorCamera.UpdateFocusPoint(transform);
 			}
 			break;
-		case KeyCode::ESCAPE:
+		case KeyCode::Escape:
 			if (m_toolbar.OnPlayMode())
 			{
 				Input::ShowCursor();
@@ -320,9 +330,9 @@ namespace Engine
 
 	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& event) 
 	{
-		if (event.GetMouseButton() == MouseButton::LEFT_BUTTON)
+		if (event.GetMouseButton() == MouseButton::LeftButton)
 		{
-			if (m_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(KeyCode::LEFT_ALT))
+			if (m_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(KeyCode::LeftAlt))
 			{
 				m_menubar.GetHierarchy()->SetSelectedEntity(m_hoveredEntity);
 			}

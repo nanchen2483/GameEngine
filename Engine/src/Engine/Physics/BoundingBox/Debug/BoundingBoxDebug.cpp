@@ -27,7 +27,7 @@ namespace Engine
 			glm::scale(glm::mat4(1.0f), transform.scale * boundingValue.extents);
 
 		PolygonMode currentMode = RendererCommand::GetPolygonMode();
-		RendererCommand::SetPolygonMode(PolygonMode::LINE);
+		RendererCommand::SetPolygonMode(PolygonMode::Line);
 		m_shader->Bind();
 		m_shader->SetMat4("uModel", model);
 		m_vertexArray->Bind();

@@ -11,7 +11,7 @@ namespace EngineTest
 
 		CollisionTest()
 		{
-			collision = Engine::Collision::Create(Engine::CollisionType::GJK_EPA_3D);
+			collision = Engine::Collision::Create(Engine::CollisionType::GjkEpa3D);
 			boudingBox = Engine::BoundingBox::Create(Engine::BoundingBoxType::AABB, glm::vec3(-0.5), glm::vec3(0.5));
 		}
 	};

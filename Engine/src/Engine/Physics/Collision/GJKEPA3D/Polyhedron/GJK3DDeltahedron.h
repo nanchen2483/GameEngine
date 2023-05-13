@@ -4,11 +4,11 @@
 
 namespace Engine
 {
-	enum GJK3DStatus
+	enum class GJK3DStatus
 	{
-		FINISHED = 1,
-		NOT_FINISHED = 2,
-		NOT_OVERLAP = 3,
+		Finished = 1,
+		NotFinished = 2,
+		NotOverlap = 3,
 	};
 
 	class GJK3DDeltahedron

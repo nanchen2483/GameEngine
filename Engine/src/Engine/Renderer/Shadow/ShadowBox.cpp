@@ -19,7 +19,7 @@ namespace Engine
 		m_shader = ShaderLibrary::Load("assets/shaders/Shadow.glsl");
 		
 		FramebufferSpecification fbSpec;
-		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::DEPTH_ARRAY });
+		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::DepthArray });
 		fbSpec.width = m_depthMapResolution;
 		fbSpec.height = m_depthMapResolution;
 		fbSpec.arraySize = m_shadowInfo.levels.size();
@@ -42,7 +42,7 @@ namespace Engine
 		m_shader->Bind();
 		m_framebuffer->Bind();
 		RendererCommand::Clear();
-		RendererCommand::CullFace(FaceCulling::BACK);
+		RendererCommand::CullFace(FaceCulling::Back);
 	}
 
 	void ShadowBox::Ubind()

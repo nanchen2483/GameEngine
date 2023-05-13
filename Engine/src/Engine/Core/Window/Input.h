@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/Core/Base.h"
+#include "Engine/Core/Enum/KeyCodes.h"
+#include "Engine/Core/Enum/MouseButtonCodes.h"
 
 #include <utility>
 
@@ -8,8 +10,8 @@ namespace Engine
 	class ENGINE_API Input
 	{
 	public:
-		static bool IsKeyPressed(int keycode);
-		static bool IsMouseButtonPressed(int button);
+		static bool IsKeyPressed(KeyCode keycode);
+		static bool IsMouseButtonPressed(MouseButton button);
 		static std::pair<float, float> GetMousePosition();
 		
 		static float GetMouseX();

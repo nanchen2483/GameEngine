@@ -6,7 +6,7 @@ namespace Engine
 {
 	enum class CollisionType
 	{
-		GJK_EPA_3D = 1,
+		GjkEpa3D = 1,
 	};
 
 	struct ShapeInfo

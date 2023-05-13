@@ -52,14 +52,14 @@ namespace Engine
 	{
 		if (!IsValidSupportPoint(newPoint))
 		{
-			return GJK3DStatus::FINISHED;
+			return GJK3DStatus::Finished;
 		}
 
 		AddSupportPoint(newPoint);
 		const Ptr<GJK3DTriangle>& expandTriangle = GetTriangleToBeExpanded(newPoint);
 		if (expandTriangle == nullptr)
 		{
-			return GJK3DStatus::FINISHED;
+			return GJK3DStatus::Finished;
 		}
 
 		ExpandWithNewPoint(newPoint, expandTriangle);
@@ -253,7 +253,7 @@ namespace Engine
 
 			if (foundTriangleIndex == -1)
 			{
-				return GJK3DStatus::NOT_OVERLAP;
+				return GJK3DStatus::NotOverlap;
 			}
 
 			const Ptr<GJK3DTriangle> foundTriangle = m_expandedTriangles[foundTriangleIndex].lock();
@@ -267,6 +267,6 @@ namespace Engine
 		firstTriangle->SetLeftTriangle(lastTriangle);
 		lastTriangle->SetBottomTriangle(firstTriangle);
 
-		return GJK3DStatus::NOT_FINISHED;
+		return GJK3DStatus::NotFinished;
 	}
 }

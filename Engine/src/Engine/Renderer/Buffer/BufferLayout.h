@@ -8,7 +8,6 @@ namespace Engine
 	{
 	public:
 		BufferLayout() = default;
-
 		BufferLayout(const std::initializer_list<BufferElement>& elements)
 			: BufferLayout(BufferLayoutType::Default, elements)
 		{

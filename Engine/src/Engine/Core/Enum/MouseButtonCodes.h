@@ -13,9 +13,9 @@ namespace Engine
 		B6 = 5,
 		B7 = 6,
 		B8 = 7,
-		LAST_BUTTON = B8,
-		LEFT_BUTTON = B1,
-		RIGHT_BUTTON = B2,
-		MIDDLE_BUTTON = B3,
+		LastButton = B8,
+		LeftButton = B1,
+		RightButton = B2,
+		MiddleButton = B3,
 	};
 }
