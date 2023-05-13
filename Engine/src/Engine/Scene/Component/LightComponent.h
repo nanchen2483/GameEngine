@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	struct LightComponent : public IComponent
+	struct ENGINE_API LightComponent : public IComponent
 	{
 		float constant = 1.0f;
 		float linear = 0.1f;

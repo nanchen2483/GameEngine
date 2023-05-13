@@ -20,11 +20,6 @@
 
 namespace Engine
 {
-	SceneSerializer::SceneSerializer(Scene* scene)
-		: m_scene(scene)
-	{
-	}
-
 	void static SerializeEntity(YAML::Emitter& out, const Entity& entity)
 	{
 		out << YAML::BeginMap;
@@ -184,15 +179,15 @@ namespace Engine
 		out << YAML::EndMap;
 	}
 	
-	void SceneSerializer::Serialize(const std::string& filepath)
+	void SceneSerializer::Serialize(Scene* scene, const std::string& filepath)
 	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
-		m_scene->m_registry.each([&](entt::entity entityId)
+		scene->m_registry.each([&](entt::entity entityId)
 			{
-				Entity entity = { entityId, m_scene };
+				Entity entity = { entityId, scene };
 				if (!entity)
 				{
 					return;
@@ -208,12 +203,12 @@ namespace Engine
 		fout.close();
 	}
 
-	void SceneSerializer::SerializeRuntime(const std::string& filepath)
+	void SceneSerializer::SerializeRuntime(Scene* scene, const std::string& filepath)
 	{
 		ENGINE_CORE_ASSERT("Not implemented", false);
 	}
 	
-	bool SceneSerializer::Deserialize(const std::string& filepath)
+	bool SceneSerializer::Deserialize(Scene* scene, const std::string& filepath)
 	{
 		std::ifstream stream(filepath);
 		std::stringstream strStream;
@@ -244,7 +239,7 @@ namespace Engine
 
 				ENGINE_CORE_ASSERT("Deserialized entity with id = {0} and name = {1}", uuid, name);
 
-				Entity deserializedEntity = m_scene->CreateEntity(name);
+				Entity deserializedEntity = scene->CreateEntity(name);
 
 				YAML::Node transformComponent = entity["TransformComponent"];
 				if (transformComponent)
@@ -363,7 +358,7 @@ namespace Engine
 		return true;
 	}
 
-	bool SceneSerializer::DeserializeRuntime(const std::string& filepath)
+	bool SceneSerializer::DeserializeRuntime(Scene* scene, const std::string& filepath)
 	{
 		ENGINE_CORE_ASSERT("Not implemented", false);
 		return false;

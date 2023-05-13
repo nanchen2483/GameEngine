@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	class TextureLibrary : public ILibrary<Texture2D>
+	class ENGINE_API TextureLibrary : public ILibrary<Texture2D>
 	{
 	public:
 		static Ptr<Texture2D> Load(const std::filesystem::path& filePath);

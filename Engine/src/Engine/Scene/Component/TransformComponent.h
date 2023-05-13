@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	struct TransformComponent : public IComponent
+	struct ENGINE_API TransformComponent : public IComponent
 	{
 		Transform transform;
 

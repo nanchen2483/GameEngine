@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	struct SkyboxComponent : public IComponent
+	struct ENGINE_API SkyboxComponent : public IComponent
 	{
 		Ptr<Skybox> skybox = nullptr;
 		// Editor-only

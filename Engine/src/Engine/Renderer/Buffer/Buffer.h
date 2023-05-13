@@ -35,7 +35,7 @@ namespace Engine
 		static Ptr<IndexBuffer> Create(uint32_t* indices, uint32_t numOfIndices);
 	};
 
-	class UniformBuffer
+	class ENGINE_API UniformBuffer
 	{
 	public:
 		virtual ~UniformBuffer() {}

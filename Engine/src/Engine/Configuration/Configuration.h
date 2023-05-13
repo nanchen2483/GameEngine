@@ -1,8 +1,9 @@
 #pragma once
+#include "Engine/Core/Base.h"
 
 namespace Engine
 {
-	class Configuration
+	class ENGINE_API Configuration
 	{
 	public:
 		static bool ShowBoundingBox() { return GetInstance().m_showBoundingBox; }

@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	class ShaderLibrary : public ILibrary<Shader>
+	class ENGINE_API ShaderLibrary : public ILibrary<Shader>
 	{
 	public:
 		static Ptr<Shader> Load(const std::filesystem::path& filePath);

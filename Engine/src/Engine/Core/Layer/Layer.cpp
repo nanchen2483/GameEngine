@@ -3,8 +3,8 @@
 
 namespace Engine
 {
-	Layer::Layer(const std::string& debugName)
-		: m_debugName(debugName)
+	Layer::Layer(const std::string& name)
+		: m_name(name)
 	{
 	}
 

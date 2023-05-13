@@ -7,19 +7,18 @@ namespace Engine
 	class ENGINE_API Layer
 	{
 	public:
-		Layer(const std::string& debugName = "Layer");
+		Layer(const std::string& name = "Layer");
 		virtual ~Layer();
 
-		virtual void OnAttach() {}
-		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
-		virtual void OnImGuiRender() {}
-		virtual void OnEvent(Event& event) {}
+		virtual void OnAttach() = 0;
+		virtual void OnDetach() = 0;
+		virtual void OnUpdate() = 0;
+		virtual void OnImGuiRender() = 0;
+		virtual void OnEvent(Event& event) = 0;
 
-		inline const std::string& GetName() const { return m_debugName; }
-
+		inline const std::string& GetName() const { return m_name; }
 	protected:
-		std::string m_debugName;
+		std::string m_name;
 	};
 }
 

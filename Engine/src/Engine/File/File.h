@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class File
+	class ENGINE_API File
 	{
 	public:
 		static std::string GetFileType(std::filesystem::path file);

@@ -6,14 +6,10 @@ namespace Engine
 	class SceneSerializer
 	{
 	public:
-		SceneSerializer(Scene* scene);
+		static void Serialize(Scene* scene, const std::string& filepath);
+		static void SerializeRuntime(Scene* scene, const std::string& filepath);
 
-		void Serialize(const std::string& filepath);
-		void SerializeRuntime(const std::string& filepath);
-
-		bool Deserialize(const std::string& filepath);
-		bool DeserializeRuntime(const std::string& filepath);
-	private:
-		Scene* m_scene;
+		static bool Deserialize(Scene* scene, const std::string& filepath);
+		static bool DeserializeRuntime(Scene* scene, const std::string& filepath);
 	};
 }

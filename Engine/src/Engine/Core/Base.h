@@ -3,13 +3,20 @@
 
 #ifdef ENGINE_PLATFORM_WINDOWS
 	#if ENGINE_DYNAMIC_LINK
-		#ifdef ENGINE_BUILD_DLL	
+		#ifdef ENGINE_BUILD_DLL
 			#define ENGINE_API __declspec(dllexport)
+			#define ENGINE_TEST_API __declspec(dllexport)
 		#else
 			#define ENGINE_API __declspec(dllimport)
+			#ifdef ENGINE_TEST_DLL
+				#define ENGINE_TEST_API __declspec(dllimport)
+			#else
+				#define ENGINE_TEST_API
+			#endif // ENGINE_TEST_DLL
 		#endif // ENGINE_BUILD_DLL
 	#else
 		#define ENGINE_API
+		#define ENGINE_TEST_API
 	#endif // ENGINE_DYNAMIC_LINK
 #else
 	#error Engine only support windows

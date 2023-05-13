@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/Core/System/Object/IComparable.h"
 #include "Engine/Scene/Component/IComponent.h"
+#include "Engine/Scene/Component/CameraComponent.h"
 #include "Engine/Scene/Scene.h"
 
 #include <entt/entt.hpp>
@@ -8,7 +9,7 @@
 
 namespace Engine
 {
-	class Entity : public IComparable<Entity>
+	class ENGINE_API Entity : public IComparable<Entity>
 	{
 	public:
 		Entity();
@@ -64,7 +65,13 @@ namespace Engine
 		virtual bool operator>=(const Entity& other) const override;
 	private:
 		template<typename T, typename std::enable_if_t<std::is_base_of_v<IComponent, T>>* = nullptr>
-		void OnComponentAdded(T& component);
+		void OnComponentAdded(T& component)
+		{
+			if constexpr (std::is_same_v<T, CameraComponent>)
+			{
+				component.camera.SetViewportSize(m_scene->m_viewportWidth, m_scene->m_viewportHeight);
+			}
+		}
 
 		entt::entity m_entityHandle;
 		Scene* m_scene;

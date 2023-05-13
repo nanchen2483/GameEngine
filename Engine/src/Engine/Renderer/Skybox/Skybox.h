@@ -8,7 +8,7 @@
 
 namespace Engine
 {
-	class Skybox
+	class ENGINE_API Skybox
 	{
 	public:
 		Skybox(const std::vector<Ptr<Image>> faces);

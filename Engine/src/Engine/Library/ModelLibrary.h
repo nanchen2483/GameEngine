@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	class ModelLibrary : public ILibrary<Model>
+	class ENGINE_API ModelLibrary : public ILibrary<Model>
 	{
 	public:
 		static Ptr<Model> Load(const std::filesystem::path& filePath);

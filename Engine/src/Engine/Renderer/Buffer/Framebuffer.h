@@ -43,7 +43,7 @@ namespace Engine
 		bool swapChainTarget = false;
 	};
 
-	class Framebuffer
+	class ENGINE_API Framebuffer
 	{
 	public:
 		virtual ~Framebuffer() = default;

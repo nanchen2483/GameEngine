@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	struct AnimationComponent : public IComponent
+	struct ENGINE_API AnimationComponent : public IComponent
 	{
 		bool isEnabled = false;
 		uint32_t selectedAnimationIndex = 0;

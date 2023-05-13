@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	struct MeshComponent : public IComponent
+	struct ENGINE_API MeshComponent : public IComponent
 	{
 		bool isLoading = false;
 		bool isPlayer = false;
