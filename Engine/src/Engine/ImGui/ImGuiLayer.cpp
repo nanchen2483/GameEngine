@@ -74,6 +74,14 @@ namespace Engine
 		ImGui::DestroyContext();
 	}
 
+	void ImGuiLayer::OnUpdate()
+	{
+	}
+
+	void ImGuiLayer::OnImGuiRender()
+	{
+	}
+
 	void ImGuiLayer::OnEvent(Event& e)
 	{
 		if (m_blockEvents)
@@ -82,10 +90,6 @@ namespace Engine
 			e.handled |= e.IsIncategory(EventCategory::EventCategoryMouse) && io.WantCaptureMouse;
 			e.handled |= e.IsIncategory(EventCategory::EventCategoryKeyboard) && io.WantCaptureKeyboard;
 		}
-	}
-
-	void ImGuiLayer::OnImGuiRender()
-	{
 	}
 
 	void ImGuiLayer::Begin()

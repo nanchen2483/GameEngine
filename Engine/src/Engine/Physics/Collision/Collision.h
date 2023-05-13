@@ -46,7 +46,7 @@ namespace Engine
 		}
 	};
 
-	class Collision
+	class ENGINE_TEST_API Collision
 	{
 	public:
 		virtual const CollisionInfo Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB) = 0;

@@ -20,6 +20,7 @@ target_compile_definitions (${PROJECT_NAME}
 	PRIVATE
 		"ENGINE_PLATFORM_WINDOWS"
 		"ENGINE_DYNAMIC_LINK"
+		"ENGINE_TEST_DLL"
 )
 
 target_link_libraries (${PROJECT_NAME} PRIVATE Engine GTest::gtest_main)

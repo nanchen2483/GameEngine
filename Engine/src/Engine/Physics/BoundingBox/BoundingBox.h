@@ -21,7 +21,7 @@ namespace Engine
 		AABB = 1,
 	};
 
-	class BoundingBox
+	class ENGINE_TEST_API BoundingBox
 	{
 	public:
 		~BoundingBox() = default;

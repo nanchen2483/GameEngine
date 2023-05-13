@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class ExampleLayer : public Engine::Layer
+	class ExampleLayer : public Layer
 	{
 	public:
 		ExampleLayer();
