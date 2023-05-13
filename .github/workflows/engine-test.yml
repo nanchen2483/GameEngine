@@ -20,6 +20,16 @@ jobs:
         uses: lukka/get-cmake@latest
       
       - name: Restore artifacts
+        id: restore
+        uses: actions/cache@v3
+        with:
+          path: |
+            Dependencies/vcpkg/packages
+            Dependencies/vcpkg/downloads
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
+          restore-keys: ${{ runner.os }}-vcpkg-
+      
+      - name: Install vcpkg packages
         uses: lukka/run-vcpkg@v11
         with:
           vcpkgDirectory: '${{ github.workspace }}/Dependencies/vcpkg'
