@@ -1,23 +1,23 @@
 @echo off
 
 set cleanAll=0
-if "%1" == "--all" (
+
+if [%1] equ [--all] (
     set cleanAll=1
-) else if "%1" == "-a" (
+) else if [%1] equ [-a] (
     set cleanAll=1
-) else if "%1" == "" (
-    rem Ignore
-) else if "%1" == " " (
+) else if [%1] equ [] (
     rem Ignore
 ) else (
-    echo unknown option: "%1"
+	echo Invalid arguments: "%1"
+	echo Usage: cleanup.bat [--all/-a]
     exit 1
 )
 
 rem Clean all untracked files except .vs
 pushd %~dp0..
 call git clean -dfx -e .vs
-if %cleanAll% == 1 (
+if %cleanAll% equ 1 (
     pushd Dependencies\vcpkg
     call git clean -dfx
     popd
