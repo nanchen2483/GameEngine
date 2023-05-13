@@ -4,6 +4,12 @@
 
 namespace Engine
 {
+#ifdef ENGINE_GRAPHICS_API_OPENGL
+	GraphicsApiType System::s_graphicsAPI = GraphicsApiType::OpenGL;
+#else
+#error Engine only support OpenGL API
+#endif
+
 	std::chrono::system_clock::time_point System::s_time = std::chrono::system_clock::now();
 	double System::s_deltaTime = 0.0f;
 	glm::vec2 System::s_mousePosition = glm::vec2(0.0f);

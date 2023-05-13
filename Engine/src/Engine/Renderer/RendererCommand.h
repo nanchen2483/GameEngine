@@ -1,83 +1,31 @@
 #pragma once
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
-#include "RendererAPI.h"
+#include "Graphics/GraphicsAPI.h"
 
 namespace Engine
 {
 	class ENGINE_API RendererCommand
 	{
 	public:
-		inline static void Init()
-		{
-			s_rendererAPI->Init();
-		}
-
-		inline static void CullFace(FaceCulling face)
-		{
-			s_rendererAPI->CullFace(face);
-		}
-
-		inline static void  SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
-		{
-			s_rendererAPI->SetViewport(x, y, width, height);
-		}
-
-		inline static void SetDepthFunc(DepthFunc func)
-		{
-			s_rendererAPI->SetDepthFunc(func);
-		}
-
-		inline static PolygonMode GetPolygonMode()
-		{
-			return s_rendererAPI->GetPolygonMode();
-		}
-
-		inline static void SetPolygonMode(PolygonMode mode)
-		{
-			s_rendererAPI->SetPolygonMode(mode);
-		}
-
-		inline static void SetClearColor(const glm::vec4& color)
-		{
-			s_rendererAPI->SetClearColor(color);
-		}
-
-		inline static void Clear()
-		{
-			s_rendererAPI->Clear();
-		}
-
-		inline static void DrawUint8Indexed(uint32_t count)
-		{
-			s_rendererAPI->DrawUint8Indexed(count);
-		}
-
-		inline static void DrawUint16Indexed(uint32_t count)
-		{
-			s_rendererAPI->DrawUint16Indexed(count);
-		}
-
-		inline static void DrawUint32Indexed(const Ptr<VertexArray>& vertexArray)
-		{
-			s_rendererAPI->DrawUint32Indexed(vertexArray);
-		}
-
-		inline static void DrawUint32Indexed(uint32_t count)
-		{
-			s_rendererAPI->DrawUint32Indexed(count);
-		}
-
-		inline static void DrawPatch(uint32_t count)
-		{
-			s_rendererAPI->DrawPatch(count);
-		}
-
-		inline static void Compute(uint32_t numOfX, uint32_t numOfY, uint32_t numOfZ)
-		{
-			s_rendererAPI->Compute(numOfX, numOfY, numOfZ);
-		}
+		static void Init();
+		static void CullFace(FaceCulling face);
+		static void  SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
+		static void SetDepthFunc(DepthFunc func);
+		static PolygonMode GetPolygonMode();
+		static void SetPolygonMode(PolygonMode mode);
+		static void SetClearColor(const glm::vec4& color);
+		static void Clear();
+		static void DrawUint8Indexed(uint32_t count);
+		static void DrawUint16Indexed(uint32_t count);
+		static void DrawUint32Indexed(const Ptr<VertexArray>& vertexArray);
+		static void DrawUint32Indexed(uint32_t count);
+		static void DrawPatch(uint32_t count);
+		static void Compute(uint32_t numOfX, uint32_t numOfY, uint32_t numOfZ);
 	private:
-		static Uniq<RendererAPI> s_rendererAPI;
+		RendererCommand();
+		static RendererCommand& GetInstance();
+
+		Uniq<GraphicsAPI> m_graphicsAPI;
 	};
 }

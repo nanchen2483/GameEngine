@@ -1,9 +1,9 @@
 #pragma once
-#include "Engine/Renderer/RendererAPI.h"
+#include "Engine/Renderer/Graphics/GraphicsAPI.h"
 
 namespace Engine
 {
-	class OpenGLRendererAPI : public RendererAPI
+	class OpenGLGraphicsAPI : public GraphicsAPI
 	{
 	public:
 		virtual void Init() override;

@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/GraphicsContext.h"
+#include "Engine/Renderer/Graphics/GraphicsContext.h"
 
 struct GLFWwindow;
 
@@ -12,7 +12,6 @@ namespace Engine
 
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
-
 	private:
 		GLFWwindow* m_windowHandler;
 		uint32_t m_minimumMajorVersion = 4;

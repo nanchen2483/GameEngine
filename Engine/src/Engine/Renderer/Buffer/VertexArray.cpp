@@ -1,20 +1,20 @@
 #include "enginepch.h"
 #include "VertexArray.h"
 
-#include "Engine/Renderer/Renderer.h"
+#include "Engine/Core/System/System.h"
 #include "Platform/OpenGL/Vertex/OpenGLVertexArray.h"
 
 namespace Engine
 {
 	Ptr<VertexArray> VertexArray::Create()
 	{
-		switch (Renderer::GetAPI())
+		switch (System::GetGraphicsApiType())
 		{
-		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return CreateUniq<OpenGLVertexArray>();
+		case GraphicsApiType::None:			ENGINE_CORE_ASSERT(false, "GraphicsAPI::None is not supported"); return nullptr;
+		case GraphicsApiType::OpenGL:		return CreateUniq<OpenGLVertexArray>();
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown GraphicsAPI");
 		return nullptr;
 	}
 }
