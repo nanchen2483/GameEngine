@@ -8,7 +8,7 @@ namespace Engine
 	{
 		switch (type)
 		{
-		case Engine::CollisionType::GJK_EPA_3D:
+		case Engine::CollisionType::GjkEpa3D:
 			return CreateUniq<GJKEPA3D>();
 		default:
 			ENGINE_CORE_ASSERT(false, "Unknow Collision Detection type");

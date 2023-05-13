@@ -55,16 +55,16 @@ namespace Engine
 		glm::vec2 delta = (mouse - m_mousePosition) * 0.003f;
 		m_mousePosition = mouse;
 
-		if (Input::IsKeyPressed(KeyCode::LEFT_ALT) &&
-			(Input::IsMouseButtonPressed(MouseButton::MIDDLE_BUTTON) ||
-			 Input::IsMouseButtonPressed(MouseButton::LEFT_BUTTON) ||
-			 Input::IsMouseButtonPressed(MouseButton::RIGHT_BUTTON)))
+		if (Input::IsKeyPressed(KeyCode::LeftAlt) &&
+			(Input::IsMouseButtonPressed(MouseButton::MiddleButton) ||
+			 Input::IsMouseButtonPressed(MouseButton::LeftButton) ||
+			 Input::IsMouseButtonPressed(MouseButton::RightButton)))
 		{
 			m_type = CameraType::FocusPoint;
 			Input::HideCursor();
 			OnFocusPointUpdate(delta);
 		}
-		else if (Input::IsMouseButtonPressed(MouseButton::RIGHT_BUTTON))
+		else if (Input::IsMouseButtonPressed(MouseButton::RightButton))
 		{
 			m_type = CameraType::FreeLook;
 			Input::HideCursor();
@@ -80,15 +80,15 @@ namespace Engine
 
 	void EditorCamera::OnFocusPointUpdate(const glm::vec2& delta)
 	{
-		if (Input::IsMouseButtonPressed(MouseButton::MIDDLE_BUTTON))
+		if (Input::IsMouseButtonPressed(MouseButton::MiddleButton))
 		{
 			OnMousePan(delta);
 		}
-		else if (Input::IsMouseButtonPressed(MouseButton::LEFT_BUTTON))
+		else if (Input::IsMouseButtonPressed(MouseButton::LeftButton))
 		{
 			OnMouseRotate(delta);
 		}
-		else if (Input::IsMouseButtonPressed(MouseButton::RIGHT_BUTTON))
+		else if (Input::IsMouseButtonPressed(MouseButton::RightButton))
 		{
 			OnMouseZoom(delta.y);
 		}

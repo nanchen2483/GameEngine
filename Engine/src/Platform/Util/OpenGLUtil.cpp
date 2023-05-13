@@ -10,21 +10,21 @@ namespace Engine
 	{
 		switch (func)
 		{
-		case DepthFunc::NEVER:
+		case DepthFunc::Never:
 			return GL_NEVER;
-		case DepthFunc::LESS:
+		case DepthFunc::Less:
 			return GL_LESS;
-		case DepthFunc::LEQUAL:
+		case DepthFunc::Lequal:
 			return GL_LEQUAL;
-		case DepthFunc::EQUAL:
+		case DepthFunc::Equal:
 			return GL_EQUAL;
-		case DepthFunc::GREATER:
+		case DepthFunc::Greater:
 			return GL_GREATER;
-		case DepthFunc::NOTEQUAL:
+		case DepthFunc::NotEqual:
 			return GL_NOTEQUAL;
-		case DepthFunc::GEQUAL:
+		case DepthFunc::Gequal:
 			return GL_GEQUAL;
-		case DepthFunc::ALWAYS:
+		case DepthFunc::Always:
 			return GL_ALWAYS;
 		default:
 			ENGINE_CORE_ASSERT(false, "Invalid depth-comparison function");
@@ -36,9 +36,9 @@ namespace Engine
 	{
 		switch (face)
 		{
-		case FaceCulling::FRONT:
+		case FaceCulling::Front:
 			return GL_FRONT;
-		case FaceCulling::BACK:
+		case FaceCulling::Back:
 			return GL_BACK;
 		default:
 			ENGINE_CORE_ASSERT(false, "Invalid faceCulling type");
@@ -126,11 +126,11 @@ namespace Engine
 	{
 		switch (mode)
 		{
-		case PolygonMode::POINT:
+		case PolygonMode::Point:
 			return GL_POINT;
-		case PolygonMode::LINE:
+		case PolygonMode::Line:
 			return GL_LINE;
-		case PolygonMode::FILL:
+		case PolygonMode::Fill:
 			return GL_FILL;
 		default:
 			ENGINE_CORE_ASSERT(false, "Invalid polygonMode type");
@@ -143,11 +143,11 @@ namespace Engine
 		switch (mode)
 		{
 		case GL_POINT:
-			return PolygonMode::POINT;
+			return PolygonMode::Point;
 		case GL_LINE:
-			return PolygonMode::LINE;
+			return PolygonMode::Line;
 		case GL_FILL:
-			return PolygonMode::FILL;
+			return PolygonMode::Fill;
 		default:
 			ENGINE_CORE_ASSERT(false, "Invalid polygonMode type");
 			return (PolygonMode)-1;

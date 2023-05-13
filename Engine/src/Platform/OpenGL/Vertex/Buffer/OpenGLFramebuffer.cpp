@@ -110,8 +110,8 @@ namespace Engine
 		{
 			switch (format)
 			{
-			case FramebufferTextureFormat::DEPTH24STENCIL8:
-			case FramebufferTextureFormat::DEPTH_ARRAY:
+			case FramebufferTextureFormat::Depth24Stencil8:
+			case FramebufferTextureFormat::DepthArray:
 				return true;
 			}
 
@@ -124,9 +124,9 @@ namespace Engine
 			{
 			case FramebufferTextureFormat::RGBA8:
 				return GL_RGBA8;
-			case FramebufferTextureFormat::RED_INTEGER:
+			case FramebufferTextureFormat::RedInteger:
 				return GL_RED_INTEGER;
-			case FramebufferTextureFormat::DEPTH24STENCIL8:
+			case FramebufferTextureFormat::Depth24Stencil8:
 				return GL_DEPTH24_STENCIL8;
 			default:
 				ENGINE_CORE_ASSERT(false, "Invalid framebuffer texture format");
@@ -203,7 +203,7 @@ namespace Engine
 						m_specification.height,
 						i);
 					break;
-				case FramebufferTextureFormat::RED_INTEGER:
+				case FramebufferTextureFormat::RedInteger:
 					Utils::AttachColorTexture(
 						m_colorAttachments[i],
 						m_specification.samples,
@@ -224,7 +224,7 @@ namespace Engine
 			Utils::BindTexture(multisampled, isTextureArray, m_depthAttachment);
 			switch (m_depthAttachmentSpecification.textureFormat)
 			{
-			case FramebufferTextureFormat::DEPTH24STENCIL8:
+			case FramebufferTextureFormat::Depth24Stencil8:
 				Utils::AttachDepthTexture(
 					m_depthAttachment,
 					m_specification.samples,
@@ -234,7 +234,7 @@ namespace Engine
 					m_specification.width,
 					m_specification.height);
 				break;
-			case FramebufferTextureFormat::DEPTH_ARRAY:
+			case FramebufferTextureFormat::DepthArray:
 				Utils::AttachDepthTextureArray(
 					m_depthAttachment,
 					m_specification.samples,

@@ -13,8 +13,8 @@ namespace Engine
 {
 	enum class ImGuiColor
 	{
-		Default = 0,
-		Red = 1,
+		Default = 1,
+		Red,
 		Green,
 		Blue,
 	};

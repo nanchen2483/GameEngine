@@ -17,7 +17,7 @@ namespace Engine
 		typedef std::function<void()> Func;
 		void SetFunctions(Func newScene, Func openScene, Func saveSceneAs);
 	private:
-		PolygonMode m_polygonMode = PolygonMode::FILL;
+		PolygonMode m_polygonMode = PolygonMode::Fill;
 		ShadowDebug m_shadowDebug;
 		bool m_showShadowMap = false;
 		bool m_showBoundingBox = false;
