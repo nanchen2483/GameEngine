@@ -4,10 +4,16 @@
 
 namespace Engine
 {
+#ifdef ENGINE_PLATFORM_WINDOWS
+	OperatingSystem System::s_operatingSystem = OperatingSystem::Windows;
+#else
+	#error Engine only support windows
+#endif // ENGINE_PLATFORM_WINDOWS
+
 #ifdef ENGINE_GRAPHICS_API_OPENGL
 	GraphicsApiType System::s_graphicsAPI = GraphicsApiType::OpenGL;
 #else
-#error Engine only support OpenGL API
+	#error Engine only support OpenGL API
 #endif
 
 	std::chrono::system_clock::time_point System::s_time = std::chrono::system_clock::now();
@@ -21,7 +27,7 @@ namespace Engine
 		OnTimeUpdate();
 		OnMouseUpdate();
 	}
-	
+
 	void System::OnTimeUpdate()
 	{
 		std::chrono::system_clock::time_point currentTime = std::chrono::system_clock::now();

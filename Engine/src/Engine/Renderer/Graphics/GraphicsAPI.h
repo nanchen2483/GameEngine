@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine/Core/Base.h"
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
 #include "Engine/Core/Enum/PolygonMode.h"
@@ -26,5 +27,7 @@ namespace Engine
 		virtual void DrawUint32Indexed(const Ptr<VertexArray>& vertexArray) = 0;
 		virtual void DrawPatch(uint32_t count) = 0;
 		virtual void Compute(uint32_t numOfX, uint32_t numOfY, uint32_t numOfZ) = 0;
+
+		static Uniq<GraphicsAPI> Create();
 	};
 }

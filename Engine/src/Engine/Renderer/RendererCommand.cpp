@@ -77,19 +77,8 @@ namespace Engine
 	}
 
 	RendererCommand::RendererCommand()
+		: m_graphicsAPI(GraphicsAPI::Create())
 	{
-		switch (System::GetGraphicsApiType())
-		{
-		case GraphicsApiType::None:
-			ENGINE_CORE_ASSERT(false, "GraphicsAPI::None is not supported");
-			break;
-		case GraphicsApiType::OpenGL:
-			m_graphicsAPI = CreateUniq<OpenGLGraphicsAPI>();
-			break;
-		default:
-			ENGINE_CORE_ASSERT(false, "Unknown GraphicsAPI");
-			break;
-		}
 	}
 
 	RendererCommand& RendererCommand::GetInstance()
