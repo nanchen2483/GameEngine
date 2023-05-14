@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	Uniq<Window> Window::Create(const WindowProps& props)
+	Uniq<Window> Window::Create(const WindowProperties& props)
 	{
 		switch (System::GetOperatingSystem())
 		{
