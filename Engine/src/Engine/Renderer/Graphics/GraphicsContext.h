@@ -1,7 +1,5 @@
 #pragma once
 
-struct IWindow;
-
 namespace Engine
 {
 	class GraphicsContext
@@ -11,6 +9,6 @@ namespace Engine
 		virtual void Init() = 0;
 		virtual void SwapBuffers() = 0;
 
-		static Uniq<GraphicsContext> Create(IWindow *window);
+		static Uniq<GraphicsContext> Create(void *window);
 	};
 }

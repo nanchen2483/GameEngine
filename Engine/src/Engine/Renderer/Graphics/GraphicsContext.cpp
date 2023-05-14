@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	Uniq<GraphicsContext> GraphicsContext::Create(IWindow* window)
+	Uniq<GraphicsContext> GraphicsContext::Create(void* window)
 	{
 		switch (System::GetGraphicsApiType())
 		{
