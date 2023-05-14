@@ -31,8 +31,7 @@ namespace Engine
 	void OpenGraphicsLibrary::CreateNewWindow(std::string title, uint32_t width, uint32_t height)
 	{
 		m_window = glfwCreateWindow((int)width, (int)height, title.c_str(), nullptr, nullptr);
-		m_context = GraphicsContext::Create((void*)m_window);
-		m_context->Init();
+		m_context = GraphicsContext::Create(static_cast<void*>(m_window));
 	}
 
 	void OpenGraphicsLibrary::DestroyWindow()
