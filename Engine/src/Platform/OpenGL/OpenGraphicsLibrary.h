@@ -25,7 +25,7 @@ namespace Engine
 
 		virtual void SetWindowsSizeCallback(void (*callback)(void* window, int32_t width, int32_t height)) override;
 		virtual void SetWindowCloseCallback(void (*callback)(void* window)) override;
-		virtual void SetKeyCallback(void (*callback)(void* window, int key, int32_t scancode, int32_t action, int32_t mods)) override;
+		virtual void SetKeyCallback(void (*callback)(void* window, int32_t key, int32_t scancode, int32_t action, int32_t mods)) override;
 		virtual void SetCharCallback(void (*callback)(void* window, uint32_t keycode)) override;
 		virtual void SetMouseButtonCallback(void (*callback)(void* window, int32_t button, int32_t action, int32_t mods)) override;
 		virtual void SetScrollCallback(void (*callabck)(void* window, double xOffset, double yOffset)) override;
