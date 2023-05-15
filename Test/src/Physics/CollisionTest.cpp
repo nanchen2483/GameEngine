@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "Engine.h"
-#include "Engine/Physics/Collision/Collision.h"
+#include "Engine/Physics/Collision/ICollision.h"
 
 namespace EngineTest
 {
