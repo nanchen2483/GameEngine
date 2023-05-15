@@ -1,16 +1,16 @@
 #pragma once
-#include "Engine/Renderer/Buffer/VertexArray.h"
-#include "Engine/Renderer/Shader/Shader.h"
-#include "Engine/Renderer/Terrain/Terrain.h"
+#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/Shader/IShader.h"
+#include "Engine/Renderer/Terrain/ITerrain.h"
 #include "TerrainVertex.h"
 
 namespace Engine
 {
-	class TessellationTerrain : public Terrain
+	class TessellationTerrain : public ITerrain
 	{
 	public:
 		TessellationTerrain(std::string filePath, int32_t entityId = -1);
-		TessellationTerrain(Ptr<Texture2D> heightMapTexture, int32_t entityId = -1);
+		TessellationTerrain(Ptr<ITexture2D> heightMapTexture, int32_t entityId = -1);
 
 		inline virtual std::string GetFilePath() const override { return m_heightMapTexture->GetFilePath(); }
 		virtual float GetHeight(float x, float z) const override;
@@ -21,9 +21,9 @@ namespace Engine
 	private:
 		std::vector<TerrainVertex> SetVertices(uint32_t numOfPoints, int32_t width, int32_t height);
 
-		Ptr<Shader> m_shader;
-		Ptr<VertexArray> m_vertexArray;
-		Ptr<Texture2D> m_heightMapTexture;
+		Ptr<IShader> m_shader;
+		Ptr<IVertexArray> m_vertexArray;
+		Ptr<ITexture2D> m_heightMapTexture;
 		std::vector<float> m_heightMapDataBuffer;
 
 		int32_t m_entityId = -1;

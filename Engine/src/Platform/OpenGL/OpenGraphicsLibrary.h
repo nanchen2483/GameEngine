@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Renderer/Graphics/GraphicsLibrary.h"
-#include "Engine/Renderer/Graphics/GraphicsContext.h"
+#include "Engine/Renderer/Graphics/IGraphicsLibrary.h"
+#include "Engine/Renderer/Graphics/IGraphicsContext.h"
 
 #include <string>
 
@@ -8,7 +8,7 @@ struct GLFWwindow;
 
 namespace Engine
 {
-	class OpenGraphicsLibrary : public GraphicsLibrary
+	class OpenGraphicsLibrary : public IGraphicsLibrary
 	{
 	public:
 		OpenGraphicsLibrary();
@@ -17,7 +17,7 @@ namespace Engine
 		virtual void CreateNewWindow(std::string title, uint32_t width, uint32_t height) override;
 		virtual void* GetWindow() const override { return m_window; };
 		virtual void DestroyWindow() override;
-		virtual Uniq<GraphicsContext> GetContext() override { return std::move(m_context); };
+		virtual Uniq<IGraphicsContext> GetContext() override { return std::move(m_context); };
 		virtual void SetWindowUserDataPointer(WindowUserData* userData) override;
 		virtual WindowUserData* GetWindowUserDataPointer() override;
 		virtual void SetVSync(bool enable) override;
@@ -34,6 +34,6 @@ namespace Engine
 		static WindowUserData* GetWindowUserDataPointerStatic(void* window);
 	private:
 		GLFWwindow* m_window;
-		Uniq<GraphicsContext> m_context;
+		Uniq<IGraphicsContext> m_context;
 	};
 }

@@ -1,12 +1,12 @@
 #include "enginepch.h"
-#include "GraphicsAPI.h"
+#include "IGraphicsAPI.h"
 
 #include "Engine/Core/System/System.h"
 #include "Platform/OpenGL/OpenGLGraphicsAPI.h"
 
 namespace Engine
 {
-	Uniq<GraphicsAPI> GraphicsAPI::Create()
+	Uniq<IGraphicsAPI> IGraphicsAPI::Create()
 	{
 		switch (System::GetGraphicsApiType())
 		{

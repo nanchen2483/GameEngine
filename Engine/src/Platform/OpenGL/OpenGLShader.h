@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Shader/Shader.h"
+#include "Engine/Renderer/Shader/IShader.h"
 
 #include <glm/glm.hpp>
 
@@ -7,7 +7,7 @@ typedef unsigned int GLenum;
 
 namespace Engine
 {
-	class OpenGLShader : public Shader
+	class OpenGLShader : public IShader
 	{
 	public:
 		OpenGLShader(const std::string& filePath);

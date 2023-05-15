@@ -1,10 +1,10 @@
 #include "enginepch.h"
-#include "Collision.h"
+#include "ICollision.h"
 #include "GJKEPA3D/GJKEPA3D.h"
 
 namespace Engine
 {
-	Uniq<Collision> Collision::Create(CollisionType type)
+	Uniq<ICollision> ICollision::Create(CollisionType type)
 	{
 		switch (type)
 		{

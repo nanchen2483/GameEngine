@@ -1,6 +1,6 @@
 #pragma once
 #include "IComponent.h"
-#include "Engine/Renderer/Model/Mesh.h"
+#include "Engine/Renderer/Model/IMesh.h"
 
 #include <string>
 
@@ -13,8 +13,8 @@ namespace Engine
 		bool isOnViewFrustum = false;
 		bool isOnLightViewFrustum = false;
 		std::string filePath;
-		std::vector<Ptr<Mesh>> meshes;
+		std::vector<Ptr<IMesh>> meshes;
 
-		operator std::vector<Ptr<Mesh>>() { return meshes; }
+		operator std::vector<Ptr<IMesh>>() { return meshes; }
 	};
 }

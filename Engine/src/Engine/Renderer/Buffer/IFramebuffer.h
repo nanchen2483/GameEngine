@@ -43,10 +43,10 @@ namespace Engine
 		bool swapChainTarget = false;
 	};
 
-	class ENGINE_API Framebuffer
+	class ENGINE_API IFramebuffer
 	{
 	public:
-		virtual ~Framebuffer() = default;
+		virtual ~IFramebuffer() = default;
 		
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
@@ -57,6 +57,6 @@ namespace Engine
 		virtual uint32_t GetColorAttachmentRendererId(uint32_t index = 0) const = 0;
 		virtual const FramebufferSpecification GetSpecification() const = 0;
 
-		static Ptr<Framebuffer> Create(const FramebufferSpecification spec);
+		static Ptr<IFramebuffer> Create(const FramebufferSpecification spec);
 	};
 }

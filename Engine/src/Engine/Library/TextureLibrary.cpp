@@ -3,12 +3,12 @@
 
 namespace Engine
 {
-	Ptr<Texture2D> TextureLibrary::Load(const std::filesystem::path& filePath)
+	Ptr<ITexture2D> TextureLibrary::Load(const std::filesystem::path& filePath)
 	{
 		return Load(filePath, TextureType::Diffuse, false);
 	}
 
-	Ptr<Texture2D> TextureLibrary::Load(const std::filesystem::path& filePath, const TextureType type, bool flipVertically)
+	Ptr<ITexture2D> TextureLibrary::Load(const std::filesystem::path& filePath, const TextureType type, bool flipVertically)
 	{
 		TextureLibrary& instance = GetInstance();
 
@@ -18,13 +18,13 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<Texture2D> texture = Texture2D::Create(filePath.string(), type, flipVertically);
+		Ptr<ITexture2D> texture = ITexture2D::Create(filePath.string(), type, flipVertically);
 		instance.Add(texture);
 
 		return texture;
 	}
 
-	Ptr<Texture2D> TextureLibrary::Load(Ptr<Image> image, const TextureType type)
+	Ptr<ITexture2D> TextureLibrary::Load(Ptr<Image> image, const TextureType type)
 	{
 		TextureLibrary& instance = GetInstance();
 
@@ -34,13 +34,13 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<Texture2D> texture = Texture2D::Create(image, type);
+		Ptr<ITexture2D> texture = ITexture2D::Create(image, type);
 		instance.Add(texture);
 
 		return texture;
 	}
 
-	Ptr<Texture2D> TextureLibrary::Load(uint32_t height, uint32_t width, uint32_t levels, TextureFormatType format)
+	Ptr<ITexture2D> TextureLibrary::Load(uint32_t height, uint32_t width, uint32_t levels, TextureFormatType format)
 	{
 		TextureLibrary& instance = GetInstance();
 
@@ -51,19 +51,19 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<Texture2D> texture = Texture2D::Create(height, width, levels, format);
+		Ptr<ITexture2D> texture = ITexture2D::Create(height, width, levels, format);
 		instance.Add(texture);
 
 		return texture;
 	}
 
-	Ptr<Texture2D> TextureLibrary::Get(const Uid& key) const
+	Ptr<ITexture2D> TextureLibrary::Get(const Uid& key) const
 	{
 		ENGINE_CORE_ASSERT(Exists(key), "Texture not found!");
 		return m_textures.at(key);
 	}
 
-	void TextureLibrary::Add(const Ptr<Texture2D> data)
+	void TextureLibrary::Add(const Ptr<ITexture2D> data)
 	{
 		const Uid& uid = data->GetUid();
 		ENGINE_CORE_ASSERT(!Exists(uid), "Texture already exists!");

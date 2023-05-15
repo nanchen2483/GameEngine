@@ -16,21 +16,20 @@ namespace Engine
 		uint32_t channels;
 	};
 
-	class ENGINE_API Texture : public IUniqueObject
+	class ENGINE_API ITexture : public IUniqueObject
 	{
 	public:
-		virtual ~Texture() = default;
+		virtual ~ITexture() = default;
 		virtual uint32_t GetRendererId() const = 0;
 		virtual TextureType GetType() const = 0;
 		virtual const std::string& GetName() const = 0;
-
 		virtual void BindImage(uint32_t slot = 0, TextureAccessType access = TextureAccessType::ReadOnly) const = 0;
 		virtual void Bind(uint32_t slot = 0) const = 0;
 
-		virtual bool operator==(const Texture& other) const = 0;
+		virtual bool operator==(const ITexture& other) const = 0;
 	};
 
-	class ENGINE_API Texture2D : public Texture
+	class ENGINE_API ITexture2D : public ITexture
 	{
 	public:
 		virtual std::string GetFilePath() const = 0;
@@ -39,14 +38,14 @@ namespace Engine
 		virtual const std::vector<float>& GetData() = 0;
 		virtual void SetData(void* data, uint32_t size) = 0;
 	private:
-		static Ptr<Texture2D> Create(uint32_t width, uint32_t height, uint32_t levels = 1, TextureFormatType format = TextureFormatType::RGBA8);
-		static Ptr<Texture2D> Create(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = false);
-		static Ptr<Texture2D> Create(const Ptr<Image> image, const TextureType type = TextureType::None);
+		static Ptr<ITexture2D> Create(uint32_t width, uint32_t height, uint32_t levels = 1, TextureFormatType format = TextureFormatType::RGBA8);
+		static Ptr<ITexture2D> Create(const std::string& filePath, const TextureType type = TextureType::None, bool flipVertically = false);
+		static Ptr<ITexture2D> Create(const Ptr<Image> image, const TextureType type = TextureType::None);
 
 		friend class TextureLibrary;
 	};
 
-	class ENGINE_API Texture3D : public Texture
+	class ENGINE_API ITexture3D : public ITexture
 	{
 	public:
 		virtual std::string GetFilePath(TextureOrientationType type) const = 0;
@@ -54,6 +53,6 @@ namespace Engine
 		virtual uint32_t GetHeight(TextureOrientationType type) const = 0;
 		virtual void SetData(void* data, TextureOrientationType type, uint32_t size) = 0;
 
-		static Ptr<Texture3D> Create(const std::vector<Ptr<Image>>& faces);
+		static Ptr<ITexture3D> Create(const std::vector<Ptr<Image>>& faces);
 	};
 }

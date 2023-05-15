@@ -21,20 +21,20 @@ namespace Engine
 		static const uint32_t MAX_INDICES = MAX_QUADS * NUM_OF_VERTEX_INDICES;
 		static const uint32_t MAX_TEXTURE_SLOTS = 32;
 
-		Ptr<VertexArray> vertexArray;
-		Ptr<VertexBuffer> vertexBuffer;
-		Ptr<UniformBuffer> cameraUniformBuffer;
-		Ptr<UniformBuffer> dirLightUniformBuffer;
-		Ptr<UniformBuffer> pointLightUniformBuffer;
-		Ptr<Shader> shader;
-		Ptr<Texture2D> whiteTexture;
+		Ptr<IVertexArray> vertexArray;
+		Ptr<IVertexBuffer> vertexBuffer;
+		Ptr<IUniformBuffer> cameraUniformBuffer;
+		Ptr<IUniformBuffer> dirLightUniformBuffer;
+		Ptr<IUniformBuffer> pointLightUniformBuffer;
+		Ptr<IShader> shader;
+		Ptr<ITexture2D> whiteTexture;
 
 		uint32_t indexCount = 0;
 		const Vertex* vertexBufferBase = new Vertex[Renderer3DData::MAX_VERTICES];
 		Vertex* vertexBufferPtr = nullptr;
 
 		static const uint32_t NUM_OF_DEFAULT_TEXTURES = 1; // The first texture slot is white block
-		std::array<Ptr<Texture2D>, MAX_TEXTURE_SLOTS> textureSlots;
+		std::array<Ptr<ITexture2D>, MAX_TEXTURE_SLOTS> textureSlots;
 		uint32_t numOfTextureSlots = NUM_OF_DEFAULT_TEXTURES;
 
 		glm::vec4 vertexPosition[NUM_OF_VERTICES] = {};
@@ -51,9 +51,9 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		s_data.vertexArray = VertexArray::Create();
+		s_data.vertexArray = IVertexArray::Create();
 
-		s_data.vertexBuffer = VertexBuffer::Create(Renderer3DData::MAX_VERTICES * sizeof(Vertex));
+		s_data.vertexBuffer = IVertexBuffer::Create(Renderer3DData::MAX_VERTICES * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 
@@ -104,7 +104,7 @@ namespace Engine
 			indices[i + 35] = indicesOffset + 5;
 		}
 
-		Ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, Renderer3DData::MAX_INDICES);
+		Ptr<IIndexBuffer> indexBuffer = IIndexBuffer::Create(indices, Renderer3DData::MAX_INDICES);
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
@@ -148,7 +148,7 @@ namespace Engine
 		s_data.textureCoords[6] = { 0.0f, 1.0f };
 		s_data.textureCoords[7] = { 1.0f, 1.0f };
 
-		s_data.cameraUniformBuffer = UniformBuffer::Create(0, {
+		s_data.cameraUniformBuffer = IUniformBuffer::Create(0, {
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Mat4 },				// Camera view matrix
@@ -157,7 +157,7 @@ namespace Engine
 				}
 			});
 
-		s_data.dirLightUniformBuffer = UniformBuffer::Create(1, {
+		s_data.dirLightUniformBuffer = IUniformBuffer::Create(1, {
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Float3 },				// Directional light direction
@@ -167,7 +167,7 @@ namespace Engine
 				}
 			});
 
-		s_data.pointLightUniformBuffer = UniformBuffer::Create(2, {
+		s_data.pointLightUniformBuffer = IUniformBuffer::Create(2, {
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Float3 },				// Point light position
@@ -247,7 +247,7 @@ namespace Engine
 		Draw(transform, nullptr, glm::vec4(1.0f), entityId);
 	}
 	
-	void Renderer3D::Draw(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color, int entityId)
+	void Renderer3D::Draw(const glm::mat4& transform, const Ptr<ITexture2D>& texture, const glm::vec4& color, int entityId)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
@@ -273,7 +273,7 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
-	void Renderer3D::Draw(const glm::mat4& transform, std::vector<Ptr<Mesh>> meshes, Ptr<Animation> animation, Ptr<Shader> shader, int entityId)
+	void Renderer3D::Draw(const glm::mat4& transform, std::vector<Ptr<IMesh>> meshes, Ptr<IAnimation> animation, Ptr<IShader> shader, int entityId)
 	{
 		if (!meshes.empty())
 		{
@@ -334,7 +334,7 @@ namespace Engine
 		return s_data.states;
 	}
 
-	uint32_t Renderer3D::GetTextureIndex(const Ptr<Texture2D>& texture)
+	uint32_t Renderer3D::GetTextureIndex(const Ptr<ITexture2D>& texture)
 	{
 		uint32_t currentTextureIndex = 0;
 		if (texture != nullptr)

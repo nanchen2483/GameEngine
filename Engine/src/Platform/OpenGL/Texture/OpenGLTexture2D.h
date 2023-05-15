@@ -1,9 +1,9 @@
 #pragma once
-#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Texture/ITexture.h"
 
 namespace Engine
 {
-	class OpenGLTexture2D : public Texture2D
+	class OpenGLTexture2D : public ITexture2D
 	{
 	public:
 		OpenGLTexture2D(uint32_t width, uint32_t height, uint32_t levels, TextureFormatType format);
@@ -24,7 +24,7 @@ namespace Engine
 		virtual void Bind(uint32_t slot) const override;
 		
 		inline virtual Uid GetUid() const override { return m_uid; }
-		virtual bool operator==(const Texture& other) const override
+		virtual bool operator==(const ITexture& other) const override
 		{
 			return m_rendererId == ((OpenGLTexture2D&)other).m_rendererId;
 		}

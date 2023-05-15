@@ -54,7 +54,7 @@ namespace Engine
 		ImGui::PopStyleVar();
 	}
 
-	void Toolbar::ImageButton(Ptr<Texture2D> texture, bool isDisabled, Func OnClick)
+	void Toolbar::ImageButton(Ptr<ITexture2D> texture, bool isDisabled, Func OnClick)
 	{
 		if (isDisabled)
 		{

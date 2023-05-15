@@ -16,16 +16,16 @@ namespace Engine
 			});
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
-		m_framebuffer = Framebuffer::Create(fbSpec);
+		m_framebuffer = IFramebuffer::Create(fbSpec);
 
-		m_vertexArray = VertexArray::Create();
-		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(const_cast<float*>(ShadowDebugData::vertices), ShadowDebugData::numOfVertices);
+		m_vertexArray = IVertexArray::Create();
+		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(const_cast<float*>(ShadowDebugData::vertices), ShadowDebugData::numOfVertices);
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },
 			{ ShaderDataType::Float2 },
 		});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
-		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(ShadowDebugData::indices), ShadowDebugData::numOfIndices));
+		m_vertexArray->SetIndexBuffer(IIndexBuffer::Create(const_cast<uint8_t*>(ShadowDebugData::indices), ShadowDebugData::numOfIndices));
 
 		m_shader = ShaderLibrary::Load("assets/shaders/Debug/ShadowDebug.glsl");
 		m_shader->Bind();

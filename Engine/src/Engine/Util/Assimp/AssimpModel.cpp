@@ -26,9 +26,9 @@ namespace Engine
 		Load(path);
 	}
 
-	Ptr<BoundingBox> AssimpModel::GenerateBoundingBox()
+	Ptr<IBoundingBox> AssimpModel::GenerateBoundingBox()
 	{
-		return BoundingBox::Create(BoundingBoxType::AABB, m_minAABB, m_maxAABB);
+		return IBoundingBox::Create(BoundingBoxType::AABB, m_minAABB, m_maxAABB);
 	}
 
 	void AssimpModel::Load(std::string const& path)
@@ -122,8 +122,8 @@ namespace Engine
 		{
 			for (uint32_t i = 0; i < scene->mNumAnimations; i++)
 			{
-				Ptr<Node> rootNode = AssimpHelper::ConvertToAssimpNode(scene->mAnimations[i], scene->mRootNode, m_boneOffsets);
-				Ptr<Animation> animation = CreatePtr<AssimpAnimation>(scene->mAnimations[i], rootNode);
+				Ptr<INode> rootNode = AssimpHelper::ConvertToAssimpNode(scene->mAnimations[i], scene->mRootNode, m_boneOffsets);
+				Ptr<IAnimation> animation = CreatePtr<AssimpAnimation>(scene->mAnimations[i], rootNode);
 				m_animations.push_back(animation);
 
 				IncreaseProgression();

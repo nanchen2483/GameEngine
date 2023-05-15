@@ -15,7 +15,7 @@ namespace Engine
 		virtual void OnEvent(Engine::Event& event) override;
 	private:
 		EditorCamera m_editorCamera;
-		Ptr<Terrain> m_terrain;
-		Ptr<UniformBuffer> m_cameraUniformBuffer;
+		Ptr<ITerrain> m_terrain;
+		Ptr<IUniformBuffer> m_cameraUniformBuffer;
 	};
 }

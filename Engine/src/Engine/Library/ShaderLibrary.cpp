@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	Ptr<Shader> ShaderLibrary::Load(const std::filesystem::path& filePath)
+	Ptr<IShader> ShaderLibrary::Load(const std::filesystem::path& filePath)
 	{
 		ShaderLibrary& instance = GetInstance();
 
@@ -13,19 +13,19 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<Shader> shader = Shader::Create(filePath.string());
+		Ptr<IShader> shader = IShader::Create(filePath.string());
 		instance.Add(shader);
 
 		return shader;
 	}
 
-	Ptr<Shader> ShaderLibrary::Get(const Uid& key) const
+	Ptr<IShader> ShaderLibrary::Get(const Uid& key) const
 	{
 		ENGINE_CORE_ASSERT(Exists(key), "Shader not found!");
 		return m_shaders.at(key);
 	}
 
-	void ShaderLibrary::Add(const Ptr<Shader> data)
+	void ShaderLibrary::Add(const Ptr<IShader> data)
 	{
 		const Uid& uid = data->GetUid();
 		ENGINE_CORE_ASSERT(!Exists(uid), "Shader already exists!");

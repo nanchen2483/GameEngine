@@ -34,7 +34,7 @@ namespace Engine
 		registry.view<TransformComponent, MeshComponent>()
 			.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)
 				{
-					Ptr<Animation> animation = nullptr;
+					Ptr<IAnimation> animation = nullptr;
 					if (registry.all_of<AnimationComponent>(entity))
 					{
 						animation = registry.get<AnimationComponent>(entity);

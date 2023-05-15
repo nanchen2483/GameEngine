@@ -1,11 +1,11 @@
 #pragma once
-#include "Engine/Core/Window/Window.h"
-#include "Engine/Renderer/Graphics/GraphicsContext.h"
-#include "Engine/Renderer/Graphics/GraphicsLibrary.h"
+#include "Engine/Core/Window/IWindow.h"
+#include "Engine/Renderer/Graphics/IGraphicsContext.h"
+#include "Engine/Renderer/Graphics/IGraphicsLibrary.h"
 
 namespace Engine
 {
-	class WindowsWindow : public Window
+	class WindowsWindow : public IWindow
 	{
 	public:
 		WindowsWindow(const WindowProperties& props);
@@ -22,8 +22,8 @@ namespace Engine
 		inline virtual void* GetNativeWindow() const { return m_library->GetWindow();  }
 		virtual void ShutDown() override;
 	private:
-		Uniq<GraphicsContext> m_context;
-		Uniq<GraphicsLibrary> m_library;
+		Uniq<IGraphicsContext> m_context;
+		Uniq<IGraphicsLibrary> m_library;
 		WindowUserData m_userData;
 	};
 }

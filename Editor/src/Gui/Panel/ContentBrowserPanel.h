@@ -19,8 +19,8 @@ namespace Engine
 
 		bool m_open = false;
 		std::filesystem::path m_currentDirectory;
-		Ptr<Texture2D> m_folderIcon;
-		Ptr<Texture2D> m_fileIcon;
+		Ptr<ITexture2D> m_folderIcon;
+		Ptr<ITexture2D> m_fileIcon;
 
 		std::vector<std::filesystem::path> m_backToPathStack;
 		std::vector<std::filesystem::path> m_forwardToPathStack;

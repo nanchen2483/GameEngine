@@ -17,7 +17,7 @@ namespace Engine
 		typedef std::function<void()> Func;
 		void SetFunctions(Func newScene, Func openScene, Func saveSceneAs);
 	private:
-		void ImageButton(Ptr<Texture2D> texture, bool isDisabled, Func OnClick);
+		void ImageButton(Ptr<ITexture2D> texture, bool isDisabled, Func OnClick);
 
 		bool m_play = false;
 		bool m_pause = false;
@@ -27,12 +27,12 @@ namespace Engine
 		const glm::vec2 m_toolbarPadding = { 7.0f, 7.0f };
 		const float m_toolbarHeight = m_buttonSizeWithPadding.y + (m_toolbarPadding.y * 2);
 		
-		Ptr<Texture2D> m_openIcon;
-		Ptr<Texture2D> m_saveIcon;
+		Ptr<ITexture2D> m_openIcon;
+		Ptr<ITexture2D> m_saveIcon;
 
-		Ptr<Texture2D> m_playIcon;
-		Ptr<Texture2D> m_pauseIcon;
-		Ptr<Texture2D> m_stopIcon;
+		Ptr<ITexture2D> m_playIcon;
+		Ptr<ITexture2D> m_pauseIcon;
+		Ptr<ITexture2D> m_stopIcon;
 
 		std::function<void()> NewScene;
 		std::function<void()> OpenScene;

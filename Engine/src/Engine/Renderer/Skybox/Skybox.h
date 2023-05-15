@@ -1,7 +1,7 @@
 #pragma once
-#include "Engine/Renderer/Buffer/VertexArray.h"
-#include "Engine/Renderer/Shader/Shader.h"
-#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/Shader/IShader.h"
+#include "Engine/Renderer/Texture/ITexture.h"
 
 #include <string>
 #include <vector>
@@ -12,14 +12,14 @@ namespace Engine
 	{
 	public:
 		Skybox(const std::vector<Ptr<Image>> faces);
-		Skybox(Ptr<Texture3D> texture);
+		Skybox(Ptr<ITexture3D> texture);
 
-		Ptr<Texture3D> GetTexture() const { return m_texture; }
-		void SetTexture(Ptr<Texture3D> texture) { m_texture = texture; }
+		Ptr<ITexture3D> GetTexture() const { return m_texture; }
+		void SetTexture(Ptr<ITexture3D> texture) { m_texture = texture; }
 		void Draw();
 	private:
-		Ptr<Shader> m_shader;
-		Ptr<Texture3D> m_texture;
-		Ptr<VertexArray> m_vertexArray;
+		Ptr<IShader> m_shader;
+		Ptr<ITexture3D> m_texture;
+		Ptr<IVertexArray> m_vertexArray;
 	};
 }

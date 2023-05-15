@@ -11,14 +11,14 @@ namespace Engine
 	{
 	}
 
-	TessellationTerrain::TessellationTerrain(Ptr<Texture2D> heightMapTexture, int32_t entityId)
+	TessellationTerrain::TessellationTerrain(Ptr<ITexture2D> heightMapTexture, int32_t entityId)
 		: m_heightMapTexture(heightMapTexture), m_entityId(entityId)
 	{
 		m_heightMapDataBuffer = m_heightMapTexture->GetData();
 
-		m_vertexArray = VertexArray::Create();
+		m_vertexArray = IVertexArray::Create();
 		std::vector<TerrainVertex> vertices = SetVertices(m_numOfPoints, m_heightMapTexture->GetWidth(), m_heightMapTexture->GetHeight());
-		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(&vertices[0], sizeof(TerrainVertex) * vertices.size());
+		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(&vertices[0], sizeof(TerrainVertex) * vertices.size());
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },
 			{ ShaderDataType::Float2 },

@@ -30,7 +30,7 @@ namespace Engine
 			});
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
-		m_framebuffer = Framebuffer::Create(fbSpec);
+		m_framebuffer = IFramebuffer::Create(fbSpec);
 
 		FramebufferSpecification fbSpec2;
 		fbSpec2.attachments = FramebufferAttachmentSpecification(
@@ -40,7 +40,7 @@ namespace Engine
 			});
 		fbSpec2.width = 1280;
 		fbSpec2.height = 720;
-		auto framebuffer = Framebuffer::Create(fbSpec2);
+		auto framebuffer = IFramebuffer::Create(fbSpec2);
 
 		// Entity
 		m_activeScene = CreatePtr<Scene>(m_framebuffer);

@@ -19,10 +19,10 @@ namespace Engine
 		Orthographic,
 	};
 
-	class Camera
+	class ICamera
 	{
 	public:
-		virtual ~Camera() = default;
+		virtual ~ICamera() = default;
 
 		virtual const glm::mat4& GetProjection() const = 0;
 		virtual const float GetFOV() const = 0;

@@ -1,6 +1,6 @@
 #pragma once
 #include "IComponent.h"
-#include "Engine/Renderer/Model/Animation.h"
+#include "Engine/Renderer/Model/IAnimation.h"
 
 namespace Engine
 {
@@ -9,9 +9,9 @@ namespace Engine
 		bool isEnabled = false;
 		uint32_t selectedAnimationIndex = 0;
 
-		std::vector<Ptr<Animation>> animations;
+		std::vector<Ptr<IAnimation>> animations;
 
-		operator Ptr<Animation>()
+		operator Ptr<IAnimation>()
 		{
 			if (!animations.empty())
 			{
