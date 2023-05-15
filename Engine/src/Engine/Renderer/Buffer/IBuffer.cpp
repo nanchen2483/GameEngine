@@ -1,5 +1,5 @@
 #include "enginepch.h"
-#include "Buffer.h"
+#include "IBuffer.h"
 
 #include "Engine/Core/System/System.h"
 #include "Platform/OpenGL/Vertex/Buffer/OpenGLIndexBuffer.h"
@@ -8,7 +8,7 @@
 
 namespace Engine
 {
-	Ptr<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	Ptr<IVertexBuffer> IVertexBuffer::Create(uint32_t size)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -20,7 +20,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t numOfVertices)
+	Ptr<IVertexBuffer> IVertexBuffer::Create(float* vertices, uint32_t numOfVertices)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -32,7 +32,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<VertexBuffer> VertexBuffer::Create(Vertex* vertices, uint32_t numOfVertices)
+	Ptr<IVertexBuffer> IVertexBuffer::Create(Vertex* vertices, uint32_t numOfVertices)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -44,7 +44,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<VertexBuffer> VertexBuffer::Create(const void* vertices, uint32_t size)
+	Ptr<IVertexBuffer> IVertexBuffer::Create(const void* vertices, uint32_t size)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -56,7 +56,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<IndexBuffer> IndexBuffer::Create(uint8_t* indices, uint32_t numOfIndices)
+	Ptr<IIndexBuffer> IIndexBuffer::Create(uint8_t* indices, uint32_t numOfIndices)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -68,7 +68,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<IndexBuffer> IndexBuffer::Create(uint16_t* indices, uint32_t numOfIndices)
+	Ptr<IIndexBuffer> IIndexBuffer::Create(uint16_t* indices, uint32_t numOfIndices)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -80,7 +80,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t numOfIndices)
+	Ptr<IIndexBuffer> IIndexBuffer::Create(uint32_t* indices, uint32_t numOfIndices)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -92,7 +92,7 @@ namespace Engine
 		return nullptr;
 	}
 	
-	Ptr<UniformBuffer> UniformBuffer::Create(uint32_t index, const BufferLayout layout)
+	Ptr<IUniformBuffer> IUniformBuffer::Create(uint32_t index, const BufferLayout layout)
 	{
 		switch (System::GetGraphicsApiType())
 		{

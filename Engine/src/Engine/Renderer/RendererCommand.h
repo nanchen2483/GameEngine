@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
-#include "Graphics/GraphicsAPI.h"
+#include "Graphics/IGraphicsAPI.h"
 
 namespace Engine
 {
@@ -18,7 +18,7 @@ namespace Engine
 		static void Clear();
 		static void DrawUint8Indexed(uint32_t count);
 		static void DrawUint16Indexed(uint32_t count);
-		static void DrawUint32Indexed(const Ptr<VertexArray>& vertexArray);
+		static void DrawUint32Indexed(const Ptr<IVertexArray>& vertexArray);
 		static void DrawUint32Indexed(uint32_t count);
 		static void DrawPatch(uint32_t count);
 		static void Compute(uint32_t numOfX, uint32_t numOfY, uint32_t numOfZ);
@@ -26,6 +26,6 @@ namespace Engine
 		RendererCommand();
 		static RendererCommand& GetInstance();
 
-		Uniq<GraphicsAPI> m_graphicsAPI;
+		Uniq<IGraphicsAPI> m_graphicsAPI;
 	};
 }

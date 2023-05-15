@@ -1,11 +1,11 @@
 #include "enginepch.h"
-#include "BoundingBox.h"
+#include "IBoundingBox.h"
 
 #include "AABB.h"
 
 namespace Engine
 {
-	Ptr<BoundingBox> BoundingBox::Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max)
+	Ptr<IBoundingBox> IBoundingBox::Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max)
 	{
 		switch (type)
 		{

@@ -5,7 +5,7 @@ namespace Engine
 {
 	PhysicsSystem::PhysicsSystem()
 	{
-		m_collision = Collision::Create(CollisionType::GjkEpa3D);
+		m_collision = ICollision::Create(CollisionType::GjkEpa3D);
 		m_debug = CreateUniq<BoundingBoxDebug>();
 	}
 

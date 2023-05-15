@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	void MeshSystem::OnUpdate(entt::registry& registry, const Frustum& frustum, const Frustum& lightViewFrustum, const Ptr<Terrain>& terrain)
+	void MeshSystem::OnUpdate(entt::registry& registry, const Frustum& frustum, const Frustum& lightViewFrustum, const Ptr<ITerrain>& terrain)
 	{
 		const float dampingFactor = 0.9f;
 		float deltaTime = System::GetDeltaTime();

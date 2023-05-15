@@ -7,7 +7,7 @@ namespace Engine
 	class AssimpHelper
 	{
 	public:
-		static Ptr<Node> ConvertToAssimpNode(const aiAnimation* animation, const aiNode* rootNode, Dictionary<std::string, glm::mat4> boneOffsets)
+		static Ptr<INode> ConvertToAssimpNode(const aiAnimation* animation, const aiNode* rootNode, Dictionary<std::string, glm::mat4> boneOffsets)
 		{
 			auto boneMap = CreateBoneMap(animation, boneOffsets);
 			return CreateNodes(rootNode, boneMap);
@@ -28,9 +28,9 @@ namespace Engine
 			return boneMap;
 		}
 
-		static Ptr<Node> CreateNodes(const aiNode* node, std::map<std::string, AssimpBone>& boneMap)
+		static Ptr<INode> CreateNodes(const aiNode* node, std::map<std::string, AssimpBone>& boneMap)
 		{
-			Ptr<Node> newNode = CreatePtr<AssimpNode>(node, boneMap[node->mName.data]);
+			Ptr<INode> newNode = CreatePtr<AssimpNode>(node, boneMap[node->mName.data]);
 			for (uint32_t i = 0; i < node->mNumChildren; i++)
 			{
 				newNode->AddChildNode(CreateNodes(node->mChildren[i], boneMap));

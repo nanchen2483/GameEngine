@@ -1,17 +1,17 @@
 #pragma once
 #include "Engine/Core/Base.h"
 #include "Engine/Core/Window/WindowUserData.h"
-#include "GraphicsContext.h"
+#include "IGraphicsContext.h"
 
 namespace Engine
 {
-	class GraphicsLibrary
+	class IGraphicsLibrary
 	{
 	public:
 		virtual void CreateNewWindow(std::string title, uint32_t width, uint32_t height) = 0;
 		virtual void* GetWindow() const = 0;
 		virtual void DestroyWindow() = 0;
-		virtual Uniq<GraphicsContext> GetContext() = 0;
+		virtual Uniq<IGraphicsContext> GetContext() = 0;
 		virtual void SetWindowUserDataPointer(WindowUserData *userData) = 0;
 		virtual WindowUserData* GetWindowUserDataPointer() = 0;
 		virtual void SetVSync(bool enable) = 0;
@@ -26,6 +26,6 @@ namespace Engine
 		virtual void SetCursorPosCallback(void (*callback)(void* window, double xPos, double yPos)) = 0;
 
 		static WindowUserData* GetWindowUserDataPointerStatic(void* window);
-		static Uniq<GraphicsLibrary> Create();
+		static Uniq<IGraphicsLibrary> Create();
 	};
 }

@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	Ptr<Model> ModelLibrary::Load(const std::filesystem::path& filePath)
+	Ptr<IModel> ModelLibrary::Load(const std::filesystem::path& filePath)
 	{
 		ModelLibrary& instance = GetInstance();
 
@@ -13,20 +13,20 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<Model> model = Model::Create(filePath.string());
+		Ptr<IModel> model = IModel::Create(filePath.string());
 		instance.Add(model);
 
 		return model;
 	}
 
-	void ModelLibrary::Add(const Ptr<Model> data)
+	void ModelLibrary::Add(const Ptr<IModel> data)
 	{
 		const Uid& uid = data->GetUid();
 		ENGINE_CORE_ASSERT(!Exists(uid), "Model already exists!");
 		m_models.emplace(uid, data);
 	}
 
-	Ptr<Model> ModelLibrary::Get(const Uid& key) const
+	Ptr<IModel> ModelLibrary::Get(const Uid& key) const
 	{
 		ENGINE_CORE_ASSERT(Exists(key), "Model not found!");
 		return m_models.at(key);

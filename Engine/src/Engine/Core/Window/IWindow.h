@@ -5,10 +5,10 @@
 
 namespace Engine
 {
-	class ENGINE_API Window
+	class ENGINE_API IWindow
 	{
 	public:
-		virtual ~Window() {}
+		virtual ~IWindow() {}
 		
 		virtual void OnUpdate() = 0;
 		virtual uint32_t GetWidth() const = 0;
@@ -21,6 +21,6 @@ namespace Engine
 		virtual void* GetNativeWindow() const = 0;
 		virtual void ShutDown() = 0;
 
-		static Uniq<Window> Create(const WindowProperties& props = WindowProperties());
+		static Uniq<IWindow> Create(const WindowProperties& props = WindowProperties());
 	};
 }

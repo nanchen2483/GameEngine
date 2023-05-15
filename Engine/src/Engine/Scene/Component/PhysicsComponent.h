@@ -1,6 +1,6 @@
 #pragma once
 #include "IComponent.h"
-#include "Engine/Physics/BoundingBox/BoundingBox.h"
+#include "Engine/Physics/BoundingBox/IBoundingBox.h"
 
 namespace Engine
 {
@@ -10,8 +10,8 @@ namespace Engine
 		float restitution = 0.0f;
 		bool isStatic = false;
 		float fallingTime = 0.0f;
-		Ptr<BoundingBox> boundingBox = nullptr;
+		Ptr<IBoundingBox> boundingBox = nullptr;
 
-		operator Ptr<BoundingBox>() { return boundingBox; }
+		operator Ptr<IBoundingBox>() { return boundingBox; }
 	};
 }

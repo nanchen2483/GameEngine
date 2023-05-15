@@ -1,8 +1,7 @@
 #pragma once
-#include "Engine/Renderer/Buffer/Buffer.h"
-#include "Engine/Renderer/Buffer/Framebuffer.h"
-#include "Engine/Renderer/Camera/EditorCamera.h"
-#include "Engine/Renderer/Shader/Shader.h"
+#include "Engine/Renderer/Buffer/IBuffer.h"
+#include "Engine/Renderer/Buffer/IFramebuffer.h"
+#include "Engine/Renderer/Shader/IShader.h"
 
 namespace Engine
 {
@@ -25,15 +24,15 @@ namespace Engine
 		void BindTexture();
 
 		void Update(glm::mat4 viewMatrix, float fov, float aspectRatio);
-		Ptr<Shader> GetShader() const { return m_shader; }
+		Ptr<IShader> GetShader() const { return m_shader; }
 	private:
 		std::vector<glm::mat4> GetLightSpaceMatrices();
 		glm::mat4 GetLightSpaceMatrix(const float nearPlane, const float farPlane);
 		std::vector<glm::vec4> GetFrustumCornersWorldSpace(const glm::mat4& projview);
 
-		Ptr<Shader> m_shader;
-		Ptr<Framebuffer> m_framebuffer;
-		Ptr<UniformBuffer> m_lightSpaceMatrixUniformBuffer;
+		Ptr<IShader> m_shader;
+		Ptr<IFramebuffer> m_framebuffer;
+		Ptr<IUniformBuffer> m_lightSpaceMatrixUniformBuffer;
 		
 		// Camera properties
 		glm::mat4 m_cameraViewMatrix;

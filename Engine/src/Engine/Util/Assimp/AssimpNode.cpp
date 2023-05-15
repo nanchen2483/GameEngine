@@ -45,7 +45,7 @@ namespace Engine
 		return {};
 	}
 	
-	const Ptr<Node> AssimpNode::GetChildNode(const uint32_t index) const
+	const Ptr<INode> AssimpNode::GetChildNode(const uint32_t index) const
 	{
 		ENGINE_CORE_ASSERT(m_numOfchildren > index, "Invalid index");
 		return m_children[index];

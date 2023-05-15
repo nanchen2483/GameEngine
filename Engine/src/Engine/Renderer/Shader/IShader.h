@@ -6,10 +6,10 @@
 
 namespace Engine
 {
-	class Shader : public IUniqueObject
+	class IShader : public IUniqueObject
 	{
 	public:
-		virtual ~Shader() = default;
+		virtual ~IShader() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
@@ -27,8 +27,8 @@ namespace Engine
 		virtual void SetBlockBinding(const std::string& name, const int value) = 0;
 		virtual const std::string& GetName() const = 0;
 	private:
-		static Ptr<Shader> Create(const std::string& filePath);
-		static Ptr<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+		static Ptr<IShader> Create(const std::string& filePath);
+		static Ptr<IShader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 
 		friend class ShaderLibrary;
 	};

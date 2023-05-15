@@ -67,7 +67,7 @@ namespace Engine
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, nullptr);
 	}
 
-	void OpenGLGraphicsAPI::DrawUint32Indexed(const Ptr<VertexArray>& vertexArray)
+	void OpenGLGraphicsAPI::DrawUint32Indexed(const Ptr<IVertexArray>& vertexArray)
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 	}

@@ -1,9 +1,9 @@
 #pragma once
-#include "Engine/Renderer/Buffer/Buffer.h"
+#include "Engine/Renderer/Buffer/IBuffer.h"
 
 namespace Engine
 {
-	class OpenGLIndexBuffer : public IndexBuffer
+	class OpenGLIndexBuffer : public IIndexBuffer
 	{
 	public:
 		OpenGLIndexBuffer(uint8_t* indices, uint32_t numOfIndices);

@@ -1,11 +1,11 @@
 #pragma once
-#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Texture/ITexture.h"
 
 #include <filesystem>
 
 namespace Engine
 {
-	class OpenGLTexture3D : public Texture3D
+	class OpenGLTexture3D : public ITexture3D
 	{
 	public:
 		OpenGLTexture3D(const std::vector<Ptr<Image>>& faces);
@@ -23,7 +23,7 @@ namespace Engine
 		virtual void Bind(uint32_t slot) const override;
 
 		inline virtual Uid GetUid() const override { return m_uid; }
-		virtual bool operator==(const Texture& other) const override
+		virtual bool operator==(const ITexture& other) const override
 		{
 			return m_rendererId == ((OpenGLTexture3D&)other).m_rendererId;
 		}

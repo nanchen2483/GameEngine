@@ -21,10 +21,10 @@ namespace Engine
 		AABB = 1,
 	};
 
-	class ENGINE_TEST_API BoundingBox
+	class ENGINE_TEST_API IBoundingBox
 	{
 	public:
-		~BoundingBox() = default;
+		~IBoundingBox() = default;
 
 		virtual BoundingValue GetBoundingValue() const = 0;
 		virtual void SetBoundingValue(const BoundingValue& value) = 0;
@@ -32,6 +32,6 @@ namespace Engine
 		virtual bool IsOnForwardPlane(const Plane& plan) const = 0;
 		virtual glm::vec3 GetSupportPoint(glm::vec3 direction) const = 0;
 
-		static Ptr<BoundingBox> Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max);
+		static Ptr<IBoundingBox> Create(BoundingBoxType type, const glm::vec3& min, const glm::vec3& max);
 	};
 }

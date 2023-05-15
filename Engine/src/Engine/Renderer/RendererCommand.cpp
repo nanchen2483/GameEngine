@@ -56,7 +56,7 @@ namespace Engine
 		GetInstance().m_graphicsAPI->DrawUint16Indexed(count);
 	}
 
-	void RendererCommand::DrawUint32Indexed(const Ptr<VertexArray>& vertexArray)
+	void RendererCommand::DrawUint32Indexed(const Ptr<IVertexArray>& vertexArray)
 	{
 		GetInstance().m_graphicsAPI->DrawUint32Indexed(vertexArray);
 	}
@@ -77,7 +77,7 @@ namespace Engine
 	}
 
 	RendererCommand::RendererCommand()
-		: m_graphicsAPI(GraphicsAPI::Create())
+		: m_graphicsAPI(IGraphicsAPI::Create())
 	{
 	}
 

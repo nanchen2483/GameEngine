@@ -1,9 +1,9 @@
 #pragma once
-#include "Engine/Renderer/Buffer/Buffer.h"
+#include "Engine/Renderer/Buffer/IBuffer.h"
 
 namespace Engine
 {
-	class OpenGLUniformBuffer : public UniformBuffer
+	class OpenGLUniformBuffer : public IUniformBuffer
 	{
 	public:
 		OpenGLUniformBuffer(uint32_t index, const BufferLayout layout);

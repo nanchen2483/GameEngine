@@ -1,9 +1,9 @@
 #pragma once
-#include "BoundingBox.h"
+#include "IBoundingBox.h"
 
 namespace Engine
 {
-	class AABB : public BoundingBox
+	class AABB : public IBoundingBox
 	{
 	public:
 		AABB(const glm::vec3& min, const glm::vec3& max);

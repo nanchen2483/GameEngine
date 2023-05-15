@@ -321,7 +321,7 @@ namespace Engine
 									{
 										component->isLoading = true;
 										component->filePath = filePath;
-										Ptr<Model> model = ModelLibrary::Load(filePath);
+										Ptr<IModel> model = ModelLibrary::Load(filePath);
 										component->meshes = model->GetMeshes();
 										component->isLoading = false;
 									}).detach();
@@ -429,7 +429,7 @@ namespace Engine
 							}
 							else
 							{
-								Ptr<Texture> texture = TextureLibrary::Load(image, TextureType::Skybox);
+								Ptr<ITexture> texture = TextureLibrary::Load(image, TextureType::Skybox);
 								ImGui::ImageButton((ImTextureID)(uint64_t)texture->GetRendererId(), ImVec2(64, 64), ImVec2(1.0f, 0.0f), ImVec2(0.0f, 1.0f));
 							}
 
@@ -476,7 +476,7 @@ namespace Engine
 					ImGuiExtension::DrawTextureSubSection("Texture", component.texture, TextureType::Height,
 						[&]()
 						{
-							component.terrain = Terrain::Create(TerrainType::Quadtree, component.texture, entity);
+							component.terrain = ITerrain::Create(TerrainType::Quadtree, component.texture, entity);
 						});
 				},
 				[&]()

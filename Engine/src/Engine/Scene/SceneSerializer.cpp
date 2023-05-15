@@ -153,7 +153,7 @@ namespace Engine
 
 			SkyboxComponent& skyboxComponent = entity.GetComponent<SkyboxComponent>();
 
-			Ptr<Texture3D> texture = skyboxComponent.skybox->GetTexture();
+			Ptr<ITexture3D> texture = skyboxComponent.skybox->GetTexture();
 			out << YAML::Key << "RightFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Right);
 			out << YAML::Key << "LeftFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Left);
 			out << YAML::Key << "TopFilePath" << YAML::Value << texture->GetFilePath(TextureOrientationType::Top);
@@ -305,7 +305,7 @@ namespace Engine
 
 					deserializedMesh.filePath = meshComponent["Path"].as<std::string>();
 					deserializedMesh.isPlayer = meshComponent["IsPlayer"].as<bool>();
-					Ptr<Model> model = ModelLibrary::Load(deserializedMesh.filePath);
+					Ptr<IModel> model = ModelLibrary::Load(deserializedMesh.filePath);
 					deserializedMesh.meshes = model->GetMeshes();
 
 					YAML::Node animationComponent = entity["AnimationComponent"];
@@ -350,7 +350,7 @@ namespace Engine
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
 					deserializedSkybox.texture = TextureLibrary::Load(terrainComponent["Path"].as<std::string>(), TextureType::Height);
-					deserializedSkybox.terrain = Terrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
+					deserializedSkybox.terrain = ITerrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}
 		}

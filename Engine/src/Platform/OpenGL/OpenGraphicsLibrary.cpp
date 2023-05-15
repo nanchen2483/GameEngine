@@ -31,7 +31,7 @@ namespace Engine
 	void OpenGraphicsLibrary::CreateNewWindow(std::string title, uint32_t width, uint32_t height)
 	{
 		m_window = glfwCreateWindow((int)width, (int)height, title.c_str(), nullptr, nullptr);
-		m_context = GraphicsContext::Create((void*)m_window);
+		m_context = IGraphicsContext::Create((void*)m_window);
 		m_context->Init();
 	}
 
@@ -47,7 +47,7 @@ namespace Engine
 
 	WindowUserData* OpenGraphicsLibrary::GetWindowUserDataPointer()
 	{
-		return static_cast<WindowUserData*>(glfwGetWindowUserPointer(m_window));
+		return GetWindowUserDataPointerStatic(m_window);
 	}
 
 	void OpenGraphicsLibrary::SetVSync(bool enable)

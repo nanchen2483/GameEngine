@@ -1,18 +1,18 @@
 #include <gtest/gtest.h>
 #include "Engine.h"
-#include "Engine/Physics/Collision/Collision.h"
+#include "Engine/Physics/Collision/ICollision.h"
 
 namespace EngineTest
 {
 	struct CollisionTest : testing::Test
 	{
-		Engine::Uniq<Engine::Collision> collision;
-		Engine::Ptr<Engine::BoundingBox> boudingBox;
+		Engine::Uniq<Engine::ICollision> collision;
+		Engine::Ptr<Engine::IBoundingBox> boudingBox;
 
 		CollisionTest()
 		{
-			collision = Engine::Collision::Create(Engine::CollisionType::GjkEpa3D);
-			boudingBox = Engine::BoundingBox::Create(Engine::BoundingBoxType::AABB, glm::vec3(-0.5), glm::vec3(0.5));
+			collision = Engine::ICollision::Create(Engine::CollisionType::GjkEpa3D);
+			boudingBox = Engine::IBoundingBox::Create(Engine::BoundingBoxType::AABB, glm::vec3(-0.5), glm::vec3(0.5));
 		}
 	};
 

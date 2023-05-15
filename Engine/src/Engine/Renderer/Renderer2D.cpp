@@ -17,16 +17,16 @@ namespace Engine
 		static const uint32_t maxIndices = maxQuads * 6;
 		static const uint32_t maxTextureSlots = 32;
 
-		Ptr<VertexArray> vertexArray;
-		Ptr<VertexBuffer> vertexBuffer;
-		Ptr<Shader> shader;
-		Ptr<Texture2D> whiteTexture;
+		Ptr<IVertexArray> vertexArray;
+		Ptr<IVertexBuffer> vertexBuffer;
+		Ptr<IShader> shader;
+		Ptr<ITexture2D> whiteTexture;
 
 		uint32_t indexCount = 0;
 		Vertex* vertexBufferBase = nullptr;
 		Vertex* vertexBufferPtr = nullptr;
 
-		std::array<Ptr<Texture2D>, maxTextureSlots> textureSlots;
+		std::array<Ptr<ITexture2D>, maxTextureSlots> textureSlots;
 		uint32_t textureSlotIndex = 1;
 
 		glm::vec4 vertexPosition[4] = {};
@@ -40,9 +40,9 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		s_data.vertexArray = VertexArray::Create();
+		s_data.vertexArray = IVertexArray::Create();
 
-		s_data.vertexBuffer = VertexBuffer::Create(s_data.maxVertices * sizeof(Vertex));
+		s_data.vertexBuffer = IVertexBuffer::Create(s_data.maxVertices * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 		s_data.vertexBufferBase = new Vertex[s_data.maxVertices];
@@ -61,7 +61,7 @@ namespace Engine
 
 			indicesOffset += 4;
 		}
-		Ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, s_data.maxIndices);
+		Ptr<IIndexBuffer> indexBuffer = IIndexBuffer::Create(indices, s_data.maxIndices);
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
@@ -116,7 +116,7 @@ namespace Engine
 		StartBatch();
 	}
 
-	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	void Renderer2D::BeginScene(const ICamera& camera, const glm::mat4& transform)
 	{
 		ENGINE_PROFILE_FUNCTION();
 
@@ -170,7 +170,7 @@ namespace Engine
 		DrawQuad(transform, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color, int entityId)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ptr<ITexture2D>& texture, const glm::vec4& color, int entityId)
 	{
 		ENGINE_PROFILE_FUNCTION();
 

@@ -1,12 +1,12 @@
 #include "enginepch.h"
-#include "Window.h"
+#include "IWindow.h"
 
 #include "Engine/Core/System/System.h"
 #include "Platform/Windows/WindowsWindow.h"
 
 namespace Engine
 {
-	Uniq<Window> Window::Create(const WindowProperties& props)
+	Uniq<IWindow> IWindow::Create(const WindowProperties& props)
 	{
 		switch (System::GetOperatingSystem())
 		{

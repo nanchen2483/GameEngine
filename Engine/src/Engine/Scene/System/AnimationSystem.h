@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Renderer/Model/Animation.h"
-#include "Engine/Renderer/Model/Node.h"
+#include "Engine/Renderer/Model/IAnimation.h"
+#include "Engine/Renderer/Model/INode.h"
 
 #include <entt/entt.hpp>
 
@@ -10,8 +10,8 @@ namespace Engine
 	{
 	public:
 		static void OnUpdate(entt::registry& registry);
-		static void UpdateAnimation(const Ptr<Animation>& animation);
+		static void UpdateAnimation(const Ptr<IAnimation>& animation);
 	private:
-		static void CalculateBoneTransform(const Ptr<Animation>& animation, const Ptr<Node>& node, glm::mat4 globalTransformation);
+		static void CalculateBoneTransform(const Ptr<IAnimation>& animation, const Ptr<INode>& node, glm::mat4 globalTransformation);
 	};
 }

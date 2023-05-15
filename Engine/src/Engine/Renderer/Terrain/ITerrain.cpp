@@ -1,11 +1,11 @@
 #include "enginepch.h"
-#include "Terrain.h"
+#include "ITerrain.h"
 #include "Tessellation/TessellationTerrain.h"
 #include "Quadtree/QuadtreeTerrain.h"
 
 namespace Engine
 {
-	Uniq<Terrain> Terrain::Create(TerrainType type, std::string filePath, int32_t entityId)
+	Uniq<ITerrain> ITerrain::Create(TerrainType type, std::string filePath, int32_t entityId)
 	{
 		switch (type)
 		{
@@ -19,7 +19,7 @@ namespace Engine
 		}
 	}
 	
-	Uniq<Terrain> Terrain::Create(TerrainType type, Ptr<Texture2D> texture, int32_t entityId)
+	Uniq<ITerrain> ITerrain::Create(TerrainType type, Ptr<ITexture2D> texture, int32_t entityId)
 	{
 		switch (type)
 		{

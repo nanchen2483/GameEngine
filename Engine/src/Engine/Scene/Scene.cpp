@@ -22,7 +22,7 @@
 
 namespace Engine
 {
-	Scene::Scene(const Ptr<Framebuffer>& framebuffer)
+	Scene::Scene(const Ptr<IFramebuffer>& framebuffer)
 		: m_framebuffer(framebuffer)
 	{
 	}
@@ -53,7 +53,7 @@ namespace Engine
 
 		// Update
 		Entity terrainEntity = GetTerrainEntity();
-		static Ptr<Terrain> terrain;
+		static Ptr<ITerrain> terrain;
 		if (terrainEntity)
 		{
 			terrain = terrainEntity.GetComponent<TerrainComponent>().terrain;
@@ -113,7 +113,7 @@ namespace Engine
 
 			// Update
 			Entity terrainEntity = GetTerrainEntity();
-			static Ptr<Terrain> terrain;
+			static Ptr<ITerrain> terrain;
 			if (terrainEntity)
 			{
 				terrain = terrainEntity.GetComponent<TerrainComponent>().terrain;

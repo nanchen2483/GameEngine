@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Physics/BoundingBox/BoundingBox.h"
+#include "Engine/Physics/BoundingBox/IBoundingBox.h"
 #include "Engine/Util/Vector3DHash.h"
 
 namespace Engine
@@ -46,11 +46,11 @@ namespace Engine
 		}
 	};
 
-	class ENGINE_TEST_API Collision
+	class ENGINE_TEST_API ICollision
 	{
 	public:
 		virtual const CollisionInfo Detect(const ShapeInfo& shapeA, const ShapeInfo& shapeB) = 0;
 
-		static Uniq<Collision> Create(CollisionType type);
+		static Uniq<ICollision> Create(CollisionType type);
 	};
 }
