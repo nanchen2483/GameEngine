@@ -2,7 +2,7 @@
 #include "Image.h"
 
 #include "Engine/Core/Base.h"
-#include "Engine/Renderer/Renderer.h"
+#include "Engine/Core/System/System.h"
 
 #include <filesystem>
 #include <stb_image.h>
@@ -19,16 +19,16 @@ namespace Engine
 	{
 		m_imageName = std::filesystem::path(filePath).stem().string();
 
-		switch (Renderer::GetAPI())
+		switch (System::GetGraphicsApiType())
 		{
-		case RendererAPI::API::OpenGL:
+		case GraphicsApiType::OpenGL:
 			// The (0, 0) coordinate of the image in OpenGL is the bottom-left corner,
 			// but images usually have (0, 0) at the top-left corner.
 			stbi_set_flip_vertically_on_load(!flipVertically);
 			break;
-		case RendererAPI::API::None:
+		case GraphicsApiType::None:
 		default:
-			ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported");
+			ENGINE_CORE_ASSERT(false, "GraphicsAPI::None is not supported");
 			break;
 		}
 		

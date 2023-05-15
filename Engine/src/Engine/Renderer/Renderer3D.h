@@ -7,7 +7,6 @@
 #include "Engine/Scene/Component/TerrainComponent.h"
 #include "Engine/Scene/Component/TransformComponent.h"
 #include "Engine/Renderer/Camera/OrthographicCamera.h"
-#include "RendererAPI.h"
 
 namespace Engine
 {
@@ -28,8 +27,6 @@ namespace Engine
 		static void Draw(SkyboxComponent& component);
 
 		static void EndScene();
-
-		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); };
 
 		struct Statistics
 		{

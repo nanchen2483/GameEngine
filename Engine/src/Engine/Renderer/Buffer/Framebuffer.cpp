@@ -1,20 +1,20 @@
 #include "enginepch.h"
 #include "Framebuffer.h"
 
-#include "Engine/Renderer/Renderer.h"
+#include "Engine/Core/System/System.h"
 #include "Platform/OpenGL/Vertex/Buffer/OpenGLFramebuffer.h"
 
 namespace Engine
 {
 	Ptr<Framebuffer> Framebuffer::Create(const FramebufferSpecification spec)
 	{
-		switch (Renderer::GetAPI())
+		switch (System::GetGraphicsApiType())
 		{
-		case RendererAPI::API::None:		ENGINE_CORE_ASSERT(false, "RendererAPI::None is not supported"); return nullptr;
-		case RendererAPI::API::OpenGL:		return CreatePtr<OpenGLFramebuffer>(spec);
+		case GraphicsApiType::None:			ENGINE_CORE_ASSERT(false, "GraphicsAPI::None is not supported"); return nullptr;
+		case GraphicsApiType::OpenGL:		return CreatePtr<OpenGLFramebuffer>(spec);
 		}
 
-		ENGINE_CORE_ASSERT(false, "Unknown RendererAPI");
+		ENGINE_CORE_ASSERT(false, "Unknown GraphicsAPI");
 		return nullptr;
 	}
 }
