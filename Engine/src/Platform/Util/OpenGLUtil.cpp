@@ -1,5 +1,4 @@
 #include "OpenGLUtil.h"
-
 #include "Engine/Core/Base.h"
 
 #include <glad/glad.h>

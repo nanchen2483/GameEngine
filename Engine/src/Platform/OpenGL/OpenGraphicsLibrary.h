@@ -16,6 +16,7 @@ namespace Engine
 
 		virtual void CreateNewWindow(std::string title, uint32_t width, uint32_t height) override;
 		virtual void* GetWindow() const override { return m_window; };
+		virtual void* GetWin32Window() const override;
 		virtual void DestroyWindow() override;
 		virtual Uniq<IGraphicsContext> GetContext() override { return std::move(m_context); };
 		virtual void SetWindowUserDataPointer(WindowUserData* userData) override;

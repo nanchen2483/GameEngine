@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class ENGINE_API FileDialogs
+	class ENGINE_API FileDialog
 	{
 	public:
 		static std::string OpenFile(const char* filter);

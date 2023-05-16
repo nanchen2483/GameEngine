@@ -36,6 +36,21 @@ namespace Engine
 		m_context->Init();
 	}
 
+#ifdef ENGINE_PLATFORM_WINDOWS
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+	void* OpenGraphicsLibrary::GetWin32Window() const
+	{
+		return static_cast<void*>(glfwGetWin32Window(m_window));
+	}
+#else
+	void* OpenGraphicsLibrary::GetWin32Window() const
+	{
+		return static_assert(false);
+	}
+#endif // ENGINE_PLATFORM_WINDOWS
+
+
 	void OpenGraphicsLibrary::DestroyWindow()
 	{
 		glfwDestroyWindow(m_window);

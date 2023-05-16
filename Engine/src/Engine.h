@@ -12,6 +12,7 @@
 
 // File
 #include "Engine/File/File.h"
+#include "Engine/File/FileDialog.h"
 #include "Engine/File/FileExtension.h"
 #include "Engine/File/FileType.h"
 
@@ -51,4 +52,3 @@
 
 // Util
 #include "Engine/ImGui/ImGuiLayer.h"
-#include "Engine/Util/PlatformUtil.h"

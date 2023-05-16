@@ -3,7 +3,8 @@
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
 #include "Engine/Core/Enum/PolygonMode.h"
-#include "Engine/Renderer/Texture/ITexture.h"
+#include "Engine/Renderer/Texture/TextureFormat.h"
+#include "Engine/Renderer/Texture/TextureType.h"
 
 namespace Engine
 {

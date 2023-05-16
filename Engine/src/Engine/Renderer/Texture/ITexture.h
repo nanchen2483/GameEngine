@@ -1,7 +1,8 @@
 #pragma once
 #include "Image.h"
-#include "Enum/TextureType.h"
 #include "Engine/Core/System/Object/IUniqueObject.h"
+#include "TextureFormat.h"
+#include "TextureType.h"
 
 #include <map>
 #include <string>
@@ -9,13 +10,6 @@
 
 namespace Engine
 {
-	struct TextureFormat
-	{
-		uint32_t internalFormat;
-		uint32_t dataFormat;
-		uint32_t channels;
-	};
-
 	class ENGINE_API ITexture : public IUniqueObject
 	{
 	public:

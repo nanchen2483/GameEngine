@@ -1,23 +1,18 @@
 #include "enginepch.h"
-#include "Engine/Util/PlatformUtil.h"
-
-#include "Engine/Core/Application.h"
+#include "Engine/File/FileDialog.h"
+#include "Engine/Renderer/Graphics/IGraphicsLibrary.h"
 
 #include <commdlg.h>
-#include <GLFW/glfw3.h>
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
-
 
 namespace Engine
 {
-	std::string FileDialogs::OpenFile(const char* filter)
+	std::string FileDialog::OpenFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::Get().GetWindow().GetNativeWindow());
+		ofn.hwndOwner = static_cast<HWND>(IGraphicsLibrary::GetInstance().GetWin32Window());
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.lpstrFilter = filter;
@@ -31,13 +26,13 @@ namespace Engine
 		return std::string();
 	}
 
-	std::string FileDialogs::SaveFile(const char* filter)
+	std::string FileDialog::SaveFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::Get().GetWindow().GetNativeWindow());
+		ofn.hwndOwner = static_cast<HWND>(IGraphicsLibrary::GetInstance().GetWin32Window());
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.lpstrFilter = filter;

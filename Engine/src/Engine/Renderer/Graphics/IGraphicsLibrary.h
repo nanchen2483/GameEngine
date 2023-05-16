@@ -14,6 +14,7 @@ namespace Engine
 	public:
 		virtual void CreateNewWindow(std::string title, uint32_t width, uint32_t height) = 0;
 		virtual void* GetWindow() const = 0;
+		virtual void* GetWin32Window() const = 0;
 		virtual void DestroyWindow() = 0;
 		virtual Uniq<IGraphicsContext> GetContext() = 0;
 		virtual void SetWindowUserDataPointer(WindowUserData *userData) = 0;
