@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine/Core/Enum/CursorMode.h"
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
 #include "Engine/Core/Enum/PolygonMode.h"
@@ -9,6 +10,8 @@ namespace Engine
 	class OpenGLUtil
 	{
 	public:
+		static int32_t ToGL(CursorMode mode);
+		static CursorMode FromGLCursorMode(int mode);
 		static int32_t ToGL(DepthFunc func);
 		static int32_t ToGL(FaceCulling face);
 		static int32_t ToGL(TextureAccessType access);
