@@ -32,16 +32,6 @@ namespace Engine
 		fbSpec.height = 720;
 		m_framebuffer = IFramebuffer::Create(fbSpec);
 
-		FramebufferSpecification fbSpec2;
-		fbSpec2.attachments = FramebufferAttachmentSpecification(
-			{
-				FramebufferTextureFormat::RGBA8,
-				FramebufferTextureFormat::RGBA8,
-			});
-		fbSpec2.width = 1280;
-		fbSpec2.height = 720;
-		auto framebuffer = IFramebuffer::Create(fbSpec2);
-
 		// Entity
 		m_activeScene = CreatePtr<Scene>(m_framebuffer);
 
