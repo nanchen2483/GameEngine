@@ -19,9 +19,15 @@ namespace Engine
 		virtual void DestroyWindow() override;
 		virtual Uniq<IGraphicsContext> GetContext() override { return std::move(m_context); };
 		virtual void SetWindowUserDataPointer(WindowUserData* userData) override;
-		virtual WindowUserData* GetWindowUserDataPointer() override;
+		virtual WindowUserData* GetWindowUserDataPointer() const override;
 		virtual void SetVSync(bool enable) override;
 		virtual void PollEvents() override;
+
+		virtual KeyMouseButtonActions GetKeyState(KeyCode keycode) const override;
+		virtual KeyMouseButtonActions GetMouseButtonState(MouseButton button) const override;
+		virtual std::pair<float, float> GetCursorPosition() const override;
+		virtual CursorMode GetCursorMode() const override;
+		virtual void SetCursorMode(CursorMode mode) override;
 
 		virtual void SetWindowsSizeCallback(void (*callback)(void* window, int32_t width, int32_t height)) override;
 		virtual void SetWindowCloseCallback(void (*callback)(void* window)) override;

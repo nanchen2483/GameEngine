@@ -18,15 +18,21 @@ namespace Engine
 		return nullptr;
 	}
 
-	Uniq<IGraphicsLibrary> IGraphicsLibrary::Create()
+	IGraphicsLibrary* Create()
 	{
 		switch (System::GetGraphicsApiType())
 		{
 		case GraphicsApiType::None:			ENGINE_CORE_ASSERT(false, "GraphicsAPI::None is not supported"); return nullptr;
-		case GraphicsApiType::OpenGL:		return CreateUniq<OpenGraphicsLibrary>();
+		case GraphicsApiType::OpenGL:		return new OpenGraphicsLibrary();
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknown GraphicsAPI");
 		return nullptr;
+	}
+
+	IGraphicsLibrary& IGraphicsLibrary::GetInstance()
+	{
+		static IGraphicsLibrary* s_instance = Create();
+		return *s_instance;
 	}
 }
