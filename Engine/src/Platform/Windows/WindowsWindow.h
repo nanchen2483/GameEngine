@@ -19,11 +19,10 @@ namespace Engine
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_userData.EventCallback = callback; }
 		void SetVSync(bool enable) override;
 		bool IsVSync() const override { return m_userData.vSync; }
-		inline virtual void* GetNativeWindow() const { return m_library->GetWindow();  }
+		inline virtual void* GetNativeWindow() const { return IGraphicsLibrary::GetInstance().GetWindow(); }
 		virtual void ShutDown() override;
 	private:
 		Uniq<IGraphicsContext> m_context;
-		Uniq<IGraphicsLibrary> m_library;
 		WindowUserData m_userData;
 	};
 }

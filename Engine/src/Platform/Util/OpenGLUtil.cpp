@@ -1,11 +1,43 @@
 #include "OpenGLUtil.h"
-
 #include "Engine/Core/Base.h"
 
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace Engine
 {
+	int32_t OpenGLUtil::ToGL(CursorMode mode)
+	{
+		switch (mode)
+		{
+		case CursorMode::Normal:
+			return GLFW_CURSOR_NORMAL;
+		case CursorMode::Hidden:
+			return GLFW_CURSOR_HIDDEN;
+		case CursorMode::Disabled:
+			return GLFW_CURSOR_DISABLED;
+		default:
+			ENGINE_CORE_ASSERT(false, "Invalid cursor mode");
+			return -1;
+		}
+	}
+
+	CursorMode OpenGLUtil::FromGLCursorMode(int mode)
+	{
+		switch (mode)
+		{
+		case GLFW_CURSOR_NORMAL:
+			return CursorMode::Normal;
+		case GLFW_CURSOR_HIDDEN:
+			return CursorMode::Hidden;
+		case GLFW_CURSOR_DISABLED:
+			return CursorMode::Disabled;
+		default:
+			ENGINE_CORE_ASSERT(false, "Invalid cursor mode");
+			return (CursorMode)-1;
+		}
+	}
+
 	int32_t OpenGLUtil::ToGL(DepthFunc func)
 	{
 		switch (func)
