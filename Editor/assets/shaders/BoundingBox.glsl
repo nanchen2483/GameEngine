@@ -1,5 +1,5 @@
 #type vertex
-#version 450 core
+#version 460 core
 
 layout (location = 0) in vec3 aPosition;
 
@@ -18,7 +18,7 @@ void main()
 }
 
 #type fragment
-#version 450 core
+#version 460 core
 
 layout (location = 0) out vec4 aFragColor;
 

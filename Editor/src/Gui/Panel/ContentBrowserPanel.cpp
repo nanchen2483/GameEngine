@@ -174,7 +174,7 @@ namespace Engine
 			icon = ICON_FA_FOLDER " ";
 		}
 
-		if (ImGui::TreeNodeEx((void*)treeNodeId, treeNodeFlag, (icon + directory.filename().string()).c_str()))
+		if (ImGui::TreeNodeEx((void*)treeNodeId, treeNodeFlag, "%s", (icon + directory.filename().string()).c_str()))
 		{
 			if (ImGui::IsItemFocused())
 			{
@@ -224,9 +224,9 @@ namespace Engine
 
 			if (ImGui::BeginDragDropSource())
 			{
-				const wchar_t* itemPath = path.c_str();
+				const wchar_t* itemPath = (const wchar_t*)path.c_str();
 				ImGui::SetDragDropPayload(File::GetFileType(path).c_str(), itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
-				ImGui::Text(filenameString.c_str());
+				ImGui::Text("%s", filenameString.c_str());
 				ImGui::EndDragDropSource();
 			}
 
@@ -247,7 +247,7 @@ namespace Engine
 				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (thumbnailSize + buttonPadding - textWidth) * 0.5f);
 			}
 
-			ImGui::TextWrapped(filenameString.c_str());
+			ImGui::TextWrapped("%s", filenameString.c_str());
 			ImGui::NextColumn();
 			ImGui::PopID();
 		}

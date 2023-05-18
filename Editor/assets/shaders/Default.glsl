@@ -1,5 +1,5 @@
 #type vertex
-#version 450 core
+#version 460 core
 
 layout (location = 0) in vec3 aPosition;
 layout (location = 1) in vec3 aNormal;
@@ -113,7 +113,7 @@ vec3 CalcWorldNormal()
 }
 
 #type fragment
-#version 450 core
+#version 460 core
 
 layout (location = 0) out vec4 aFragColor;
 layout (location = 1) out int aEntityId;

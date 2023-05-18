@@ -42,7 +42,7 @@ namespace EngineTest
 		EXPECT_EQ(perspectiveFarClip, camera.GetPerspectiveFarClip());
 		EXPECT_EQ(perspectiveFOV, camera.GetPerspectiveFOV());
 		EXPECT_EQ(Engine::CameraProjectionType::Perspective, camera.GetProjectionType());
-		glm::mat4& perspective = glm::perspective(glm::radians(perspectiveFOV), aspectRatio, perspectiveNearClip, perspectiveFarClip);
+		const glm::mat4& perspective = glm::perspective(glm::radians(perspectiveFOV), aspectRatio, perspectiveNearClip, perspectiveFarClip);
 		EXPECT_EQ(perspective, camera.GetProjection());
 	}
 

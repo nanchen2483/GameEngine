@@ -1,5 +1,5 @@
 #type vertex
-#version 430
+#version 460 core
 
 layout (location = 0) in vec2 aPosition;
 
@@ -175,7 +175,7 @@ float MorphLongitude(vec2 position)
 }
 
 #type control
-#version 430
+#version 460
 
 layout (vertices = 16) out;
 
@@ -233,7 +233,7 @@ void main()
 }
 
 #type evaluation
-#version 430
+#version 460 core
 
 layout (quads, fractional_odd_spacing, cw) in;
 
@@ -275,7 +275,7 @@ void main()
 }
 
 #type geometry
-#version 430
+#version 460 core
 
 layout (triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
@@ -379,7 +379,7 @@ void main()
 }
 
 #type fragment
-#version 430
+#version 460 core
 
 layout (location = 0) out vec4 aFragColor;
 

@@ -1,8 +1,8 @@
-#ifdef ENGINE_PLATFORM_WINDOWS
 #include "enginepch.h"
 #include "Engine/File/FileDialog.h"
 #include "Engine/Renderer/Graphics/IGraphicsLibrary.h"
 
+#ifdef ENGINE_PLATFORM_WINDOWS
 #include <Windows.h>
 #include <commdlg.h>
 
@@ -45,6 +45,19 @@ namespace Engine
 			return ofn.lpstrFile;
 		}
 
+		return std::string();
+	}
+}
+#else
+namespace Engine
+{
+	std::string FileDialog::OpenFile(const char* filter)
+	{
+		return std::string();
+	}
+
+	std::string FileDialog::SaveFile(const char* filter)
+	{
 		return std::string();
 	}
 }

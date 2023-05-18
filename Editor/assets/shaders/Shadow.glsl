@@ -1,5 +1,5 @@
 #type vertex
-#version 450 core
+#version 460 core
 
 layout (location = 0) in vec3 aPosition;
 layout (location = 7) in ivec4 aBoneIds;

@@ -120,7 +120,7 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		glm::mat4& viewProjection = camera.GetProjection() * glm::inverse(transform);
+		const glm::mat4& viewProjection = camera.GetProjection() * glm::inverse(transform);
 
 		s_data.shader->Bind();
 		s_data.shader->SetMat4("uViewProjection", viewProjection);

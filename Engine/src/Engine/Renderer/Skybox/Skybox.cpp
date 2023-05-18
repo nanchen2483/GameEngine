@@ -16,7 +16,7 @@ namespace Engine
 	Skybox::Skybox(Ptr<ITexture3D> texture)
 		: m_texture(texture)
 	{
-		m_vertexArray = Engine::IVertexArray::Create();
+		m_vertexArray = IVertexArray::Create();
 		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(const_cast<float*>(SkyboxData::vertices), SkyboxData::numOfVertices);
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },

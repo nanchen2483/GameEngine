@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	template<typename T, typename std::enable_if_t<std::is_base_of_v<IComparable<T>, T>>* = nullptr>
+	template<typename T>
 	class OrderedLinkedList
 	{
 	public:
@@ -120,16 +120,6 @@ namespace Engine
 			--m_size;
 		}
 
-		class Iterator;
-		Iterator begin() { return Iterator(m_head); }
-		Iterator end() { return Iterator(nullptr); }
-	private:
-		struct Node;
-		Node* m_head;
-		Node* m_tail;
-		uint32_t m_size;
-		std::vector<Uniq<Node>> m_nodes;
-
 		struct Node
 		{
 			T data;
@@ -191,5 +181,13 @@ namespace Engine
 		private:
 			Node* m_current;
 		};
+
+		Iterator begin() { return Iterator(m_head); }
+		Iterator end() { return Iterator(nullptr); }
+	private:
+		Node* m_head;
+		Node* m_tail;
+		uint32_t m_size;
+		std::vector<Uniq<Node>> m_nodes;
 	};
 }

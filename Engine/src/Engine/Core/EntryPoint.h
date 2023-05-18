@@ -2,8 +2,6 @@
 #include "Base.h"
 #include "Engine/Debug/Instrumentor.h"
 
-#ifdef ENGINE_PLATFORM_WINDOWS
-
 extern Engine::Application* Engine::CreateApplication();
 
 int main(int argc, char** argv)
@@ -24,5 +22,3 @@ int main(int argc, char** argv)
 
 	return 0;
 }
-
-#endif // ENGINE_PLATFORM_WINDOWS

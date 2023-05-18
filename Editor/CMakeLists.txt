@@ -16,8 +16,9 @@ target_link_libraries (Editor PRIVATE Engine)
 
 target_compile_definitions (Editor
 	PRIVATE
+		$<$<PLATFORM_ID:Windows>:ENGINE_PLATFORM_WINDOWS>
+        $<$<PLATFORM_ID:Linux>:ENGINE_PLATFORM_LINUX>
 		"_CRT_SECURE_NO_WARNINGS"
-		"ENGINE_PLATFORM_WINDOWS"
 		"ENGINE_DYNAMIC_LINK"
 )
 

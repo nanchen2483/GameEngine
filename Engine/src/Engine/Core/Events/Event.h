@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/core/Log/Log.h"
+#include "Engine/Core/Log/Log.h"
 
 #include <functional>
 #include <string>
@@ -72,26 +72,26 @@ namespace Engine
 
 	namespace EventUtil
 	{
-		static char* ToString(EventType eventType)
+		static const char* ToString(EventType eventType)
 		{
 			switch (eventType)
 			{
-			case Engine::EventType::None:					return "None";
-			case Engine::EventType::WindowClose:			return "WindowClose";
-			case Engine::EventType::WindowResize:			return "WindowResize";
-			case Engine::EventType::WindowFocus:			return "WindowFocus";
-			case Engine::EventType::WindowLostFocus:		return "WindowLostFocus";
-			case Engine::EventType::WindowMoved:			return "WindowMoved";
-			case Engine::EventType::ApplicationTick:		return "ApplicationTick";
-			case Engine::EventType::ApplicationUpdate:		return "ApplicationUpdate";
-			case Engine::EventType::ApplicationRender:		return "ApplicationRender";
-			case Engine::EventType::KeyPressed:				return "KeyPressed";
-			case Engine::EventType::KeyReleased:			return "KeyReleased";
-			case Engine::EventType::KeyTyped:				return "KeyTyped";
-			case Engine::EventType::MouseButtonPressed:		return "MouseButtonPressed";
-			case Engine::EventType::MouseButtonReleased:	return "MouseButtonReleased";
-			case Engine::EventType::MouseMoved:				return "MouseMoved";
-			case Engine::EventType::MouseScrolled:			return "MouseScrolled";
+			case EventType::None:					return "None";
+			case EventType::WindowClose:			return "WindowClose";
+			case EventType::WindowResize:			return "WindowResize";
+			case EventType::WindowFocus:			return "WindowFocus";
+			case EventType::WindowLostFocus:		return "WindowLostFocus";
+			case EventType::WindowMoved:			return "WindowMoved";
+			case EventType::ApplicationTick:		return "ApplicationTick";
+			case EventType::ApplicationUpdate:		return "ApplicationUpdate";
+			case EventType::ApplicationRender:		return "ApplicationRender";
+			case EventType::KeyPressed:				return "KeyPressed";
+			case EventType::KeyReleased:			return "KeyReleased";
+			case EventType::KeyTyped:				return "KeyTyped";
+			case EventType::MouseButtonPressed:		return "MouseButtonPressed";
+			case EventType::MouseButtonReleased:	return "MouseButtonReleased";
+			case EventType::MouseMoved:				return "MouseMoved";
+			case EventType::MouseScrolled:			return "MouseScrolled";
 			default:
 				ENGINE_CORE_ASSERT(false, "Unsupported EventType")
 				return "Unknown EventType";
