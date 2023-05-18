@@ -9,7 +9,7 @@ namespace Engine
 {
 	BoundingBoxDebug::BoundingBoxDebug()
 	{
-		m_vertexArray = Engine::IVertexArray::Create();
+		m_vertexArray = IVertexArray::Create();
 		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(const_cast<float*>(BoundingBoxDebugData::vertices), BoundingBoxDebugData::numOfVertices);
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },

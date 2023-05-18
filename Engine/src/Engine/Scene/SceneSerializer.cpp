@@ -256,7 +256,7 @@ namespace Engine
 				{
 					CameraComponent& deserializedCC = deserializedEntity.AddComponent<CameraComponent>();
 					
-					YAML::Node& cameraProps = cameraComponent["Camera"];
+					const YAML::Node& cameraProps = cameraComponent["Camera"];
 					deserializedCC.camera.SetProjectionType((CameraProjectionType)cameraProps["ProjectionType"].as<int>());
 
 					deserializedCC.camera.SetPerspectiveFOV(cameraProps["PerspectiveFOV"].as<float>());
@@ -291,7 +291,7 @@ namespace Engine
 					SpriteRendererComponent& deserializedSRC = deserializedEntity.AddComponent<SpriteRendererComponent>();
 
 					deserializedSRC.color = spriteRendererComponent["Color"].as<glm::vec4>();
-					YAML::Node& filePathNode = spriteRendererComponent["TextureFilePath"];
+					const YAML::Node& filePathNode = spriteRendererComponent["TextureFilePath"];
 					if (filePathNode)
 					{
 						deserializedSRC.texture = TextureLibrary::Load(filePathNode.as<std::string>());

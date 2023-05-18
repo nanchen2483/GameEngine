@@ -40,7 +40,7 @@ namespace EngineTest
 		float expectedPerspectiveFarClip = 1000.0f;
 		float expectedFOV = 45.0f;
 		Engine::CameraProjectionType expectedProjectionType = Engine::CameraProjectionType::Perspective;
-		glm::mat4& expectedPerspective = glm::perspective(
+		const glm::mat4& expectedPerspective = glm::perspective(
 			glm::radians(expectedFOV),
 			viewportSize.x / viewportSize.y, 
 			expectedPerspectiveNearClip, 

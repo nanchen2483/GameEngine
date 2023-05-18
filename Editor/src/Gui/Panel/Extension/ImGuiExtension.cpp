@@ -10,7 +10,7 @@ namespace Engine
 	void ImGuiExtension::EditableText(const std::string& label, std::string& text, float labelSize)
 	{
 		static bool isEditMode = false;
-		ImGui::Text(label.c_str());
+		ImGui::Text("%s", label.c_str());
 		ImGui::SameLine(labelSize == -1 ? LABEL_WIDTH : 0);
 		if (isEditMode)
 		{
@@ -29,7 +29,7 @@ namespace Engine
 		}
 		else
 		{
-			ImGui::Text(text.c_str());
+			ImGui::Text("%s", text.c_str());
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
 				isEditMode = true;
@@ -40,7 +40,7 @@ namespace Engine
 
 	void ImGuiExtension::InputText(const std::string& label, std::string& text)
 	{
-		ImGui::Text(label.c_str());
+		ImGui::Text("%s", label.c_str());
 		ImGui::SameLine(LABEL_WIDTH);
 		char buffer[256];
 		strcpy(buffer, text.c_str());
@@ -54,9 +54,9 @@ namespace Engine
 
 	void ImGuiExtension::LabelText(const std::string& label, const std::string& text)
 	{
-		ImGui::Text(label.c_str());
+		ImGui::Text("%s", label.c_str());
 		ImGui::SameLine(LABEL_WIDTH);
-		ImGui::LabelText("##LabelText", text.c_str());
+		ImGui::LabelText("##LabelText", "%s", text.c_str());
 	}
 
 	void ImGuiExtension::ProgressBar(float fragtion)
@@ -68,7 +68,7 @@ namespace Engine
 	void ImGuiExtension::DrawSection(uint32_t id, const std::string& label, int treeNodeFlags, std::function<void(void)> InlineCode, std::function<void(void)> OnOpen, std::function<void(void)> OnRemove)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
-		bool isOpen = ImGui::TreeNodeEx((void*)std::hash<std::string>()((std::to_string(id) + label)), (ImGuiTreeNodeFlags)treeNodeFlags | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth, label.c_str());
+		bool isOpen = ImGui::TreeNodeEx((void*)std::hash<std::string>()((std::to_string(id) + label)), (ImGuiTreeNodeFlags)treeNodeFlags | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_SpanAvailWidth, "%s", label.c_str());
 		InlineCode();
 		ImGui::PopStyleVar();
 
@@ -154,7 +154,7 @@ namespace Engine
 				}
 
 				ImGui::SetColumnWidth(0, labelWidth);
-				ImGui::Text(label.c_str());
+				ImGui::Text("%s", label.c_str());
 				ImGui::NextColumn();
 				ImGui::PushItemWidth(-1);
 				InlineCode();
@@ -298,7 +298,7 @@ namespace Engine
 					}
 					ImGui::EndDragDropTarget();
 				}
-				ImGui::Text(filePath.c_str());
+				ImGui::Text("%s", filePath.c_str());
 			});
 	}
 	
@@ -326,7 +326,7 @@ namespace Engine
 				}
 				else
 				{
-					ImGui::Text(filePath.c_str());
+					ImGui::Text("%s", filePath.c_str());
 				}
 			});
 

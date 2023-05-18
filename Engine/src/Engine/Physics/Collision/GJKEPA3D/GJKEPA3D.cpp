@@ -71,8 +71,8 @@ namespace Engine
 	{
 		glm::dvec3 direction = m_deltahedron->GetSearchDirection();
 
-		glm::dvec3& pointA = GetPointFromShape(m_shapeA, -direction);
-		glm::dvec3& pointB = GetPointFromShape(m_shapeB, direction);
+		const glm::dvec3& pointA = GetPointFromShape(m_shapeA, -direction);
+		const glm::dvec3& pointB = GetPointFromShape(m_shapeB, direction);
 		glm::dvec3 supportPoint = pointA - pointB;
 		
 		return supportPoint;

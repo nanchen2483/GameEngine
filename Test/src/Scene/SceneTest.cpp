@@ -14,7 +14,7 @@ namespace EngineTest
 
 		glm::mat4 GetTransform(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale)
 		{
-			glm::mat4& rotationMatrix = glm::rotate(glm::mat4(1.0f), rotation.x, { 1, 0, 0 })
+			const glm::mat4& rotationMatrix = glm::rotate(glm::mat4(1.0f), rotation.x, { 1, 0, 0 })
 				* glm::rotate(glm::mat4(1.0f), rotation.y, { 0, 1, 0 })
 				* glm::rotate(glm::mat4(1.0f), rotation.z, { 0, 0, 1 });
 			return glm::translate(glm::mat4(1.0f), translation)

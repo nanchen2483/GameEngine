@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine/Core/Base.h"
 #include "Engine/Core/System/Object/IComparable.h"
 #include "Engine/Polyhedron/Triangle3D.h"
 
