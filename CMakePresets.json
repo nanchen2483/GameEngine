@@ -141,6 +141,11 @@
 			"configurePreset": "linux-debug"
 		},
 		{
+			"name": "linux-release",
+			"displayName": "Linux Release",
+			"configurePreset": "linux-release"
+		},
+		{
 			"name": "macos-debug",
 			"displayName": "macOS Debug",
 			"configurePreset": "macos-debug"
