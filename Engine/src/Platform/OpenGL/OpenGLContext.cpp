@@ -10,10 +10,7 @@ namespace Engine
 		: m_windowHandler(windowHandler)
 	{
 		ENGINE_ASSERT(m_windowHandler, "Window handler is null");
-	}
 
-	void OpenGLContext::Init()
-	{
 		glfwMakeContextCurrent(m_windowHandler);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		ENGINE_CORE_ASSERT(status, "Failed to initialize GLAD");

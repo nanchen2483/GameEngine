@@ -7,7 +7,6 @@ namespace Engine
 	{
 	public:
 		virtual ~IGraphicsContext() = default;
-		virtual void Init() = 0;
 		virtual void SwapBuffers() = 0;
 
 		static Uniq<IGraphicsContext> Create(void *window);
