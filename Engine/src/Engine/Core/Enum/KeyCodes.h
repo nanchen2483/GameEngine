@@ -6,7 +6,7 @@ namespace Engine
 	enum KeyCode
 	{
 		/* The unknown key */
-		Unknown = -1,
+		UnknownKey = -1,
 		/* Printable keys */
 		Space = 32,
 		Apostrophe = 39,  /* ' */
@@ -60,7 +60,7 @@ namespace Engine
 		World2 = 162, /* non-US #2 */
 
 		/* Function keys */
-		Escape = 256,
+		Esc = 256,
 		Enter = 257,
 		Tab = 258,
 		Backspace = 259,

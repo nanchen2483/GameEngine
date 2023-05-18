@@ -4,8 +4,6 @@
 #include "FileExtension.h"
 #include "FileType.h"
 
-#include <algorithm>
-
 namespace Engine
 {
 	std::string File::GetFileType(std::filesystem::path file)

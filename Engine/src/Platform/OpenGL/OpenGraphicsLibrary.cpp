@@ -91,7 +91,7 @@ namespace Engine
 		double xPos, yPos;
 		glfwGetCursorPos(m_window, &xPos, &yPos);
 
-		return { xPos, yPos };
+		return { (float)xPos, (float)yPos };
 	}
 
 	CursorMode OpenGraphicsLibrary::GetCursorMode() const
