@@ -45,7 +45,8 @@ namespace Engine
 #else
 	void* OpenGraphicsLibrary::GetWin32Window() const
 	{
-		return static_assert(false);
+		ENGINE_CORE_ASSERT(false, "GetWin32Window is not supported on non-Windows platforms.");
+		return nullptr;
 	}
 #endif // ENGINE_PLATFORM_WINDOWS
 

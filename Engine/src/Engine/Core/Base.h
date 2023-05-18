@@ -1,8 +1,12 @@
 #pragma once
 #include <memory>
 
+#ifdef ENGINE_DEBUG
+	#define ENGINE_ENABLE_ASSERTS
+#endif // ENGINE_DEBUG
+
 #ifdef ENGINE_PLATFORM_WINDOWS
-	#if ENGINE_DYNAMIC_LINK
+	#ifdef ENGINE_DYNAMIC_LINK
 		#ifdef ENGINE_BUILD_DLL
 			#define ENGINE_API __declspec(dllexport)
 			#define ENGINE_TEST_API __declspec(dllexport)
@@ -18,22 +22,34 @@
 		#define ENGINE_API
 		#define ENGINE_TEST_API
 	#endif // ENGINE_DYNAMIC_LINK
+
+	#ifdef ENGINE_ENABLE_ASSERTS
+		#define ENGINE_ASSERT(x, ...) { if(!(x)) { ENGINE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+		#define ENGINE_CORE_ASSERT(x, ...) { if(!(x)) { ENGINE_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#else
+		#define ENGINE_ASSERT(x, ...)
+		#define ENGINE_CORE_ASSERT(x, ...)
+	#endif // ENGINE_ENABLE_ASSERTS
+#elif defined(ENGINE_PLATFORM_LINUX)
+	#ifdef ENGINE_DYNAMIC_LINK
+		#define ENGINE_API
+		#define ENGINE_TEST_API
+	#else
+		#define ENGINE_API
+		#define ENGINE_TEST_API
+	#endif // ENGINE_DYNAMIC_LINK
+
+	#ifdef ENGINE_ENABLE_ASSERTS
+		#include <csignal>
+		#define ENGINE_ASSERT(x, ...) { if(!(x)) { ENGINE_ERROR("Assertion Failed: {0}", __VA_ARGS__); raise(SIGTRAP); } }
+		#define ENGINE_CORE_ASSERT(x, ...) { if(!(x)) { ENGINE_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); raise(SIGTRAP); } }
+	#else
+		#define ENGINE_ASSERT(x, ...)
+		#define ENGINE_CORE_ASSERT(x, ...)
+	#endif
 #else
-	#error Engine only support windows
+	#error Engine only support Windows and Linux
 #endif // ENGINE_PLATFORM_WINDOWS
-
-#ifdef ENGINE_DEBUG
-	#define ENGINE_ENABLE_ASSERTS
-#endif // ENGINE_DEBUG
-
-
-#ifdef ENGINE_ENABLE_ASSERTS
-	#define ENGINE_ASSERT(x, ...) { if(!(x)) { ENGINE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
-	#define ENGINE_CORE_ASSERT(x, ...) { if(!(x)) { ENGINE_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
-#else
-	#define ENGINE_ASSERT(x, ...)
-	#define ENGINE_CORE_ASSERT(x, ...)
-#endif // ENGINE_ENABLE_ASSERTS
 
 #define BIT(x) (1 << x)
 

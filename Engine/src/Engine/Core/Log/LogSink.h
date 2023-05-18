@@ -1,6 +1,5 @@
 #pragma once
 
-#include <shared_mutex>
 #include <vector>
 
 #include <spdlog/sinks/base_sink.h>

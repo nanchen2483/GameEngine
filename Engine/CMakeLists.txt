@@ -7,9 +7,7 @@ project (Engine)
 
 set (CMAKE_CXX_STANDARD 17)
 
-if (MSVC)
-	set (BUILD_SHARED_LIBS TRUE)
-endif()
+set (BUILD_SHARED_LIBS TRUE)
 
 find_package (assimp CONFIG REQUIRED)
 find_package (EnTT CONFIG REQUIRED)

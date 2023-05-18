@@ -6,6 +6,8 @@ namespace Engine
 {
 #ifdef ENGINE_PLATFORM_WINDOWS
 	OperatingSystem System::s_operatingSystem = OperatingSystem::Windows;
+#elif defined(ENGINE_PLATFORM_LINUX)
+	OperatingSystem System::s_operatingSystem = OperatingSystem::Linux;
 #else
 	#error Engine only support windows
 #endif // ENGINE_PLATFORM_WINDOWS
