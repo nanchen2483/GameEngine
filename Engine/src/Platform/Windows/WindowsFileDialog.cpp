@@ -1,7 +1,9 @@
+#ifdef ENGINE_PLATFORM_WINDOWS
 #include "enginepch.h"
 #include "Engine/File/FileDialog.h"
 #include "Engine/Renderer/Graphics/IGraphicsLibrary.h"
 
+#include <Windows.h>
 #include <commdlg.h>
 
 namespace Engine
@@ -46,3 +48,5 @@ namespace Engine
 		return std::string();
 	}
 }
+
+#endif // ENGINE_PLATFORM_WINDOWS

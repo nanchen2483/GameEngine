@@ -305,7 +305,7 @@ namespace Engine
 				m_editorCamera.UpdateFocusPoint(transform);
 			}
 			break;
-		case KeyCode::Escape:
+		case KeyCode::Esc:
 			if (m_toolbar.OnPlayMode())
 			{
 				Input::ShowCursor();

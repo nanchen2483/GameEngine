@@ -28,7 +28,7 @@ namespace Engine {
 			s_coreLogger->set_level(spdlog::level::info);
 		}
 
-		s_coreLogger->set_formatter(std::unique_ptr<spdlog::formatter>(
+		s_coreLogger->set_formatter(Uniq<spdlog::formatter>(
 			new spdlog::pattern_formatter("%^[%T] %n: %v%$", spdlog::pattern_time_type::local)));
 
 		std::vector<spdlog::sink_ptr> editorSinks;
@@ -44,7 +44,7 @@ namespace Engine {
 			s_clientLogger->set_level(spdlog::level::info);
 		}
 
-		s_clientLogger->set_formatter(std::unique_ptr<spdlog::formatter>(
+		s_clientLogger->set_formatter(Uniq<spdlog::formatter>(
 			new spdlog::pattern_formatter("%^[%T] %n: %v%$", spdlog::pattern_time_type::local)));
 	}
 }

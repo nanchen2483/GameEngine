@@ -16,16 +16,16 @@ namespace Engine
 
 	struct ProfileResult
 	{
-		std::string Name;
+		std::string name;
 
-		FloatingPointMicroseconds Start;
-		std::chrono::microseconds ElapsedTime;
-		std::thread::id ThreadID;
+		FloatingPointMicroseconds start;
+		std::chrono::microseconds elapsedTime;
+		std::thread::id threadID;
 	};
 
 	struct InstrumentationSession
 	{
-		std::string Name;
+		std::string name;
 	};
 
 	class Instrumentor
@@ -36,20 +36,20 @@ namespace Engine
 
 		void BeginSession(const std::string& name, const std::string& filepath = "results.json")
 		{
-			std::lock_guard lock(m_Mutex);
-			if (m_CurrentSession)
+			std::lock_guard lock(m_mutex);
+			if (m_currentSession)
 			{
 				if (Log::GetCoreLogger()) // Edge case: BeginSession() might be before Log::Init()
 				{
-					ENGINE_CORE_ERROR("Instrumentor::BeginSession('{0}') when session '{1}' already open.", name, m_CurrentSession->Name);
+					ENGINE_CORE_ERROR("Instrumentor::BeginSession('{0}') when session '{1}' already open.", name, m_currentSession->name);
 				}
 				InternalEndSession();
 			}
-			m_OutputStream.open(filepath);
+			m_outputStream.open(filepath);
 
-			if (m_OutputStream.is_open())
+			if (m_outputStream.is_open())
 			{
-				m_CurrentSession = new InstrumentationSession({ name });
+				m_currentSession = new InstrumentationSession({ name });
 				WriteHeader();
 			}
 			else
@@ -63,7 +63,7 @@ namespace Engine
 
 		void EndSession()
 		{
-			std::lock_guard lock(m_Mutex);
+			std::lock_guard lock(m_mutex);
 			InternalEndSession();
 		}
 
@@ -74,30 +74,30 @@ namespace Engine
 			json << std::setprecision(3) << std::fixed;
 			json << ",{";
 			json << "\"cat\":\"function\",";
-			json << "\"dur\":" << (result.ElapsedTime.count()) << ',';
-			json << "\"name\":\"" << result.Name << "\",";
+			json << "\"dur\":" << (result.elapsedTime.count()) << ',';
+			json << "\"name\":\"" << result.name << "\",";
 			json << "\"ph\":\"X\",";
 			json << "\"pid\":0,";
-			json << "\"tid\":" << result.ThreadID << ",";
-			json << "\"ts\":" << result.Start.count();
+			json << "\"tid\":" << result.threadID << ",";
+			json << "\"ts\":" << result.start.count();
 			json << "}";
 
-			std::lock_guard lock(m_Mutex);
-			if (m_CurrentSession)
+			std::lock_guard lock(m_mutex);
+			if (m_currentSession)
 			{
-				m_OutputStream << json.str();
-				m_OutputStream.flush();
+				m_outputStream << json.str();
+				m_outputStream.flush();
 			}
 		}
 
-		static Instrumentor& Get()
+		static Instrumentor& GetInstance()
 		{
 			static Instrumentor instance;
 			return instance;
 		}
 	private:
 		Instrumentor()
-			: m_CurrentSession(nullptr)
+			: m_currentSession(nullptr)
 		{
 		}
 
@@ -108,69 +108,71 @@ namespace Engine
 
 		void WriteHeader()
 		{
-			m_OutputStream << "{\"otherData\": {},\"traceEvents\":[{}";
-			m_OutputStream.flush();
+			m_outputStream << "{\"otherData\": {},\"traceEvents\":[{}";
+			m_outputStream.flush();
 		}
 
 		void WriteFooter()
 		{
-			m_OutputStream << "]}";
-			m_OutputStream.flush();
+			m_outputStream << "]}";
+			m_outputStream.flush();
 		}
 
 		void InternalEndSession()
 		{
-			if (m_CurrentSession)
+			if (m_currentSession)
 			{
 				WriteFooter();
-				m_OutputStream.close();
-				delete m_CurrentSession;
-				m_CurrentSession = nullptr;
+				m_outputStream.close();
+				delete m_currentSession;
+				m_currentSession = nullptr;
 			}
 		}
 	private:
-		std::mutex m_Mutex;
-		InstrumentationSession* m_CurrentSession;
-		std::ofstream m_OutputStream;
+		std::mutex m_mutex;
+		InstrumentationSession* m_currentSession;
+		std::ofstream m_outputStream;
 	};
 
 	class InstrumentationTimer
 	{
 	public:
 		InstrumentationTimer(const char* name)
-			: m_Name(name), m_Stopped(false)
+			: m_name(name), m_stopped(false)
 		{
-			m_StartTimepoint = std::chrono::steady_clock::now();
+			m_startTimepoint = std::chrono::steady_clock::now();
 		}
 
 		~InstrumentationTimer()
 		{
-			if (!m_Stopped)
+			if (!m_stopped)
+			{
 				Stop();
+			}
 		}
 
 		void Stop()
 		{
 			std::chrono::steady_clock::time_point endTimepoint = std::chrono::steady_clock::now();
-			FloatingPointMicroseconds highResStart = FloatingPointMicroseconds{ m_StartTimepoint.time_since_epoch() };
-			std::chrono::microseconds elapsedTime = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch() - std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch();
+			FloatingPointMicroseconds highResStart = FloatingPointMicroseconds{ m_startTimepoint.time_since_epoch() };
+			std::chrono::microseconds elapsedTime = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch() - std::chrono::time_point_cast<std::chrono::microseconds>(m_startTimepoint).time_since_epoch();
 
-			Instrumentor::Get().WriteProfile({ m_Name, highResStart, elapsedTime, std::this_thread::get_id() });
+			Instrumentor::GetInstance().WriteProfile({ m_name, highResStart, elapsedTime, std::this_thread::get_id() });
 
-			m_Stopped = true;
+			m_stopped = true;
 		}
 	private:
-		const char* m_Name;
-		std::chrono::time_point<std::chrono::steady_clock> m_StartTimepoint;
-		bool m_Stopped;
+		const char* m_name;
+		std::chrono::time_point<std::chrono::steady_clock> m_startTimepoint;
+		bool m_stopped;
 	};
 
-	namespace InstrumentorUtils {
-
+	namespace InstrumentorUtils
+	{
 		template <size_t N>
 		struct ChangeResult
 		{
-			char Data[N];
+			char data[N];
 		};
 
 		template <size_t N, size_t K>
@@ -184,10 +186,16 @@ namespace Engine
 			{
 				size_t matchIndex = 0;
 				while (matchIndex < K - 1 && srcIndex + matchIndex < N - 1 && expr[srcIndex + matchIndex] == remove[matchIndex])
+				{
 					matchIndex++;
+				}
+
 				if (matchIndex == K - 1)
+				{
 					srcIndex += matchIndex;
-				result.Data[dstIndex++] = expr[srcIndex] == '"' ? '\'' : expr[srcIndex];
+				}
+
+				result.data[dstIndex++] = expr[srcIndex] == '"' ? '\'' : expr[srcIndex];
 				srcIndex++;
 			}
 			return result;
@@ -215,10 +223,10 @@ namespace Engine
 #define ENGINE_FUNC_SIG "ENGINE_FUNC_SIG unknown!"
 #endif
 
-#define ENGINE_PROFILE_BEGIN_SESSION(name, filepath) ::Engine::Instrumentor::Get().BeginSession(name, filepath)
-#define ENGINE_PROFILE_END_SESSION() ::Engine::Instrumentor::Get().EndSession()
+#define ENGINE_PROFILE_BEGIN_SESSION(name, filepath) ::Engine::Instrumentor::GetInstance().BeginSession(name, filepath)
+#define ENGINE_PROFILE_END_SESSION() ::Engine::Instrumentor::GetInstance().EndSession()
 #define ENGINE_PROFILE_SCOPE_LINE2(name, line) constexpr auto fixedName##line = ::Engine::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
-											   ::Engine::InstrumentationTimer timer##line(fixedName##line.Data)
+											   ::Engine::InstrumentationTimer timer##line(fixedName##line.data)
 #define ENGINE_PROFILE_SCOPE_LINE(name, line) ENGINE_PROFILE_SCOPE_LINE2(name, line)
 #define ENGINE_PROFILE_SCOPE(name) ENGINE_PROFILE_SCOPE_LINE(name, __LINE__)
 #define ENGINE_PROFILE_FUNCTION() ENGINE_PROFILE_SCOPE(ENGINE_FUNC_SIG)
