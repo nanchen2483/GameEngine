@@ -44,8 +44,9 @@ target_include_directories (${PROJECT_NAME} PUBLIC "src" "external")
 
 target_compile_definitions (${PROJECT_NAME}
 	PRIVATE
+		$<$<PLATFORM_ID:Windows>:ENGINE_PLATFORM_WINDOWS>
+        $<$<PLATFORM_ID:Linux>:ENGINE_PLATFORM_LINUX>
 		"_CRT_SECURE_NO_WARNINGS"
-		"ENGINE_PLATFORM_WINDOWS"
 		"ENGINE_GRAPHICS_API_OPENGL"
 		"ENGINE_DYNAMIC_LINK"
 		"ENGINE_BUILD_DLL"
@@ -54,7 +55,6 @@ target_compile_definitions (${PROJECT_NAME}
 	PUBLIC
 		$<$<CONFIG:Debug>:ENGINE_DEBUG>
 		$<$<CONFIG:Release>:ENGINE_RELEASE>
-
 		$<$<CONFIG:RelWithDebInfo>:ENGINE_DEBUG>
 		$<$<CONFIG:MinSizeRel>:ENGINE_RELEASE>
 )
