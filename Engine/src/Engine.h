@@ -12,6 +12,7 @@
 
 // File
 #include "Engine/File/File.h"
+#include "Engine/File/FileDialog.h"
 #include "Engine/File/FileExtension.h"
 #include "Engine/File/FileType.h"
 
@@ -20,7 +21,7 @@
 #include "Engine/Renderer/Shadow/Debug/ShadowDebug.h"
 
 // Renderer
-#include "Engine/Renderer/Buffer/Framebuffer.h"
+#include "Engine/Renderer/Buffer/IFramebuffer.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/RendererCommand.h"
 
@@ -51,4 +52,3 @@
 
 // Util
 #include "Engine/ImGui/ImGuiLayer.h"
-#include "Engine/Util/PlatformUtil.h"

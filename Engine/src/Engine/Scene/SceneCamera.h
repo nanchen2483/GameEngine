@@ -1,11 +1,11 @@
 #pragma once
-#include "Engine/Renderer/Camera/Camera.h"
+#include "Engine/Renderer/Camera/ICamera.h"
 
 #include <map>
 
 namespace Engine
 {
-	class ENGINE_API SceneCamera : public Camera
+	class ENGINE_API SceneCamera : public ICamera
 	{
 	public:
 		SceneCamera();

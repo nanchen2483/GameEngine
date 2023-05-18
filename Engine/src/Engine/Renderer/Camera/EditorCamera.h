@@ -1,5 +1,5 @@
 #pragma once
-#include "Camera.h"
+#include "ICamera.h"
 #include "Engine/Core/Events/Event.h"
 #include "Engine/Core/Events/MouseEvent.h"
 
@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	class ENGINE_API EditorCamera : public Camera
+	class ENGINE_API EditorCamera : public ICamera
 	{
 	public:
 		EditorCamera();

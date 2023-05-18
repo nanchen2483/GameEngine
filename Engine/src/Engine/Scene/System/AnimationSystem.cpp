@@ -17,7 +17,7 @@ namespace Engine
 				});
 	}
 
-	void AnimationSystem::UpdateAnimation(const Ptr<Animation>& animation)
+	void AnimationSystem::UpdateAnimation(const Ptr<IAnimation>& animation)
 	{
 		Ptr<float> animationTime = animation->GetTime();
 		*animationTime += animation->GetTicketPerSecond() * System::GetDeltaTime();
@@ -26,7 +26,7 @@ namespace Engine
 		CalculateBoneTransform(animation, animation->GetRootNode(), glm::mat4(1.0f));
 	}
 
-	void AnimationSystem::CalculateBoneTransform(const Ptr<Animation>& animation, const Ptr<Node>& node, glm::mat4 globalTransformation)
+	void AnimationSystem::CalculateBoneTransform(const Ptr<IAnimation>& animation, const Ptr<INode>& node, glm::mat4 globalTransformation)
 	{
 		globalTransformation *= node->GetTransform(*animation->GetTime());
 		if (node->AnyBones())

@@ -270,7 +270,7 @@ namespace Engine
 			});
 	}
 	
-	void ImGuiExtension::DrawTextureSubSection(const std::string& label, Ptr<Texture2D>& texture, TextureType type, std::function<void(void)> OnDrop)
+	void ImGuiExtension::DrawTextureSubSection(const std::string& label, Ptr<ITexture2D>& texture, TextureType type, std::function<void(void)> OnDrop)
 	{
 		uint64_t textureId = 0;
 		std::string filePath = "none";
@@ -332,7 +332,7 @@ namespace Engine
 
 	}
 
-	void ImGuiExtension::DrawAnimationSubSection(std::vector<Ptr<Animation>> animations, uint32_t selectedAnimationIndex, bool& isEnabled, std::function<void(uint32_t)> OnSelect)
+	void ImGuiExtension::DrawAnimationSubSection(std::vector<Ptr<IAnimation>> animations, uint32_t selectedAnimationIndex, bool& isEnabled, std::function<void(uint32_t)> OnSelect)
 	{
 		if (!animations.empty())
 		{
@@ -340,12 +340,12 @@ namespace Engine
 				[&]()
 				{
 					ImGui::Checkbox("##EnableAnimation", &isEnabled);
-					Ptr<Animation> selectedAnimation = animations[selectedAnimationIndex];
+					Ptr<IAnimation> selectedAnimation = animations[selectedAnimationIndex];
 					if (ImGui::BeginCombo("##BeginCombo", selectedAnimation->GetName().c_str()))
 					{
 						for (uint32_t index = 0; index < animations.size(); index++)
 						{
-							Ptr<Animation> currentAnimation = animations[index];
+							Ptr<IAnimation> currentAnimation = animations[index];
 							bool isSelected = selectedAnimationIndex == index;
 							if (ImGui::Selectable(currentAnimation->GetName().c_str(), isSelected))
 							{

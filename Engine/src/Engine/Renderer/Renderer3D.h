@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Renderer/Model/Animation.h"
-#include "Engine/Renderer/Model/Mesh.h"
+#include "Engine/Renderer/Model/IAnimation.h"
+#include "Engine/Renderer/Model/IMesh.h"
 #include "Engine/Scene/Component/LightComponent.h"
 #include "Engine/Scene/Component/SkyboxComponent.h"
 #include "Engine/Scene/Component/SpriteRendererComponent.h"
@@ -21,8 +21,8 @@ namespace Engine
 		
 		static void Draw(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityId = -1);
 		static void Draw(const Transform& transform, LightComponent& light, int entityId = -1);
-		static void Draw(const glm::mat4& transform, const Ptr<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), int entityId = -1);
-		static void Draw(const glm::mat4& transform, std::vector<Ptr<Mesh>> meshes, Ptr<Animation> animation = nullptr, Ptr<Shader> shader = nullptr, int entityId = -1);
+		static void Draw(const glm::mat4& transform, const Ptr<ITexture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), int entityId = -1);
+		static void Draw(const glm::mat4& transform, std::vector<Ptr<IMesh>> meshes, Ptr<IAnimation> animation = nullptr, Ptr<IShader> shader = nullptr, int entityId = -1);
 		static void Draw(const glm::mat4& transform, TerrainComponent& component, const Frustum& frustum);
 		static void Draw(SkyboxComponent& component);
 
@@ -36,7 +36,7 @@ namespace Engine
 		static void ResetStates();
 		static Statistics GetState();
 	private:
-		static uint32_t GetTextureIndex(const Ptr<Texture2D>& texture);
+		static uint32_t GetTextureIndex(const Ptr<ITexture2D>& texture);
 		static void DrawAndReset();
 		static void ResetRendererData();
 	};

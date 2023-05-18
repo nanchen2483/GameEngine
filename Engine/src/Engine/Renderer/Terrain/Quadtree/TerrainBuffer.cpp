@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	TerrainBuffer::TerrainBuffer(Ptr<Texture2D> heightMapTexture, int32_t entityId)
+	TerrainBuffer::TerrainBuffer(Ptr<ITexture2D> heightMapTexture, int32_t entityId)
 		: m_heightMapTexture(heightMapTexture), m_entityId(entityId)
 	{
 		m_heightMapDataBuffer = m_heightMapTexture->GetData();
@@ -57,7 +57,7 @@ namespace Engine
 		transform.translation = glm::vec3(-m_scaleXZ / 2.0f, 0.0f, -m_scaleXZ / 2.0f);
 		glm::mat4 worldMatrix = (glm::mat4)transform;
 
-		m_wordTransform = UniformBuffer::Create(4,
+		m_wordTransform = IUniformBuffer::Create(4,
 			{
 				BufferLayoutType::Std140,
 				{
@@ -90,8 +90,8 @@ namespace Engine
 		};
 
 		m_sizeOfPatch = vertices.size() / 2;
-		m_vertexArray = VertexArray::Create();
-		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(&vertices[0], sizeof(float) * vertices.size());
+		m_vertexArray = IVertexArray::Create();
+		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(&vertices[0], sizeof(float) * vertices.size());
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float2 },
 		});
@@ -104,7 +104,7 @@ namespace Engine
 		uint32_t N = m_heightMapTexture->GetWidth();
 		m_normalMapTexture = TextureLibrary::Load(N, N, (int)(log(N) / log(2)), TextureFormatType::RGBA32);
 
-		Ptr<Shader> normalShader = ShaderLibrary::Load("assets/shaders/Compute/NormalMap.glsl");
+		Ptr<IShader> normalShader = ShaderLibrary::Load("assets/shaders/Compute/NormalMap.glsl");
 		normalShader->Bind();
 		normalShader->SetInt("uHeightMap", 0);
 		normalShader->SetInt("uN", N);
@@ -119,7 +119,7 @@ namespace Engine
 		uint32_t N = m_heightMapTexture->GetWidth();
 		m_splatMapTexture = TextureLibrary::Load(N, N, (int)(log(N) / log(2)), TextureFormatType::RGBA16);
 
-		Ptr<Shader> splatShader = ShaderLibrary::Load("assets/shaders/Compute/SplatMap.glsl");
+		Ptr<IShader> splatShader = ShaderLibrary::Load("assets/shaders/Compute/SplatMap.glsl");
 		splatShader->Bind();
 		splatShader->SetInt("uNormalMap", 0);
 		splatShader->SetInt("uN", N);

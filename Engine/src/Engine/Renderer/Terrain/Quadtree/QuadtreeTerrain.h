@@ -1,15 +1,15 @@
 #pragma once
-#include "Engine/Renderer/Terrain/Terrain.h"
-#include "Engine/Physics/BoundingBox/BoundingBox.h"
+#include "Engine/Renderer/Terrain/ITerrain.h"
+#include "Engine/Physics/BoundingBox/IBoundingBox.h"
 #include "TerrainNode.h"
 
 namespace Engine
 {
-	class QuadtreeTerrain : public Terrain
+	class QuadtreeTerrain : public ITerrain
 	{
 	public:
 		QuadtreeTerrain(std::string filePath, int32_t entityId);
-		QuadtreeTerrain(Ptr<Texture2D> heightMapTexture, int32_t entityId);
+		QuadtreeTerrain(Ptr<ITexture2D> heightMapTexture, int32_t entityId);
 
 		inline virtual std::string GetFilePath() const override { return m_buffer->GetHeightMapPath(); }
 		virtual float GetHeight(float x, float z) const override { return m_buffer->GetTerrainHeight(x, z); }
@@ -20,6 +20,6 @@ namespace Engine
 	private:
 		Ptr<TerrainBuffer> m_buffer = nullptr;
 		std::vector<TerrainNode> m_children;
-		std::vector<Ptr<BoundingBox>> m_boundingBoxes;
+		std::vector<Ptr<IBoundingBox>> m_boundingBoxes;
 	};
 }

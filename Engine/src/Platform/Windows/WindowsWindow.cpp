@@ -16,15 +16,14 @@ namespace Engine
 		m_userData.width = properties.width;
 		m_userData.height = properties.height;
 
-		m_library = GraphicsLibrary::Create();
-		m_library->CreateNewWindow(properties.title, properties.width, properties.height);
-		m_library->SetWindowUserDataPointer(&m_userData);
-		m_context = m_library->GetContext();
+		IGraphicsLibrary::GetInstance().CreateNewWindow(properties.title, properties.width, properties.height);
+		IGraphicsLibrary::GetInstance().SetWindowUserDataPointer(&m_userData);
+		m_context = IGraphicsLibrary::GetInstance().GetContext();
 		SetVSync(true);
 
-		// Set GLFW callbacks
-		m_library->SetWindowsSizeCallback([](void* window, int32_t width, int32_t height) {
-			WindowUserData* data = GraphicsLibrary::GetWindowUserDataPointerStatic(window);
+		// Set callbacks
+		IGraphicsLibrary::GetInstance().SetWindowsSizeCallback([](void* window, int32_t width, int32_t height) {
+			WindowUserData* data = IGraphicsLibrary::GetWindowUserDataPointerStatic(window);
 			data->width = width;
 			data->height = height;
 
@@ -32,15 +31,15 @@ namespace Engine
 			data->EventCallback(event);
 		});
 
-		m_library->SetWindowCloseCallback([](void* window) {
-			WindowUserData* data = GraphicsLibrary::GetWindowUserDataPointerStatic(window);
+		IGraphicsLibrary::GetInstance().SetWindowCloseCallback([](void* window) {
+			WindowUserData* data = IGraphicsLibrary::GetWindowUserDataPointerStatic(window);
 
 			WindowCloseEvent event;
 			data->EventCallback(event);
 		});
 
-		m_library->SetKeyCallback([](void* window, int32_t key, int32_t scancode, int32_t action, int32_t mods) {
-			WindowUserData* data = GraphicsLibrary::GetWindowUserDataPointerStatic(window);
+		IGraphicsLibrary::GetInstance().SetKeyCallback([](void* window, int32_t key, int32_t scancode, int32_t action, int32_t mods) {
+			WindowUserData* data = IGraphicsLibrary::GetWindowUserDataPointerStatic(window);
 
 			switch (action)
 			{
@@ -67,15 +66,15 @@ namespace Engine
 			}
 		});
 
-		m_library->SetCharCallback([](void* window, uint32_t keycode) {
-			WindowUserData* data = GraphicsLibrary::GetWindowUserDataPointerStatic(window);
+		IGraphicsLibrary::GetInstance().SetCharCallback([](void* window, uint32_t keycode) {
+			WindowUserData* data = IGraphicsLibrary::GetWindowUserDataPointerStatic(window);
 
 			KeyTypedEvent event(keycode);
 			data->EventCallback(event);
 		});
 
-		m_library->SetMouseButtonCallback([](void* window, int32_t button, int32_t action, int32_t mods) {
-			WindowUserData* data = GraphicsLibrary::GetWindowUserDataPointerStatic(window);
+		IGraphicsLibrary::GetInstance().SetMouseButtonCallback([](void* window, int32_t button, int32_t action, int32_t mods) {
+			WindowUserData* data = IGraphicsLibrary::GetWindowUserDataPointerStatic(window);
 
 			switch (action)
 			{
@@ -96,15 +95,15 @@ namespace Engine
 			}
 		});
 
-		m_library->SetScrollCallback([](void* window, double xOffset, double yOffset) {
-			WindowUserData* data = GraphicsLibrary::GetWindowUserDataPointerStatic(window);
+		IGraphicsLibrary::GetInstance().SetScrollCallback([](void* window, double xOffset, double yOffset) {
+			WindowUserData* data = IGraphicsLibrary::GetWindowUserDataPointerStatic(window);
 			
 			MouseScrolledEvent event((float)xOffset, (float)yOffset);
 			data->EventCallback(event);
 		});
 
-		m_library->SetCursorPosCallback([](void* window, double xPos, double yPos) {
-			WindowUserData* data = GraphicsLibrary::GetWindowUserDataPointerStatic(window);
+		IGraphicsLibrary::GetInstance().SetCursorPosCallback([](void* window, double xPos, double yPos) {
+			WindowUserData* data = IGraphicsLibrary::GetWindowUserDataPointerStatic(window);
 			
 			MouseMovedEvent event((float)xPos, (float)yPos);
 			data->EventCallback(event);
@@ -118,18 +117,18 @@ namespace Engine
 
 	void WindowsWindow::OnUpdate()
 	{
-		m_library->PollEvents();
+		IGraphicsLibrary::GetInstance().PollEvents();
 		m_context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enable)
 	{
-		m_library->SetVSync(enable);
+		IGraphicsLibrary::GetInstance().SetVSync(enable);
 		m_userData.vSync = enable;
 	}
 
 	void WindowsWindow::ShutDown()
 	{
-		m_library->DestroyWindow();
+		IGraphicsLibrary::GetInstance().DestroyWindow();
 	}
 }

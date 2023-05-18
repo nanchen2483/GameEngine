@@ -1,10 +1,10 @@
 #pragma once
-#include "Engine/Physics/Collision/Collision.h"
+#include "Engine/Physics/Collision/ICollision.h"
 #include "Polyhedron/GJK3DDeltahedron.h"
 
 namespace Engine
 {
-	class GJKEPA3D : public Collision
+	class GJKEPA3D : public ICollision
 	{
 	public:
 		GJKEPA3D() = default;

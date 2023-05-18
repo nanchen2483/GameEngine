@@ -30,17 +30,7 @@ namespace Engine
 			});
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
-		m_framebuffer = Framebuffer::Create(fbSpec);
-
-		FramebufferSpecification fbSpec2;
-		fbSpec2.attachments = FramebufferAttachmentSpecification(
-			{
-				FramebufferTextureFormat::RGBA8,
-				FramebufferTextureFormat::RGBA8,
-			});
-		fbSpec2.width = 1280;
-		fbSpec2.height = 720;
-		auto framebuffer = Framebuffer::Create(fbSpec2);
+		m_framebuffer = IFramebuffer::Create(fbSpec);
 
 		// Entity
 		m_activeScene = CreatePtr<Scene>(m_framebuffer);
@@ -355,7 +345,7 @@ namespace Engine
 	
 	void EditorLayer::OpenScene()
 	{
-		const std::string& filepath = FileDialogs::OpenFile("Game scene (*.xengine)\0*.engine\0");
+		const std::string& filepath = FileDialog::OpenFile("Game scene (*.xengine)\0*.engine\0");
 
 		if (!filepath.empty())
 		{
@@ -374,7 +364,7 @@ namespace Engine
 	
 	void EditorLayer::SaveSceneAs()
 	{
-		std::string filepath = FileDialogs::SaveFile("Game scene (*.engine)\0*.engine\0");
+		std::string filepath = FileDialog::SaveFile("Game scene (*.engine)\0*.engine\0");
 
 		if (!filepath.empty())
 		{

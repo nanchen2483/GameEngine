@@ -1,16 +1,16 @@
 #pragma once
 #include "Engine/Math/Transform.h"
-#include "Engine/Renderer/Buffer/VertexArray.h"
-#include "Engine/Renderer/Shader/Shader.h"
-#include "Engine/Renderer/Texture/Texture.h"
+#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/Shader/IShader.h"
+#include "Engine/Renderer/Texture/ITexture.h"
 
 namespace Engine
 {
 	struct TerrainMaterial
 	{
-		Ptr<Texture2D> diffuseMap;
-		Ptr<Texture2D> normalMap;
-		Ptr<Texture2D> displacementMap;
+		Ptr<ITexture2D> diffuseMap;
+		Ptr<ITexture2D> normalMap;
+		Ptr<ITexture2D> displacementMap;
 		float displacementScaling;
 		float horizontalScaling;
 	};
@@ -18,8 +18,8 @@ namespace Engine
 	class TerrainBuffer
 	{
 	public:
-		TerrainBuffer(Ptr<Texture2D> heightMapTexture, int32_t entityId);
-		Ptr<Shader> GetShader() const { return m_shader; };
+		TerrainBuffer(Ptr<ITexture2D> heightMapTexture, int32_t entityId);
+		Ptr<IShader> GetShader() const { return m_shader; };
 		float GetScaleY() const { return m_scaleY; }
 		float GetScaleXZ() const { return m_scaleXZ; }
 		std::string GetHeightMapPath() const { return m_heightMapTexture->GetFilePath(); }
@@ -38,12 +38,12 @@ namespace Engine
 		void AddLodRange(uint32_t lodRange);
 		uint32_t GetMorphingArea(uint32_t lod);
 
-		Ptr<Shader> m_shader = nullptr;
-		Ptr<Texture2D> m_heightMapTexture = nullptr;
-		Ptr<Texture2D> m_normalMapTexture = nullptr;
-		Ptr<Texture2D> m_splatMapTexture = nullptr;
+		Ptr<IShader> m_shader = nullptr;
+		Ptr<ITexture2D> m_heightMapTexture = nullptr;
+		Ptr<ITexture2D> m_normalMapTexture = nullptr;
+		Ptr<ITexture2D> m_splatMapTexture = nullptr;
 		std::vector<float> m_heightMapDataBuffer;
-		Ptr<UniformBuffer> m_wordTransform = nullptr;
+		Ptr<IUniformBuffer> m_wordTransform = nullptr;
 		std::unordered_map<uint32_t, std::unordered_map<uint32_t, float>> m_heightCache;
 
 		int32_t m_entityId;
@@ -56,7 +56,7 @@ namespace Engine
 		std::vector<int32_t> m_loadMorphingArea = std::vector<int32_t>();
 		std::vector<TerrainMaterial> m_materials = std::vector<TerrainMaterial>(3);
 
-		Ptr<VertexArray> m_vertexArray;
+		Ptr<IVertexArray> m_vertexArray;
 		uint32_t m_sizeOfPatch;
 	};
 }

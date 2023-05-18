@@ -16,7 +16,7 @@ namespace Engine
 		ENGINE_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		m_window = Window::Create(WindowProperties(name));
+		m_window = IWindow::Create(WindowProperties(name));
 		m_window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();

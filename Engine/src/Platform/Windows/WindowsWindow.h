@@ -1,11 +1,11 @@
 #pragma once
-#include "Engine/Core/Window/Window.h"
-#include "Engine/Renderer/Graphics/GraphicsContext.h"
-#include "Engine/Renderer/Graphics/GraphicsLibrary.h"
+#include "Engine/Core/Window/IWindow.h"
+#include "Engine/Renderer/Graphics/IGraphicsContext.h"
+#include "Engine/Renderer/Graphics/IGraphicsLibrary.h"
 
 namespace Engine
 {
-	class WindowsWindow : public Window
+	class WindowsWindow : public IWindow
 	{
 	public:
 		WindowsWindow(const WindowProperties& props);
@@ -19,11 +19,10 @@ namespace Engine
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_userData.EventCallback = callback; }
 		void SetVSync(bool enable) override;
 		bool IsVSync() const override { return m_userData.vSync; }
-		inline virtual void* GetNativeWindow() const { return m_library->GetWindow();  }
+		inline virtual void* GetNativeWindow() const { return IGraphicsLibrary::GetInstance().GetWindow(); }
 		virtual void ShutDown() override;
 	private:
-		Uniq<GraphicsContext> m_context;
-		Uniq<GraphicsLibrary> m_library;
+		Uniq<IGraphicsContext> m_context;
 		WindowUserData m_userData;
 	};
 }

@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-	AssimpAnimation::AssimpAnimation(const aiAnimation* animation, const Ptr<Node> rootNode)
+	AssimpAnimation::AssimpAnimation(const aiAnimation* animation, const Ptr<INode> rootNode)
 		:	m_name(animation->mName.data),
 			m_animationTime(CreatePtr<float>(0.0f)),
 			m_duration((float)animation->mDuration),

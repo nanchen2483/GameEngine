@@ -9,13 +9,13 @@ namespace Engine
 {
 	BoundingBoxDebug::BoundingBoxDebug()
 	{
-		m_vertexArray = Engine::VertexArray::Create();
-		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(const_cast<float*>(BoundingBoxDebugData::vertices), BoundingBoxDebugData::numOfVertices);
+		m_vertexArray = Engine::IVertexArray::Create();
+		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(const_cast<float*>(BoundingBoxDebugData::vertices), BoundingBoxDebugData::numOfVertices);
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },
 			});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
-		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(BoundingBoxDebugData::indices), BoundingBoxDebugData::numOfIndices));
+		m_vertexArray->SetIndexBuffer(IIndexBuffer::Create(const_cast<uint8_t*>(BoundingBoxDebugData::indices), BoundingBoxDebugData::numOfIndices));
 
 		m_shader = ShaderLibrary::Load("assets/shaders/BoundingBox.glsl");
 	}

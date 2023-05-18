@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "OpenGraphicsLibrary.h"
 
+#include "Platform/Util/OpenGLUtil.h"
 #include <GLFW/glfw3.h>
 
 namespace Engine
@@ -31,8 +32,23 @@ namespace Engine
 	void OpenGraphicsLibrary::CreateNewWindow(std::string title, uint32_t width, uint32_t height)
 	{
 		m_window = glfwCreateWindow((int)width, (int)height, title.c_str(), nullptr, nullptr);
-		m_context = GraphicsContext::Create(static_cast<void*>(m_window));
+		m_context = IGraphicsContext::Create(static_cast<void*>(m_window));
 	}
+
+#ifdef ENGINE_PLATFORM_WINDOWS
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+	void* OpenGraphicsLibrary::GetWin32Window() const
+	{
+		return static_cast<void*>(glfwGetWin32Window(m_window));
+	}
+#else
+	void* OpenGraphicsLibrary::GetWin32Window() const
+	{
+		return static_assert(false);
+	}
+#endif // ENGINE_PLATFORM_WINDOWS
+
 
 	void OpenGraphicsLibrary::DestroyWindow()
 	{
@@ -44,9 +60,9 @@ namespace Engine
 		glfwSetWindowUserPointer(m_window, static_cast<void*>(userData));
 	}
 
-	WindowUserData* OpenGraphicsLibrary::GetWindowUserDataPointer()
+	WindowUserData* OpenGraphicsLibrary::GetWindowUserDataPointer() const
 	{
-		return static_cast<WindowUserData*>(glfwGetWindowUserPointer(m_window));
+		return GetWindowUserDataPointerStatic(m_window);
 	}
 
 	void OpenGraphicsLibrary::SetVSync(bool enable)
@@ -57,6 +73,34 @@ namespace Engine
 	void OpenGraphicsLibrary::PollEvents()
 	{
 		glfwPollEvents();
+	}
+
+	KeyMouseButtonActions OpenGraphicsLibrary::GetKeyState(KeyCode keycode) const
+	{
+		return static_cast<KeyMouseButtonActions>(glfwGetKey(m_window, keycode));
+	}
+
+	KeyMouseButtonActions OpenGraphicsLibrary::GetMouseButtonState(MouseButton button) const
+	{
+		return static_cast<KeyMouseButtonActions>(glfwGetMouseButton(m_window, button));
+	}
+
+	std::pair<float, float> OpenGraphicsLibrary::GetCursorPosition() const
+	{
+		double xPos, yPos;
+		glfwGetCursorPos(m_window, &xPos, &yPos);
+
+		return { xPos, yPos };
+	}
+
+	CursorMode OpenGraphicsLibrary::GetCursorMode() const
+	{
+		return OpenGLUtil::FromGLCursorMode(glfwGetInputMode(m_window, GLFW_CURSOR));
+	}
+
+	void OpenGraphicsLibrary::SetCursorMode(CursorMode mode)
+	{
+		glfwSetInputMode(m_window, GLFW_CURSOR, OpenGLUtil::ToGL(mode));
 	}
 
 	void OpenGraphicsLibrary::SetWindowsSizeCallback(void (*callback)(void* window, int32_t width, int32_t height))

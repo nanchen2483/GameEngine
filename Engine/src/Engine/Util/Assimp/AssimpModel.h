@@ -1,6 +1,6 @@
 #pragma once
 #include "AssimpAnimation.h"
-#include "Engine/Renderer/Model/Model.h"
+#include "Engine/Renderer/Model/IModel.h"
 #include "Helper/AssimpHelper.h"
 
 #include <assimp/Importer.hpp>
@@ -10,7 +10,7 @@
 
 namespace Engine
 {
-	class AssimpModel: public Model
+	class AssimpModel: public IModel
 	{
 	public:
 		AssimpModel(std::string const& path);
@@ -18,9 +18,9 @@ namespace Engine
 		AssimpModel(std::string const& path, bool gamma, Ptr<float> progression);
 		
 		virtual std::filesystem::path GetFilePath() override { return m_filePath; }
-		virtual std::vector<Ptr<Mesh>> GetMeshes() const override { return m_meshes; }
-		virtual std::vector<Ptr<Animation>> GetAnimations() const override { return m_animations; }
-		virtual Ptr<BoundingBox> GenerateBoundingBox() override;
+		virtual std::vector<Ptr<IMesh>> GetMeshes() const override { return m_meshes; }
+		virtual std::vector<Ptr<IAnimation>> GetAnimations() const override { return m_animations; }
+		virtual Ptr<IBoundingBox> GenerateBoundingBox() override;
 		
 		virtual Uid GetUid() const override { return m_uid; }
 	private:
@@ -36,7 +36,7 @@ namespace Engine
 		const std::filesystem::path m_directory = m_filePath.parent_path();
 		const bool m_gammaCorrection;
 
-		std::vector<Ptr<Mesh>> m_meshes;
+		std::vector<Ptr<IMesh>> m_meshes;
 
 		// Bounding volume
 		glm::vec3 m_minAABB = glm::vec3(std::numeric_limits<float>::max());
@@ -44,7 +44,7 @@ namespace Engine
 
 		// Animations
 		Dictionary<std::string, glm::mat4> m_boneOffsets;
-		std::vector<Ptr<Animation>> m_animations;
+		std::vector<Ptr<IAnimation>> m_animations;
 
 		// Editor-only
 		bool m_isLoaded = false;

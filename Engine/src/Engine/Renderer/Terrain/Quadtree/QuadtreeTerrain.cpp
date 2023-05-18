@@ -9,7 +9,7 @@ namespace Engine
 	{
 	}
 
-	QuadtreeTerrain::QuadtreeTerrain(Ptr<Texture2D> heightMapTexture, int32_t entityId)
+	QuadtreeTerrain::QuadtreeTerrain(Ptr<ITexture2D> heightMapTexture, int32_t entityId)
 	{
 		m_buffer = CreatePtr<TerrainBuffer>(heightMapTexture, entityId);
 		for (uint32_t i = 0; i < TerrainBuffer::NUM_OF_ROOT_NODES; ++i)
@@ -48,7 +48,7 @@ namespace Engine
 				maxAABB.y = std::max(maxAABB.y, bottomRightEdgeHeight);
 				maxAABB.z = std::max(maxAABB.z, worldPosition.z + distanceFromCenterToSide);
 
-				m_boundingBoxes.push_back(BoundingBox::Create(BoundingBoxType::AABB, minAABB, maxAABB));
+				m_boundingBoxes.push_back(IBoundingBox::Create(BoundingBoxType::AABB, minAABB, maxAABB));
 			}
 		}
 	}
