@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  test:
+  test-windows:
     runs-on: windows-latest
     steps:
       - name: Check out repository with submodules
@@ -34,3 +34,29 @@ jobs:
       - name: Test
         shell: bash
         run: out/build/x64-release/Editor/Test
+  test-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository with submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      
+      - name: Install latest CMake
+        uses: lukka/get-cmake@latest
+        
+      - name: Restore artifacts
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgDirectory: '${{ github.workspace }}/Dependencies/vcpkg'
+          vcpkgJsonGlob: '**/vcpkg.json'
+      
+      - name: Build
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: 'linux-release'
+          buildPreset: 'linux-release'
+      
+      - name: Test
+        shell: bash
+        run: out/build/linux-release/Editor/Test
