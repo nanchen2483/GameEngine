@@ -23,7 +23,7 @@ namespace Engine
 		int versionMinor;
 		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
 		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
-		ENGINE_CORE_ASSERT(versionMajor > m_minimumMajorVersion || (versionMajor == 4 && m_minimumMinorVersion >= 6), "Engine requires at least OpenGL {0}.{1}", m_minimumMajorVersion, m_minimumMinorVersion);
+		ENGINE_CORE_ASSERT(versionMajor > m_minimumMajorVersion || (versionMajor == m_minimumMajorVersion && versionMinor >= m_minimumMinorVersion), "Engine requires at least OpenGL {0}.{1}", m_minimumMajorVersion, m_minimumMinorVersion);
 #endif // ENGINE_ENABLE_ASSERTS
 	}
 
