@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/Math/Transform.h"
 #include "Engine/Renderer/Buffer/UniformBuffer/IUniformBuffer.h"
-#include "Engine/Renderer/VertexArray/VertexArray.h"
+#include "Engine/Renderer/VertexArray/IVertexArray.h"
 #include "Engine/Renderer/Shader/IShader.h"
 #include "Engine/Renderer/Texture/ITexture.h"
 
@@ -57,7 +57,7 @@ namespace Engine
 		std::vector<int32_t> m_loadMorphingArea = std::vector<int32_t>();
 		std::vector<TerrainMaterial> m_materials = std::vector<TerrainMaterial>(3);
 
-		Ptr<VertexArray> m_vertexArray;
+		Ptr<IVertexArray> m_vertexArray;
 		uint32_t m_sizeOfPatch;
 	};
 }

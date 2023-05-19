@@ -6,6 +6,7 @@
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 #include <array>
 #include <glm/gtc/type_ptr.hpp>
@@ -22,7 +23,7 @@ namespace Engine
 		static const uint32_t MAX_INDICES = MAX_QUADS * NUM_OF_VERTEX_INDICES;
 		static const uint32_t MAX_TEXTURE_SLOTS = 32;
 
-		Ptr<VertexArray> vertexArray;
+		Ptr<IVertexArray> vertexArray;
 		Ptr<IVertexBuffer> vertexBuffer;
 		Ptr<IUniformBuffer> cameraUniformBuffer;
 		Ptr<IUniformBuffer> dirLightUniformBuffer;
@@ -52,7 +53,7 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		s_data.vertexArray = VertexArray::Create();
+		s_data.vertexArray = VertexArrayFactory::Create();
 
 		s_data.vertexBuffer = BufferFactory::CreateVertexBuffer(Renderer3DData::MAX_VERTICES * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());

@@ -6,6 +6,7 @@
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Renderer/Buffer/BufferFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 namespace Engine
 {
@@ -17,7 +18,7 @@ namespace Engine
 	Skybox::Skybox(Ptr<ITexture3D> texture)
 		: m_texture(texture)
 	{
-		m_vertexArray = VertexArray::Create();
+		m_vertexArray = VertexArrayFactory::Create();
 		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(const_cast<float*>(SkyboxData::vertices), SkyboxData::numOfVertices);
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },

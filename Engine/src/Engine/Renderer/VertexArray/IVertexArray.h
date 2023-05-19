@@ -4,10 +4,10 @@
 
 namespace Engine
 {
-	class VertexArray
+	class IVertexArray
 	{
 	public:
-		virtual ~VertexArray() {}
+		virtual ~IVertexArray() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
@@ -19,7 +19,5 @@ namespace Engine
 		virtual const std::vector<Ptr<IVertexBuffer>>& GetVertexBuffer() const = 0;
 		virtual const Ptr<IIndexBuffer>& GetIndexBuffer() const = 0;
 		virtual const uint32_t GetNumOfIndices() const = 0;
-
-		static Ptr<VertexArray> Create();
 	};
 }

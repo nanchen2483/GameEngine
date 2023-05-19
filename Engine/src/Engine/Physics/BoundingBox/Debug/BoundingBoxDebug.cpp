@@ -2,15 +2,16 @@
 #include "BoundingBoxDebug.h"
 #include "BoundingBoxDebugData.h"
 
-#include "Engine/Renderer/Buffer/BufferFactory.h"
 #include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Renderer/Buffer/BufferFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 namespace Engine
 {
 	BoundingBoxDebug::BoundingBoxDebug()
 	{
-		m_vertexArray = VertexArray::Create();
+		m_vertexArray = VertexArrayFactory::Create();
 		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(const_cast<float*>(BoundingBoxDebugData::vertices), BoundingBoxDebugData::numOfVertices);
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },

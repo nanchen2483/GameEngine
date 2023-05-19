@@ -5,6 +5,7 @@
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 #include <array>
 #include <glm/gtc/matrix_transform.hpp>
@@ -18,7 +19,7 @@ namespace Engine
 		static const uint32_t maxIndices = maxQuads * 6;
 		static const uint32_t maxTextureSlots = 32;
 
-		Ptr<VertexArray> vertexArray;
+		Ptr<IVertexArray> vertexArray;
 		Ptr<IVertexBuffer> vertexBuffer;
 		Ptr<IShader> shader;
 		Ptr<ITexture2D> whiteTexture;
@@ -41,7 +42,7 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		s_data.vertexArray = VertexArray::Create();
+		s_data.vertexArray = VertexArrayFactory::Create();
 
 		s_data.vertexBuffer = BufferFactory::CreateVertexBuffer(s_data.maxVertices * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());

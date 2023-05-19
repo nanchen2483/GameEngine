@@ -2,8 +2,9 @@
 #include "TessellationTerrain.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
-#include "Engine/Renderer/RendererCommand.h"
 #include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 namespace Engine
 {
@@ -17,7 +18,7 @@ namespace Engine
 	{
 		m_heightMapDataBuffer = m_heightMapTexture->GetData();
 
-		m_vertexArray = VertexArray::Create();
+		m_vertexArray = VertexArrayFactory::Create();
 		std::vector<TerrainVertex> vertices = SetVertices(m_numOfPoints, m_heightMapTexture->GetWidth(), m_heightMapTexture->GetHeight());
 		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(&vertices[0], sizeof(TerrainVertex) * vertices.size());
 		vertexBuffer->SetLayout({

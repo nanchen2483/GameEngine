@@ -1,9 +1,9 @@
 #pragma once
-#include "Engine/Renderer/VertexArray/VertexArray.h"
+#include "Engine/Renderer/VertexArray/IVertexArray.h"
 
 namespace Engine
 {
-	class OpenGLVertexArray : public VertexArray
+	class OpenGLVertexArray : public IVertexArray
 	{
 	public:
 		OpenGLVertexArray();

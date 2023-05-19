@@ -5,6 +5,7 @@
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Renderer/Buffer/BufferFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 namespace Engine
 {
@@ -91,7 +92,7 @@ namespace Engine
 		};
 
 		m_sizeOfPatch = vertices.size() / 2;
-		m_vertexArray = VertexArray::Create();
+		m_vertexArray = VertexArrayFactory::Create();
 		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(&vertices[0], sizeof(float) * vertices.size());
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float2 },
