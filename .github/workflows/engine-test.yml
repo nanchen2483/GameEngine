@@ -46,7 +46,7 @@ jobs:
       - name: Install necessary packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config
+          sudo apt-get install -y libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config libgtk-3-dev
 
       - name: Install latest CMake
         uses: lukka/get-cmake@latest
