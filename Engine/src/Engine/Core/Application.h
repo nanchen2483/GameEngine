@@ -1,7 +1,7 @@
 #pragma once
 #include "Base.h"
 #include "Layer/LayerStack.h"
-#include "Window/IWindow.h"
+#include "Window/Window.h"
 
 #include "Engine/ImGui/ImGuiLayer.h"
 #include "Engine/Renderer/Shader/IShader.h"
@@ -24,14 +24,14 @@ namespace Engine
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
-		inline IWindow& GetWindow() { return *m_window; }
+		inline Window& GetWindow() { return *m_window; }
 		inline ImGuiLayer* GetImGuiLayer() { return m_imGuiLayer; }
 		inline static Application& Get() { return *s_instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 	private:
-		Uniq<IWindow> m_window;
+		Uniq<Window> m_window;
 		ImGuiLayer* m_imGuiLayer;
 		bool m_running = true;
 		bool m_minimized = false;
