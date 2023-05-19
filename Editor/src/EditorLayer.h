@@ -26,7 +26,7 @@ namespace Engine
 		void OpenScene(const std::filesystem::path& filepath);
 		void SaveSceneAs();
 
-		Ptr<Framebuffer> m_framebuffer;
+		Ptr<IFramebuffer> m_framebuffer;
 		glm::vec2 m_viewportSize = glm::vec2(1280.0f, 720.0f);
 		bool m_viewportFocused = false, m_viewportHovered = false;
 		Ptr<Scene> m_activeScene;

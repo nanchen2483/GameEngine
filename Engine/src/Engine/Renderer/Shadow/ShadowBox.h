@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/Renderer/Buffer/UniformBuffer/IUniformBuffer.h"
-#include "Engine/Renderer/Framebuffer/Framebuffer.h"
+#include "Engine/Renderer/Framebuffer/IFramebuffer.h"
 #include "Engine/Renderer/Shader/IShader.h"
 
 namespace Engine
@@ -31,7 +31,7 @@ namespace Engine
 		std::vector<glm::vec4> GetFrustumCornersWorldSpace(const glm::mat4& projview);
 
 		Ptr<IShader> m_shader;
-		Ptr<Framebuffer> m_framebuffer;
+		Ptr<IFramebuffer> m_framebuffer;
 		Ptr<IUniformBuffer> m_lightSpaceMatrixUniformBuffer;
 		
 		// Camera properties

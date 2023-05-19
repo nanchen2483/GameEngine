@@ -1,12 +1,12 @@
 #include "enginepch.h"
-#include "Framebuffer.h"
+#include "FramebufferFactory.h"
 
 #include "Engine/Core/System/System.h"
 #include "Platform/OpenGL/Framebuffer/OpenGLFramebuffer.h"
 
 namespace Engine
 {
-	Ptr<Framebuffer> Framebuffer::Create(const FramebufferSpecification spec)
+	Ptr<IFramebuffer> FramebufferFactory::Create(const FramebufferSpecification spec)
 	{
 		switch (System::GetGraphicsApiType())
 		{

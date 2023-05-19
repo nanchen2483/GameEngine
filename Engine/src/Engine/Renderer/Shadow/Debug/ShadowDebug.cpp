@@ -4,6 +4,7 @@
 
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Renderer/Framebuffer/FramebufferFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 namespace Engine
@@ -17,7 +18,7 @@ namespace Engine
 			});
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
-		m_framebuffer = Framebuffer::Create(fbSpec);
+		m_framebuffer = FramebufferFactory::Create(fbSpec);
 
 		m_vertexArray = VertexArray::Create();
 		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(const_cast<float*>(ShadowDebugData::vertices), ShadowDebugData::numOfVertices);

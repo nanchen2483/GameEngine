@@ -3,6 +3,7 @@
 
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Renderer/Framebuffer/FramebufferFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 #include <glad/glad.h>
@@ -24,7 +25,7 @@ namespace Engine
 		fbSpec.width = m_depthMapResolution;
 		fbSpec.height = m_depthMapResolution;
 		fbSpec.arraySize = m_shadowInfo.levels.size();
-		m_framebuffer = Framebuffer::Create(fbSpec);
+		m_framebuffer = FramebufferFactory::Create(fbSpec);
 
 		m_lightSpaceMatrixUniformBuffer = BufferFactory::CreateUniformBuffer(3, {
 				BufferLayoutType::Std140,

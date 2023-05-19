@@ -1,10 +1,9 @@
 #pragma once
-#include "Engine/Core/Base.h"
 #include "Specifications/FramebufferSpecification.h"
 
 namespace Engine
 {
-	class ENGINE_API Framebuffer
+	class IFramebuffer
 	{
 	public:
 		virtual void Bind() = 0;
@@ -15,7 +14,5 @@ namespace Engine
 		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) = 0;
 		virtual uint32_t GetColorAttachmentRendererId(uint32_t index = 0) const = 0;
 		virtual const FramebufferSpecification GetSpecification() const = 0;
-
-		static Ptr<Framebuffer> Create(const FramebufferSpecification spec);
 	};
 }

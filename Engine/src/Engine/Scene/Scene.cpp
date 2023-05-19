@@ -22,7 +22,7 @@
 
 namespace Engine
 {
-	Scene::Scene(const Ptr<Framebuffer>& framebuffer)
+	Scene::Scene(const Ptr<IFramebuffer>& framebuffer)
 		: m_framebuffer(framebuffer)
 	{
 	}

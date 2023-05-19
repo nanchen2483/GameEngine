@@ -1,9 +1,9 @@
 #pragma once
-#include "Engine/Renderer/Framebuffer/Framebuffer.h"
+#include "Engine/Renderer/Framebuffer/IFramebuffer.h"
 
 namespace Engine
 {
-	class OpenGLFramebuffer : public Framebuffer
+	class OpenGLFramebuffer : public IFramebuffer
 	{
 	public:
 		OpenGLFramebuffer(const FramebufferSpecification& spec);
