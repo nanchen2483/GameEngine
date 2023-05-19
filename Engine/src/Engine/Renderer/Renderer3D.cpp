@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "Renderer3D.h"
 #include "RendererCommand.h"
-#include "Model/Vertex.h"
+#include "Vertex/Vertex.h"
 #include "Shadow/ShadowBox.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"

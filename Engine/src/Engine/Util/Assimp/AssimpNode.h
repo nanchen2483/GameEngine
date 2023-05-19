@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Model/INode.h"
+#include "Engine/Renderer/Model/Animation/Node/INode.h"
 #include "AssimpBone.h"
 
 namespace Engine

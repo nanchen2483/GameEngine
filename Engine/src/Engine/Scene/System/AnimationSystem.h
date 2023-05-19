@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Renderer/Model/IAnimation.h"
-#include "Engine/Renderer/Model/INode.h"
+#include "Engine/Renderer/Model/Animation/IAnimation.h"
+#include "Engine/Renderer/Model/Animation/Node/INode.h"
 
 #include <entt/entt.hpp>
 

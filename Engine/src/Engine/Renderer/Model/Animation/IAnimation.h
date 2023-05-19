@@ -1,8 +1,6 @@
 #pragma once
-#include "Engine/Core/Base.h"
-#include "Engine/Renderer/Model/INode.h"
+#include "Node/INode.h"
 
-#include <glm/glm.hpp>
 #include <string>
 #include <vector>
 

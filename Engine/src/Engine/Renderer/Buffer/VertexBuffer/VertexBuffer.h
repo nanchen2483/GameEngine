@@ -2,7 +2,7 @@
 #include "Engine/Core/Base.h"
 #include "Engine/Renderer/Buffer/IBuffer.h"
 #include "Engine/Renderer/Buffer/BufferLayout.h"
-#include "Engine/Renderer/Model/Vertex.h"
+#include "Engine/Renderer/Vertex/Vertex.h"
 
 namespace Engine
 {

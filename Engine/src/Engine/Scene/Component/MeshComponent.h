@@ -1,6 +1,6 @@
 #pragma once
 #include "IComponent.h"
-#include "Engine/Renderer/Model/IMesh.h"
+#include "Engine/Renderer/Model/Mesh/IMesh.h"
 
 #include <string>
 

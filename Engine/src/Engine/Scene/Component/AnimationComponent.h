@@ -1,6 +1,6 @@
 #pragma once
 #include "IComponent.h"
-#include "Engine/Renderer/Model/IAnimation.h"
+#include "Engine/Renderer/Model/Animation/IAnimation.h"
 
 namespace Engine
 {

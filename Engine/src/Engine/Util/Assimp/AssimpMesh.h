@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Model/IMesh.h"
+#include "Engine/Renderer/Model/Mesh/IMesh.h"
 
 namespace Engine
 {
