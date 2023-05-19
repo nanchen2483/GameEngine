@@ -4,6 +4,7 @@
 
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Renderer/Buffer/BufferFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 namespace Engine
@@ -17,12 +18,12 @@ namespace Engine
 		: m_texture(texture)
 	{
 		m_vertexArray = VertexArray::Create();
-		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(const_cast<float*>(SkyboxData::vertices), SkyboxData::numOfVertices);
+		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(const_cast<float*>(SkyboxData::vertices), SkyboxData::numOfVertices);
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },
 		});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
-		m_vertexArray->SetIndexBuffer(IndexBuffer::Create(const_cast<uint8_t*>(SkyboxData::indices), SkyboxData::numOfIndices));
+		m_vertexArray->SetIndexBuffer(BufferFactory::CreateIndexBuffer(const_cast<uint8_t*>(SkyboxData::indices), SkyboxData::numOfIndices));
 
 		m_shader = ShaderLibrary::Load("assets/shaders/Skybox.glsl");
 	}

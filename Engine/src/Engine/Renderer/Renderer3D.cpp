@@ -5,6 +5,7 @@
 #include "Shadow/ShadowBox.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
+#include "Engine/Renderer/Buffer/BufferFactory.h"
 
 #include <array>
 #include <glm/gtc/type_ptr.hpp>
@@ -22,10 +23,10 @@ namespace Engine
 		static const uint32_t MAX_TEXTURE_SLOTS = 32;
 
 		Ptr<VertexArray> vertexArray;
-		Ptr<VertexBuffer> vertexBuffer;
-		Ptr<UniformBuffer> cameraUniformBuffer;
-		Ptr<UniformBuffer> dirLightUniformBuffer;
-		Ptr<UniformBuffer> pointLightUniformBuffer;
+		Ptr<IVertexBuffer> vertexBuffer;
+		Ptr<IUniformBuffer> cameraUniformBuffer;
+		Ptr<IUniformBuffer> dirLightUniformBuffer;
+		Ptr<IUniformBuffer> pointLightUniformBuffer;
 		Ptr<IShader> shader;
 		Ptr<ITexture2D> whiteTexture;
 
@@ -53,7 +54,7 @@ namespace Engine
 
 		s_data.vertexArray = VertexArray::Create();
 
-		s_data.vertexBuffer = VertexBuffer::Create(Renderer3DData::MAX_VERTICES * sizeof(Vertex));
+		s_data.vertexBuffer = BufferFactory::CreateVertexBuffer(Renderer3DData::MAX_VERTICES * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 
@@ -104,7 +105,7 @@ namespace Engine
 			indices[i + 35] = indicesOffset + 5;
 		}
 
-		Ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, Renderer3DData::MAX_INDICES);
+		Ptr<IIndexBuffer> indexBuffer = BufferFactory::CreateIndexBuffer(indices, Renderer3DData::MAX_INDICES);
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
@@ -148,7 +149,7 @@ namespace Engine
 		s_data.textureCoords[6] = { 0.0f, 1.0f };
 		s_data.textureCoords[7] = { 1.0f, 1.0f };
 
-		s_data.cameraUniformBuffer = UniformBuffer::Create(0, {
+		s_data.cameraUniformBuffer = BufferFactory::CreateUniformBuffer(0, {
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Mat4 },				// Camera view matrix
@@ -157,7 +158,7 @@ namespace Engine
 				}
 			});
 
-		s_data.dirLightUniformBuffer = UniformBuffer::Create(1, {
+		s_data.dirLightUniformBuffer = BufferFactory::CreateUniformBuffer(1, {
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Float3 },				// Directional light direction
@@ -167,7 +168,7 @@ namespace Engine
 				}
 			});
 
-		s_data.pointLightUniformBuffer = UniformBuffer::Create(2, {
+		s_data.pointLightUniformBuffer = BufferFactory::CreateUniformBuffer(2, {
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Float3 },				// Point light position

@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Buffer/UniformBuffer/UniformBuffer.h"
+#include "Engine/Renderer/Buffer/UniformBuffer/IUniformBuffer.h"
 #include "Engine/Renderer/Framebuffer/Framebuffer.h"
 #include "Engine/Renderer/Shader/IShader.h"
 
@@ -32,7 +32,7 @@ namespace Engine
 
 		Ptr<IShader> m_shader;
 		Ptr<Framebuffer> m_framebuffer;
-		Ptr<UniformBuffer> m_lightSpaceMatrixUniformBuffer;
+		Ptr<IUniformBuffer> m_lightSpaceMatrixUniformBuffer;
 		
 		// Camera properties
 		glm::mat4 m_cameraViewMatrix;

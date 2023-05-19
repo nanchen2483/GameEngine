@@ -3,6 +3,7 @@
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/Buffer/BufferFactory.h"
 
 namespace Engine
 {
@@ -18,7 +19,7 @@ namespace Engine
 
 		m_vertexArray = VertexArray::Create();
 		std::vector<TerrainVertex> vertices = SetVertices(m_numOfPoints, m_heightMapTexture->GetWidth(), m_heightMapTexture->GetHeight());
-		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(&vertices[0], sizeof(TerrainVertex) * vertices.size());
+		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(&vertices[0], sizeof(TerrainVertex) * vertices.size());
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },
 			{ ShaderDataType::Float2 },

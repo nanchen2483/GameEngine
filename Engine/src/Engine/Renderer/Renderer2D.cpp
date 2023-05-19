@@ -4,6 +4,7 @@
 #include "Vertex/Vertex.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
+#include "Engine/Renderer/Buffer/BufferFactory.h"
 
 #include <array>
 #include <glm/gtc/matrix_transform.hpp>
@@ -18,7 +19,7 @@ namespace Engine
 		static const uint32_t maxTextureSlots = 32;
 
 		Ptr<VertexArray> vertexArray;
-		Ptr<VertexBuffer> vertexBuffer;
+		Ptr<IVertexBuffer> vertexBuffer;
 		Ptr<IShader> shader;
 		Ptr<ITexture2D> whiteTexture;
 
@@ -42,7 +43,7 @@ namespace Engine
 
 		s_data.vertexArray = VertexArray::Create();
 
-		s_data.vertexBuffer = VertexBuffer::Create(s_data.maxVertices * sizeof(Vertex));
+		s_data.vertexBuffer = BufferFactory::CreateVertexBuffer(s_data.maxVertices * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 		s_data.vertexBufferBase = new Vertex[s_data.maxVertices];
@@ -61,7 +62,7 @@ namespace Engine
 
 			indicesOffset += 4;
 		}
-		Ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, s_data.maxIndices);
+		Ptr<IIndexBuffer> indexBuffer = BufferFactory::CreateIndexBuffer(indices, s_data.maxIndices);
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
