@@ -16,7 +16,7 @@ namespace Engine
 
 		// Create a file chooser dialog
 		GtkWidget* dialog = gtk_file_chooser_dialog_new("Open File",
-			GTK_WINDOW(IGraphicsLibrary::GetInstance().GetGtkWindow()),
+			GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL)),
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			"Cancel",
 			GTK_RESPONSE_CANCEL,
@@ -55,7 +55,7 @@ namespace Engine
 
 		// Create a file chooser dialog
 		GtkWidget* dialog = gtk_file_chooser_dialog_new("Save File",
-			GTK_WINDOW(IGraphicsLibrary::GetInstance().GetGtkWindow()),
+			GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL)),
 			GTK_FILE_CHOOSER_ACTION_SAVE,
 			"Cancel",
 			GTK_RESPONSE_CANCEL,
