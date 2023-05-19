@@ -23,8 +23,12 @@ find_package (imgui CONFIG REQUIRED)
 find_package (imguizmo CONFIG REQUIRED)
 find_package (spdlog CONFIG REQUIRED)
 find_package (yaml-cpp CONFIG REQUIRED)
-find_package (PkgConfig REQUIRED)
-pkg_check_modules (GTK3 REQUIRED gtk+-3.0)
+
+# Find Linux-specific packages
+if (UNIX AND NOT APPLE)
+	find_package (PkgConfig REQUIRED)
+	pkg_check_modules (GTK3 REQUIRED gtk+-3.0)
+endif()
 
 # Find additional include directories
 find_path (STB_INCLUDE_DIRS "stb_image.h" REQUIRED)
@@ -80,7 +84,6 @@ target_link_libraries (${PROJECT_NAME}
 		glad::glad
 		glfw
 		yaml-cpp
-		PkgConfig::GTK3
 	PUBLIC
 		glm::glm
 		imgui::imgui
@@ -88,3 +91,9 @@ target_link_libraries (${PROJECT_NAME}
 		spdlog::spdlog
 		spdlog::spdlog_header_only
 )
+
+# Add Linux-specific configurations
+if (UNIX AND NOT APPLE)
+	target_include_directories (${PROJECT_NAME} PRIVATE ${GTK3_INCLUDE_DIRS})
+	target_link_libraries (${PROJECT_NAME} PRIVATE ${GTK3_LIBRARIES})
+endif ()
