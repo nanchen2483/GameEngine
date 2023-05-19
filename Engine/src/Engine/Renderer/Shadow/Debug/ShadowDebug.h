@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Renderer/Buffer/IFramebuffer.h"
-#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/Framebuffer/Framebuffer.h"
+#include "Engine/Renderer/VertexArray/VertexArray.h"
 #include "Engine/Renderer/Shader/IShader.h"
 #include "Engine/Renderer/Shadow/ShadowBox.h"
 
@@ -14,8 +14,8 @@ namespace Engine
 		uint32_t GetShadowLayer(uint32_t layer) const;
 	private:
 		Ptr<IShader> m_shader;
-		Ptr<IVertexArray> m_vertexArray;
-		Ptr<IFramebuffer> m_framebuffer;
+		Ptr<VertexArray> m_vertexArray;
+		Ptr<Framebuffer> m_framebuffer;
 
 		const ShadowBoxInfo m_shadowInfo;
 	};

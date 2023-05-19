@@ -21,7 +21,7 @@
 #include "Engine/Renderer/Shadow/Debug/ShadowDebug.h"
 
 // Renderer
-#include "Engine/Renderer/Buffer/IFramebuffer.h"
+#include "Engine/Renderer/Framebuffer/Framebuffer.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/RendererCommand.h"
 

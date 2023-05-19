@@ -16,9 +16,9 @@ namespace Engine
 	{
 		m_heightMapDataBuffer = m_heightMapTexture->GetData();
 
-		m_vertexArray = IVertexArray::Create();
+		m_vertexArray = VertexArray::Create();
 		std::vector<TerrainVertex> vertices = SetVertices(m_numOfPoints, m_heightMapTexture->GetWidth(), m_heightMapTexture->GetHeight());
-		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(&vertices[0], sizeof(TerrainVertex) * vertices.size());
+		Ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(&vertices[0], sizeof(TerrainVertex) * vertices.size());
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },
 			{ ShaderDataType::Float2 },

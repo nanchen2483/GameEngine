@@ -16,6 +16,6 @@ namespace Engine
 	private:
 		EditorCamera m_editorCamera;
 		Ptr<ITerrain> m_terrain;
-		Ptr<IUniformBuffer> m_cameraUniformBuffer;
+		Ptr<UniformBuffer> m_cameraUniformBuffer;
 	};
 }

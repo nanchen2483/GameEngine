@@ -1,9 +1,9 @@
 #pragma once
-#include "Engine/Renderer/Buffer/IBuffer.h"
+#include "Engine/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
 
 namespace Engine
 {
-	class OpenGLVertexBuffer : public IVertexBuffer
+	class OpenGLVertexBuffer : public VertexBuffer
 	{
 	public:
 		OpenGLVertexBuffer(uint32_t size);

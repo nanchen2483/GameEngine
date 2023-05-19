@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/Math/Transform.h"
-#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/Buffer/UniformBuffer/UniformBuffer.h"
+#include "Engine/Renderer/VertexArray/VertexArray.h"
 #include "Engine/Renderer/Shader/IShader.h"
 #include "Engine/Renderer/Texture/ITexture.h"
 
@@ -43,7 +44,7 @@ namespace Engine
 		Ptr<ITexture2D> m_normalMapTexture = nullptr;
 		Ptr<ITexture2D> m_splatMapTexture = nullptr;
 		std::vector<float> m_heightMapDataBuffer;
-		Ptr<IUniformBuffer> m_wordTransform = nullptr;
+		Ptr<UniformBuffer> m_wordTransform = nullptr;
 		std::unordered_map<uint32_t, std::unordered_map<uint32_t, float>> m_heightCache;
 
 		int32_t m_entityId;
@@ -56,7 +57,7 @@ namespace Engine
 		std::vector<int32_t> m_loadMorphingArea = std::vector<int32_t>();
 		std::vector<TerrainMaterial> m_materials = std::vector<TerrainMaterial>(3);
 
-		Ptr<IVertexArray> m_vertexArray;
+		Ptr<VertexArray> m_vertexArray;
 		uint32_t m_sizeOfPatch;
 	};
 }

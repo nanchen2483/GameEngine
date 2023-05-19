@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/VertexArray/VertexArray.h"
 #include "Engine/Renderer/Shader/IShader.h"
 #include "Engine/Renderer/Texture/ITexture.h"
 
@@ -20,6 +20,6 @@ namespace Engine
 	private:
 		Ptr<IShader> m_shader;
 		Ptr<ITexture3D> m_texture;
-		Ptr<IVertexArray> m_vertexArray;
+		Ptr<VertexArray> m_vertexArray;
 	};
 }

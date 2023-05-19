@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/Physics/BoundingBox/IBoundingBox.h"
-#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/VertexArray/VertexArray.h"
 #include "Engine/Renderer/Shader/IShader.h"
 
 namespace Engine
@@ -13,6 +13,6 @@ namespace Engine
 		void Draw(Transform &transform, BoundingValue boundingValue);
 	private:
 		Ptr<IShader> m_shader;
-		Ptr<IVertexArray> m_vertexArray;
+		Ptr<VertexArray> m_vertexArray;
 	};
 }

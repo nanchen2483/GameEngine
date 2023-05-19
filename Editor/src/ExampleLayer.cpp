@@ -16,7 +16,7 @@ namespace Engine
 		m_editorCamera = EditorCamera(30.0f, 1280.0f, 720.0f, 0.1f, 1000.0f);
 		m_terrain = ITerrain::Create(TerrainType::Default, "assets/textures/heights/iceland_heightmap.png");
 
-		m_cameraUniformBuffer = IUniformBuffer::Create(0, {
+		m_cameraUniformBuffer = UniformBuffer::Create(0, {
 			BufferLayoutType::Std140,
 			{
 				{ ShaderDataType::Mat4 },

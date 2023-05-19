@@ -1,12 +1,12 @@
 #include "enginepch.h"
-#include "IVertexArray.h"
+#include "VertexArray.h"
 
 #include "Engine/Core/System/System.h"
-#include "Platform/OpenGL/Vertex/OpenGLVertexArray.h"
+#include "Platform/OpenGL/VertexArray/OpenGLVertexArray.h"
 
 namespace Engine
 {
-	Ptr<IVertexArray> IVertexArray::Create()
+	Ptr<VertexArray> VertexArray::Create()
 	{
 		switch (System::GetGraphicsApiType())
 		{

@@ -17,8 +17,8 @@ namespace Engine
 		static const uint32_t maxIndices = maxQuads * 6;
 		static const uint32_t maxTextureSlots = 32;
 
-		Ptr<IVertexArray> vertexArray;
-		Ptr<IVertexBuffer> vertexBuffer;
+		Ptr<VertexArray> vertexArray;
+		Ptr<VertexBuffer> vertexBuffer;
 		Ptr<IShader> shader;
 		Ptr<ITexture2D> whiteTexture;
 
@@ -40,9 +40,9 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		s_data.vertexArray = IVertexArray::Create();
+		s_data.vertexArray = VertexArray::Create();
 
-		s_data.vertexBuffer = IVertexBuffer::Create(s_data.maxVertices * sizeof(Vertex));
+		s_data.vertexBuffer = VertexBuffer::Create(s_data.maxVertices * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 		s_data.vertexBufferBase = new Vertex[s_data.maxVertices];
@@ -61,7 +61,7 @@ namespace Engine
 
 			indicesOffset += 4;
 		}
-		Ptr<IIndexBuffer> indexBuffer = IIndexBuffer::Create(indices, s_data.maxIndices);
+		Ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, s_data.maxIndices);
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 

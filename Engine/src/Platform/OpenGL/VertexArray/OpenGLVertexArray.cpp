@@ -49,7 +49,7 @@ namespace Engine
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const Ptr<IVertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::AddVertexBuffer(const Ptr<VertexBuffer>& vertexBuffer)
 	{
 		ENGINE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size() > 0, "Vertex Buffer has no layout!");
 
@@ -115,7 +115,7 @@ namespace Engine
 		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const Ptr<IIndexBuffer>& indexBuffer)
+	void OpenGLVertexArray::SetIndexBuffer(const Ptr<IndexBuffer>& indexBuffer)
 	{
 		ENGINE_CORE_ASSERT(m_vertexBuffers.size() > 0, "Vertex Buffer is empty!");
 

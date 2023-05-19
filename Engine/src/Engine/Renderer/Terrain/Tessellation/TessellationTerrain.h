@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/VertexArray/VertexArray.h"
 #include "Engine/Renderer/Shader/IShader.h"
 #include "Engine/Renderer/Terrain/ITerrain.h"
 #include "TerrainVertex.h"
@@ -22,7 +22,7 @@ namespace Engine
 		std::vector<TerrainVertex> SetVertices(uint32_t numOfPoints, int32_t width, int32_t height);
 
 		Ptr<IShader> m_shader;
-		Ptr<IVertexArray> m_vertexArray;
+		Ptr<VertexArray> m_vertexArray;
 		Ptr<ITexture2D> m_heightMapTexture;
 		std::vector<float> m_heightMapDataBuffer;
 
