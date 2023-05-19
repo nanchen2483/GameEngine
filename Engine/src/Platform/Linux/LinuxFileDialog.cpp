@@ -7,12 +7,18 @@
 
 namespace Engine
 {
+	static bool s_gtkInitialized = false;
+
 	std::string FileDialog::OpenFile(const char* filter)
 	{
 		std::string result;
 
-		// Initialize GTK
-		gtk_init(nullptr, nullptr);
+		if (!s_gtkInitialized)
+		{
+			// Initialize GTK
+			gtk_init(nullptr, nullptr);
+			s_gtkInitialized = true;
+		}
 
 		// Create a file chooser dialog
 		GtkWidget* dialog = gtk_file_chooser_dialog_new("Open File",
@@ -50,8 +56,12 @@ namespace Engine
 	{
 		std::string result;
 
-		// Initialize GTK
-		gtk_init(nullptr, nullptr);
+		if (!s_gtkInitialized)
+		{
+			// Initialize GTK
+			gtk_init(nullptr, nullptr);
+			s_gtkInitialized = true;
+		}
 
 		// Create a file chooser dialog
 		GtkWidget* dialog = gtk_file_chooser_dialog_new("Save File",
