@@ -6,7 +6,8 @@
 #include <spdlog/pattern_formatter.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-namespace Engine {
+namespace Engine
+{
 	Ptr<spdlog::logger> Log::s_coreLogger;
 	Ptr<spdlog::logger> Log::s_clientLogger;
 	Ptr<LogSink> Log::s_logSink;
