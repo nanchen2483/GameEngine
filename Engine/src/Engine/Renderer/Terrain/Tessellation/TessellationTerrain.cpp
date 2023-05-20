@@ -2,9 +2,9 @@
 #include "TessellationTerrain.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
-#include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
-#include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 namespace Engine
 {
@@ -86,7 +86,7 @@ namespace Engine
 	std::vector<TerrainVertex> TessellationTerrain::SetVertices(uint32_t numOfPoints, int32_t width, int32_t height)
 	{
 		std::vector<TerrainVertex> vertices;
-		vertices.reserve(numOfPoints * numOfPoints * 4);
+		vertices.reserve((size_t)(numOfPoints * numOfPoints * 4));
 		TerrainVertex vertex;
 		for (uint32_t i = 0; i < numOfPoints; i++)
 		{

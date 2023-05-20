@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
-#include "Graphics/GraphicsAPI/IGraphicsAPI.h"
+#include "Graphics/IGraphicsAPI.h"
 
 namespace Engine
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include "ICollision.h"
-#include "CollisionType.h"
+#include "Engine/Physics/Collision/ICollision.h"
+#include "Engine/Physics/Collision/CollisionType.h"
 
 namespace Engine
 {

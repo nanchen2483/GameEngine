@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "TextureLibrary.h"
 
-#include "Engine/Renderer/Texture/TextureFactory.h"
+#include "Engine/Factory/TextureFactory.h"
 
 namespace Engine
 {

@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "PhysicsSystem.h"
-#include "Engine/Physics/Collision/CollisionFactory.h"
+
+#include "Engine/Factory/CollisionFactory.h"
 
 namespace Engine
 {

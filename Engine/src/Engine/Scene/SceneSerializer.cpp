@@ -17,7 +17,7 @@
 #include "Engine/Library/ModelLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Util/YAML.h"
-#include "Engine/Renderer/Terrain/TerrainFactory.h"
+#include "Engine/Factory/TerrainFactory.h"
 
 namespace Engine
 {

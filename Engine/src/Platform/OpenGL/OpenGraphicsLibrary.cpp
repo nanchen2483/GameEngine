@@ -2,7 +2,7 @@
 #include "OpenGraphicsLibrary.h"
 
 #include "Platform/Util/OpenGLUtil.h"
-#include "Engine/Renderer/Graphics/GraphicsFactory.h"
+#include "Engine/Factory/GraphicsFactory.h"
 
 #include <GLFW/glfw3.h>
 

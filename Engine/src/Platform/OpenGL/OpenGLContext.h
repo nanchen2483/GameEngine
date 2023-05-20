@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Graphics/GraphicsContext/IGraphicsContext.h"
+#include "Engine/Renderer/Graphics/IGraphicsContext.h"
 
 struct GLFWwindow;
 

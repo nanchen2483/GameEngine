@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Renderer/Graphics/GraphicsLibrary/IGraphicsLibrary.h"
-#include "Engine/Renderer/Graphics/GraphicsContext/IGraphicsContext.h"
+#include "Engine/Renderer/Graphics/IGraphicsLibrary.h"
+#include "Engine/Renderer/Graphics/IGraphicsContext.h"
 
 #include <string>
 

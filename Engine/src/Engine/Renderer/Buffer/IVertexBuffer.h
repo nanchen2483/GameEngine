@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Renderer/Buffer/IBuffer.h"
-#include "Engine/Renderer/Buffer/BufferLayout.h"
+#include "IBuffer.h"
+#include "BufferLayout.h"
 
 namespace Engine
 {

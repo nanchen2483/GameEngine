@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine.h"
-#include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Factory/BufferFactory.h"
 
 namespace Engine
 {

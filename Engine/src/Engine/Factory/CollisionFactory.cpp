@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "CollisionFactory.h"
-#include "GJKEPA3D/GJKEPA3D.h"
+
+#include "Engine/Physics/Collision/GJKEPA3D/GJKEPA3D.h"
 
 namespace Engine
 {

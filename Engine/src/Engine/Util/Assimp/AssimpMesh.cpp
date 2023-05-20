@@ -1,9 +1,9 @@
 #include "enginepch.h"
 #include "AssimpMesh.h"
 
-#include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
-#include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 namespace Engine
 {

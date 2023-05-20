@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "ModelLibrary.h"
 
-#include "Engine/Renderer/Model/ModelFactory.h"
+#include "Engine/Factory/ModelFactory.h"
 
 namespace Engine
 {

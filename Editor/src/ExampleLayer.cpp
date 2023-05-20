@@ -1,6 +1,6 @@
 #include "ExampleLayer.h"
 
-#include "Engine/Renderer/Terrain/TerrainFactory.h"
+#include "Engine/Factory/TerrainFactory.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

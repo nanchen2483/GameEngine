@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "BoundingBoxFactory.h"
 
-#include "AABB/AABB.h"
+#include "Engine/Physics/BoundingBox/AABB/AABB.h"
 
 namespace Engine
 {

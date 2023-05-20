@@ -4,10 +4,10 @@
 
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Library/ShaderLibrary.h"
-#include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/TextureFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
-#include "Engine/Renderer/Texture/TextureFactory.h"
-#include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 namespace Engine
 {

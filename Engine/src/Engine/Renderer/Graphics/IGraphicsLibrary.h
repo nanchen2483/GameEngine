@@ -5,7 +5,7 @@
 #include "Engine/Core/Enum/KeyMouseButtonActions.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
 #include "Engine/Core/Window/WindowUserData.h"
-#include "Engine/Renderer/Graphics/GraphicsContext/IGraphicsContext.h"
+#include "Engine/Renderer/Graphics/IGraphicsContext.h"
 
 namespace Engine
 {

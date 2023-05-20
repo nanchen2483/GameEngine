@@ -1,6 +1,6 @@
 #pragma once
 #include "ShadowBoxInfo.h"
-#include "Engine/Renderer/Buffer/UniformBuffer/IUniformBuffer.h"
+#include "Engine/Renderer/Buffer/IUniformBuffer.h"
 #include "Engine/Renderer/Framebuffer/IFramebuffer.h"
 #include "Engine/Renderer/Shader/IShader.h"
 

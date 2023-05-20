@@ -1,8 +1,8 @@
 #include "enginepch.h"
 #include "TerrainFactory.h"
 
-#include "Tessellation/TessellationTerrain.h"
-#include "Quadtree/QuadtreeTerrain.h"
+#include "Engine/Renderer/Terrain/Quadtree/QuadtreeTerrain.h"
+#include "Engine/Renderer/Terrain/Tessellation/TessellationTerrain.h"
 
 namespace Engine
 {

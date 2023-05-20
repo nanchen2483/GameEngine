@@ -1,9 +1,10 @@
 #include "enginepch.h"
 #include "AssimpModel.h"
+
 #include "AssimpMesh.h"
+#include "Engine/Factory/BoundingBoxFactory.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Scene/System/AnimationSystem.h"
-#include "Engine/Physics/BoundingBox/BoundingBoxFactory.h"
 
 #include <stb_image.h>
 

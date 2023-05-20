@@ -1,9 +1,9 @@
 #pragma once
 #include "Engine/Core/Base.h"
 #include "Engine/Renderer/Vertex/Vertex.h"
-#include "IndexBuffer/IIndexBuffer.h"
-#include "UniformBuffer/IUniformBuffer.h"
-#include "VertexBuffer/IVertexBuffer.h"
+#include "Engine/Renderer/Buffer/IIndexBuffer.h"
+#include "Engine/Renderer/Buffer/IUniformBuffer.h"
+#include "Engine/Renderer/Buffer/IVertexBuffer.h"
 
 namespace Engine
 {

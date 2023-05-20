@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "QuadtreeTerrain.h"
 #include "Engine/Library/TextureLibrary.h"
-#include "Engine/Physics/BoundingBox/BoundingBoxFactory.h"
+#include "Engine/Factory/BoundingBoxFactory.h"
 
 namespace Engine
 {

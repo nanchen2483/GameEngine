@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Renderer/Buffer/VertexBuffer/IVertexBuffer.h"
-#include "Engine/Renderer/Buffer/IndexBuffer/IIndexBuffer.h"
+#include "Engine/Renderer/Buffer/IVertexBuffer.h"
+#include "Engine/Renderer/Buffer/IIndexBuffer.h"
 
 namespace Engine
 {

@@ -1,7 +1,7 @@
 #pragma once
-#include "IBoundingBox.h"
-#include "BoundingBoxType.h"
 #include "Engine/Core/Base.h"
+#include "Engine/Physics/BoundingBox/IBoundingBox.h"
+#include "Engine/Physics/BoundingBox/BoundingBoxType.h"
 
 namespace Engine
 {

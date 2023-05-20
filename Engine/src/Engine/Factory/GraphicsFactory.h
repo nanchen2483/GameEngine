@@ -1,7 +1,7 @@
 #pragma once
-#include "GraphicsAPI/IGraphicsAPI.h"
-#include "GraphicsContext/IGraphicsContext.h"
-#include "GraphicsLibrary/IGraphicsLibrary.h"
+#include "Engine/Renderer/Graphics/IGraphicsAPI.h"
+#include "Engine/Renderer/Graphics/IGraphicsContext.h"
+#include "Engine/Renderer/Graphics/IGraphicsLibrary.h"
 #include "Engine/Core/Window/WindowUserData.h"
 
 namespace Engine

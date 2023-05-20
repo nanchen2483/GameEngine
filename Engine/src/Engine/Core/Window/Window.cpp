@@ -5,7 +5,7 @@
 #include "Engine/Core/Events/ApplicationEvent.h"
 #include "Engine/Core/Events/KeyEvent.h"
 #include "Engine/Core/Events/MouseEvent.h"
-#include "Engine/Renderer/Graphics/GraphicsFactory.h"
+#include "Engine/Factory/GraphicsFactory.h"
 
 namespace Engine
 {

@@ -1,6 +1,6 @@
 #include "HierarchyPanel.h"
 #include "Extension/ImGuiExtension.h"
-#include "Engine/Renderer/Terrain/TerrainFactory.h"
+#include "Engine/Factory/TerrainFactory.h"
 
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>

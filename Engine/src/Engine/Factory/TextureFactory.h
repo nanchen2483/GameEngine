@@ -1,5 +1,5 @@
 #pragma once
-#include "ITexture.h"
+#include "Engine/Renderer/Texture/ITexture.h"
 
 namespace Engine
 {

@@ -1,8 +1,6 @@
 #pragma once
-#include "ITerrain.h"
+#include "Engine/Renderer/Terrain/ITerrain.h"
 #include "Engine/Renderer/Texture/ITexture.h"
-
-#include <glm/glm.hpp>
 
 namespace Engine
 {

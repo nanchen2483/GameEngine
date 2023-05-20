@@ -2,8 +2,8 @@
 #include "ShadowBox.h"
 
 #include "Engine/Library/ShaderLibrary.h"
-#include "Engine/Renderer/Buffer/BufferFactory.h"
-#include "Engine/Renderer/Framebuffer/FramebufferFactory.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/FramebufferFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 #include <glad/glad.h>

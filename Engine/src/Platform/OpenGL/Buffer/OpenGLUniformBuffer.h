@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Buffer/UniformBuffer/IUniformBuffer.h"
+#include "Engine/Renderer/Buffer/IUniformBuffer.h"
 #include "Engine/Renderer/Buffer/BufferLayout.h"
 
 namespace Engine

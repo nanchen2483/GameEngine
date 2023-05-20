@@ -1,5 +1,5 @@
 #pragma once
-#include "IModel.h"
+#include "Engine/Renderer/Model/IModel.h"
 
 namespace Engine
 {
