@@ -10,19 +10,19 @@ namespace Engine
 {
 	struct Vertex
 	{
-		glm::vec3 position = {};
-		glm::vec3 normal = {};
-		glm::vec4 color = {};
-		glm::vec2 texCoord = {};
-		glm::vec3 material = {};
-		glm::vec3 tangent = {};
-		glm::vec3 bitangent = {};
-		int boneIds[MAX_BONE_WEIGHTS] = {};
-		float weights[MAX_BONE_WEIGHTS] = {};
-		uint32_t isWorldPos = false;
+		glm::vec3 position{};
+		glm::vec3 normal{};
+		glm::vec4 color{};
+		glm::vec2 texCoord{};
+		glm::vec3 material{};
+		glm::vec3 tangent{};
+		glm::vec3 bitangent{};
+		int boneIds[MAX_BONE_WEIGHTS]{};
+		float weights[MAX_BONE_WEIGHTS]{};
+		uint32_t isWorldPos{ false };
 
 		// Editor-only
-		int entityId = -1;
+		int entityId{ -1 };
 
 		Vertex()
 		{

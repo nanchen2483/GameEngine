@@ -11,6 +11,6 @@ namespace Engine
 		FramebufferAttachmentSpecification(std::vector<FramebufferTextureSpecification> attachments)
 			: attachments(attachments) {}
 
-		std::vector<FramebufferTextureSpecification> attachments;
+		std::vector<FramebufferTextureSpecification> attachments{};
 	};
 }

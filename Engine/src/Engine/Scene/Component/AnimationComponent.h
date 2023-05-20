@@ -6,9 +6,9 @@ namespace Engine
 {
 	struct ENGINE_API AnimationComponent : public IComponent
 	{
-		bool isEnabled = false;
-		uint32_t selectedAnimationIndex = 0;
-		std::vector<Ptr<IAnimation>> animations;
+		bool isEnabled{};
+		uint32_t selectedAnimationIndex{};
+		std::vector<Ptr<IAnimation>> animations{};
 
 		operator Ptr<IAnimation>()
 		{

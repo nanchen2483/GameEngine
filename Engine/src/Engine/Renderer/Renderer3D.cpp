@@ -23,28 +23,27 @@ namespace Engine
 		static const uint32_t MAX_INDICES = MAX_QUADS * NUM_OF_VERTEX_INDICES;
 		static const uint32_t MAX_TEXTURE_SLOTS = 32;
 
-		Ptr<IVertexArray> vertexArray;
-		Ptr<IVertexBuffer> vertexBuffer;
-		Ptr<IUniformBuffer> cameraUniformBuffer;
-		Ptr<IUniformBuffer> dirLightUniformBuffer;
-		Ptr<IUniformBuffer> pointLightUniformBuffer;
-		Ptr<IShader> shader;
-		Ptr<ITexture2D> whiteTexture;
+		Ptr<IVertexArray> vertexArray{};
+		Ptr<IVertexBuffer> vertexBuffer{};
+		Ptr<IUniformBuffer> cameraUniformBuffer{};
+		Ptr<IUniformBuffer> dirLightUniformBuffer{};
+		Ptr<IUniformBuffer> pointLightUniformBuffer{};
+		Ptr<IShader> shader{};
+		Ptr<ITexture2D> whiteTexture{};
 
-		uint32_t indexCount = 0;
+		uint32_t indexCount{};
 		const Vertex* vertexBufferBase = new Vertex[Renderer3DData::MAX_VERTICES];
-		Vertex* vertexBufferPtr = nullptr;
+		Vertex* vertexBufferPtr{};
 
 		static const uint32_t NUM_OF_DEFAULT_TEXTURES = 1; // The first texture slot is white block
 		std::array<Ptr<ITexture2D>, MAX_TEXTURE_SLOTS> textureSlots;
 		uint32_t numOfTextureSlots = NUM_OF_DEFAULT_TEXTURES;
 
-		glm::vec4 vertexPosition[NUM_OF_VERTICES] = {};
-		glm::vec2 textureCoords[NUM_OF_VERTICES] = {};
+		glm::vec4 vertexPosition[NUM_OF_VERTICES]{};
+		glm::vec2 textureCoords[NUM_OF_VERTICES]{};
 
-		Renderer3D::Statistics states;
-
-		ShadowBoxInfo shadowInfo;
+		Renderer3D::Statistics states{};
+		ShadowBoxInfo shadowInfo{};
 	};
 
 	static Renderer3DData s_data;
@@ -114,7 +113,7 @@ namespace Engine
 		uint32_t whiteTextureData = 0xffffffff;
 		s_data.whiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
 
-		int32_t samplers[Renderer3DData::MAX_TEXTURE_SLOTS];
+		int32_t samplers[Renderer3DData::MAX_TEXTURE_SLOTS]{};
 		for (uint32_t i = 0; i < s_data.MAX_TEXTURE_SLOTS; i++)
 		{
 			samplers[i] = i;

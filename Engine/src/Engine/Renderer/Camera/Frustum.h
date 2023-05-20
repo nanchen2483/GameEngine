@@ -12,12 +12,13 @@ namespace Engine
 {
 	struct Plane
 	{
-		glm::vec3 normal = { 0.f, 1.f, 0.f }; // Unit vector
-		float distance = 0.f;
+		glm::vec3 normal{ 0.f, 1.f, 0.f }; // Unit vector
+		float distance{};
 
 		Plane() = default;
 		Plane(const glm::vec3& position, const glm::vec3& norm)
-			: normal(glm::normalize(norm)), distance(glm::dot(normal, position))
+			: normal(glm::normalize(norm))
+			, distance(glm::dot(normal, position))
 		{
 		}
 
@@ -29,16 +30,16 @@ namespace Engine
 
 	struct Frustum
 	{
-		Plane topFace;
-		Plane bottomFace;
+		Plane topFace{};
+		Plane bottomFace{};
 
-		Plane rightFace;
-		Plane leftFace;
+		Plane rightFace{};
+		Plane leftFace{};
 
-		Plane farFace;
-		Plane nearFace;
+		Plane farFace{};
+		Plane nearFace{};
 
-		std::vector<glm::vec3> points;
+		std::vector<glm::vec3> points{};
 
 		Frustum(glm::vec3 position, glm::vec3 rotation, float FOV, float nearClip, float farClip, float aspectRatio)
 		{
@@ -73,7 +74,6 @@ namespace Engine
 		{
 			return Frustum(points, lightDirection);
 		}
-
 	private:
 		Frustum(std::vector<glm::vec3> frustumPoints, glm::vec3 lightDirection)
 		{

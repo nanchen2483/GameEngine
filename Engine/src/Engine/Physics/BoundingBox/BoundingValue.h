@@ -6,9 +6,9 @@ namespace Engine
 {
 	struct BoundingValue
 	{
-		glm::vec3 center;
-		glm::vec3 extents;
+		glm::vec3 center{};
+		glm::vec3 extents{};
 
-		std::function<glm::vec3(glm::vec3)> GetSupportPoint;
+		std::function<glm::vec3(glm::vec3)> GetSupportPoint{};
 	};
 }

@@ -7,6 +7,6 @@ namespace Engine
 {
 	struct ENGINE_API TagComponent : public IComponent
 	{
-		std::string tag;
+		std::string tag{};
 	};
 }

@@ -30,8 +30,8 @@ namespace Engine
 
 		struct Statistics
 		{
-			uint32_t drawCalls = 0;
-			uint32_t drawModels = 0;
+			uint32_t drawCalls{};
+			uint32_t drawModels{};
 		};
 		static void ResetStates();
 		static Statistics GetState();
