@@ -1,12 +1,12 @@
 #include "enginepch.h"
-#include "IShader.h"
+#include "ShaderFactory.h"
 
 #include "Engine/Core/System/System.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Engine
 {
-	Ptr<IShader> IShader::Create(const std::string& filePath)
+	Ptr<IShader> ShaderFactory::Create(const std::string& filePath)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -17,8 +17,8 @@ namespace Engine
 		ENGINE_CORE_ASSERT(false, "Unknown GraphicsAPI");
 		return nullptr;
 	}
-	
-	Ptr<IShader> IShader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+
+	Ptr<IShader> ShaderFactory::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
 		switch (System::GetGraphicsApiType())
 		{
