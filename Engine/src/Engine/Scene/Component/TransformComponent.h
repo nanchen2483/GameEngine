@@ -6,7 +6,7 @@ namespace Engine
 {
 	struct ENGINE_API TransformComponent : public IComponent
 	{
-		Transform transform;
+		Transform transform{};
 
 		glm::vec3 GetTranslation() const { return transform.translation; }
 		glm::vec3 GetRotation() const { return transform.rotation; }

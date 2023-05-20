@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/Renderer/Camera/EditorCamera.h"
-#include "Engine/Renderer/Buffer/IFramebuffer.h"
+#include "Engine/Renderer/Framebuffer/IFramebuffer.h"
 
 #include <entt/entt.hpp>
 

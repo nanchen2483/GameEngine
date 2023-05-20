@@ -2,6 +2,8 @@
 #include "ShadowBox.h"
 
 #include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/FramebufferFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 #include <glad/glad.h>
@@ -23,9 +25,9 @@ namespace Engine
 		fbSpec.width = m_depthMapResolution;
 		fbSpec.height = m_depthMapResolution;
 		fbSpec.arraySize = m_shadowInfo.levels.size();
-		m_framebuffer = IFramebuffer::Create(fbSpec);
+		m_framebuffer = FramebufferFactory::Create(fbSpec);
 
-		m_lightSpaceMatrixUniformBuffer = IUniformBuffer::Create(3, {
+		m_lightSpaceMatrixUniformBuffer = BufferFactory::CreateUniformBuffer(3, {
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Mat4 },

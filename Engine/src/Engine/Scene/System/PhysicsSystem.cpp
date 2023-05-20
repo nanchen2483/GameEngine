@@ -1,11 +1,13 @@
 #include "enginepch.h"
 #include "PhysicsSystem.h"
 
+#include "Engine/Factory/CollisionFactory.h"
+
 namespace Engine
 {
 	PhysicsSystem::PhysicsSystem()
 	{
-		m_collision = ICollision::Create(CollisionType::GjkEpa3D);
+		m_collision = CollisionFactory::Create(CollisionType::GjkEpa3D);
 		m_debug = CreateUniq<BoundingBoxDebug>();
 	}
 

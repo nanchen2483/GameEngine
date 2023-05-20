@@ -5,19 +5,19 @@ namespace EngineTest
 {
 	struct EditorCameraTest : testing::Test
 	{
-		float distance = 10.0f;
-		float pitch = 0.0f;
-		float yaw = 0.0f;
-		glm::vec3 focusPoint = glm::vec3(0.0f);
-		glm::mat4 viewMatrix = glm::mat4(1.0f);
+		float distance{ 10.0f };
+		float pitch{ 0.0f };
+		float yaw{ 0.0f };
+		glm::vec3 focusPoint{ 0.0f };
+		glm::mat4 viewMatrix{ 1.0f };
 
-		float FOV = 45.0f;
-		float viewportWidth = 1280, viewportHeight = 720;
-		float nearClip = 0.1f, farClip = 1000.0f;
+		float FOV{ 45.0f };
+		float viewportWidth{ 1280.0f };
+		float viewportHeight{ 720.0f };
+		float nearClip{ 0.1f };
+		float farClip{ 1000.0f };
 
-		EditorCameraTest()
-		{
-		}
+		EditorCameraTest() = default;
 
 		glm::vec3 GetForwardDirection() const
 		{

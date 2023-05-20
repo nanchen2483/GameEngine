@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine/Renderer/Model/IAnimation.h"
-#include "Engine/Renderer/Model/IMesh.h"
+#include "Engine/Renderer/Model/Animation/IAnimation.h"
+#include "Engine/Renderer/Model/Mesh/IMesh.h"
 #include "Engine/Scene/Component/LightComponent.h"
 #include "Engine/Scene/Component/SkyboxComponent.h"
 #include "Engine/Scene/Component/SpriteRendererComponent.h"
@@ -30,8 +30,8 @@ namespace Engine
 
 		struct Statistics
 		{
-			uint32_t drawCalls = 0;
-			uint32_t drawModels = 0;
+			uint32_t drawCalls{};
+			uint32_t drawModels{};
 		};
 		static void ResetStates();
 		static Statistics GetState();

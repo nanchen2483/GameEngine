@@ -6,7 +6,7 @@ namespace EngineTest
 {
 	struct TestElement : Engine::IComparable<TestElement>
 	{
-		int value;
+		int32_t value;
 		TestElement(int value) : value(value) {}
 
 		// Inherited via IComparable

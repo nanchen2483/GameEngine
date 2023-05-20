@@ -1,6 +1,8 @@
 #include "enginepch.h"
 #include "ModelLibrary.h"
 
+#include "Engine/Factory/ModelFactory.h"
+
 namespace Engine
 {
 	Ptr<IModel> ModelLibrary::Load(const std::filesystem::path& filePath)
@@ -13,7 +15,7 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<IModel> model = IModel::Create(filePath.string());
+		Ptr<IModel> model = ModelFactory::Create(filePath.string());
 		instance.Add(model);
 
 		return model;

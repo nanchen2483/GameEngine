@@ -3,6 +3,9 @@
 #include "ShadowDebugData.h"
 
 #include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/FramebufferFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 namespace Engine
@@ -16,16 +19,16 @@ namespace Engine
 			});
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
-		m_framebuffer = IFramebuffer::Create(fbSpec);
+		m_framebuffer = FramebufferFactory::Create(fbSpec);
 
-		m_vertexArray = IVertexArray::Create();
-		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(const_cast<float*>(ShadowDebugData::vertices), ShadowDebugData::numOfVertices);
+		m_vertexArray = VertexArrayFactory::Create();
+		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(const_cast<float*>(ShadowDebugData::vertices), ShadowDebugData::numOfVertices);
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },
 			{ ShaderDataType::Float2 },
 		});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
-		m_vertexArray->SetIndexBuffer(IIndexBuffer::Create(const_cast<uint8_t*>(ShadowDebugData::indices), ShadowDebugData::numOfIndices));
+		m_vertexArray->SetIndexBuffer(BufferFactory::CreateIndexBuffer(const_cast<uint8_t*>(ShadowDebugData::indices), ShadowDebugData::numOfIndices));
 
 		m_shader = ShaderLibrary::Load("assets/shaders/Debug/ShadowDebug.glsl");
 		m_shader->Bind();

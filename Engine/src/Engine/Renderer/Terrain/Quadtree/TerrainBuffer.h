@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/Math/Transform.h"
-#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/Buffer/IUniformBuffer.h"
+#include "Engine/Renderer/VertexArray/IVertexArray.h"
 #include "Engine/Renderer/Shader/IShader.h"
 #include "Engine/Renderer/Texture/ITexture.h"
 

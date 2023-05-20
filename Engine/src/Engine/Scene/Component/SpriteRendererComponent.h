@@ -8,7 +8,7 @@ namespace Engine
 {
 	struct ENGINE_API SpriteRendererComponent : public IComponent
 	{
-		glm::vec4 color = glm::vec4(1.0f);
-		Ptr<ITexture2D> texture = nullptr;
+		glm::vec4 color{ 1.0f };
+		Ptr<ITexture2D> texture{};
 	};
 }

@@ -3,6 +3,8 @@
 
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 namespace Engine
@@ -57,7 +59,7 @@ namespace Engine
 		transform.translation = glm::vec3(-m_scaleXZ / 2.0f, 0.0f, -m_scaleXZ / 2.0f);
 		glm::mat4 worldMatrix = (glm::mat4)transform;
 
-		m_wordTransform = IUniformBuffer::Create(4,
+		m_wordTransform = BufferFactory::CreateUniformBuffer(4,
 			{
 				BufferLayoutType::Std140,
 				{
@@ -90,8 +92,8 @@ namespace Engine
 		};
 
 		m_sizeOfPatch = vertices.size() / 2;
-		m_vertexArray = IVertexArray::Create();
-		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(&vertices[0], sizeof(float) * vertices.size());
+		m_vertexArray = VertexArrayFactory::Create();
+		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(&vertices[0], sizeof(float) * vertices.size());
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float2 },
 		});

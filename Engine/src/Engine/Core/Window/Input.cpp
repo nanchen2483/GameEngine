@@ -1,24 +1,24 @@
 #include "enginepch.h"
 #include "Input.h"
-#include "Engine/Renderer/Graphics/IGraphicsLibrary.h"
+#include "Engine/Factory/GraphicsFactory.h"
 
 namespace Engine
 {
 	bool Input::IsKeyPressed(KeyCode keycode)
 	{
-		KeyMouseButtonActions state = IGraphicsLibrary::GetInstance().GetKeyState(keycode);
+		KeyMouseButtonActions state = GraphicsFactory::GetLibraryInstance().GetKeyState(keycode);
 		return state == KeyMouseButtonActions::Press ||
 			   state == KeyMouseButtonActions::Repeat;
 	}
 
 	bool Input::IsMouseButtonPressed(MouseButton button)
 	{
-		return IGraphicsLibrary::GetInstance().GetMouseButtonState(button) == KeyMouseButtonActions::Press;
+		return GraphicsFactory::GetLibraryInstance().GetMouseButtonState(button) == KeyMouseButtonActions::Press;
 	}
 
 	std::pair<float, float> Input::GetMousePosition()
 	{
-		return IGraphicsLibrary::GetInstance().GetCursorPosition();
+		return GraphicsFactory::GetLibraryInstance().GetCursorPosition();
 	}
 
 	float Input::GetMouseX()
@@ -35,16 +35,16 @@ namespace Engine
 	
 	bool Input::IsCursorVisible()
 	{
-		return IGraphicsLibrary::GetInstance().GetCursorMode() == CursorMode::Normal;
+		return GraphicsFactory::GetLibraryInstance().GetCursorMode() == CursorMode::Normal;
 	}
 
 	void Input::ShowCursor()
 	{
-		IGraphicsLibrary::GetInstance().SetCursorMode(CursorMode::Normal);
+		GraphicsFactory::GetLibraryInstance().SetCursorMode(CursorMode::Normal);
 	}
 	
 	void Input::HideCursor()
 	{
-		IGraphicsLibrary::GetInstance().SetCursorMode(CursorMode::Disabled);
+		GraphicsFactory::GetLibraryInstance().SetCursorMode(CursorMode::Disabled);
 	}
 }

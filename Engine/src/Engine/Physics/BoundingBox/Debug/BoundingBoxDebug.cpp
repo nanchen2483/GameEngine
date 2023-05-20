@@ -3,19 +3,21 @@
 #include "BoundingBoxDebugData.h"
 
 #include "Engine/Library/ShaderLibrary.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 namespace Engine
 {
 	BoundingBoxDebug::BoundingBoxDebug()
 	{
-		m_vertexArray = IVertexArray::Create();
-		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(const_cast<float*>(BoundingBoxDebugData::vertices), BoundingBoxDebugData::numOfVertices);
+		m_vertexArray = VertexArrayFactory::Create();
+		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(const_cast<float*>(BoundingBoxDebugData::vertices), BoundingBoxDebugData::numOfVertices);
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },
 			});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
-		m_vertexArray->SetIndexBuffer(IIndexBuffer::Create(const_cast<uint8_t*>(BoundingBoxDebugData::indices), BoundingBoxDebugData::numOfIndices));
+		m_vertexArray->SetIndexBuffer(BufferFactory::CreateIndexBuffer(const_cast<uint8_t*>(BoundingBoxDebugData::indices), BoundingBoxDebugData::numOfIndices));
 
 		m_shader = ShaderLibrary::Load("assets/shaders/BoundingBox.glsl");
 	}

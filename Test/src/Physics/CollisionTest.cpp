@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "Engine.h"
-#include "Engine/Physics/Collision/ICollision.h"
+#include "Engine/Factory/CollisionFactory.h"
+#include "Engine/Factory/BoundingBoxFactory.h"
 
 namespace EngineTest
 {
@@ -11,8 +12,8 @@ namespace EngineTest
 
 		CollisionTest()
 		{
-			collision = Engine::ICollision::Create(Engine::CollisionType::GjkEpa3D);
-			boudingBox = Engine::IBoundingBox::Create(Engine::BoundingBoxType::AABB, glm::vec3(-0.5), glm::vec3(0.5));
+			collision = Engine::CollisionFactory::Create(Engine::CollisionType::GjkEpa3D);
+			boudingBox = Engine::BoundingBoxFactory::Create(Engine::BoundingBoxType::AABB, glm::vec3(-0.5), glm::vec3(0.5));
 		}
 	};
 

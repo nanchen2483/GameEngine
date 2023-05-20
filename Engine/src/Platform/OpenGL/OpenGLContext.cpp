@@ -19,6 +19,8 @@ namespace Engine
 		ENGINE_CORE_INFO("GLSL Version: {0}", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 #ifdef ENGINE_ENABLE_ASSERTS
+		const uint32_t m_minimumMajorVersion = 4;
+		const uint32_t m_minimumMinorVersion = 6;
 		int versionMajor;
 		int versionMinor;
 		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);

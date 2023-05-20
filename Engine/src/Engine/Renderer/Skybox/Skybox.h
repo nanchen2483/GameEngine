@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Renderer/Buffer/IVertexArray.h"
+#include "Engine/Renderer/VertexArray/IVertexArray.h"
 #include "Engine/Renderer/Shader/IShader.h"
 #include "Engine/Renderer/Texture/ITexture.h"
 

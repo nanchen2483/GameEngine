@@ -30,7 +30,7 @@ namespace Engine
 			});
 		fbSpec.width = 1280;
 		fbSpec.height = 720;
-		m_framebuffer = IFramebuffer::Create(fbSpec);
+		m_framebuffer = FramebufferFactory::Create(fbSpec);
 
 		// Entity
 		m_activeScene = CreatePtr<Scene>(m_framebuffer);

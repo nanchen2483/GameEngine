@@ -1,6 +1,8 @@
 #include "enginepch.h"
 #include "AssimpMesh.h"
 
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 namespace Engine
@@ -14,9 +16,9 @@ namespace Engine
 	{
 		if (m_vertexArray == nullptr)
 		{
-			m_vertexArray = IVertexArray::Create();
-			m_vertexArray->AddVertexBuffer(IVertexBuffer::Create(&(m_vertices)[0], m_vertices.size()));
-			m_vertexArray->SetIndexBuffer(IIndexBuffer::Create(&(m_indices)[0], m_indices.size()));
+			m_vertexArray = VertexArrayFactory::Create();
+			m_vertexArray->AddVertexBuffer(BufferFactory::CreateVertexBuffer(&(m_vertices)[0], m_vertices.size()));
+			m_vertexArray->SetIndexBuffer(BufferFactory::CreateIndexBuffer(&(m_indices)[0], m_indices.size()));
 			std::vector<Vertex>().swap(m_vertices);
 			std::vector<uint32_t>().swap(m_indices);
 		}

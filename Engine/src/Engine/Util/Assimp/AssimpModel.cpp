@@ -1,6 +1,8 @@
 #include "enginepch.h"
 #include "AssimpModel.h"
+
 #include "AssimpMesh.h"
+#include "Engine/Factory/BoundingBoxFactory.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Scene/System/AnimationSystem.h"
 
@@ -28,7 +30,7 @@ namespace Engine
 
 	Ptr<IBoundingBox> AssimpModel::GenerateBoundingBox()
 	{
-		return IBoundingBox::Create(BoundingBoxType::AABB, m_minAABB, m_maxAABB);
+		return BoundingBoxFactory::Create(BoundingBoxType::AABB, m_minAABB, m_maxAABB);
 	}
 
 	void AssimpModel::Load(std::string const& path)

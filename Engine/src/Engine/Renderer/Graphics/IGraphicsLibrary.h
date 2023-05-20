@@ -5,7 +5,7 @@
 #include "Engine/Core/Enum/KeyMouseButtonActions.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
 #include "Engine/Core/Window/WindowUserData.h"
-#include "IGraphicsContext.h"
+#include "Engine/Renderer/Graphics/IGraphicsContext.h"
 
 namespace Engine
 {
@@ -33,8 +33,5 @@ namespace Engine
 		virtual void SetMouseButtonCallback(void (*callback)(void* window, int32_t button, int32_t action, int32_t mods)) = 0;
 		virtual void SetScrollCallback(void (*callabck)(void* window, double xOffset, double yOffset)) = 0;
 		virtual void SetCursorPosCallback(void (*callback)(void* window, double xPos, double yPos)) = 0;
-
-		static WindowUserData* GetWindowUserDataPointerStatic(void* window);
-		static IGraphicsLibrary& GetInstance();
 	};
 }

@@ -2,6 +2,8 @@
 #include "TessellationTerrain.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
 
 namespace Engine
@@ -16,9 +18,9 @@ namespace Engine
 	{
 		m_heightMapDataBuffer = m_heightMapTexture->GetData();
 
-		m_vertexArray = IVertexArray::Create();
+		m_vertexArray = VertexArrayFactory::Create();
 		std::vector<TerrainVertex> vertices = SetVertices(m_numOfPoints, m_heightMapTexture->GetWidth(), m_heightMapTexture->GetHeight());
-		Ptr<IVertexBuffer> vertexBuffer = IVertexBuffer::Create(&vertices[0], sizeof(TerrainVertex) * vertices.size());
+		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(&vertices[0], sizeof(TerrainVertex) * vertices.size());
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float3 },
 			{ ShaderDataType::Float2 },
@@ -84,7 +86,7 @@ namespace Engine
 	std::vector<TerrainVertex> TessellationTerrain::SetVertices(uint32_t numOfPoints, int32_t width, int32_t height)
 	{
 		std::vector<TerrainVertex> vertices;
-		vertices.reserve(numOfPoints * numOfPoints * 4);
+		vertices.reserve((size_t)(numOfPoints * numOfPoints * 4));
 		TerrainVertex vertex;
 		for (uint32_t i = 0; i < numOfPoints; i++)
 		{

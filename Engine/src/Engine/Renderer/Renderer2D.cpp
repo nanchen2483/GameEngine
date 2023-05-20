@@ -1,9 +1,11 @@
 #include "enginepch.h"
 #include "Renderer2D.h"
 #include "RendererCommand.h"
-#include "Model/Vertex.h"
+#include "Vertex/Vertex.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 
 #include <array>
 #include <glm/gtc/matrix_transform.hpp>
@@ -17,21 +19,21 @@ namespace Engine
 		static const uint32_t maxIndices = maxQuads * 6;
 		static const uint32_t maxTextureSlots = 32;
 
-		Ptr<IVertexArray> vertexArray;
-		Ptr<IVertexBuffer> vertexBuffer;
-		Ptr<IShader> shader;
-		Ptr<ITexture2D> whiteTexture;
+		Ptr<IVertexArray> vertexArray{};
+		Ptr<IVertexBuffer> vertexBuffer{};
+		Ptr<IShader> shader{};
+		Ptr<ITexture2D> whiteTexture{};
 
-		uint32_t indexCount = 0;
-		Vertex* vertexBufferBase = nullptr;
-		Vertex* vertexBufferPtr = nullptr;
+		uint32_t indexCount{};
+		Vertex* vertexBufferBase{};
+		Vertex* vertexBufferPtr{};
 
 		std::array<Ptr<ITexture2D>, maxTextureSlots> textureSlots;
-		uint32_t textureSlotIndex = 1;
+		uint32_t textureSlotIndex{1};
 
-		glm::vec4 vertexPosition[4] = {};
+		glm::vec4 vertexPosition[4]{};
 
-		Renderer2D::Statistics states;
+		Renderer2D::Statistics states{};
 	};
 
 	static Renderer2DData s_data;
@@ -40,9 +42,9 @@ namespace Engine
 	{
 		ENGINE_PROFILE_FUNCTION();
 
-		s_data.vertexArray = IVertexArray::Create();
+		s_data.vertexArray = VertexArrayFactory::Create();
 
-		s_data.vertexBuffer = IVertexBuffer::Create(s_data.maxVertices * sizeof(Vertex));
+		s_data.vertexBuffer = BufferFactory::CreateVertexBuffer(s_data.maxVertices * sizeof(Vertex));
 		s_data.vertexBuffer->SetLayout(Vertex::GetBufferLayout());
 		s_data.vertexArray->AddVertexBuffer(s_data.vertexBuffer);
 		s_data.vertexBufferBase = new Vertex[s_data.maxVertices];
@@ -61,7 +63,7 @@ namespace Engine
 
 			indicesOffset += 4;
 		}
-		Ptr<IIndexBuffer> indexBuffer = IIndexBuffer::Create(indices, s_data.maxIndices);
+		Ptr<IIndexBuffer> indexBuffer = BufferFactory::CreateIndexBuffer(indices, s_data.maxIndices);
 		s_data.vertexArray->SetIndexBuffer(indexBuffer);
 		delete[] indices;
 
@@ -69,7 +71,7 @@ namespace Engine
 		uint32_t whiteTextureData = 0xffffffff;
 		s_data.whiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
 
-		int32_t samplers[s_data.maxTextureSlots];
+		int32_t samplers[s_data.maxTextureSlots]{};
 		for (uint32_t i = 0; i < s_data.maxTextureSlots; i++)
 		{
 			samplers[i] = i;

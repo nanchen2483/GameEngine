@@ -6,7 +6,7 @@ namespace Engine
 {
 	struct ENGINE_API NativeScriptComponent : public IComponent
 	{
-		ScriptableEntity* instance = nullptr;
+		ScriptableEntity* instance{};
 
 		ScriptableEntity* (*InstantiateScript)();
 		void (*DestroyScript)(NativeScriptComponent* nsc);

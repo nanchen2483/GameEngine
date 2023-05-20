@@ -1,6 +1,8 @@
 #include "enginepch.h"
 #include "ShaderLibrary.h"
 
+#include "Engine/Factory/ShaderFactory.h"
+
 namespace Engine
 {
 	Ptr<IShader> ShaderLibrary::Load(const std::filesystem::path& filePath)
@@ -13,7 +15,7 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<IShader> shader = IShader::Create(filePath.string());
+		Ptr<IShader> shader = ShaderFactory::Create(filePath.string());
 		instance.Add(shader);
 
 		return shader;
