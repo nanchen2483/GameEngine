@@ -1,5 +1,5 @@
 #include "enginepch.h"
-#include "ITexture.h"
+#include "TextureFactory.h"
 
 #include "Engine/Core/System/System.h"
 #include "Platform/OpenGL/Texture/OpenGLTexture2D.h"
@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	Ptr<ITexture2D> ITexture2D::Create(uint32_t width, uint32_t height, uint32_t levels, TextureFormatType format)
+	Ptr<ITexture2D> TextureFactory::Create2D(uint32_t width, uint32_t height, uint32_t levels, TextureFormatType format)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -19,7 +19,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<ITexture2D> ITexture2D::Create(const Ptr<Image> image, const TextureType type)
+	Ptr<ITexture2D> TextureFactory::Create2D(const Ptr<Image> image, const TextureType type)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -31,7 +31,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<ITexture2D> ITexture2D::Create(const std::string& filePath, const TextureType type, bool flipVertically)
+	Ptr<ITexture2D> TextureFactory::Create2D(const std::string& filePath, const TextureType type, bool flipVertically)
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -43,7 +43,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<ITexture3D> ITexture3D::Create(const std::vector<Ptr<Image>>& faces)
+	Ptr<ITexture3D> TextureFactory::Create3D(const std::vector<Ptr<Image>>& faces)
 	{
 		switch (System::GetGraphicsApiType())
 		{

@@ -1,6 +1,8 @@
 #include "enginepch.h"
 #include "TextureLibrary.h"
 
+#include "Engine/Renderer/Texture/TextureFactory.h"
+
 namespace Engine
 {
 	Ptr<ITexture2D> TextureLibrary::Load(const std::filesystem::path& filePath)
@@ -18,7 +20,7 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<ITexture2D> texture = ITexture2D::Create(filePath.string(), type, flipVertically);
+		Ptr<ITexture2D> texture = TextureFactory::Create2D(filePath.string(), type, flipVertically);
 		instance.Add(texture);
 
 		return texture;
@@ -34,7 +36,7 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<ITexture2D> texture = ITexture2D::Create(image, type);
+		Ptr<ITexture2D> texture = TextureFactory::Create2D(image, type);
 		instance.Add(texture);
 
 		return texture;
@@ -51,7 +53,7 @@ namespace Engine
 			return instance.Get(uid);
 		}
 
-		Ptr<ITexture2D> texture = ITexture2D::Create(height, width, levels, format);
+		Ptr<ITexture2D> texture = TextureFactory::Create2D(height, width, levels, format);
 		instance.Add(texture);
 
 		return texture;

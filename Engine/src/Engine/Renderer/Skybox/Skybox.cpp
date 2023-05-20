@@ -6,12 +6,13 @@
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Renderer/Buffer/BufferFactory.h"
 #include "Engine/Renderer/RendererCommand.h"
+#include "Engine/Renderer/Texture/TextureFactory.h"
 #include "Engine/Renderer/VertexArray/VertexArrayFactory.h"
 
 namespace Engine
 {
 	Skybox::Skybox(const std::vector<Ptr<Image>> faces)
-		: Skybox(ITexture3D::Create(faces))
+		: Skybox(TextureFactory::Create3D(faces))
 	{
 	}
 
