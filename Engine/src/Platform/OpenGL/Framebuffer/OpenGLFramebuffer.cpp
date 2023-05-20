@@ -192,6 +192,17 @@ namespace Engine
 
 				switch (m_colorAttachmentSpecifications[i].textureFormat)
 				{
+				case FramebufferTextureFormat::RedInteger:
+					Utils::AttachColorTexture(
+						m_colorAttachments[i],
+						m_specification.samples,
+						m_specification.arraySize,
+						GL_R32I,
+						GL_RGB_INTEGER,
+						m_specification.width,
+						m_specification.height,
+						i);
+					break;
 				case FramebufferTextureFormat::RGBA8:
 					Utils::AttachColorTexture(
 						m_colorAttachments[i],
@@ -203,13 +214,24 @@ namespace Engine
 						m_specification.height,
 						i);
 					break;
-				case FramebufferTextureFormat::RedInteger:
+				case FramebufferTextureFormat::RGBA16:
 					Utils::AttachColorTexture(
 						m_colorAttachments[i],
 						m_specification.samples,
 						m_specification.arraySize,
-						GL_R32I,
-						GL_RGB_INTEGER,
+						GL_RGBA16F,
+						GL_RGBA,
+						m_specification.width,
+						m_specification.height,
+						i);
+					break;
+				case FramebufferTextureFormat::RGBA32:
+					Utils::AttachColorTexture(
+						m_colorAttachments[i],
+						m_specification.samples,
+						m_specification.arraySize,
+						GL_RGBA32F,
+						GL_RGBA,
 						m_specification.width,
 						m_specification.height,
 						i);
