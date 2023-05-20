@@ -17,6 +17,7 @@
 #include "Engine/Library/ModelLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Util/YAML.h"
+#include "Engine/Renderer/Terrain/TerrainFactory.h"
 
 namespace Engine
 {
@@ -350,7 +351,7 @@ namespace Engine
 				{
 					TerrainComponent& deserializedSkybox = deserializedEntity.AddComponent<TerrainComponent>();
 					deserializedSkybox.texture = TextureLibrary::Load(terrainComponent["Path"].as<std::string>(), TextureType::Height);
-					deserializedSkybox.terrain = ITerrain::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
+					deserializedSkybox.terrain = TerrainFactory::Create((TerrainType)terrainComponent["Type"].as<int32_t>(), deserializedSkybox.texture, deserializedEntity);
 				}
 			}
 		}

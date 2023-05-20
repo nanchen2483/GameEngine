@@ -1,5 +1,6 @@
 #include "HierarchyPanel.h"
 #include "Extension/ImGuiExtension.h"
+#include "Engine/Renderer/Terrain/TerrainFactory.h"
 
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>
@@ -476,7 +477,7 @@ namespace Engine
 					ImGuiExtension::DrawTextureSubSection("Texture", component.texture, TextureType::Height,
 						[&]()
 						{
-							component.terrain = ITerrain::Create(TerrainType::Quadtree, component.texture, entity);
+							component.terrain = TerrainFactory::Create(TerrainType::Quadtree, component.texture, entity);
 						});
 				},
 				[&]()

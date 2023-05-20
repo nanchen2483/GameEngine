@@ -1,6 +1,8 @@
 #include "ExampleLayer.h"
 
 #include "Engine/Renderer/Buffer/BufferFactory.h"
+#include "Engine/Renderer/Terrain/TerrainFactory.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
@@ -15,7 +17,7 @@ namespace Engine
 	void ExampleLayer::OnAttach()
 	{
 		m_editorCamera = EditorCamera(30.0f, 1280.0f, 720.0f, 0.1f, 1000.0f);
-		m_terrain = ITerrain::Create(TerrainType::Default, "assets/textures/heights/iceland_heightmap.png");
+		m_terrain = TerrainFactory::Create(TerrainType::Default, "assets/textures/heights/iceland_heightmap.png");
 
 		m_cameraUniformBuffer = BufferFactory::CreateUniformBuffer(0, {
 			BufferLayoutType::Std140,
