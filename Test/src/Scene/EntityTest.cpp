@@ -7,7 +7,7 @@ namespace EngineTest
 	{
 		Engine::Entity entity;
 		Engine::Ptr<Engine::Scene> scene;
-		glm::vec2 viewportSize = { 1280.0f, 720.0f };
+		glm::vec2 viewportSize{ 1280.0f, 720.0f };
 
 		EntityTest()
 		{
