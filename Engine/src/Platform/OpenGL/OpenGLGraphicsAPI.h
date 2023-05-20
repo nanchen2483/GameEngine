@@ -9,6 +9,9 @@ namespace Engine
 		virtual void Init() override;
 		virtual void CullFace(FaceCulling face) override;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
+		virtual std::pair<uint32_t, uint32_t> GetViewport() override;
+		virtual uint32_t GetFramebuffer() override;
+		virtual void SetFramebuffer(uint32_t framebuffer) override;
 		virtual void SetDepthFunc(DepthFunc func) override;
 		virtual PolygonMode GetPolygonMode() override;
 		virtual void SetPolygonMode(PolygonMode mode) override;
