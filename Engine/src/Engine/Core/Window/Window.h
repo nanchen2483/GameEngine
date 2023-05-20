@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/Core/Base.h"
-#include "Engine/Renderer/Graphics/IGraphicsContext.h"
+#include "Engine/Renderer/Graphics/GraphicsContext/IGraphicsContext.h"
 #include "WindowProperties.h"
 #include "WindowUserData.h"
 

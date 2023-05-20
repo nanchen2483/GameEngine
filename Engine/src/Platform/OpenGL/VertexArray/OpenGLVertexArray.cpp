@@ -11,17 +11,17 @@ namespace Engine
 	{
 		switch (type)
 		{
-		case Engine::ShaderDataType::Float:		return GL_FLOAT;
-		case Engine::ShaderDataType::Float2:	return GL_FLOAT;
-		case Engine::ShaderDataType::Float3:	return GL_FLOAT;
-		case Engine::ShaderDataType::Float4:	return GL_FLOAT;
-		case Engine::ShaderDataType::Mat3:		return GL_FLOAT;
-		case Engine::ShaderDataType::Mat4:		return GL_FLOAT;
-		case Engine::ShaderDataType::Int:		return GL_INT;
-		case Engine::ShaderDataType::Int2:		return GL_INT;
-		case Engine::ShaderDataType::Int3:		return GL_INT;
-		case Engine::ShaderDataType::Int4:		return GL_INT;
-		case Engine::ShaderDataType::Bool:		return GL_BOOL;
+		case ShaderDataType::Float:		return GL_FLOAT;
+		case ShaderDataType::Float2:	return GL_FLOAT;
+		case ShaderDataType::Float3:	return GL_FLOAT;
+		case ShaderDataType::Float4:	return GL_FLOAT;
+		case ShaderDataType::Mat3:		return GL_FLOAT;
+		case ShaderDataType::Mat4:		return GL_FLOAT;
+		case ShaderDataType::Int:		return GL_INT;
+		case ShaderDataType::Int2:		return GL_INT;
+		case ShaderDataType::Int3:		return GL_INT;
+		case ShaderDataType::Int4:		return GL_INT;
+		case ShaderDataType::Bool:		return GL_BOOL;
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknown ShaderDataType!");
@@ -62,10 +62,10 @@ namespace Engine
 		{
 			switch (element.type)
 			{
-			case Engine::ShaderDataType::Float:
-			case Engine::ShaderDataType::Float2:
-			case Engine::ShaderDataType::Float3:
-			case Engine::ShaderDataType::Float4:
+			case ShaderDataType::Float:
+			case ShaderDataType::Float2:
+			case ShaderDataType::Float3:
+			case ShaderDataType::Float4:
 				glEnableVertexAttribArray(index);
 				glVertexAttribPointer(
 					index,
@@ -76,11 +76,11 @@ namespace Engine
 					(const void*)(uint64_t)element.offset);
 				index++;
 				break;
-			case Engine::ShaderDataType::Int:
-			case Engine::ShaderDataType::Int2:
-			case Engine::ShaderDataType::Int3:
-			case Engine::ShaderDataType::Int4:
-			case Engine::ShaderDataType::Bool:
+			case ShaderDataType::Int:
+			case ShaderDataType::Int2:
+			case ShaderDataType::Int3:
+			case ShaderDataType::Int4:
+			case ShaderDataType::Bool:
 				glEnableVertexAttribArray(index);
 				glVertexAttribIPointer(
 					index,
@@ -90,8 +90,8 @@ namespace Engine
 					(const void*)(uint64_t)element.offset);
 				index++;
 				break;
-			case Engine::ShaderDataType::Mat3:
-			case Engine::ShaderDataType::Mat4:
+			case ShaderDataType::Mat3:
+			case ShaderDataType::Mat4:
 				uint8_t count = element.GetComponentCount();
 				for (uint8_t i = 0; i < count; i++)
 				{

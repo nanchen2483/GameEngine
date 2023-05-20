@@ -1,5 +1,4 @@
 #pragma once
-#include "Engine/Core/Base.h"
 
 namespace Engine
 {
@@ -8,7 +7,5 @@ namespace Engine
 	public:
 		virtual ~IGraphicsContext() = default;
 		virtual void SwapBuffers() = 0;
-
-		static Uniq<IGraphicsContext> Create(void *window);
 	};
 }

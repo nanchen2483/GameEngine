@@ -2,6 +2,8 @@
 #include "OpenGraphicsLibrary.h"
 
 #include "Platform/Util/OpenGLUtil.h"
+#include "Engine/Renderer/Graphics/GraphicsFactory.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Engine
@@ -32,7 +34,7 @@ namespace Engine
 	void OpenGraphicsLibrary::CreateNewWindow(std::string title, uint32_t width, uint32_t height)
 	{
 		m_window = glfwCreateWindow((int)width, (int)height, title.c_str(), nullptr, nullptr);
-		m_context = IGraphicsContext::Create(static_cast<void*>(m_window));
+		m_context = GraphicsFactory::CreateContext(static_cast<void*>(m_window));
 	}
 
 #ifdef ENGINE_PLATFORM_WINDOWS

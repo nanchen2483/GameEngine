@@ -27,7 +27,5 @@ namespace Engine
 		virtual void DrawUint32Indexed(const Ptr<IVertexArray>& vertexArray) = 0;
 		virtual void DrawPatch(uint32_t count) = 0;
 		virtual void Compute(uint32_t numOfX, uint32_t numOfY, uint32_t numOfZ) = 0;
-
-		static Uniq<IGraphicsAPI> Create();
 	};
 }

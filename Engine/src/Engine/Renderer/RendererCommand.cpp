@@ -1,8 +1,7 @@
 #include "enginepch.h"
 #include "RendererCommand.h"
 
-#include "Engine/Core/System/System.h"
-#include "Platform/OpenGL/OpenGLGraphicsAPI.h"
+#include "Engine/Renderer/Graphics/GraphicsFactory.h"
 
 namespace Engine
 {
@@ -77,7 +76,7 @@ namespace Engine
 	}
 
 	RendererCommand::RendererCommand()
-		: m_graphicsAPI(IGraphicsAPI::Create())
+		: m_graphicsAPI(GraphicsFactory::CreateAPI())
 	{
 	}
 
