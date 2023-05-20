@@ -1,4 +1,5 @@
 #pragma once
+#include "ShadowBoxInfo.h"
 #include "Engine/Renderer/Buffer/UniformBuffer/IUniformBuffer.h"
 #include "Engine/Renderer/Framebuffer/IFramebuffer.h"
 #include "Engine/Renderer/Shader/IShader.h"
@@ -6,14 +7,6 @@
 namespace Engine
 {
 	static const glm::vec3 LIGHT_DIRECTION = glm::normalize(glm::vec3(0.2f, 1.0f, 0.3f));
-
-	struct ShadowBoxInfo
-	{
-		const uint32_t depthTextureSlot = 40;
-		const float nearPlane = 0.1f;
-		const float farPlane = 1000.0f;
-		const std::vector<float> levels{ farPlane / 50.0f, farPlane / 25.0f, farPlane / 10.0f, farPlane / 2.0f, farPlane };
-	};
 
 	class ShadowBox
 	{
