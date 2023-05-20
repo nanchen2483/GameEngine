@@ -3,6 +3,7 @@
 #include "AssimpMesh.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Scene/System/AnimationSystem.h"
+#include "Engine/Physics/BoundingBox/BoundingBoxFactory.h"
 
 #include <stb_image.h>
 
@@ -28,7 +29,7 @@ namespace Engine
 
 	Ptr<IBoundingBox> AssimpModel::GenerateBoundingBox()
 	{
-		return IBoundingBox::Create(BoundingBoxType::AABB, m_minAABB, m_maxAABB);
+		return BoundingBoxFactory::Create(BoundingBoxType::AABB, m_minAABB, m_maxAABB);
 	}
 
 	void AssimpModel::Load(std::string const& path)

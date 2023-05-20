@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "QuadtreeTerrain.h"
 #include "Engine/Library/TextureLibrary.h"
+#include "Engine/Physics/BoundingBox/BoundingBoxFactory.h"
 
 namespace Engine
 {
@@ -48,7 +49,7 @@ namespace Engine
 				maxAABB.y = std::max(maxAABB.y, bottomRightEdgeHeight);
 				maxAABB.z = std::max(maxAABB.z, worldPosition.z + distanceFromCenterToSide);
 
-				m_boundingBoxes.push_back(IBoundingBox::Create(BoundingBoxType::AABB, minAABB, maxAABB));
+				m_boundingBoxes.push_back(BoundingBoxFactory::Create(BoundingBoxType::AABB, minAABB, maxAABB));
 			}
 		}
 	}

@@ -8,7 +8,6 @@ namespace Engine
 	{
 		bool isEnabled = false;
 		uint32_t selectedAnimationIndex = 0;
-
 		std::vector<Ptr<IAnimation>> animations;
 
 		operator Ptr<IAnimation>()

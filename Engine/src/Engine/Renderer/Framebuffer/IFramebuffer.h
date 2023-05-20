@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class IFramebuffer
+	class ENGINE_API IFramebuffer
 	{
 	public:
 		virtual void Bind() = 0;

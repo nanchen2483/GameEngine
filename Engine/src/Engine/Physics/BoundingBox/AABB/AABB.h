@@ -1,5 +1,5 @@
 #pragma once
-#include "IBoundingBox.h"
+#include "Engine/Physics/BoundingBox/IBoundingBox.h"
 
 namespace Engine
 {
@@ -9,7 +9,7 @@ namespace Engine
 		AABB(const glm::vec3& min, const glm::vec3& max);
 		AABB(const glm::vec3& center, const float extentX, const float extentY, const float extentZ);
 
-		virtual BoundingValue GetBoundingValue() const override { return m_boundingValue; }
+		virtual const BoundingValue& GetBoundingValue() const override { return m_boundingValue; }
 		virtual void SetBoundingValue(const BoundingValue& value) override;
 		virtual bool IsOnFrustum(const Frustum& frustum, const Transform& transform) const override;
 		virtual bool IsOnForwardPlane(const Plane& plan) const override;
