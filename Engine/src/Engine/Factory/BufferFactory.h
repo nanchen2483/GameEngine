@@ -22,6 +22,6 @@ namespace Engine
 		static Ptr<IIndexBuffer> CreateIndexBuffer(uint32_t* indices, uint32_t numOfIndices);
 
 		// Uniform Buffer
-		static Ptr<IUniformBuffer> CreateUniformBuffer(uint32_t index, const BufferLayout layout);
+		static Ptr<IUniformBuffer> CreateUniformBuffer(uint32_t index, const BufferLayout layout, uint32_t numOfUniforms = 1);
 	};
 }
