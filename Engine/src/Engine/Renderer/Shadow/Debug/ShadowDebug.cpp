@@ -39,7 +39,6 @@ namespace Engine
 	void ShadowDebug::Draw()
 	{
 		m_framebuffer->Bind();
-		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RendererCommand::Clear();
 		m_shader->Bind();
 		m_vertexArray->Bind();
