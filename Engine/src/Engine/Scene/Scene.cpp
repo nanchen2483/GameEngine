@@ -19,11 +19,11 @@
 #include "System/MeshSystem.h"
 #include "System/ScriptSystem.h"
 #include "System/ShadowSystem.h"
+#include "System/LightSystem.h"
 
 namespace Engine
 {
-	Scene::Scene(const Ptr<IFramebuffer>& framebuffer)
-		: m_framebuffer(framebuffer)
+	Scene::Scene()
 	{
 	}
 
@@ -65,13 +65,13 @@ namespace Engine
 
 		ScriptSystem::OnUpdate(m_registry, this);
 		AnimationSystem::OnUpdate(m_registry);
+		LightSystem::OnUpdate(m_registry);
 		ShadowSystem::OnUpdate(m_registry,
 			camera.GetViewMatrix(),
 			camera.GetFOV(),
 			camera.GetAspectRatio());
 
 		// Debug
-		m_framebuffer->Bind();
 		Debug();
 
 		// Draw
@@ -128,13 +128,13 @@ namespace Engine
 			MeshSystem::OnUpdate(m_registry, frustum, lightFrustum, terrain);
 			PhysicsSystem::OnUpdate(m_registry);
 			AnimationSystem::OnUpdate(m_registry);
+			LightSystem::OnUpdate(m_registry);
 			ShadowSystem::OnUpdate(m_registry,
 				viewMatrix,
 				primaryCamera.camera.GetFOV(),
 				primaryCamera.camera.GetAspectRatio());
 
 			// Draw
-			m_framebuffer->Bind();
 			RendererSystem::OnUpdate(m_registry,
 				viewMatrix,
 				primaryCamera.camera.GetProjection(),

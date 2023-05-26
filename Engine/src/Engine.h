@@ -10,17 +10,22 @@
 #include "Engine/Core/Window/Input.h"
 #include "Engine/Configuration/Configuration.h"
 
+// Debug
+#include "Engine/Debug/FPSCalculator.h"
+#include "Engine/Renderer/Shadow/Debug/ShadowDebug.h"
+
+// Effect
+#include "Engine/Effect/BloomEffect.h"
+
 // File
 #include "Engine/File/File.h"
 #include "Engine/File/FileDialog.h"
 #include "Engine/File/FileExtension.h"
 #include "Engine/File/FileType.h"
 
-// Debug
-#include "Engine/Debug/FPSCalculator.h"
-#include "Engine/Renderer/Shadow/Debug/ShadowDebug.h"
-
 // Renderer
+#include "Engine/Factory/BufferFactory.h"
+#include "Engine/Factory/VertexArrayFactory.h"
 #include "Engine/Factory/FramebufferFactory.h"
 #include "Engine/Renderer/Camera/EditorCamera.h"
 #include "Engine/Renderer/RendererCommand.h"
