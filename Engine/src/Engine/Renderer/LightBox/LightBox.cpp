@@ -12,8 +12,9 @@ namespace Engine
 	{
 		m_vertexArray = VertexArrayFactory::Create();
 		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(const_cast<float*>(LightBoxData::vertices), LightBoxData::numOfVertices);
-		vertexBuffer->SetLayout({
-			{ ShaderDataType::Float3 },
+		vertexBuffer->SetLayout(
+			{
+				{ ShaderDataType::Float3 },
 			});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetIndexBuffer(BufferFactory::CreateIndexBuffer(const_cast<uint8_t*>(LightBoxData::indices), LightBoxData::numOfIndices));

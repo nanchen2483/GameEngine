@@ -24,8 +24,8 @@ namespace Engine
 		FramebufferSpecification fbSpec;
 		fbSpec.attachments = FramebufferAttachmentSpecification(
 			{
-				FramebufferTextureFormat::RGBA16,		// Frag color
-				FramebufferTextureFormat::RGBA16,		// Bright color
+				FramebufferTextureFormat::RGBA16,		// Fragment color
+				FramebufferTextureFormat::RGBA16,		// Brightness color
 				FramebufferTextureFormat::RedInteger,	// Entity id
 				FramebufferTextureFormat::Depth24Stencil8
 			});
@@ -74,7 +74,6 @@ namespace Engine
 		}
 
 		m_framebuffer->Bind();
-		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RendererCommand::Clear();
 
 		if (m_toolbar.OnEditMode())
@@ -110,7 +109,7 @@ namespace Engine
 
 		int mouseX = (int)mx; 
 		int mouseY = (int)my;
-		if (mouseX >  0 && mouseY > 0 && mouseX < viewportSize.x && mouseY < viewportSize.y)
+		if (mouseX > 0 && mouseY > 0 && mouseX < viewportSize.x && mouseY < viewportSize.y)
 		{
 			int pixelData = m_framebuffer->ReadPixel(ENTITY_ID_ATTACHMENT_INDEX, mouseX, mouseY);
 			if (pixelData == -1)

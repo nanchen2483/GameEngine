@@ -11,7 +11,7 @@ namespace EngineTest
 
 		EntityTest()
 		{
-			scene = Engine::CreatePtr<Engine::Scene>(nullptr);
+			scene = Engine::CreatePtr<Engine::Scene>();
 			scene->OnViewportResize(viewportSize.x, viewportSize.y);
 			entity = scene->CreateEntity();
 		}
@@ -122,7 +122,7 @@ namespace EngineTest
 		// Arrange
 		Engine::Entity uninitializedEntity;
 		Engine::Entity entityWithInvalidEntityId((entt::entity)123, scene.get());
-		Engine::Entity entityWithIncorrectScene(entity, new Engine::Scene(nullptr));
+		Engine::Entity entityWithIncorrectScene(entity, new Engine::Scene());
 		Engine::Entity copyEntity(entity, scene.get());
 
 		// Act

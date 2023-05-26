@@ -40,16 +40,17 @@ namespace Engine
 		};
 		m_vertexArray = VertexArrayFactory::Create();
 		Ptr<IVertexBuffer> vertexBuffer = BufferFactory::CreateVertexBuffer(&(quadVertices)[0], quadVertices.size());
-		vertexBuffer->SetLayout({
-			{ ShaderDataType::Float3 },
-			{ ShaderDataType::Float2 },
+		vertexBuffer->SetLayout(
+			{
+				{ ShaderDataType::Float3 },
+				{ ShaderDataType::Float2 },
 			});
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 
 		m_shaderBlur = ShaderLibrary::Load("assets/shaders/Bloom/Blur.glsl");
 		m_shaderFinal = ShaderLibrary::Load("assets/shaders/Bloom/FinalScene.glsl");
 		m_shaderBlur->Bind();
-		m_shaderBlur->SetInt("uHdrScene", 0);
+		m_shaderBlur->SetInt("uScene", 0);
 		m_shaderFinal->Bind();
 		m_shaderFinal->SetInt("uScene", 0);
 		m_shaderFinal->SetInt("uBloomBlur", 1);
