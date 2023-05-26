@@ -78,6 +78,16 @@ namespace Engine
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	void OpenGLGraphicsAPI::DrawArrays(uint32_t count)
+	{
+		glDrawArrays(GL_TRIANGLES, 0, count);
+	}
+
+	void OpenGLGraphicsAPI::DrawArraysStrip(uint32_t count)
+	{
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
+	}
+
 	void OpenGLGraphicsAPI::DrawUint8Indexed(uint32_t count)
 	{
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_BYTE, nullptr);

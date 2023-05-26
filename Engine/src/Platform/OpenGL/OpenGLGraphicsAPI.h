@@ -17,6 +17,8 @@ namespace Engine
 		virtual void SetPolygonMode(PolygonMode mode) override;
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void Clear() override;
+		virtual void DrawArrays(uint32_t count) override;
+		virtual void DrawArraysStrip(uint32_t count) override;
 		virtual void DrawUint8Indexed(uint32_t count) override;
 		virtual void DrawUint16Indexed(uint32_t count) override;
 		virtual void DrawUint32Indexed(uint32_t count) override;

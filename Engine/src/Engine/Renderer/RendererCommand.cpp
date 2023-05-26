@@ -60,6 +60,16 @@ namespace Engine
 		GetInstance().m_graphicsAPI->Clear();
 	}
 
+	void RendererCommand::DrawArrays(uint32_t count)
+	{
+		GetInstance().m_graphicsAPI->DrawArrays(count);
+	}
+
+	void RendererCommand::DrawArraysStrip(uint32_t count)
+	{
+		GetInstance().m_graphicsAPI->DrawArraysStrip(count);
+	}
+
 	void RendererCommand::DrawUint8Indexed(uint32_t count)
 	{
 		GetInstance().m_graphicsAPI->DrawUint8Indexed(count);

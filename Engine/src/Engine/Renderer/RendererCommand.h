@@ -19,6 +19,8 @@ namespace Engine
 		static void SetFramebuffer(uint32_t framebuffer);
 		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
+		static void DrawArrays(uint32_t count);
+		static void DrawArraysStrip(uint32_t count);
 		static void DrawUint8Indexed(uint32_t count);
 		static void DrawUint16Indexed(uint32_t count);
 		static void DrawUint32Indexed(const Ptr<IVertexArray>& vertexArray);
