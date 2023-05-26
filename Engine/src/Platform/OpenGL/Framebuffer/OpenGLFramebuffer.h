@@ -11,13 +11,14 @@ namespace Engine
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
+		virtual void BindColorTexture(uint32_t slot, uint32_t attachmentIndex) override;
 		virtual void BindDepthTexture(uint32_t slot) override;
 
 		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
 		virtual void Resize(uint32_t width, uint32_t height) override;
 		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) override;
 
-		inline virtual uint32_t GetColorAttachmentRendererId(uint32_t index = 0) const override { return m_colorAttachments[index]; };
+		inline virtual uint32_t GetColorAttachmentRendererId(uint32_t attachmentIndex) const override { return m_colorAttachments[attachmentIndex]; };
 		inline virtual const FramebufferSpecification GetSpecification() const override { return m_specification; };
 	private:
 		void Setup();

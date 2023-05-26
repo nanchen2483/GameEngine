@@ -300,6 +300,13 @@ namespace Engine
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	void OpenGLFramebuffer::BindColorTexture(uint32_t slot, uint32_t attachmentIndex)
+	{
+		ENGINE_CORE_ASSERT(attachmentIndex < m_colorAttachments.size(), "Invalid attachment index {0}", attachmentIndex);
+
+		glBindTextureUnit(slot, m_colorAttachments[attachmentIndex]);
+	}
+
 	void OpenGLFramebuffer::BindDepthTexture(uint32_t slot)
 	{
 		glBindTextureUnit(slot, m_depthAttachment);
