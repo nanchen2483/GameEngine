@@ -1,7 +1,11 @@
 #pragma once
+#include "Engine/Core/Base.h"
 #include "Engine/Core/Enum/DepthFunc.h"
 #include "Engine/Core/Enum/FaceCulling.h"
-#include "Graphics/IGraphicsAPI.h"
+#include "Engine/Core/Enum/PolygonMode.h"
+#include "VertexArray/IVertexArray.h"
+
+#include <glm/glm.hpp>
 
 namespace Engine
 {
@@ -27,10 +31,5 @@ namespace Engine
 		static void DrawUint32Indexed(uint32_t count);
 		static void DrawPatch(uint32_t count);
 		static void Compute(uint32_t numOfX, uint32_t numOfY, uint32_t numOfZ);
-	private:
-		RendererCommand();
-		static RendererCommand& GetInstance();
-
-		Uniq<IGraphicsAPI> m_graphicsAPI;
 	};
 }

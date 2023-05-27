@@ -9,9 +9,9 @@ namespace Engine
 	class GraphicsFactory
 	{
 	public:
-		static Uniq<IGraphicsAPI> CreateAPI();
 		static Uniq<IGraphicsContext> CreateContext(void* window);
 
+		static IGraphicsAPI& GetAPIInstance();
 		static IGraphicsLibrary& GetLibraryInstance();
 		static WindowUserData* GetWindowUserDataPointerStatic(void* window);
 	};
