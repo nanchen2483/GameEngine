@@ -1,13 +1,10 @@
 #pragma once
-#include "ShadowBoxInfo.h"
 #include "Engine/Renderer/Buffer/IUniformBuffer.h"
 #include "Engine/Renderer/Framebuffer/IFramebuffer.h"
 #include "Engine/Renderer/Shader/IShader.h"
 
 namespace Engine
 {
-	static const glm::vec3 LIGHT_DIRECTION = glm::normalize(glm::vec3(0.2f, 1.0f, 0.3f));
-
 	class ShadowBox
 	{
 	public:
@@ -34,7 +31,6 @@ namespace Engine
 
 		// Light properties
 		const uint32_t m_depthMapResolution = 4096;
-		const ShadowBoxInfo m_shadowInfo;
 		const glm::vec3 m_up = { 0.0f, 1.0f, 0.0f };
 	};
 }

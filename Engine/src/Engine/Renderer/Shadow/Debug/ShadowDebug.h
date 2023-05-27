@@ -2,7 +2,6 @@
 #include "Engine/Renderer/Framebuffer/IFramebuffer.h"
 #include "Engine/Renderer/VertexArray/IVertexArray.h"
 #include "Engine/Renderer/Shader/IShader.h"
-#include "Engine/Renderer/Shadow/ShadowBoxInfo.h"
 
 namespace Engine
 {
@@ -16,7 +15,5 @@ namespace Engine
 		Ptr<IShader> m_shader;
 		Ptr<IVertexArray> m_vertexArray;
 		Ptr<IFramebuffer> m_framebuffer;
-
-		const ShadowBoxInfo m_shadowInfo;
 	};
 }

@@ -1,8 +1,8 @@
 #include "enginepch.h"
 #include "File.h"
 
-#include "FileExtension.h"
-#include "FileType.h"
+#include "Engine/Core/Constant/FileExtension.h"
+#include "Engine/Core/Constant/FileType.h"
 
 namespace Engine
 {

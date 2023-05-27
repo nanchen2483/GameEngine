@@ -1,9 +1,11 @@
 #include "enginepch.h"
 #include "Renderer3D.h"
+
 #include "RendererCommand.h"
 #include "LightBox/LightBox.h"
 #include "Vertex/Vertex.h"
-#include "Shadow/ShadowBox.h"
+#include "Shadow/ShadowBoxData.h"
+#include "Engine/Core/Constant/LightProperty.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Factory/BufferFactory.h"
@@ -45,7 +47,6 @@ namespace Engine
 		glm::vec2 textureCoords[NUM_OF_VERTICES]{};
 
 		Renderer3D::Statistics states{};
-		ShadowBoxInfo shadowInfo{};
 	};
 
 	static Renderer3DData s_data;
@@ -125,12 +126,12 @@ namespace Engine
 		s_data.shader->Bind();
 		s_data.textureSlots[0] = s_data.whiteTexture;
 		s_data.shader->SetIntArray("uTextures", samplers, Renderer3DData::MAX_TEXTURE_SLOTS);
-		s_data.shader->SetInt("uShadowMap", s_data.shadowInfo.depthTextureSlot);
+		s_data.shader->SetInt("uShadowMap", ShadowBoxData::depthTextureSlot);
 		
-		s_data.shader->SetInt("uCascadeCount", s_data.shadowInfo.levels.size());
-		for (size_t i = 0; i < s_data.shadowInfo.levels.size(); ++i)
+		s_data.shader->SetInt("uCascadeCount", ShadowBoxData::numOfCascades);
+		for (size_t i = 0; i < ShadowBoxData::numOfCascades; ++i)
 		{
-			s_data.shader->SetFloat("uCascadePlaneDistances[" + std::to_string(i) + "]", s_data.shadowInfo.levels[i]);
+			s_data.shader->SetFloat("uCascadePlaneDistances[" + std::to_string(i) + "]", ShadowBoxData::levels[i + 1]); // Ignore the first level (near plane)
 		}
 		
 		s_data.vertexPosition[0] = { -0.5, -0.5f,  0.5f, 1.0f };
@@ -192,7 +193,7 @@ namespace Engine
 			}, 64);
 
 		s_data.dirLightUniformBuffer->SetData({
-			glm::value_ptr(LIGHT_DIRECTION),
+			glm::value_ptr(LightProperty::Direction),
 			glm::value_ptr(glm::vec3(0.05f)),
 			glm::value_ptr(glm::vec3(0.4f)),
 			glm::value_ptr(glm::vec3(0.5f)),
