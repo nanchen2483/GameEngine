@@ -8,23 +8,23 @@ namespace Engine
 	class UniformBufferStd140Util
 	{
 	public:
-		void RecalculateSize(std::vector<BufferElement>& elements);
+		void AlignBufferElements(std::vector<BufferElement>& elements);
 	private:
-		void AddComponent(BufferElement* element);
-		void UpdateSize();
-		void Reset();
-	private:
+		void PadBufferElement(BufferElement* element);
+		void RecalculateComponentSizeInBuffer();
+		void AddToBuffer(BufferElement* element);
+		void CleanBuffer();
 		std::vector<BufferElement*> m_currentBuffer;
-		uint32_t m_currentBufferSize;
+		uint32_t m_currentComponentSizeInBuffer;
 		
-		const uint32_t NUM_OF_COMPONENTS = 4;
-		const uint32_t COMPONENT_SIZE = 4;
-		const uint32_t TOTAL_SIZE_OF_COMPONENTS = NUM_OF_COMPONENTS * COMPONENT_SIZE;
+		const uint32_t ComponentCount = 4;
+		const uint32_t ComponentSize = 4;
+		const uint32_t TotalSizeOfComponents = ComponentCount * ComponentSize;
 	};
 
 	class BufferLayoutUtil
 	{
 	public:
-		static void RecalculateSize(BufferLayoutType type, std::vector<BufferElement>& elements);
+		static void AlignBufferElements(BufferLayoutType type, std::vector<BufferElement>& elements);
 	};
 }

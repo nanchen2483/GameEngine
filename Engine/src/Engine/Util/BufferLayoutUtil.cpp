@@ -3,33 +3,37 @@
 
 namespace Engine
 {
-	void UniformBufferStd140Util::RecalculateSize(std::vector<BufferElement>& elements)
+	void UniformBufferStd140Util::AlignBufferElements(std::vector<BufferElement>& elements)
 	{
-		Reset();
+		CleanBuffer();
 		for (BufferElement& element : elements)
 		{
-			AddComponent(&element);
+			PadBufferElement(&element);
 		}
 
-		UpdateSize();
+		RecalculateComponentSizeInBuffer();
 	}
 
-	void UniformBufferStd140Util::AddComponent(BufferElement* element)
+	void UniformBufferStd140Util::PadBufferElement(BufferElement* element)
 	{
 		ENGINE_CORE_ASSERT(element->type != ShaderDataType::Mat3, "Invalid type in uniform buffer");
-		if (element->size % TOTAL_SIZE_OF_COMPONENTS == 0)
+		if (element->size % TotalSizeOfComponents == 0)
 		{
-			return UpdateSize();
+			// Re-calculate component size in the current buffer
+			return RecalculateComponentSizeInBuffer();
 		}
 
-		if (element->size < COMPONENT_SIZE)
+		if (element->size < ComponentSize)
 		{
-			element->size = COMPONENT_SIZE;
+			// Update to the minimum component size
+			element->size = ComponentSize;
 		}
 
 		if (!m_currentBuffer.empty() && element->size % 3 == 0)
 		{
-			UpdateSize();
+			// 3 is a magic number in the uniform buffer
+			// Re-calculate component size in the current buffer
+			RecalculateComponentSizeInBuffer();
 		}
 
 		if (m_currentBuffer.size() > 1)
@@ -37,33 +41,30 @@ namespace Engine
 			const BufferElement* lastElement = m_currentBuffer.back();
 			if (lastElement->size > element->size)
 			{
-				UpdateSize();
-				m_currentBufferSize = element->size;
-				m_currentBuffer.push_back(element);
+				RecalculateComponentSizeInBuffer();
+				AddToBuffer(element);
 				return;
 			}
 		}
 
-		uint32_t newTotalSize = m_currentBufferSize + element->size;
-		if (newTotalSize == TOTAL_SIZE_OF_COMPONENTS)
+		uint32_t totalComponentSize = m_currentComponentSizeInBuffer + element->size;
+		if (totalComponentSize == TotalSizeOfComponents)
 		{
 			// Keep the original size
-			return Reset();
+			return CleanBuffer();
 		}
-		else if (newTotalSize > TOTAL_SIZE_OF_COMPONENTS)
+		else if (totalComponentSize > TotalSizeOfComponents)
 		{
-			UpdateSize();
-			m_currentBufferSize = element->size;
-			m_currentBuffer.push_back(element);
+			RecalculateComponentSizeInBuffer();
+			AddToBuffer(element);
 		}
-		else if (newTotalSize < TOTAL_SIZE_OF_COMPONENTS)
+		else
 		{
-			m_currentBufferSize = newTotalSize;
-			m_currentBuffer.push_back(element);
+			AddToBuffer(element);
 		}
 	}
 
-	void UniformBufferStd140Util::UpdateSize()
+	void UniformBufferStd140Util::RecalculateComponentSizeInBuffer()
 	{
 		switch (m_currentBuffer.size())
 		{
@@ -71,52 +72,58 @@ namespace Engine
 			return;
 		case 1:
 		{
-			m_currentBuffer.front()->size = TOTAL_SIZE_OF_COMPONENTS;
+			m_currentBuffer.front()->size = TotalSizeOfComponents;
 			break;
 		}
 		case 2:
 		{
 			BufferElement* firstElement = m_currentBuffer.front();
 			BufferElement* secondElement = m_currentBuffer.back();
-			if (firstElement->size == COMPONENT_SIZE)
+			if (firstElement->size == ComponentSize)
 			{
-				if (secondElement->size == COMPONENT_SIZE)
+				if (secondElement->size == ComponentSize)
 				{
-					secondElement->size = TOTAL_SIZE_OF_COMPONENTS - firstElement->size;
+					secondElement->size = TotalSizeOfComponents - firstElement->size;
 				}
-				else if (secondElement->size == COMPONENT_SIZE * 2)
+				else if (secondElement->size == ComponentSize * 2)
 				{
-					firstElement->size = COMPONENT_SIZE * 2;
+					firstElement->size = ComponentSize * 2;
 				}
 			}
-			else if (firstElement->size == COMPONENT_SIZE * 2)
+			else if (firstElement->size == ComponentSize * 2)
 			{
-				secondElement->size = COMPONENT_SIZE * 2;
+				secondElement->size = ComponentSize * 2;
 			}
 			break;
 		}
 		case 3:
 		{
-			m_currentBuffer.back()->size = COMPONENT_SIZE * 2;
+			m_currentBuffer.back()->size = ComponentSize * 2;
 			break;
 		}
 		default:
 			break;
 		}
 
-		return Reset();
+		return CleanBuffer();
 	}
 
-	void UniformBufferStd140Util::Reset()
+	void UniformBufferStd140Util::AddToBuffer(BufferElement* element)
+	{
+		m_currentBuffer.push_back(element);
+		m_currentComponentSizeInBuffer += element->size;
+	}
+
+	void UniformBufferStd140Util::CleanBuffer()
 	{
 		m_currentBuffer.clear();
-		m_currentBufferSize = 0;
+		m_currentComponentSizeInBuffer = 0;
 	}
 }
 
 namespace Engine
 {
-	void BufferLayoutUtil::RecalculateSize(BufferLayoutType type, std::vector<BufferElement>& elements)
+	void BufferLayoutUtil::AlignBufferElements(BufferLayoutType type, std::vector<BufferElement>& elements)
 	{
 		switch (type)
 		{
@@ -125,7 +132,7 @@ namespace Engine
 		case BufferLayoutType::Std140:
 		{
 			UniformBufferStd140Util uniformBuffer;
-			uniformBuffer.RecalculateSize(elements);
+			uniformBuffer.AlignBufferElements(elements);
 			break;
 		}
 		case BufferLayoutType::Shared:
