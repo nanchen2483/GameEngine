@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	OpenGLUniformBuffer::OpenGLUniformBuffer(uint32_t index, const BufferLayout layout, uint32_t numOfUniforms)
+	OpenGLUniformBuffer::OpenGLUniformBuffer(UniformBufferBindingPoint bindingPoint, const BufferLayout layout, uint32_t numOfUniforms)
 		: m_layout(layout)
 	{
 		ENGINE_PROFILE_FUNCTION();
@@ -15,7 +15,7 @@ namespace Engine
 		glCreateBuffers(1, &m_rendererId);
 		glBindBuffer(GL_UNIFORM_BUFFER, m_rendererId);
 		glBufferData(GL_UNIFORM_BUFFER, m_layout.GetStride() * numOfUniforms, nullptr, GL_STATIC_DRAW);
-		glBindBufferRange(GL_UNIFORM_BUFFER, index, m_rendererId, 0, m_layout.GetStride() * numOfUniforms);
+		glBindBufferRange(GL_UNIFORM_BUFFER, (uint32_t)bindingPoint, m_rendererId, 0, m_layout.GetStride() * numOfUniforms);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 		ENGINE_CORE_ASSERT(OpenGLDebug::IsValid(), OpenGLDebug::GetErrorMessage());

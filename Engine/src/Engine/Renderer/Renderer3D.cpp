@@ -153,7 +153,9 @@ namespace Engine
 
 		s_data.lightBox = CreatePtr<LightBox>();
 
-		s_data.cameraUniformBuffer = BufferFactory::CreateUniformBuffer(0, {
+		s_data.cameraUniformBuffer = BufferFactory::CreateUniformBuffer(
+			UniformBufferBindingPoint::CameraBlock,
+			{
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Mat4 },				// Camera view matrix
@@ -162,7 +164,9 @@ namespace Engine
 				}
 			});
 
-		s_data.dirLightUniformBuffer = BufferFactory::CreateUniformBuffer(1, {
+		s_data.dirLightUniformBuffer = BufferFactory::CreateUniformBuffer(
+			UniformBufferBindingPoint::DirLightBlock,
+			{
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Float3 },				// Directional light direction
@@ -172,7 +176,9 @@ namespace Engine
 				}
 			});
 
-		s_data.pointLightUniformBuffer = BufferFactory::CreateUniformBuffer(2, {
+		s_data.pointLightUniformBuffer = BufferFactory::CreateUniformBuffer(
+			UniformBufferBindingPoint::PointLightBlock,
+			{
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Float3 },				// Point light position

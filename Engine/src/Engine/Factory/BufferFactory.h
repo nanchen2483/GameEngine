@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Core/Base.h"
+#include "Engine/Core/Enum/UniformBufferBindingPoint.h"
 #include "Engine/Renderer/Vertex/Vertex.h"
 #include "Engine/Renderer/Buffer/IIndexBuffer.h"
 #include "Engine/Renderer/Buffer/IUniformBuffer.h"
@@ -22,6 +23,6 @@ namespace Engine
 		static Ptr<IIndexBuffer> CreateIndexBuffer(uint32_t* indices, uint32_t numOfIndices);
 
 		// Uniform Buffer
-		static Ptr<IUniformBuffer> CreateUniformBuffer(uint32_t index, const BufferLayout layout, uint32_t numOfUniforms = 1);
+		static Ptr<IUniformBuffer> CreateUniformBuffer(UniformBufferBindingPoint bindingPoint, const BufferLayout layout, uint32_t numOfUniforms = 1);
 	};
 }

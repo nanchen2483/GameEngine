@@ -27,7 +27,9 @@ namespace Engine
 		fbSpec.arraySize = m_shadowInfo.levels.size();
 		m_framebuffer = FramebufferFactory::Create(fbSpec);
 
-		m_lightSpaceMatrixUniformBuffer = BufferFactory::CreateUniformBuffer(3, {
+		m_lightSpaceMatrixUniformBuffer = BufferFactory::CreateUniformBuffer(
+			UniformBufferBindingPoint::LightSpaceBlock,
+			{
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Mat4 },
