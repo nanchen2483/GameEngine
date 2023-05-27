@@ -1,6 +1,5 @@
 #include "BloomEffect.h"
 
-#include "Engine/Core/Constant/CameraProperty.h"
 #include "Engine/Factory/BufferFactory.h"
 #include "Engine/Factory/FramebufferFactory.h"
 #include "Engine/Factory/VertexArrayFactory.h"

@@ -2,7 +2,7 @@
 #include "ShadowBox.h"
 #include "ShadowBoxData.h"
 
-#include "Engine/Core/Constant/LightProperty.h"
+#include "Engine/Core/Constant/DirectionalLightConstant.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Factory/BufferFactory.h"
 #include "Engine/Factory/FramebufferFactory.h"
@@ -102,7 +102,7 @@ namespace Engine
 
 		center /= frustumCorners.size();
 
-		const glm::mat4 lightView = glm::lookAt(center + LightProperty::Direction, center, m_up);
+		const glm::mat4 lightView = glm::lookAt(center + DirectionalLightConstant::Direction, center, m_up);
 
 		float minX = std::numeric_limits<float>::max();
 		float maxX = std::numeric_limits<float>::min();

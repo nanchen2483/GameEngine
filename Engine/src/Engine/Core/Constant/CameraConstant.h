@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-	namespace CameraProperty
+	namespace CameraConstant
 	{
 		const float FOV = 45.0f;
 		const float ViewportWidth = 1280.0f;

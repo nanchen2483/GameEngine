@@ -5,7 +5,8 @@
 #include "LightBox/LightBox.h"
 #include "Vertex/Vertex.h"
 #include "Shadow/ShadowBoxData.h"
-#include "Engine/Core/Constant/LightProperty.h"
+#include "Engine/Core/Constant/DirectionalLightConstant.h"
+#include "Engine/Core/Constant/PointLightConstant.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Library/TextureLibrary.h"
 #include "Engine/Factory/BufferFactory.h"
@@ -190,14 +191,15 @@ namespace Engine
 					{ ShaderDataType::Float3 },				// Point light diffuse
 					{ ShaderDataType::Float3 },				// Point light specular
 				}
-			}, 64);
+			}, PointLightConstant::NumberOfPointLights);
 
-		s_data.dirLightUniformBuffer->SetData({
-			glm::value_ptr(LightProperty::Direction),
-			glm::value_ptr(glm::vec3(0.05f)),
-			glm::value_ptr(glm::vec3(0.4f)),
-			glm::value_ptr(glm::vec3(0.5f)),
-		});
+		s_data.dirLightUniformBuffer->SetData(
+			{
+				glm::value_ptr(DirectionalLightConstant::Direction),
+				glm::value_ptr(DirectionalLightConstant::Ambient),
+				glm::value_ptr(DirectionalLightConstant::Diffuse),
+				glm::value_ptr(DirectionalLightConstant::Specular),
+			});
 	}
 	
 	void Renderer3D::Shutdown()

@@ -2,8 +2,6 @@
 #include "Scene.h"
 #include "SceneSerializer.h"
 
-#include "Engine/Core/Constant/LightProperty.h"
-
 #include "Component/CameraComponent.h"
 #include "Component/MeshComponent.h"
 #include "Component/TagComponent.h"
@@ -106,7 +104,7 @@ namespace Engine
 			CameraComponent& primaryCamera = cameraEntity.GetComponent<CameraComponent>();
 			TransformComponent& playerTransform = playerEntity.GetComponent<TransformComponent>();
 			Frustum frustum = CameraSystem::GetFrustum(playerTransform.transform, primaryCamera.camera);
-			Frustum lightFrustum = frustum.GetLightViewFrustum(LightProperty::Direction);
+			Frustum lightFrustum = frustum.GetLightViewFrustum();
 
 			if (!Input::IsCursorVisible())
 			{

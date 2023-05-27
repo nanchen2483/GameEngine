@@ -1,7 +1,7 @@
 #include "enginepch.h"
 #include "EditorCamera.h"
 
-#include "Engine/Core/Constant/CameraProperty.h"
+#include "Engine/Core/Constant/CameraConstant.h"
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
 #include "Engine/Core/System/System.h"
@@ -16,11 +16,11 @@ namespace Engine
 {
 	EditorCamera::EditorCamera()
 		: EditorCamera(
-			CameraProperty::FOV,
-			CameraProperty::ViewportWidth,
-			CameraProperty::ViewportHeight,
-			CameraProperty::NearPlane,
-			CameraProperty::FarPlane)
+			CameraConstant::FOV,
+			CameraConstant::ViewportWidth,
+			CameraConstant::ViewportHeight,
+			CameraConstant::NearPlane,
+			CameraConstant::FarPlane)
 	{
 	}
 
