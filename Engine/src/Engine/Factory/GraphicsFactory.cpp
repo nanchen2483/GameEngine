@@ -20,7 +20,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	Uniq<IGraphicsAPI> GraphicsFactory::CreateAPI()
+	Uniq<IGraphicsAPI> CreateAPI()
 	{
 		switch (System::GetGraphicsApiType())
 		{
@@ -32,12 +32,19 @@ namespace Engine
 		return nullptr;
 	}
 
-	IGraphicsLibrary* Create()
+
+	IGraphicsAPI& GraphicsFactory::GetAPIInstance()
+	{
+		static Uniq<IGraphicsAPI> s_instance = CreateAPI();
+		return *s_instance;
+	}
+
+	Uniq<IGraphicsLibrary> CreateLibrary()
 	{
 		switch (System::GetGraphicsApiType())
 		{
 		case GraphicsApiType::None:			ENGINE_CORE_ASSERT(false, "GraphicsAPI::None is not supported"); return nullptr;
-		case GraphicsApiType::OpenGL:		return new OpenGraphicsLibrary();
+		case GraphicsApiType::OpenGL:		return CreateUniq<OpenGraphicsLibrary>();
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknown GraphicsAPI");
@@ -46,7 +53,7 @@ namespace Engine
 
 	IGraphicsLibrary& GraphicsFactory::GetLibraryInstance()
 	{
-		static IGraphicsLibrary* s_instance = Create();
+		static Uniq<IGraphicsLibrary> s_instance = CreateLibrary();
 		return *s_instance;
 	}
 
