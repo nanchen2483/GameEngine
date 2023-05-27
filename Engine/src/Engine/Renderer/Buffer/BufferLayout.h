@@ -16,7 +16,7 @@ namespace Engine
 		BufferLayout(const BufferLayoutType type, const std::initializer_list<BufferElement>& elements)
 			: m_type(type), m_elements(elements)
 		{
-			BufferLayoutUtil::RecalculateSize(m_type, m_elements);
+			BufferLayoutUtil::AlignBufferElements(m_type, m_elements);
 			CalculateOffset();
 		}
 
