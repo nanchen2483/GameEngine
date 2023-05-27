@@ -40,5 +40,7 @@ namespace Engine
 		RendererCommand::DrawUint8Indexed(SkyboxData::numOfIndices);
 		RendererCommand::CullFace(FaceCulling::Back);
 		RendererCommand::SetDepthFunc(DepthFunc::Less); // Set to default
+		m_vertexArray->Unbind();
+		m_shader->Unbind();
 	}
 }

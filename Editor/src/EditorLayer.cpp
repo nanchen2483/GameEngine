@@ -96,6 +96,7 @@ namespace Engine
 			m_activeScene->OnUpdateRuntime();
 		}
 
+		m_framebuffer->Unbind();
 		m_bloomEffect->OnUpdate(m_framebuffer);
 	}
 
