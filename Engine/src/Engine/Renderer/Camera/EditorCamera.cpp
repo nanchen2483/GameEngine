@@ -32,8 +32,8 @@ namespace Engine
 
 		m_pitch = 0.0f;
 		m_yaw = 0.0f;
-		m_moveSpeed = 20.0f;
-		m_rotationSpeed = 0.8f;
+		m_moveSpeed = CameraConstant::MoveSpeed;
+		m_rotationSpeed = CameraConstant::RotationSpeed;
 		m_distanceToFocusPoint = 10.0f;
 
 		m_rotation = glm::vec3(0.0f);
