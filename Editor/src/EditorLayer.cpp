@@ -29,8 +29,6 @@ namespace Engine
 				FramebufferTextureFormat::RedInteger,	// Entity id
 				FramebufferTextureFormat::Depth24Stencil8
 			});
-		fbSpec.width = 1280;
-		fbSpec.height = 720;
 		m_framebuffer = FramebufferFactory::Create(fbSpec);
 
 		// Entity

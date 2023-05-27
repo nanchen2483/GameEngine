@@ -39,12 +39,11 @@ namespace Engine
 		void AddLodRange(uint32_t lodRange);
 		uint32_t GetMorphingArea(uint32_t lod);
 
-		Ptr<IShader> m_shader = nullptr;
-		Ptr<ITexture2D> m_heightMapTexture = nullptr;
-		Ptr<ITexture2D> m_normalMapTexture = nullptr;
-		Ptr<ITexture2D> m_splatMapTexture = nullptr;
+		Ptr<IShader> m_shader;
+		Ptr<ITexture2D> m_heightMapTexture;
+		Ptr<ITexture2D> m_normalMapTexture;
+		Ptr<ITexture2D> m_splatMapTexture;
 		std::vector<float> m_heightMapDataBuffer;
-		Ptr<IUniformBuffer> m_wordTransform = nullptr;
 		std::unordered_map<uint32_t, std::unordered_map<uint32_t, float>> m_heightCache;
 
 		int32_t m_entityId;

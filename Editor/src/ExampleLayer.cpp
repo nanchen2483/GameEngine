@@ -18,14 +18,16 @@ namespace Engine
 		m_editorCamera = EditorCamera(30.0f, 1280.0f, 720.0f, 0.1f, 1000.0f);
 		m_terrain = TerrainFactory::Create(TerrainType::Default, "assets/textures/heights/iceland_heightmap.png");
 
-		m_cameraUniformBuffer = BufferFactory::CreateUniformBuffer(0, {
-			BufferLayoutType::Std140,
+		m_cameraUniformBuffer = BufferFactory::CreateUniformBuffer(
+			UniformBufferBindingPoint::CameraBlock,
 			{
-				{ ShaderDataType::Mat4 },
-				{ ShaderDataType::Mat4 },
-				{ ShaderDataType::Float3 },
-			}
-		});
+				BufferLayoutType::Std140,
+				{
+					{ ShaderDataType::Mat4 },
+					{ ShaderDataType::Mat4 },
+					{ ShaderDataType::Float3 },
+				}
+			});
 	}
 
 	void ExampleLayer::OnDetach()

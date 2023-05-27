@@ -2,6 +2,8 @@
 
 // Core
 #include "Engine/Core/Application.h"
+#include "Engine/Core/Constant/FileExtension.h"
+#include "Engine/Core/Constant/FileType.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Layer/Layer.h"
@@ -20,8 +22,6 @@
 // File
 #include "Engine/File/File.h"
 #include "Engine/File/FileDialog.h"
-#include "Engine/File/FileExtension.h"
-#include "Engine/File/FileType.h"
 
 // Renderer
 #include "Engine/Factory/BufferFactory.h"

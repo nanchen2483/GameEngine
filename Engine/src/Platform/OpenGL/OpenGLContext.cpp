@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "OpenGLContext.h"
+#include "Engine/Core/Constant/OpenGLConstant.h"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -19,13 +20,14 @@ namespace Engine
 		ENGINE_CORE_INFO("GLSL Version: {0}", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 #ifdef ENGINE_ENABLE_ASSERTS
-		const uint32_t m_minimumMajorVersion = 4;
-		const uint32_t m_minimumMinorVersion = 6;
 		int versionMajor;
 		int versionMinor;
 		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
 		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
-		ENGINE_CORE_ASSERT(versionMajor > m_minimumMajorVersion || (versionMajor == m_minimumMajorVersion && versionMinor >= m_minimumMinorVersion), "Engine requires at least OpenGL {0}.{1}", m_minimumMajorVersion, m_minimumMinorVersion);
+		ENGINE_CORE_ASSERT(
+			versionMajor > OpenGLConstant::MinimumMajorVersion ||
+			(versionMajor == OpenGLConstant::MinimumMajorVersion && versionMinor >= OpenGLConstant::MinimumMinorVersion),
+			"Engine requires at least OpenGL {0}.{1}", OpenGLConstant::MinimumMajorVersion, OpenGLConstant::MinimumMinorVersion);
 #endif // ENGINE_ENABLE_ASSERTS
 	}
 

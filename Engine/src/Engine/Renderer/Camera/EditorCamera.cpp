@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "EditorCamera.h"
 
+#include "Engine/Core/Constant/CameraConstant.h"
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
 #include "Engine/Core/System/System.h"
@@ -14,7 +15,12 @@
 namespace Engine
 {
 	EditorCamera::EditorCamera()
-		: EditorCamera(45.0f, 1280.0f, 720.0f, 0.1f, 1000.0f)
+		: EditorCamera(
+			CameraConstant::FOV,
+			CameraConstant::ViewportWidth,
+			CameraConstant::ViewportHeight,
+			CameraConstant::NearPlane,
+			CameraConstant::FarPlane)
 	{
 	}
 
@@ -26,8 +32,8 @@ namespace Engine
 
 		m_pitch = 0.0f;
 		m_yaw = 0.0f;
-		m_moveSpeed = 20.0f;
-		m_rotationSpeed = 0.8f;
+		m_moveSpeed = CameraConstant::MoveSpeed;
+		m_rotationSpeed = CameraConstant::RotationSpeed;
 		m_distanceToFocusPoint = 10.0f;
 
 		m_rotation = glm::vec3(0.0f);

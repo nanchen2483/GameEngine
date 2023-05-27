@@ -16,18 +16,14 @@ namespace Engine
 			{
 				FramebufferTextureFormat::RGBA16,
 			});
-		blurFbSpec.width = 1280;
-		blurFbSpec.height = 720;
 		m_blurFramebuffers[0] = FramebufferFactory::Create(blurFbSpec);
 		m_blurFramebuffers[1] = FramebufferFactory::Create(blurFbSpec);
 
 		FramebufferSpecification finalFbSpec;
 		finalFbSpec.attachments = FramebufferAttachmentSpecification(
 			{
-				FramebufferTextureFormat::RGBA16,		// Frag color
+				FramebufferTextureFormat::RGBA16,
 			});
-		finalFbSpec.width = 1280;
-		finalFbSpec.height = 720;
 		m_finalFramebuffer = FramebufferFactory::Create(finalFbSpec);
 
 		std::vector<float> quadVertices =

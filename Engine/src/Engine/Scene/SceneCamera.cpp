@@ -1,5 +1,6 @@
 #include "enginepch.h"
 #include "SceneCamera.h"
+#include "Engine/Core/Constant/CameraConstant.h"
 #include "Engine/Core/Window/Input.h"
 #include "Engine/Core/Enum/KeyCodes.h"
 #include "Engine/Core/Enum/MouseButtonCodes.h"
@@ -11,17 +12,17 @@ namespace Engine
 	SceneCamera::SceneCamera()
 		: m_type(CameraType::FreeLook), m_projectionType(CameraProjectionType::Perspective)
 	{
-		m_FOV = 45.0f;
+		m_FOV = CameraConstant::FOV;
 		m_aspectRatio = 1.778f;
-		m_perspectiveNearClip = 0.1f;
-		m_perspectiveFarClip = 1000.0f;
+		m_perspectiveNearClip = CameraConstant::NearPlane;
+		m_perspectiveFarClip = CameraConstant::FarPlane;
 
 		m_orthographicSize = 10.0f;
 		m_orthographicNear = -1.0f;
 		m_orthographicFar = 1.0f;
 
-		m_moveSpeed = 20.0f;
-		m_rotationSpeed = 0.8f;
+		m_moveSpeed = CameraConstant::MoveSpeed;
+		m_rotationSpeed = CameraConstant::RotationSpeed;
 		m_upDirection = glm::vec3(0.0f);
 
 		UpdateProjection();

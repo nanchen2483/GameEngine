@@ -59,14 +59,7 @@ namespace Engine
 		transform.translation = glm::vec3(-m_scaleXZ / 2.0f, 0.0f, -m_scaleXZ / 2.0f);
 		glm::mat4 worldMatrix = (glm::mat4)transform;
 
-		m_wordTransform = BufferFactory::CreateUniformBuffer(4,
-			{
-				BufferLayoutType::Std140,
-				{
-					{ ShaderDataType::Mat4 },
-				}
-			});
-		m_wordTransform->SetData({ &worldMatrix });
+		m_shader->SetMat4("uWorldMatrix", worldMatrix);
 
 		std::vector<float> vertices = std::vector<float>
 		{

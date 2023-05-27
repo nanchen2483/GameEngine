@@ -92,12 +92,12 @@ namespace Engine
 		return nullptr;
 	}
 
-	Ptr<IUniformBuffer> BufferFactory::CreateUniformBuffer(uint32_t index, const BufferLayout layout, uint32_t numOfUniforms)
+	Ptr<IUniformBuffer> BufferFactory::CreateUniformBuffer(UniformBufferBindingPoint bindingPoint, const BufferLayout layout, uint32_t numOfUniforms)
 	{
 		switch (System::GetGraphicsApiType())
 		{
 		case GraphicsApiType::None:			ENGINE_CORE_ASSERT(false, "GraphicsAPI::None is not supported"); return nullptr;
-		case GraphicsApiType::OpenGL:		return CreatePtr<OpenGLUniformBuffer>(index, layout, numOfUniforms);
+		case GraphicsApiType::OpenGL:		return CreatePtr<OpenGLUniformBuffer>(bindingPoint, layout, numOfUniforms);
 		}
 
 		ENGINE_CORE_ASSERT(false, "Unknown GraphicsAPI");

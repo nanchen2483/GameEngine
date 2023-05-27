@@ -1,6 +1,8 @@
 #include "enginepch.h"
 #include "ShadowBox.h"
+#include "ShadowBoxData.h"
 
+#include "Engine/Core/Constant/DirectionalLightConstant.h"
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Factory/BufferFactory.h"
 #include "Engine/Factory/FramebufferFactory.h"
@@ -24,10 +26,12 @@ namespace Engine
 		fbSpec.attachments = FramebufferAttachmentSpecification({ FramebufferTextureFormat::DepthArray });
 		fbSpec.width = m_depthMapResolution;
 		fbSpec.height = m_depthMapResolution;
-		fbSpec.arraySize = m_shadowInfo.levels.size();
+		fbSpec.arraySize = ShadowBoxData::numOfCascades;
 		m_framebuffer = FramebufferFactory::Create(fbSpec);
 
-		m_lightSpaceMatrixUniformBuffer = BufferFactory::CreateUniformBuffer(3, {
+		m_lightSpaceMatrixUniformBuffer = BufferFactory::CreateUniformBuffer(
+			UniformBufferBindingPoint::LightSpaceBlock,
+			{
 				BufferLayoutType::Std140,
 				{
 					{ ShaderDataType::Mat4 },
@@ -55,7 +59,7 @@ namespace Engine
 
 	void ShadowBox::BindTexture()
 	{
-		m_framebuffer->BindDepthTexture(m_shadowInfo.depthTextureSlot);
+		m_framebuffer->BindDepthTexture(ShadowBoxData::depthTextureSlot);
 	}
 
 	void ShadowBox::Update(glm::mat4 viewMatrix, float fov, float aspectRatio)
@@ -77,17 +81,11 @@ namespace Engine
 	std::vector<glm::mat4> ShadowBox::GetLightSpaceMatrices()
 	{
 		std::vector<glm::mat4> lightSpaceMatrices;
-		for (size_t i = 0; i < m_shadowInfo.levels.size(); i++)
+		for (size_t i = 0; i < ShadowBoxData::numOfLevels - 1; ++i)
 		{
-			if (i == 0)
-			{
-				lightSpaceMatrices.push_back(GetLightSpaceMatrix(m_shadowInfo.nearPlane, m_shadowInfo.levels[i]));
-			}
-			else
-			{
-				lightSpaceMatrices.push_back(GetLightSpaceMatrix(m_shadowInfo.levels[i - 1], m_shadowInfo.levels[i]));
-			}
+			lightSpaceMatrices.push_back(GetLightSpaceMatrix(ShadowBoxData::levels[i], ShadowBoxData::levels[i + 1]));
 		}
+
 		return lightSpaceMatrices;
 	}
 
@@ -101,9 +99,10 @@ namespace Engine
 		{
 			center += glm::vec3(corner);
 		}
+
 		center /= frustumCorners.size();
 
-		const glm::mat4 lightView = glm::lookAt(center + LIGHT_DIRECTION, center, m_up);
+		const glm::mat4 lightView = glm::lookAt(center + DirectionalLightConstant::Direction, center, m_up);
 
 		float minX = std::numeric_limits<float>::max();
 		float maxX = std::numeric_limits<float>::min();

@@ -1,12 +1,13 @@
 #pragma once
+#include "Engine/Core/Constant/DirectionalLightConstant.h"
+#include "Engine/Math/Math.h"
+#include "Engine/Util/Algorithm/ConvexHull.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
-
-#include "Engine/Math/Math.h"
-#include "Engine/Util/Algorithm/ConvexHull.h"
 
 namespace Engine
 {
@@ -70,14 +71,16 @@ namespace Engine
 			points.push_back(position + farRightPoint - upDirection * halfVSide);
 		}
 
-		Frustum GetLightViewFrustum(glm::vec3 lightDirection)
+		Frustum GetLightViewFrustum()
 		{
-			return Frustum(points, lightDirection);
+			return Frustum(points);
 		}
 	private:
-		Frustum(std::vector<glm::vec3> frustumPoints, glm::vec3 lightDirection)
+		Frustum(std::vector<glm::vec3> frustumPoints)
 		{
 			ENGINE_ASSERT(frustumPoints.size() == 5, "The size of frustum points is not equal to 5");
+
+			glm::vec3 lightDirection = DirectionalLightConstant::Direction;
 
 			std::vector<glm::vec3> pointsOnPlane = ClostestPointsOnPlane(lightDirection, frustumPoints);
 			std::vector<glm::vec3> convexSet = ConvexHull::GetConvexSet(pointsOnPlane, lightDirection);

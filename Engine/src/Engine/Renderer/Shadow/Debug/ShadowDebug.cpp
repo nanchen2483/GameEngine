@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "ShadowDebug.h"
 #include "ShadowDebugData.h"
+#include "Engine/Renderer/Shadow/ShadowBoxData.h"
 
 #include "Engine/Library/ShaderLibrary.h"
 #include "Engine/Factory/BufferFactory.h"
@@ -32,7 +33,7 @@ namespace Engine
 
 		m_shader = ShaderLibrary::Load("assets/shaders/Debug/ShadowDebug.glsl");
 		m_shader->Bind();
-		m_shader->SetInt("uDepthMap", m_shadowInfo.depthTextureSlot);
+		m_shader->SetInt("uDepthMap", ShadowBoxData::depthTextureSlot);
 		m_shader->SetInt("uLayer", 0);
 	}
 

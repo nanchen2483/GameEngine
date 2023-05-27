@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine/Core/Enum/UniformBufferBindingPoint.h"
 #include "Engine/Renderer/Buffer/IUniformBuffer.h"
 #include "Engine/Renderer/Buffer/BufferLayout.h"
 
@@ -7,7 +8,7 @@ namespace Engine
 	class OpenGLUniformBuffer : public IUniformBuffer
 	{
 	public:
-		OpenGLUniformBuffer(uint32_t index, const BufferLayout layout, uint32_t numOfUniforms);
+		OpenGLUniformBuffer(UniformBufferBindingPoint bindingPoint, const BufferLayout layout, uint32_t numOfUniforms);
 		~OpenGLUniformBuffer();
 
 		virtual void Bind() const override;
