@@ -24,9 +24,30 @@ namespace Engine
 		glCullFace(OpenGLUtil::ToGL(face));
 	}
 
+	std::pair<uint32_t, uint32_t> OpenGLGraphicsAPI::GetViewport()
+	{
+		int viewport[4];
+		glGetIntegerv(GL_VIEWPORT, viewport);
+
+		return { (uint32_t)viewport[2], (uint32_t)viewport[3] };
+	}
+
 	void OpenGLGraphicsAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
 		glViewport(x, y, width, height);
+	}
+
+	uint32_t OpenGLGraphicsAPI::GetFramebuffer()
+	{
+		int framebuffer;
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &framebuffer);
+
+		return framebuffer;
+	}
+
+	void OpenGLGraphicsAPI::SetFramebuffer(uint32_t framebuffer)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	}
 
 	void OpenGLGraphicsAPI::SetDepthFunc(DepthFunc func)
@@ -55,6 +76,16 @@ namespace Engine
 	void OpenGLGraphicsAPI::Clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void OpenGLGraphicsAPI::DrawArrays(uint32_t count)
+	{
+		glDrawArrays(GL_TRIANGLES, 0, count);
+	}
+
+	void OpenGLGraphicsAPI::DrawArraysStrip(uint32_t count)
+	{
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
 	}
 
 	void OpenGLGraphicsAPI::DrawUint8Indexed(uint32_t count)

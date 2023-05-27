@@ -9,13 +9,13 @@
 #include "Engine/Scene/Component/TerrainComponent.h"
 
 #include "Engine/Renderer/Renderer3D.h"
+#include "LightSystem.h"
 
 namespace Engine
 {
 	void RendererSystem::OnUpdate(entt::registry& registry, const glm::mat4& cameraViewMatrix, const glm::mat4& cameraProjection, const glm::vec3& cameraPosition, const Frustum& frustum)
 	{
-		uint32_t numOfLights = registry.view<LightComponent>().size();
-		Renderer3D::BeginScene(cameraViewMatrix, cameraProjection, cameraPosition, numOfLights);
+		Renderer3D::BeginScene(cameraViewMatrix, cameraProjection, cameraPosition, LightSystem::GetLights());
 
 		registry.group<TransformComponent>(entt::get<SpriteRendererComponent>)
 			.each([](entt::entity entity, TransformComponent& transform, SpriteRendererComponent& component)
@@ -23,13 +23,13 @@ namespace Engine
 					Renderer3D::Draw(transform, component, (int)entity);
 				});
 
+		Renderer3D::EndScene();
+
 		registry.view<TransformComponent, LightComponent>()
 			.each([](entt::entity entity, TransformComponent& transform, LightComponent& component)
 				{
 					Renderer3D::Draw(transform, component, (int)entity);
 				});
-
-		Renderer3D::EndScene();
 
 		registry.view<TransformComponent, MeshComponent>()
 			.each([&](entt::entity entity, TransformComponent& transform, MeshComponent& mesh)

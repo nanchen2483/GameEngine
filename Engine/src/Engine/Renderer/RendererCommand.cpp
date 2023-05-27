@@ -15,6 +15,11 @@ namespace Engine
 		GetInstance().m_graphicsAPI->CullFace(face);
 	}
 
+	std::pair<uint32_t, uint32_t> RendererCommand::GetViewport()
+	{
+		return GetInstance().m_graphicsAPI->GetViewport();
+	}
+
 	void RendererCommand::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
 		GetInstance().m_graphicsAPI->SetViewport(x, y, width, height);
@@ -35,6 +40,16 @@ namespace Engine
 		GetInstance().m_graphicsAPI->SetPolygonMode(mode);
 	}
 
+	uint32_t RendererCommand::GetFramebuffer()
+	{
+		return GetInstance().m_graphicsAPI->GetFramebuffer();
+	}
+
+	void RendererCommand::SetFramebuffer(uint32_t framebuffer)
+	{
+		GetInstance().m_graphicsAPI->SetFramebuffer(framebuffer);
+	}
+
 	void RendererCommand::SetClearColor(const glm::vec4& color)
 	{
 		GetInstance().m_graphicsAPI->SetClearColor(color);
@@ -43,6 +58,16 @@ namespace Engine
 	void RendererCommand::Clear()
 	{
 		GetInstance().m_graphicsAPI->Clear();
+	}
+
+	void RendererCommand::DrawArrays(uint32_t count)
+	{
+		GetInstance().m_graphicsAPI->DrawArrays(count);
+	}
+
+	void RendererCommand::DrawArraysStrip(uint32_t count)
+	{
+		GetInstance().m_graphicsAPI->DrawArraysStrip(count);
 	}
 
 	void RendererCommand::DrawUint8Indexed(uint32_t count)

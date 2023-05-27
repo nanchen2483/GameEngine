@@ -1,6 +1,7 @@
 #include "enginepch.h"
 #include "Renderer3D.h"
 #include "RendererCommand.h"
+#include "LightBox/LightBox.h"
 #include "Vertex/Vertex.h"
 #include "Shadow/ShadowBox.h"
 #include "Engine/Library/ShaderLibrary.h"
@@ -30,6 +31,7 @@ namespace Engine
 		Ptr<IUniformBuffer> pointLightUniformBuffer{};
 		Ptr<IShader> shader{};
 		Ptr<ITexture2D> whiteTexture{};
+		Ptr<LightBox> lightBox{};
 
 		uint32_t indexCount{};
 		const Vertex* vertexBufferBase = new Vertex[Renderer3DData::MAX_VERTICES];
@@ -149,6 +151,8 @@ namespace Engine
 		s_data.textureCoords[6] = { 0.0f, 1.0f };
 		s_data.textureCoords[7] = { 1.0f, 1.0f };
 
+		s_data.lightBox = CreatePtr<LightBox>();
+
 		s_data.cameraUniformBuffer = BufferFactory::CreateUniformBuffer(0, {
 				BufferLayoutType::Std140,
 				{
@@ -179,7 +183,7 @@ namespace Engine
 					{ ShaderDataType::Float3 },				// Point light diffuse
 					{ ShaderDataType::Float3 },				// Point light specular
 				}
-			});
+			}, 64);
 
 		s_data.dirLightUniformBuffer->SetData({
 			glm::value_ptr(LIGHT_DIRECTION),
@@ -187,7 +191,6 @@ namespace Engine
 			glm::value_ptr(glm::vec3(0.4f)),
 			glm::value_ptr(glm::vec3(0.5f)),
 		});
-
 	}
 	
 	void Renderer3D::Shutdown()
@@ -198,16 +201,18 @@ namespace Engine
 	{
 	}
 	
-	void Renderer3D::BeginScene(glm::mat4 cameraViewMatrix, glm::mat4 cameraProjection, glm::vec3 cameraPosition, uint32_t numOfPointLights)
+	void Renderer3D::BeginScene(glm::mat4 cameraViewMatrix, glm::mat4 cameraProjection, glm::vec3 cameraPosition, std::vector<std::vector<const void*>> lights)
 	{
 		ENGINE_PROFILE_FUNCTION();
 		ENGINE_CORE_ASSERT(s_data.shader, "Shader is null");
 
 		s_data.shader->Bind();
-		s_data.shader->SetBool("uHasPointLight", numOfPointLights > 0);
+		s_data.shader->SetInt("uNumOfPointLights", lights.size());
 		s_data.shader->SetBool("uHasAnimation", false);
 		s_data.shader->SetInt("uEntityId", -1);
 		s_data.cameraUniformBuffer->SetData({ &cameraViewMatrix, &cameraProjection, &cameraPosition });
+		s_data.pointLightUniformBuffer->SetData(lights);
+
 		s_data.vertexArray->Bind();
 		ResetRendererData();
 	}
@@ -240,13 +245,6 @@ namespace Engine
 	{
 		Draw(transform, sprite.texture, sprite.color, entityId);
 	}
-
-	void Renderer3D::Draw(const Transform& transform, LightComponent& light, int entityId)
-	{
-		light.position = transform.translation;
-		s_data.pointLightUniformBuffer->SetData(light.GetData());
-		Draw(transform, nullptr, glm::vec4(1.0f), entityId);
-	}
 	
 	void Renderer3D::Draw(const glm::mat4& transform, const Ptr<ITexture2D>& texture, const glm::vec4& color, int entityId)
 	{
@@ -274,6 +272,11 @@ namespace Engine
 		s_data.indexCount += Renderer3DData::NUM_OF_VERTEX_INDICES;
 	}
 
+	void Renderer3D::Draw(const Transform& transform, LightComponent& light, int entityId)
+	{
+		s_data.lightBox->Draw(transform, light.ambient);
+	}
+
 	void Renderer3D::Draw(const glm::mat4& transform, std::vector<Ptr<IMesh>> meshes, Ptr<IAnimation> animation, Ptr<IShader> shader, int entityId)
 	{
 		if (!meshes.empty())
@@ -282,6 +285,7 @@ namespace Engine
 			{
 				// Use default shader
 				shader = s_data.shader;
+				shader->Bind();
 				shader->SetMat3("uInverseModel", glm::transpose(glm::inverse(glm::mat3(transform))));
 				shader->SetInt("uEntityId", entityId);
 			}

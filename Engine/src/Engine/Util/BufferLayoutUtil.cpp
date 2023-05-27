@@ -10,6 +10,8 @@ namespace Engine
 		{
 			AddComponent(&element);
 		}
+
+		UpdateSize();
 	}
 
 	void UniformBufferStd140Util::AddComponent(BufferElement* element)

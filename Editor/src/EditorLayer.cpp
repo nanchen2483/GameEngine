@@ -8,7 +8,7 @@
 #include <imgui.h>
 #include <ImGuizmo.h>
 
-#define ENTITY_ID_ATTACHMENT_INDEX 1
+#define ENTITY_ID_ATTACHMENT_INDEX 2
 
 namespace Engine
 {
@@ -24,8 +24,9 @@ namespace Engine
 		FramebufferSpecification fbSpec;
 		fbSpec.attachments = FramebufferAttachmentSpecification(
 			{
-				FramebufferTextureFormat::RGBA8, // Main framebuffer
-				FramebufferTextureFormat::RedInteger, // EntityId
+				FramebufferTextureFormat::RGBA16,		// Fragment color
+				FramebufferTextureFormat::RGBA16,		// Brightness color
+				FramebufferTextureFormat::RedInteger,	// Entity id
 				FramebufferTextureFormat::Depth24Stencil8
 			});
 		fbSpec.width = 1280;
@@ -33,8 +34,8 @@ namespace Engine
 		m_framebuffer = FramebufferFactory::Create(fbSpec);
 
 		// Entity
-		m_activeScene = CreatePtr<Scene>(m_framebuffer);
-
+		m_activeScene = CreatePtr<Scene>();
+		m_bloomEffect = CreatePtr<BloomEffect>();
 		m_editorCamera = EditorCamera(45.0f, m_viewportSize.x, m_viewportSize.y, 0.1f, 10000.0f);
 
 		// Globals are not shared accross DLL https://github.com/ocornut/imgui/issues/3169
@@ -69,10 +70,10 @@ namespace Engine
 			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 			m_editorCamera.SetViewportSize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 			m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+			m_bloomEffect->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		}
 
 		m_framebuffer->Bind();
-		RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RendererCommand::Clear();
 
 		if (m_toolbar.OnEditMode())
@@ -88,15 +89,15 @@ namespace Engine
 
 			m_activeScene->OnUpdateEditor(m_editorCamera);
 
-			m_framebuffer->Bind();
 			UpdateHoveredEntity();
 		}
 		else
 		{
 			m_activeScene->OnUpdateRuntime();
 		}
-		
+
 		m_framebuffer->Unbind();
+		m_bloomEffect->OnUpdate(m_framebuffer);
 	}
 
 	void EditorLayer::UpdateHoveredEntity()
@@ -109,7 +110,7 @@ namespace Engine
 
 		int mouseX = (int)mx; 
 		int mouseY = (int)my;
-		if (mouseX >  0 && mouseY > 0 && mouseX < viewportSize.x && mouseY < viewportSize.y)
+		if (mouseX > 0 && mouseY > 0 && mouseX < viewportSize.x && mouseY < viewportSize.y)
 		{
 			int pixelData = m_framebuffer->ReadPixel(ENTITY_ID_ATTACHMENT_INDEX, mouseX, mouseY);
 			if (pixelData == -1)
@@ -157,7 +158,7 @@ namespace Engine
 					ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 					m_viewportSize = glm::vec2(viewportSize.x, viewportSize.y);
 
-					uint64_t textureId = m_framebuffer->GetColorAttachmentRendererId(0);
+					uint64_t textureId = m_bloomEffect->GetRendererId();
 					ImGui::Image((void*)textureId, ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 
 					if (m_toolbar.OnEditMode())
@@ -338,7 +339,7 @@ namespace Engine
 
 	void EditorLayer::NewScene()
 	{
-		m_activeScene = CreatePtr<Scene>(m_framebuffer);
+		m_activeScene = CreatePtr<Scene>();
 		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 	}
@@ -355,7 +356,7 @@ namespace Engine
 
 	void EditorLayer::OpenScene(const std::filesystem::path& filepath)
 	{
-		m_activeScene = CreatePtr<Scene>(m_framebuffer);
+		m_activeScene = CreatePtr<Scene>();
 		m_activeScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 		m_menubar.GetHierarchy()->SetContext(m_activeScene);
 

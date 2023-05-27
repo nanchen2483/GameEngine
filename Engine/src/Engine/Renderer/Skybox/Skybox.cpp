@@ -33,12 +33,14 @@ namespace Engine
 	void Skybox::Draw()
 	{
 		RendererCommand::SetDepthFunc(DepthFunc::Lequal);
-		RendererCommand::CullFace(FaceCulling::Back);
+		RendererCommand::CullFace(FaceCulling::Front);
 		m_shader->Bind();
 		m_vertexArray->Bind();
 		m_texture->Bind();
-		RendererCommand::CullFace(FaceCulling::Front);
 		RendererCommand::DrawUint8Indexed(SkyboxData::numOfIndices);
+		RendererCommand::CullFace(FaceCulling::Back);
 		RendererCommand::SetDepthFunc(DepthFunc::Less); // Set to default
+		m_vertexArray->Unbind();
+		m_shader->Unbind();
 	}
 }

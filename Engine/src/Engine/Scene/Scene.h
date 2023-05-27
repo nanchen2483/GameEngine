@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine/Renderer/Camera/EditorCamera.h"
-#include "Engine/Renderer/Framebuffer/IFramebuffer.h"
 
 #include <entt/entt.hpp>
 
@@ -12,7 +11,7 @@ namespace Engine
 	class ENGINE_API Scene
 	{
 	public:
-		Scene(const Ptr<IFramebuffer>& framebuffer);
+		Scene();
 
 		Entity CreateEntity(const std::string& name = "");
 		void DestoryEntity(Entity entity);
@@ -35,7 +34,6 @@ namespace Engine
 		
 		entt::registry m_registry;
 		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
-		Ptr<IFramebuffer> m_framebuffer;
 
 		friend class Entity;
 		friend class SceneSerializer;

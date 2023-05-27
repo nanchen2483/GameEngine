@@ -7,5 +7,6 @@ namespace Engine
 	{
 	public:
 		virtual void SetData(const std::vector<const void*>& data) = 0;
+		virtual void SetData(const std::vector<std::vector<const void*>>& data) = 0;
 	};
 }

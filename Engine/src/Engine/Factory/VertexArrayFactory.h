@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class VertexArrayFactory
+	class ENGINE_API VertexArrayFactory
 	{
 	public:
 		static Ptr<IVertexArray> Create();

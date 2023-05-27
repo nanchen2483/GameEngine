@@ -9,11 +9,16 @@ namespace Engine
 		virtual void Init() override;
 		virtual void CullFace(FaceCulling face) override;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
+		virtual std::pair<uint32_t, uint32_t> GetViewport() override;
+		virtual uint32_t GetFramebuffer() override;
+		virtual void SetFramebuffer(uint32_t framebuffer) override;
 		virtual void SetDepthFunc(DepthFunc func) override;
 		virtual PolygonMode GetPolygonMode() override;
 		virtual void SetPolygonMode(PolygonMode mode) override;
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void Clear() override;
+		virtual void DrawArrays(uint32_t count) override;
+		virtual void DrawArraysStrip(uint32_t count) override;
 		virtual void DrawUint8Indexed(uint32_t count) override;
 		virtual void DrawUint16Indexed(uint32_t count) override;
 		virtual void DrawUint32Indexed(uint32_t count) override;

@@ -10,12 +10,17 @@ namespace Engine
 	public:
 		static void Init();
 		static void CullFace(FaceCulling face);
-		static void  SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
+		static std::pair<uint32_t, uint32_t> GetViewport();
+		static void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
 		static void SetDepthFunc(DepthFunc func);
 		static PolygonMode GetPolygonMode();
 		static void SetPolygonMode(PolygonMode mode);
+		static uint32_t GetFramebuffer();
+		static void SetFramebuffer(uint32_t framebuffer);
 		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
+		static void DrawArrays(uint32_t count);
+		static void DrawArraysStrip(uint32_t count);
 		static void DrawUint8Indexed(uint32_t count);
 		static void DrawUint16Indexed(uint32_t count);
 		static void DrawUint32Indexed(const Ptr<IVertexArray>& vertexArray);

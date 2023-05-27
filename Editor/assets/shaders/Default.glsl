@@ -116,10 +116,12 @@ vec3 CalcWorldNormal()
 #version 460 core
 
 layout (location = 0) out vec4 aFragColor;
-layout (location = 1) out int aEntityId;
+layout (location = 1) out vec4 aBrightColor;  
+layout (location = 2) out int aEntityId;
 
 const int MAX_TEXTURES = 32;
 const int MAX_SHADOW_CASCADES = 16;
+const int MAX_POINT_LIGHTS = 64;
 
 layout (std140, binding = 0) uniform CameraBlock
 {
@@ -136,18 +138,21 @@ layout (std140, binding = 1) uniform DirLightBlock
 	vec3 specular;
 } uDirLight;
 
-layout (std140, binding = 2) uniform PointLightBlock
+struct PointLight
 {
 	vec3 position;
-
 	float constant;
 	float linear;
 	float quadratic;
-
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
-} uPointLight;
+};
+
+layout (std140, binding = 2) uniform PointLightBlock
+{
+	PointLight uPointLight[MAX_POINT_LIGHTS];
+};
 
 layout (std140, binding = 3) uniform LightSpaceBlock
 {
@@ -156,7 +161,7 @@ layout (std140, binding = 3) uniform LightSpaceBlock
 
 uniform sampler2DArray uShadowMap;
 uniform sampler2D uTextures[MAX_TEXTURES];
-uniform bool uHasPointLight;
+uniform int uNumOfPointLights;
 
 // Shadow
 uniform float uCascadePlaneDistances[MAX_SHADOW_CASCADES];
@@ -196,12 +201,19 @@ void main()
 	Material material = SetupMaterial();
 
 	vec3 result = CalcDirectionalLight(material, normal, viewDir);
-	if (uHasPointLight)
-	{
-		result += CalcPointLight(material, normal, viewDir);
-	}
+	result += CalcPointLight(material, normal, viewDir);
 
 	aFragColor = vec4(result, 1.0f) * material.color;
+    float brightness = dot(aFragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+	if(brightness > 1.0)
+	{
+        aBrightColor = aFragColor;
+	}
+    else
+	{
+        aBrightColor = vec4(0.0, 0.0, 0.0, 1.0);
+	}
+
 	aEntityId = vertex.entityId;
 }
 
@@ -255,29 +267,37 @@ vec3 CalcDirectionalLight(Material material, vec3 normal, vec3 viewDir)
 
 vec3 CalcPointLight(Material material, vec3 normal, vec3 viewDir)
 {
-	// Attenuation
-	float distance = length(uPointLight.position - vertex.fragPos);
-	float attenuation = 1.0 / (uPointLight.constant + uPointLight.linear * distance + uPointLight.quadratic * (distance * distance));
-
-	// Ambient
-	vec3 ambient = uPointLight.ambient * material.diffuse * attenuation;
-
-	// Diffuse
-	vec3 lightDir = normalize(uPointLight.position - vertex.fragPos);
-	float diff = max(dot(normal, lightDir), 0.0);
-	vec3 diffuse = uPointLight.diffuse * diff * material.diffuse * attenuation;
-	
-	// Specular
-	if (vertex.material.y != -1)
+	vec3 result = vec3(0.0);
+	for (int i = 0; i < uNumOfPointLights; ++i)
 	{
-		vec3 reflectDir = reflect(-lightDir, normal);
-		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-		vec3 specular = uPointLight.specular * spec * material.specular * attenuation;
-		
-		return ambient + (1.0 - material.shadow) * (diffuse + specular);
+		// Attenuation
+		const float distance = length(uPointLight[i].position - vertex.fragPos);
+		const float attenuation = 1.0 / (uPointLight[i].constant + uPointLight[i].linear * distance + uPointLight[i].quadratic * (distance * distance));
+
+		// Ambient
+		const vec3 ambient = uPointLight[i].ambient * material.diffuse * attenuation;
+
+		// Diffuse
+		const vec3 lightDir = normalize(uPointLight[i].position - vertex.fragPos);
+		const float diff = max(dot(normal, lightDir), 0.0);
+		const vec3 diffuse = uPointLight[i].diffuse * diff * material.diffuse * attenuation;
+	
+		// Specular
+		if (vertex.material.y != -1)
+		{
+			const vec3 reflectDir = reflect(-lightDir, normal);
+			const float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+			const vec3 specular = uPointLight[i].specular * spec * material.specular * attenuation;
+			
+			result += ambient + (1.0 - material.shadow) * (diffuse + specular);
+		}
+		else
+		{
+			result += ambient + (1.0 - material.shadow) * diffuse;
+		}
 	}
 
-	return ambient + (1.0 - material.shadow) * diffuse;
+	return result;
 }
 
 // Caculate shadow using Percentage-Closer Filtering (PCF)

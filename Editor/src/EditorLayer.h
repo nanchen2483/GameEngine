@@ -30,6 +30,7 @@ namespace Engine
 		glm::vec2 m_viewportSize = glm::vec2(1280.0f, 720.0f);
 		bool m_viewportFocused = false, m_viewportHovered = false;
 		Ptr<Scene> m_activeScene;
+		Ptr<BloomEffect> m_bloomEffect;
 		EditorCamera m_editorCamera;
 		int32_t m_guizmoType = -1;
 
